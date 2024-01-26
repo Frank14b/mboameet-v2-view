@@ -2,13 +2,13 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import InputFormComponent from '../../widgets/inputForm'
-import { proceedLogin } from '@/app/services/servers/users/auth'
 
-export default function LoginPopupComponent({ children }: { children: React.ReactNode }) {
+
+export default function RegistrationPopupComponent({ children }: { children: React.ReactNode }) {
 
     const [open, setOpen] = useState(false)
     const cancelButtonRef = useRef(null)
-    const [formData, setFormData] = useState<LoginFormData>({
+    const [formData, setFormData] = useState<RegistrationFormData>({
         username: "",
         password: "",
     })
@@ -19,12 +19,6 @@ export default function LoginPopupComponent({ children }: { children: React.Reac
         currentData[`${e.currentTarget.name}`] = e.currentTarget.value
 
         setFormData(currentData);
-    }
-
-    const submitFormData = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const result = await proceedLogin(formData);
-        console.log("🚀 ~ submitFormData ~ result:", result)
     }
 
     return (
@@ -65,7 +59,7 @@ export default function LoginPopupComponent({ children }: { children: React.Reac
                                             </div>
                                             <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                                 <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                                                    Login to your account
+                                                    Create new account
                                                 </Dialog.Title>
                                                 <div className="mt-2">
                                                     <p className="text-sm text-gray-500">
@@ -77,7 +71,7 @@ export default function LoginPopupComponent({ children }: { children: React.Reac
 
                                         <div className="px-1">
                                             <div>
-                                                <form method='post' onSubmit={(e: React.FormEvent) => submitFormData(e)}>
+                                                <form method='post'>
                                                     <div className="space-y-12">
                                                         <div className="border-0 border-gray-900/10 pb-4">
                                                             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-3">
