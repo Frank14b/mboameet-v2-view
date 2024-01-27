@@ -146,11 +146,11 @@ function NavList() {
                     href="#"
                     variant="small"
                     color="gray"
-                    className="font-medium text-blue-gray-500"
+                    className="font-medium"
                 >
                     <MenuItem placeholder={""} className="flex items-center gap-2 lg:rounded-full">
                         {React.createElement(icon, { className: "h-[18px] w-[18px]" })}{" "}
-                        <span className="text-gray-900"> {label}</span>
+                        <span className="text-white"> {label}</span>
                     </MenuItem>
                 </Typography>
             ))}
@@ -172,8 +172,8 @@ export default function HeaderComponent() {
     }, []);
 
     return (
-        <Navbar placeholder={""} className="mx-auto w-full p-2 border-0 lg:pl-6 bg-blue-200">
-            <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
+        <Navbar placeholder={""} className="mx-auto w-full p-2 border-0 lg:pl-6 bg-pink-500">
+            <div className="relative mx-auto flex items-center justify-between text-white-900">
                 <Typography
                     placeholder={"MboaMeet"}
                     as="a"

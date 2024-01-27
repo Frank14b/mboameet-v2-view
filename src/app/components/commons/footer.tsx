@@ -23,7 +23,7 @@ export default function FooterComponent() {
 
     return (
         <>
-            <footer className="relative w-full bg-blue-200">
+            <footer className="relative w-full bg-pink-300">
                 <div className="mx-auto w-full max-w-7xl px-8 pt-6">
                     <div className="grid grid-cols-1 justify-between gap-4 md:grid-cols-2">
                         <Typography variant="h5" className="mb-6" placeholder={""}>
@@ -36,7 +36,7 @@ export default function FooterComponent() {
                                         placeholder={""}
                                         variant="small"
                                         color="blue-gray"
-                                        className="mb-3 font-medium opacity-40"                                  >
+                                        className="mb-3 font-medium opacity-40">
                                         {title}
                                     </Typography>
                                     {items.map((link) => (
