@@ -1,30 +1,25 @@
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import InputFormComponent from '../../widgets/inputForm'
-import { proceedLogin } from '@/app/services/servers/users/auth'
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { signInSchema } from '@/app/validators'
+import { proceedLogin } from '@/app/services';
+import { ApiResponseDto, LoginFormData } from '@/app/types';
 
 export default function LoginPopupComponent({ children }: { children: React.ReactNode }) {
 
     const [open, setOpen] = useState(false)
     const cancelButtonRef = useRef(null)
-    const [formData, setFormData] = useState<LoginFormData>({
-        username: "",
-        password: "",
-    })
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(signInSchema), // Integrate Yup for validation
+    });
+    const [requestData, setRequestData] = useState<ApiResponseDto | null>(null)
 
-    const onChangeInput = (e: React.FormEvent<HTMLInputElement>) => {
-
-        let currentData: any = formData;
-        currentData[`${e.currentTarget.name}`] = e.currentTarget.value
-
-        setFormData(currentData);
-    }
-
-    const submitFormData = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const result = await proceedLogin(formData);
-        console.log("🚀 ~ submitFormData ~ result:", result)
+    const submitFormData = async (data: LoginFormData) => {
+        const result = await proceedLogin(data);
+        setRequestData(result);
     }
 
     return (
@@ -77,20 +72,22 @@ export default function LoginPopupComponent({ children }: { children: React.Reac
 
                                         <div className="px-1">
                                             <div>
-                                                <form method='post' onSubmit={(e: React.FormEvent) => submitFormData(e)}>
+                                                <form method='post' onSubmit={handleSubmit(submitFormData)}>
                                                     <div className="space-y-12">
                                                         <div className="border-0 border-gray-900/10 pb-4">
                                                             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-3">
 
-                                                                <InputFormComponent data={{ title: "Username", onChange: onChangeInput, value: formData?.username }} />
+                                                                <InputFormComponent data={{ title: "Username" }} register={register} />
+                                                                {errors.username && <span className='text-red-500'>{errors.username.message}</span>}
 
-                                                                <InputFormComponent data={{ title: "Password", type: 'password', onChange: onChangeInput, value: formData?.password }} />
+                                                                <InputFormComponent data={{ title: "Password", type: 'password' }} register={register} />
+                                                                {errors.password && <span className='text-red-500'>{errors.password.message}</span>}
 
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <div className="mt-1 flex items-center justify-end gap-x-6">
+                                                    <div className="mt-1 flex items-center justify-end gap-x-6 mb-4">
                                                         <button
                                                             type="submit"
                                                             className="rounded-md bg-indigo-600 w-full px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -98,6 +95,9 @@ export default function LoginPopupComponent({ children }: { children: React.Reac
                                                             Proceed
                                                         </button>
                                                     </div>
+
+                                                    {requestData?.status === false && <span className='text-red-500 mt-5'>{requestData?.message}</span>}
+
                                                 </form>
                                             </div>
                                         </div>

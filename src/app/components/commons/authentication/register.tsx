@@ -2,6 +2,7 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import InputFormComponent from '../../widgets/inputForm'
+import { RegistrationFormData } from '@/app/types'
 
 
 export default function RegistrationPopupComponent({ children }: { children: React.ReactNode }) {

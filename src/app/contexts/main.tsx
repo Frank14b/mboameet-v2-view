@@ -3,10 +3,13 @@
 import { createContext, useContext } from 'react';
 import HeaderComponent from '../components/commons/header';
 import FooterComponent from '../components/commons/footer';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 const MainContext = createContext<any>({});
 
 export function MainWrapper({ children }: { children: any }) {
+
+    const queryClient = new QueryClient();
 
     const MainData = {};
 
@@ -17,7 +20,9 @@ export function MainWrapper({ children }: { children: any }) {
                 <div
                     className={``}
                 >
-                    {children}
+                    <QueryClientProvider client={queryClient}>
+                        {children}
+                    </QueryClientProvider>
                 </div>
             </main>
             <FooterComponent />
