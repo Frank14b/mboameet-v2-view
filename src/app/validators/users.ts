@@ -13,7 +13,7 @@ export const signUpSchema = yup.object({
     firstname: yup.string().notRequired(),
     lastname: yup.string().notRequired(),
     email: yup.string().email("Invalid email e.g: example@test.com").required("Email address is required"),
-    phone: yup.number().notRequired(),
+    phone: yup.number().positive().integer().required("Phone number is required"),
     countryCode: yup.string().notRequired(),
     password: yup.string().matches(new RegExp(passwordRegex), {
         message: passwordErrorMessage

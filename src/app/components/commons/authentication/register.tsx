@@ -41,6 +41,14 @@ export default function RegistrationPopupComponent({ children }: { children: Rea
                 ) {
                     setStepper(stepper + 1);
                 }
+            } else if (stepper === 1) {
+                const phone = watch("phone");
+
+                if (errors?.phone == undefined &&
+                    phone
+                ) {
+                    setStepper(stepper + 1);
+                }
             }
         }, 100);
     }
@@ -140,12 +148,42 @@ export default function RegistrationPopupComponent({ children }: { children: Rea
                                                                             <InputFormComponent data={{ title: "What's your email address?", name: "Email", type: "email" }} register={register} error={errors.email} />
                                                                         </div>
                                                                     </div>
-                                                                    <button type="submit" className="text-white bg-indigo-600 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">
+                                                                    <button type="submit" className="text-white mt-5 bg-indigo-600 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">
                                                                         Next Step: Personal Details
                                                                     </button>
                                                                 </div>
 
                                                                 <div className={`mt-10 grid grid-cols-1 gap-x-6 ${stepper != 1 && "hidden"}`}>
+                                                                    <h3 className="mb-4 text-md font-medium font-700 leading-none text-indigo-600 dark:text-indigo-600">Personal Information</h3>
+                                                                    <div className="grid gap-4 mb-4 sm:grid-cols-2">
+                                                                        <div>
+                                                                            <InputFormComponent data={{ title: "Firstname (Optional)", name: "Firstname" }} register={register} error={errors.firstname} />
+                                                                        </div>
+                                                                        <div>
+                                                                            <InputFormComponent data={{ title: "Lastname (Optional)", name: "Lastname" }} register={register} error={errors.lastname} />
+                                                                        </div>
+                                                                        <div>
+                                                                            <InputFormComponent data={{ title: "Phone Number (Optional)", name: "phone" }} register={register} error={errors.phone} />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="flex justify-between mt-5">
+                                                                        <button
+                                                                            onClick={switchbackStepper}
+                                                                            type="button"
+                                                                            className="rounded-md border bg-white-600 w-1/3 px-3 py-2 text-sm font-semibold text-indigo-600 hover:text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                                                        >
+                                                                            Back: Identity
+                                                                        </button>
+                                                                        <button
+                                                                            type="submit"
+                                                                            className="rounded-md bg-indigo-600 w-1/2 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                                                        >
+                                                                            Next step: Security
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className={`mt-10 grid grid-cols-1 gap-x-6 ${stepper != 2 && "hidden"}`}>
                                                                     <h3 className="mb-4 text-md font-medium font-700 leading-none text-indigo-600 dark:text-indigo-600">Account Security</h3>
                                                                     <div className="grid gap-4 mb-4 sm:grid-cols-2">
                                                                         <div>
