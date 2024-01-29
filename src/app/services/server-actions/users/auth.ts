@@ -3,6 +3,7 @@
 import { hashingData, setCache } from "@/app/lib/server-utils";
 import { ApiResponseDto, LoginFormData, RegistrationFormData, ResultloginDto } from "@/app/types/index";
 import { apiCall } from "../../api";
+import { cookies } from 'next/headers'
 
 export const proceedLogin = async (data: LoginFormData): Promise<ApiResponseDto<ResultloginDto>> => {
     try {
@@ -12,8 +13,7 @@ export const proceedLogin = async (data: LoginFormData): Promise<ApiResponseDto<
             data,
         });
 
-        const cackeKey: string = hashingData(`token-${result.id}`);
-        setCache(cackeKey, result.token);
+        createUserSession(result);
 
         return {
             status: true,
@@ -49,4 +49,12 @@ export const proceedRegister = async (data: RegistrationFormData): Promise<ApiRe
             data: error.response.data?.errors
         };
     }
+}
+
+export const createUserSession = (user: ResultloginDto) => {
+    cookies().set('sessionId', user.id);
+    cookies().set('token', user.token);
+
+    const cackeKey: string = hashingData(`token-${user.id}`);
+    setCache(cackeKey, user.token);
 }

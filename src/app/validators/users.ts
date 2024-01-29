@@ -20,5 +20,5 @@ export const signUpSchema = yup.object({
     }).required("Password is required"),
     confirmpassword: yup.string().matches(new RegExp(passwordRegex), {
         message: passwordErrorMessage
-    }).oneOf([yup.ref("password")], "Passwords must").required("Confirm password is required")
+    }).oneOf([yup.ref("password")], "Passwords must be same").required("Confirm password is required")
 });

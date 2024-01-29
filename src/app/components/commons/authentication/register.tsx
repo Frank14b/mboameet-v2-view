@@ -7,6 +7,7 @@ import { signUpSchema } from '@/app/validators'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { proceedRegister } from '@/app/services'
+import LoadingSpinnerComponent from '../loadingSpinner'
 
 
 export default function RegistrationPopupComponent({ children }: { children: React.ReactNode }) {
@@ -14,19 +15,32 @@ export default function RegistrationPopupComponent({ children }: { children: Rea
     const [stepper, setStepper] = useState<number>(0);
     const [open, setOpen] = useState(false)
     const cancelButtonRef = useRef(null)
-    const { register, handleSubmit, watch, formState: { errors } } = useForm({
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({
         resolver: yupResolver(signUpSchema), // Integrate Yup for validation
     });
     const [requestData, setRequestData] = useState<ApiResponseDto<ResultloginDto> | null>(null)
 
     const submitFormData = async (data: RegistrationFormData) => {
+        if (stepper < 2) return;
+        setIsLoading(true);
         const result = await proceedRegister(data);
+        setIsLoading(false);
         setRequestData(result);
+
+        if (result.status === true) {
+            setStepper(stepper + 1);
+        }
     }
 
     useEffect(() => {
         switchSepper()
     }, [errors])
+
+    useEffect(() => {
+        if (isLoading) return;
+        reset();
+    }, [isLoading])
 
     const switchSepper = () => {
         setTimeout(() => {
@@ -107,117 +121,136 @@ export default function RegistrationPopupComponent({ children }: { children: Rea
 
                                         <div className="px-1">
                                             <div>
-                                                <form method='post' onSubmit={handleSubmit(submitFormData)}>
-                                                    <div className="space-y-12">
-                                                        <div className="border-0 border-gray-900/10 pb-4">
-                                                            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-3">
+                                                <LoadingSpinnerComponent isLoading={isLoading}>
+                                                    <form method='post' onSubmit={handleSubmit(submitFormData)}>
+                                                        <div className="space-y-12">
+                                                            <div className="border-0 border-gray-900/10 pb-4">
+                                                                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-3">
 
 
-                                                                <ol className="flex items-center w-full mb-4 sm:mb-5">
-                                                                    <li className="flex w-full items-center text-blue-600 dark:text-blue-500 after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-100 after:border-4 after:inline-block dark:after:border-blue-800">
-                                                                        <div className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 dark:bg-${stepper > 0 ? "green" : "blue"}-800 shrink-0`}>
-                                                                            <svg className="w-4 h-4 text-gray-200 lg:w-6 lg:h-6 dark:text-white-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
-                                                                                <path d="M18 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM6.5 3a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3.014 13.021l.157-.625A3.427 3.427 0 0 1 6.5 9.571a3.426 3.426 0 0 1 3.322 2.805l.159.622-6.967.023ZM16 12h-3a1 1 0 0 1 0-2h3a1 1 0 0 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Z" />
-                                                                            </svg>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li className="flex w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-100 after:border-4 after:inline-block dark:after:border-gray-700">
-                                                                        <div className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 dark:bg-${stepper > 1 ? "green" : "blue"}-800 shrink-0`}>
-                                                                            <svg className="w-4 h-4 text-gray-200 lg:w-6 lg:h-6 dark:text-white-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
-                                                                                <path d="M18 0H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM2 12V6h16v6H2Z" />
-                                                                                <path d="M6 8H4a1 1 0 0 0 0 2h2a1 1 0 0 0 0-2Zm8 0H9a1 1 0 0 0 0 2h5a1 1 0 1 0 0-2Z" />
-                                                                            </svg>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li className="flex items-center w-full">
-                                                                        <div className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 dark:bg-${stepper > 2 ? "green" : "blue"}-800 shrink-0`}>
-                                                                            <svg className="w-4 h-4 text-gray-200 lg:w-6 lg:h-6 dark:text-white-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                                                                                <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v3H7V2Zm5.7 8.289-3.975 3.857a1 1 0 0 1-1.393 0L5.3 12.182a1.002 1.002 0 1 1 1.4-1.436l1.328 1.289 3.28-3.181a1 1 0 1 1 1.392 1.435Z" />
-                                                                            </svg>
-                                                                        </div>
-                                                                    </li>
-                                                                </ol>
+                                                                    <ol className="flex items-center w-full mb-4 sm:mb-5">
+                                                                        <li className={`flex w-full items-center text-blue-600 dark:text-blue-500 after:content-[''] after:w-full after:h-1 after:border-b ${stepper > 0 ? "after:border-green-700 dark:after:border-green-700" : "after:border-blue-700 dark:after:border-blue-700"} after:border-4 after:inline-block`}>
+                                                                            <div className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 ${stepper > 0 ? "dark:bg-green-800" : "dark:bg-blue-800"} shrink-0`}>
+                                                                                <svg className="w-4 h-4 text-gray-200 lg:w-6 lg:h-6 dark:text-white-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
+                                                                                    <path d="M18 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM6.5 3a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3.014 13.021l.157-.625A3.427 3.427 0 0 1 6.5 9.571a3.426 3.426 0 0 1 3.322 2.805l.159.622-6.967.023ZM16 12h-3a1 1 0 0 1 0-2h3a1 1 0 0 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Z" />
+                                                                                </svg>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li className={`flex w-full items-center after:content-[''] after:w-full after:h-1 after:border-b ${stepper > 1 ? "after:border-green-700 dark:after:border-green-700" : "after:border-blue-700 dark:after:border-blue-700"} after:border-4 after:inline-block`}>
+                                                                            <div className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 ${stepper > 1 ? "dark:bg-green-800" : "dark:bg-blue-800"} shrink-0`}>
+                                                                                <svg className="w-4 h-4 text-gray-200 lg:w-6 lg:h-6 dark:text-white-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
+                                                                                    <path d="M18 0H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM2 12V6h16v6H2Z" />
+                                                                                    <path d="M6 8H4a1 1 0 0 0 0 2h2a1 1 0 0 0 0-2Zm8 0H9a1 1 0 0 0 0 2h5a1 1 0 1 0 0-2Z" />
+                                                                                </svg>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li className="flex items-center w-full">
+                                                                            <div className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 ${stepper > 2 ? "dark:bg-green-800" : "dark:bg-blue-800"} shrink-0`}>
+                                                                                <svg className="w-4 h-4 text-gray-200 lg:w-6 lg:h-6 dark:text-white-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                                                                                    <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v3H7V2Zm5.7 8.289-3.975 3.857a1 1 0 0 1-1.393 0L5.3 12.182a1.002 1.002 0 1 1 1.4-1.436l1.328 1.289 3.28-3.181a1 1 0 1 1 1.392 1.435Z" />
+                                                                                </svg>
+                                                                            </div>
+                                                                        </li>
+                                                                    </ol>
 
-                                                                <div className={`mt-10 grid grid-cols-1 gap-x-6 ${stepper != 0 && "hidden"}`}>
-                                                                    <h3 className="mb-4 text-md font-medium font-700 leading-none text-indigo-600 dark:text-indigo-600">Account Identity</h3>
-                                                                    <div className="grid gap-4 mb-4 sm:grid-cols-2">
-                                                                        <div>
-                                                                            <InputFormComponent data={{ title: "How can we call you?", name: "Username" }} register={register} error={errors.username} />
+                                                                    <div className={`mt-10 grid grid-cols-1 gap-x-6 ${stepper != 0 && "hidden"}`}>
+                                                                        <h3 className="mb-4 text-md font-medium font-700 leading-none text-indigo-600 dark:text-indigo-600">Account Identity</h3>
+                                                                        <div className="grid gap-4 mb-4 sm:grid-cols-2">
+                                                                            <div>
+                                                                                <InputFormComponent data={{ title: "How can we call you?", name: "Username" }} register={register} error={errors.username} />
+                                                                            </div>
+                                                                            <div>
+                                                                                <InputFormComponent data={{ title: "What's your email address?", name: "Email", type: "email" }} register={register} error={errors.email} />
+                                                                            </div>
                                                                         </div>
-                                                                        <div>
-                                                                            <InputFormComponent data={{ title: "What's your email address?", name: "Email", type: "email" }} register={register} error={errors.email} />
+                                                                        <button type="submit" className="text-white mt-5 bg-indigo-600 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">
+                                                                            Next Step: Personal Details
+                                                                        </button>
+                                                                    </div>
+
+                                                                    <div className={`mt-10 grid grid-cols-1 gap-x-6 ${stepper != 1 && "hidden"}`}>
+                                                                        <h3 className="mb-4 text-md font-medium font-700 leading-none text-indigo-600 dark:text-indigo-600">Personal Information</h3>
+                                                                        <div className="grid gap-4 mb-4 sm:grid-cols-2">
+                                                                            <div>
+                                                                                <InputFormComponent data={{ title: "Firstname (Optional)", name: "Firstname" }} register={register} error={errors.firstname} />
+                                                                            </div>
+                                                                            <div>
+                                                                                <InputFormComponent data={{ title: "Lastname (Optional)", name: "Lastname" }} register={register} error={errors.lastname} />
+                                                                            </div>
+                                                                            <div>
+                                                                                <InputFormComponent data={{ title: "Phone Number (Optional)", name: "phone" }} register={register} error={errors.phone} />
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="flex justify-between mt-5">
+                                                                            <button
+                                                                                onClick={switchbackStepper}
+                                                                                type="button"
+                                                                                className="rounded-md border bg-white-600 w-1/3 px-3 py-2 text-sm font-semibold text-indigo-600 hover:text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                                                            >
+                                                                                Back: Identity
+                                                                            </button>
+                                                                            <button
+                                                                                type="submit"
+                                                                                className="rounded-md bg-indigo-600 w-1/2 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                                                            >
+                                                                                Next step: Security
+                                                                            </button>
                                                                         </div>
                                                                     </div>
-                                                                    <button type="submit" className="text-white mt-5 bg-indigo-600 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">
-                                                                        Next Step: Personal Details
-                                                                    </button>
+
+                                                                    <div className={`mt-10 grid grid-cols-1 gap-x-6 ${stepper != 2 && "hidden"}`}>
+                                                                        <h3 className="mb-4 text-md font-medium font-700 leading-none text-indigo-600 dark:text-indigo-600">Account Security</h3>
+                                                                        <div className="grid gap-4 mb-4 sm:grid-cols-2">
+                                                                            <div>
+                                                                                <InputFormComponent data={{ title: "Password", type: 'password' }} register={register} error={errors.password} />
+                                                                            </div>
+                                                                            <div>
+                                                                                <InputFormComponent data={{ title: "Confirm Password", type: 'password', name: "confirmpassword" }} register={register} error={errors.confirmpassword} />
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="flex justify-between mt-5">
+                                                                            <button
+                                                                                onClick={switchbackStepper}
+                                                                                type="button"
+                                                                                className="rounded-md border bg-white-600 w-1/3 px-3 py-2 text-sm font-semibold text-indigo-600 hover:text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                                                            >
+                                                                                Back
+                                                                            </button>
+                                                                            <button
+                                                                                type="submit"
+                                                                                className="rounded-md bg-indigo-600 w-1/3 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                                                            >
+                                                                                Proceed
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className={`mt-10 grid grid-cols-1 gap-x-6 text-center ${stepper != 3 && "hidden"}`}>
+                                                                        <h3 className="mb-4 text-md font-medium font-bold leading-none text-green-600 dark:text-green-800">Congratulations</h3>
+                                                                        <div className="grid gap-4 mb-4 sm:grid-cols-1 bg-gray-100 p-3 rounded-md border">
+                                                                            <div>
+                                                                                <h3>Your account <b>{requestData?.data?.email}</b> has been created successfully</h3>
+                                                                                <p>Check your email address to activate your account</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="flex justify-between mt-5">
+                                                                            <button
+                                                                                onClick={() => { setOpen(false); setStepper(0) }}
+                                                                                type="button"
+                                                                                className="rounded-md bg-indigo-600 w-full px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                                                            >
+                                                                                Close
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+
                                                                 </div>
-
-                                                                <div className={`mt-10 grid grid-cols-1 gap-x-6 ${stepper != 1 && "hidden"}`}>
-                                                                    <h3 className="mb-4 text-md font-medium font-700 leading-none text-indigo-600 dark:text-indigo-600">Personal Information</h3>
-                                                                    <div className="grid gap-4 mb-4 sm:grid-cols-2">
-                                                                        <div>
-                                                                            <InputFormComponent data={{ title: "Firstname (Optional)", name: "Firstname" }} register={register} error={errors.firstname} />
-                                                                        </div>
-                                                                        <div>
-                                                                            <InputFormComponent data={{ title: "Lastname (Optional)", name: "Lastname" }} register={register} error={errors.lastname} />
-                                                                        </div>
-                                                                        <div>
-                                                                            <InputFormComponent data={{ title: "Phone Number (Optional)", name: "phone" }} register={register} error={errors.phone} />
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="flex justify-between mt-5">
-                                                                        <button
-                                                                            onClick={switchbackStepper}
-                                                                            type="button"
-                                                                            className="rounded-md border bg-white-600 w-1/3 px-3 py-2 text-sm font-semibold text-indigo-600 hover:text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                                                        >
-                                                                            Back: Identity
-                                                                        </button>
-                                                                        <button
-                                                                            type="submit"
-                                                                            className="rounded-md bg-indigo-600 w-1/2 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                                                        >
-                                                                            Next step: Security
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className={`mt-10 grid grid-cols-1 gap-x-6 ${stepper != 2 && "hidden"}`}>
-                                                                    <h3 className="mb-4 text-md font-medium font-700 leading-none text-indigo-600 dark:text-indigo-600">Account Security</h3>
-                                                                    <div className="grid gap-4 mb-4 sm:grid-cols-2">
-                                                                        <div>
-                                                                            <InputFormComponent data={{ title: "Password", type: 'password' }} register={register} error={errors.password} />
-                                                                        </div>
-                                                                        <div>
-                                                                            <InputFormComponent data={{ title: "Confirm Password", type: 'password', name: "confirmpassword" }} register={register} error={errors.confirmpassword} />
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="flex justify-between">
-                                                                        <button
-                                                                            onClick={switchbackStepper}
-                                                                            type="button"
-                                                                            className="rounded-md border bg-white-600 w-1/3 px-3 py-2 text-sm font-semibold text-indigo-600 hover:text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                                                        >
-                                                                            Back
-                                                                        </button>
-                                                                        <button
-                                                                            type="submit"
-                                                                            className="rounded-md bg-indigo-600 w-1/3 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                                                        >
-                                                                            Proceed
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-
-
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    {requestData?.status === false && <span className='text-red-500 mt-5'>{requestData?.message}</span>}
-
-                                                </form>
+                                                        {requestData?.status === false && <span className='text-red-500 mt-5'>{requestData?.message}</span>}
+                                                    </form>
+                                                </LoadingSpinnerComponent>
                                             </div>
                                         </div>
                                     </div>

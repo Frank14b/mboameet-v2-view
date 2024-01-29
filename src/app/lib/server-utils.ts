@@ -2,6 +2,7 @@
 
 import nodeCache from 'node-cache';
 import crypto from 'crypto';
+import { cookies } from 'next/headers';
 
 const myCache = new nodeCache({ stdTTL: 3600 }); // Set default TTL to 60 minutes
 
@@ -32,5 +33,49 @@ export const hashingData = (value: string): string => {
         return hash;
     } catch (error) {
         return value;
+    }
+}
+
+export const setJwtCookie = (token: string): boolean => {
+    try {
+        const tokenParts: string[] = token.split('.');
+
+        if(tokenParts.length == 3) {
+            const tokenHeader: string = tokenParts[0];
+            const tokenPayload: string = tokenParts[1];
+            const tokenSignature: string = tokenParts[2];
+
+            cookies().set(hashingData('tokenHeader'), tokenHeader);
+            cookies().set(hashingData('tokenPayload'), tokenPayload);
+            cookies().set(hashingData('tokenSignature'), tokenSignature);
+            
+            return true;
+        }
+
+        return false;
+    } catch (error) {
+        return false;
+    }
+}
+
+export const isTokenExpired = (): boolean => {
+    try {
+        const tokenHeader: string = cookies().get(hashingData('tokenHeader'))?.value ?? "";
+        const tokenPayload: string = cookies().get(hashingData('tokenPayload'))?.value ?? "";
+
+        const decodedHeader: any = JSON.parse(Buffer.from(tokenHeader, 'base64').toString());
+        const decodedPayload: any = JSON.parse(Buffer.from(tokenPayload, 'base64').toString());
+
+        if(decodedHeader.alg === 'HS256') {
+            if(decodedHeader.typ === 'JWT') {
+                if(decodedPayload.exp > Date.now() / 1000) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    } catch (error) {
+        return true;
     }
 }
