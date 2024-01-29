@@ -6,28 +6,34 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signInSchema } from '@/app/validators'
 import { proceedLogin } from '@/app/services';
-import { ApiResponseDto, LoginFormData } from '@/app/types';
+import { ApiResponseDto, LoginFormData, ResultloginDto } from '@/app/types';
+import LoadingSpinnerComponent from '../loadingSpinner';
+import RegistrationPopupComponent from './register';
 
 export default function LoginPopupComponent({ children }: { children: React.ReactNode }) {
 
-    const [open, setOpen] = useState(false)
+    const [openLogin, setOpenLogin] = useState(false)
     const cancelButtonRef = useRef(null)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(signInSchema), // Integrate Yup for validation
     });
-    const [requestData, setRequestData] = useState<ApiResponseDto | null>(null)
+    const [requestData, setRequestData] = useState<ApiResponseDto<ResultloginDto> | null>(null)
 
     const submitFormData = async (data: LoginFormData) => {
+        setIsLoading(true);
         const result = await proceedLogin(data);
         setRequestData(result);
+        setIsLoading(false);
+        setOpenLogin(false);
     }
 
     return (
         <>
-            <div onClick={() => setOpen(true)}>{children}</div>
+            <div onClick={() => setOpenLogin(true)}>{children}</div>
 
-            <Transition.Root show={open} as={Fragment}>
-                <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
+            <Transition.Root show={openLogin} as={Fragment}>
+                <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpenLogin}>
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -72,33 +78,44 @@ export default function LoginPopupComponent({ children }: { children: React.Reac
 
                                         <div className="px-1">
                                             <div>
-                                                <form method='post' onSubmit={handleSubmit(submitFormData)}>
-                                                    <div className="space-y-12">
-                                                        <div className="border-0 border-gray-900/10 pb-4">
-                                                            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-3">
 
-                                                                <InputFormComponent data={{ title: "Username" }} register={register} />
-                                                                {errors.username && <span className='text-red-500'>{errors.username.message}</span>}
+                                                <LoadingSpinnerComponent isLoading={isLoading}>
+                                                    <form method='post' onSubmit={handleSubmit(submitFormData)}>
+                                                        <div className="space-y-12">
+                                                            <div className="border-0 border-gray-900/10 pb-4">
+                                                                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-3">
 
-                                                                <InputFormComponent data={{ title: "Password", type: 'password' }} register={register} />
-                                                                {errors.password && <span className='text-red-500'>{errors.password.message}</span>}
+                                                                    <InputFormComponent data={{ title: "Username" }} register={register} error={errors?.username} />
 
+                                                                    <InputFormComponent data={{ title: "Password", type: 'password' }} register={register} error={errors?.password} />
+
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div className="mt-1 flex items-center justify-end gap-x-6 mb-4">
-                                                        <button
-                                                            type="submit"
-                                                            className="rounded-md bg-indigo-600 w-full px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                                        >
-                                                            Proceed
-                                                        </button>
-                                                    </div>
+                                                        <div className="mt-5 flex items-center justify-end gap-x-6 mb-4">
+                                                            <button
+                                                                type="submit"
+                                                                className="rounded-md bg-indigo-600 w-full px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                                            >
+                                                                Proceed
+                                                            </button>
+                                                        </div>
 
-                                                    {requestData?.status === false && <span className='text-red-500 mt-5'>{requestData?.message}</span>}
+                                                        {requestData?.status === false && <span className='text-red-500 mt-5'>{requestData?.message}</span>}
 
-                                                </form>
+                                                    </form>
+                                                </LoadingSpinnerComponent>
+
+                                                <div className="mt-3 flex items-center text-center justify-end gap-x-2 mb-4">
+                                                    Don't have account ?
+
+                                                    <RegistrationPopupComponent>
+                                                        <a href="#" className='text-indigo-600'>register now</a>
+                                                    </RegistrationPopupComponent>
+
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -106,7 +123,7 @@ export default function LoginPopupComponent({ children }: { children: React.Reac
                                         <button
                                             type="button"
                                             className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                                            onClick={() => setOpen(false)}
+                                            onClick={() => setOpenLogin(false)}
                                             ref={cancelButtonRef}
                                         >
                                             Cancel

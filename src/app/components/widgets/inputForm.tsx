@@ -2,11 +2,29 @@ import { useState } from "react";
 
 import { InpputFormComponent } from "@/app/types/index";
 import { UseFormRegister } from "react-hook-form";
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 
-export default function InputFormComponent({ data, register }: { data: InpputFormComponent & { [key: string]: any }, register: UseFormRegister<any> }) {
+export default function InputFormComponent(
+    {
+        data,
+        register,
+        error }: {
+            data: InpputFormComponent & { [key: string]: any },
+            register: UseFormRegister<any>,
+            error?: any
+        }) {
 
-    const [inputValue, setInputValue] = useState<string | undefined>(data?.value)
+    const [type, setType] = useState(data?.type ?? "text");
 
+    const switchPasswordType = () => {
+        if (type == "password") {
+            setType("text");
+        } else {
+            setType("password");
+        }
+    }
+
+    // const [inputValue, setInputValue] = useState<string | undefined>(data?.value)
     // const onValueChange = (e: React.FormEvent<HTMLInputElement>) => {
     //     setInputValue(e.currentTarget.value)
     //     data?.onChange(e)
@@ -18,21 +36,29 @@ export default function InputFormComponent({ data, register }: { data: InpputFor
                 {data.title}
             </label>
             <div className="mt-2">
-                <div className="rounded-md shadow-sm ring-1 ring-inset ring-gray-300 w-full">
+                <div className={`rounded-md relative ${error && "border-2 border-rose-500"} shadow-sm ring-1 ring-inset ring-gray-300 w-full`}>
                     <input
-                        type={data?.type ?? "text"}
-                        // name={data?.name ?? data.title.toLowerCase()}
+                        type={type}
                         id={data?.id ?? data.title.toLowerCase()}
                         autoComplete={data.title}
                         className="block border-0 w-full bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                        placeholder={data?.placeholder}
-                        // onChange={(e: React.FormEvent<HTMLInputElement>) => onValueChange(e)}
-                        value={inputValue}
+                        placeholder={data?.placeholder ?? data?.name ?? data.title}
+                        // onChange={(e: R    eact.FormEvent<HTMLInputElement>) => onValueChange(e)}
+                        // value={inputValue}
                         defaultValue={data?.defaultValue}
-                        {...register(`${data?.name ?? data.title.toLowerCase()}`)}
+                        {...register(`${data?.name?.toLowerCase() ?? data.title.toLowerCase()}`)}
                     />
+                    {
+                        data?.type == "password" && <span className="password-eye" onClick={switchPasswordType}>
+                            {
+                                type == "text" ? <EyeIcon className="w-4 h-4" aria-hidden="true" /> : <EyeSlashIcon className="w-4 h-4" aria-hidden="true" />
+                            }
+                        </span>
+                    }
                 </div>
             </div>
         </div>
+
+        {error && <span className='text-red-500 text-sm'>{error?.message}</span>}
     </>
 }
