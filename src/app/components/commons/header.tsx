@@ -10,6 +10,8 @@ import {
     MenuList,
     MenuItem,
     IconButton,
+    Collapse,
+    Avatar,
 } from "@material-tailwind/react";
 import {
     CubeTransparentIcon,
@@ -19,8 +21,10 @@ import {
     LifebuoyIcon,
     PowerIcon,
     Bars2Icon,
+    ChevronDownIcon,
 } from "@heroicons/react/24/solid";
-import LoginPopupComponent from "./authentication/login";
+import LoginPopupComponent from "../layout/authentication/login";
+import RegistrationPopupComponent from "../layout/authentication/register";
 
 // profile menu component
 const profileMenuItems = [
@@ -50,40 +54,26 @@ function ProfileMenu() {
     return (
         <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
             <MenuHandler>
-                <>
-                    <LoginPopupComponent>
-                        <Button
-                            placeholder={""}
-                            size="sm"
-                            variant="text"
-                            color="blue-gray"
-                            className="flex items-center gap-1 rounded-full py-0.5 pr-5 pl-5 lg:ml-auto">
-                            <span>Log In</span>
-                        </Button>
-                    </LoginPopupComponent>
-
-
-                    {/* <Button
+                <Button
+                    placeholder={""}
+                    variant="text"
+                    color="blue-gray"
+                    className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
+                >
+                    <Avatar
                         placeholder={""}
-                        variant="text"
-                        color="blue-gray"
-                        className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
-                    >
-                        <Avatar
-                            placeholder={""}
-                            variant="circular"
-                            size="sm"
-                            alt="tania andrew"
-                            className="border border-gray-900 p-0.5"
-                            src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
-                        />
-                        <ChevronDownIcon
-                            strokeWidth={2.5}
-                            className={`h-3 w-3 transition-transform ${isMenuOpen ? "rotate-180" : ""
-                                }`}
-                        />
-                    </Button> */}
-                </>
+                        variant="circular"
+                        size="sm"
+                        alt="tania andrew"
+                        className="border border-gray-900 p-0.5"
+                        src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
+                    />
+                    <ChevronDownIcon
+                        strokeWidth={2.5}
+                        className={`h-3 w-3 transition-transform ${isMenuOpen ? "rotate-180" : ""
+                            }`}
+                    />
+                </Button>
             </MenuHandler>
             <MenuList placeholder={""} className="p-1 bg-white">
                 {profileMenuItems.map(({ label, icon }, key) => {
@@ -172,8 +162,8 @@ export default function HeaderComponent() {
     }, []);
 
     return (
-        <Navbar placeholder={""} className="mx-auto w-full p-2 border-0 lg:pl-6 bg-pink-500">
-            <div className="relative mx-auto flex items-center justify-between text-white-900">
+        <Navbar placeholder={""} className="mx-auto w-full px-4 py-2">
+            <div className="flex items-center justify-between text-blue-gray-900">
                 <Typography
                     placeholder={"MboaMeet"}
                     as="a"
@@ -196,11 +186,27 @@ export default function HeaderComponent() {
                     <Bars2Icon className="h-6 w-6" />
                 </IconButton>
 
+                <Menu placement="bottom-end">
+                    <div className="hidden gap-2 lg:flex">
+                        <LoginPopupComponent>
+                            <Button placeholder={""} variant="text" size="sm" color="blue-gray">
+                                Log In
+                            </Button>
+                        </LoginPopupComponent>
+
+                        <RegistrationPopupComponent>
+                            <Button placeholder={""} variant="gradient" size="sm">
+                                Sign In
+                            </Button>
+                        </RegistrationPopupComponent>
+                    </div>
+                </Menu>
+
                 <ProfileMenu />
             </div>
-            {/* <Collapse open={isNavOpen} className="overflow-scroll">
+            <Collapse open={isNavOpen} className="overflow-scroll">
                 <NavList />
-            </Collapse > */}
+            </Collapse >
         </Navbar>
     );
 }

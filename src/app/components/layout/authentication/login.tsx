@@ -1,3 +1,5 @@
+"use client";
+
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
@@ -7,8 +9,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { signInSchema } from '@/app/validators'
 import { proceedLogin } from '@/app/services';
 import { ApiResponseDto, LoginFormData, ResultloginDto } from '@/app/types';
-import LoadingSpinnerComponent from '../loadingSpinner';
+import LoadingSpinnerComponent from '../../commons/loadingSpinner';
 import RegistrationPopupComponent from './register';
+import Link from 'next/link';
+import { Button } from '@material-tailwind/react';
 
 export default function LoginPopupComponent({ children }: { children: React.ReactNode }) {
 
@@ -94,12 +98,7 @@ export default function LoginPopupComponent({ children }: { children: React.Reac
                                                         </div>
 
                                                         <div className="mt-5 flex items-center justify-end gap-x-6 mb-4">
-                                                            <button
-                                                                type="submit"
-                                                                className="rounded-md bg-indigo-600 w-full px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                                            >
-                                                                Proceed
-                                                            </button>
+                                                            <Button type='submit' placeholder={""} color="blue" className='w-full bg-indigo-600'>Proceed</Button>
                                                         </div>
 
                                                         {requestData?.status === false && <span className='text-red-500 mt-5'>{requestData?.message}</span>}
@@ -107,12 +106,19 @@ export default function LoginPopupComponent({ children }: { children: React.Reac
                                                     </form>
                                                 </LoadingSpinnerComponent>
 
-                                                <div className="mt-3 flex items-center text-center justify-end gap-x-2 mb-4">
-                                                    Don't have account ?
+                                                <div className="mt-3 text-sm flex items-center text-center justify-end gap-x-2 mb-4">
+                                                    Don't have account?
 
                                                     <RegistrationPopupComponent>
-                                                        <a href="#" className='text-indigo-600'>register now</a>
+                                                        <a href="#" className='text-indigo-600 font-bold'>Register now</a>
                                                     </RegistrationPopupComponent>
+
+                                                </div>
+
+                                                <div className="mt-3 text-sm flex items-center text-center justify-end gap-x-2 mb-4">
+                                                    Forgot Password?
+
+                                                    <Link onClick={() => setOpenLogin(false)} href="/auth/forget-password" className='text-indigo-600 font-bold'>Change now</Link>
 
                                                 </div>
 

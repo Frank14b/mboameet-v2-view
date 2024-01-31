@@ -1,7 +1,7 @@
 "use server";
 
 import axios, { CancelTokenSource } from 'axios';
-import { RequestMethod } from '../types';
+import { ApiResponseDto, RequestMethod } from '../types';
 
 const instance = axios.create({
     baseURL: `${process.env.APP_ENV == 'live' ? process.env.LIVE_API : process.env.DEV_API}/${process.env.API_VERSION}`, // Set your base URL here
@@ -67,9 +67,26 @@ export const apiCall = async ({
     }
 };
 
+
 // Update cache for a specific URL (optional):
 // export const updateCache = async (url: string, params: any) => {
 //     const response = await instance.get(url, { cache: 'no-cache' });
 //     const cacheKey = `GET-${url}-${JSON.stringify(params)}`; // Assume no params
 //     cache[cacheKey] = response.data;
 // };
+
+export const ApiErrorMessage = (error: any): ApiResponseDto<any> => {
+    return {
+        status: false,
+        message: error.response.data?.title ?? error.response.data,
+        data: error.response.data?.errors
+    }
+}
+
+export const ApiSuccessMessage = (data: any, message: string = "Success"): ApiResponseDto<any> => {
+    return {
+        status: true,
+        message: message,
+        data: data
+    }
+}

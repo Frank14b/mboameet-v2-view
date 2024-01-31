@@ -1,8 +1,8 @@
 "use server";
 
 import { hashingData, setCache } from "@/app/lib/server-utils";
-import { ApiResponseDto, LoginFormData, RegistrationFormData, ResultloginDto } from "@/app/types/index";
-import { apiCall } from "../../api";
+import { ApiResponseDto, ForgetPasswordDto, LoginFormData, RegistrationFormData, ResultForgetPasswordDto, ResultloginDto } from "@/app/types/index";
+import { ApiErrorMessage, ApiSuccessMessage, apiCall } from "../../api";
 import { cookies } from 'next/headers'
 
 export const proceedLogin = async (data: LoginFormData): Promise<ApiResponseDto<ResultloginDto>> => {
@@ -15,17 +15,9 @@ export const proceedLogin = async (data: LoginFormData): Promise<ApiResponseDto<
 
         createUserSession(result);
 
-        return {
-            status: true,
-            message: "Success",
-            data: result
-        };
+        return ApiSuccessMessage(result);
     } catch (error: any){
-        return {
-            status: false,
-            message: error.response.data?.title ?? error.response.data,
-            data: error.response.data?.errors
-        };
+        return  ApiErrorMessage(error);
     }
 }
 
@@ -37,17 +29,23 @@ export const proceedRegister = async (data: RegistrationFormData): Promise<ApiRe
             data,
         });
         
-        return {
-            status: true,
-            message: "Success",
-            data: result
-        };
+        return ApiSuccessMessage(result);
     } catch (error: any){
-        return {
-            status: false,
-            message: error.response.data?.title ?? error.response.data,
-            data: error.response.data?.errors
-        };
+        return  ApiErrorMessage(error);
+    }
+}
+
+export const proceedForgetPassword = async (data: ForgetPasswordDto): Promise<ApiResponseDto<ResultForgetPasswordDto>> => {
+    try {
+        const result = await apiCall({
+            method: "POST",
+            url: "/users/foget-password",
+            data,
+        });
+        
+        return ApiSuccessMessage(result);
+    } catch (error) {
+        return  ApiErrorMessage(error)
     }
 }
 

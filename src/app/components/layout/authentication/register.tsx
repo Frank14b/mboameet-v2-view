@@ -1,3 +1,5 @@
+"use client";
+
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
@@ -7,7 +9,7 @@ import { signUpSchema } from '@/app/validators'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { proceedRegister } from '@/app/services'
-import LoadingSpinnerComponent from '../loadingSpinner'
+import LoadingSpinnerComponent from '../../commons/loadingSpinner'
 
 
 export default function RegistrationPopupComponent({ children }: { children: React.ReactNode }) {

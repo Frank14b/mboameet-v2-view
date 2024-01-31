@@ -30,3 +30,11 @@ export type ResultloginDto = {
     age: number,
     lastLogin: Date
 }
+
+export type ForgetPasswordDto = {
+    email: string,
+}
+
+export type ResultForgetPasswordDto = {
+    token: string,
+}
