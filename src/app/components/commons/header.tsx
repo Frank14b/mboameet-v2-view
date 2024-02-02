@@ -186,7 +186,7 @@ export default function HeaderComponent() {
                     <Bars2Icon className="h-6 w-6" />
                 </IconButton>
 
-                <Menu placement="bottom-end">
+                {/* <Menu placement="bottom-end">
                     <div className="hidden gap-2 lg:flex">
                         <LoginPopupComponent>
                             <Button placeholder={""} variant="gradient" size="sm" color="pink">
@@ -200,7 +200,7 @@ export default function HeaderComponent() {
                             </Button>
                         </RegistrationPopupComponent>
                     </div>
-                </Menu>
+                </Menu> */}
 
                 {/* <ProfileMenu /> */}
             </div>
