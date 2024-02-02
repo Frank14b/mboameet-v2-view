@@ -70,7 +70,7 @@ function ProfileMenu() {
                     />
                     <ChevronDownIcon
                         strokeWidth={2.5}
-                        className={`h-3 w-3 transition-transform ${isMenuOpen ? "rotate-180" : ""
+                        className={`h-3 w-3 transition-transform text-white ${isMenuOpen ? "rotate-180" : ""
                             }`}
                     />
                 </Button>
@@ -136,11 +136,11 @@ function NavList() {
                     href="#"
                     variant="small"
                     color="gray"
-                    className="font-medium"
+                    className="font-medium text-white dark:text-white"
                 >
                     <MenuItem placeholder={""} className="flex items-center gap-2 lg:rounded-full">
                         {React.createElement(icon, { className: "h-[18px] w-[18px]" })}{" "}
-                        <span className="text-white"> {label}</span>
+                        <span className="text-white dark:text-white"> {label}</span>
                     </MenuItem>
                 </Typography>
             ))}
@@ -162,13 +162,13 @@ export default function HeaderComponent() {
     }, []);
 
     return (
-        <Navbar placeholder={""} className="mx-auto w-full px-4 py-2">
+        <Navbar placeholder={""} className="mx-auto w-full bg-indigo-900 px-4 py-2">
             <div className="flex items-center justify-between text-blue-gray-900">
                 <Typography
                     placeholder={"MboaMeet"}
                     as="a"
-                    href="#"
-                    className="mr-4 ml-2 cursor-pointer py-1.5 font-medium"
+                    href="/"
+                    className="mr-8 ml-2 cursor-pointer py-1.5 font-bold text-white"
                 >
                     MboaMeet
                 </Typography>
@@ -189,7 +189,7 @@ export default function HeaderComponent() {
                 <Menu placement="bottom-end">
                     <div className="hidden gap-2 lg:flex">
                         <LoginPopupComponent>
-                            <Button placeholder={""} variant="text" size="sm" color="blue-gray">
+                            <Button placeholder={""} variant="gradient" size="sm" color="pink">
                                 Log In
                             </Button>
                         </LoginPopupComponent>
@@ -202,7 +202,7 @@ export default function HeaderComponent() {
                     </div>
                 </Menu>
 
-                <ProfileMenu />
+                {/* <ProfileMenu /> */}
             </div>
             <Collapse open={isNavOpen} className="overflow-scroll">
                 <NavList />

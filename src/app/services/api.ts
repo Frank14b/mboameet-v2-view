@@ -78,8 +78,8 @@ export const apiCall = async ({
 export const ApiErrorMessage = (error: any): ApiResponseDto<any> => {
     return {
         status: false,
-        message: error.response.data?.title ?? error.response.data,
-        data: error.response.data?.errors
+        message: error.response?.data?.title ?? error.response?.data,
+        data: error.response?.data?.errors
     }
 }
 

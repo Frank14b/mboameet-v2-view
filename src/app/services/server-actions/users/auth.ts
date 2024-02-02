@@ -39,10 +39,10 @@ export const proceedForgetPassword = async (data: ForgetPasswordDto): Promise<Ap
     try {
         const result = await apiCall({
             method: "POST",
-            url: "/users/foget-password",
+            url: "/users/forget-password",
             data,
         });
-        
+
         return ApiSuccessMessage(result);
     } catch (error) {
         return  ApiErrorMessage(error)

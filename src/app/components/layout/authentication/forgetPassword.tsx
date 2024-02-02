@@ -10,7 +10,10 @@ import { proceedForgetPassword } from '@/app/services';
 import { ApiResponseDto, ForgetPasswordDto, ResultForgetPasswordDto } from '@/app/types';
 import LoadingSpinnerComponent from '../../commons/loadingSpinner';
 import RegistrationPopupComponent from './register';
+import { Button } from '@material-tailwind/react';
+import Link from 'next/link';
 
+//
 export default function ForgetPasswordComponent() {
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -45,7 +48,7 @@ export default function ForgetPasswordComponent() {
                     </div>
                 </div>
 
-                <div className="px-1">
+                <div className="px-1 relative">
                     <div>
 
                         <LoadingSpinnerComponent isLoading={isLoading}>
@@ -61,12 +64,7 @@ export default function ForgetPasswordComponent() {
                                 </div>
 
                                 <div className="mt-5 flex items-center justify-end gap-x-6 mb-4">
-                                    <button
-                                        type="submit"
-                                        className="rounded-md bg-indigo-600 w-full px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                    >
-                                        Proceed
-                                    </button>
+                                    <Button type='submit' placeholder={""} color="blue" className='w-full bg-indigo-600'>Proceed</Button>
                                 </div>
 
                                 {requestData?.status === false && <span className='text-red-500 mt-5'>{requestData?.message}</span>}
@@ -75,10 +73,10 @@ export default function ForgetPasswordComponent() {
                         </LoadingSpinnerComponent>
 
                         <div className="mt-3 flex items-center text-center justify-end gap-x-2 mb-4">
-                            Don't have account ?
+                            Already have account ?
 
                             <RegistrationPopupComponent>
-                                <a href="#" className='text-indigo-600'>register now</a>
+                                <Link href="/" className='text-indigo-600 font-bold text-sm'>Register now</Link>
                             </RegistrationPopupComponent>
                         </div>
 
