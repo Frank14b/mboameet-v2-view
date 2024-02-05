@@ -29,7 +29,8 @@ export default function LoginPopupComponent({ children }: { children: React.Reac
         const result = await proceedLogin(data);
         setRequestData(result);
         setIsLoading(false);
-        setOpenLogin(false);
+
+        if(result.status === true) setOpenLogin(false);
     }
 
     return (

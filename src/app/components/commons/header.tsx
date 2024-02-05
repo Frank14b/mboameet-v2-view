@@ -25,6 +25,8 @@ import {
 } from "@heroicons/react/24/solid";
 import LoginPopupComponent from "../layout/authentication/login";
 import RegistrationPopupComponent from "../layout/authentication/register";
+import useUserStore from "@/app/store/userStore";
+
 
 // profile menu component
 const profileMenuItems = [
@@ -128,10 +130,10 @@ const navListItems = [
 function NavList() {
     return (
         <ul className="mt-2 mb-4 flex flex-col gap-7 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
-            {navListItems.map(({ label, icon }, key) => (
+            {navListItems.map(({ label, icon }, key: number) => (
                 <Typography
                     placeholder={""}
-                    key={label}
+                    key={`${label}-${key}`}
                     as="a"
                     href="#"
                     variant="small"
@@ -151,8 +153,8 @@ function NavList() {
 export default function HeaderComponent() {
 
     const [isNavOpen, setIsNavOpen] = React.useState(false);
-
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
+    const userState = useUserStore.getState();
 
     React.useEffect(() => {
         window.addEventListener(
@@ -186,23 +188,28 @@ export default function HeaderComponent() {
                     <Bars2Icon className="h-6 w-6" />
                 </IconButton>
 
-                {/* <Menu placement="bottom-end">
-                    <div className="hidden gap-2 lg:flex">
-                        <LoginPopupComponent>
-                            <Button placeholder={""} variant="gradient" size="sm" color="pink">
-                                Log In
-                            </Button>
-                        </LoginPopupComponent>
-
-                        <RegistrationPopupComponent>
-                            <Button placeholder={""} variant="gradient" size="sm">
-                                Sign In
-                            </Button>
-                        </RegistrationPopupComponent>
-                    </div>
-                </Menu> */}
-
-                {/* <ProfileMenu /> */}
+                {
+                    userState ?  (
+                        <Menu placement="bottom-end">
+                        <div className="hidden gap-2 lg:flex">
+                            <LoginPopupComponent>
+                                <Button placeholder={""} variant="gradient" size="sm" color="pink">
+                                    Log In
+                                </Button>
+                            </LoginPopupComponent>
+    
+                            <RegistrationPopupComponent>
+                                <Button placeholder={""} variant="gradient" size="sm">
+                                    Sign In
+                                </Button>
+                            </RegistrationPopupComponent>
+                        </div>
+                    </Menu>
+                    ) : (
+                        <><ProfileMenu /></>
+                    )
+                }
+               
             </div>
             <Collapse open={isNavOpen} className="overflow-scroll">
                 <NavList />

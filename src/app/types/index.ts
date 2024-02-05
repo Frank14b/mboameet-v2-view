@@ -8,3 +8,11 @@ export type ApiResponseDto<T> = {
     message: string,
     data?: T
 }
+
+export type BooleanResultDto<T> = {
+    status: boolean,
+    message: string,
+    data?: Array<T> | object | string | number | undefined | T | ObjectKeyDto
+}
+
+export type ObjectKeyDto = {[key: string]: any}

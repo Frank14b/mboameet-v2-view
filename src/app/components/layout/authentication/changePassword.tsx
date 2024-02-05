@@ -1,41 +1,41 @@
 "use client";
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import InputFormComponent from '../../widgets/inputForm'
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { forgetPasswordSchema } from '@/app/validators'
-import { proceedForgetPassword } from '@/app/services';
-import { ApiResponseDto, ForgetPasswordDto, ResultForgetPasswordDto } from '@/app/types';
+import { changePasswordSchema } from '@/app/validators'
+import { proceedChangePassword } from '@/app/services';
+import { ApiResponseDto, BooleanResultDto, ChangePasswordDto } from '@/app/types';
 import LoadingSpinnerComponent from '../../commons/loadingSpinner';
 import RegistrationPopupComponent from './register';
 import { Button } from '@material-tailwind/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { type } from 'os';
 
 //
-export default function ForgetPasswordComponent() {
+export default function ChangePasswordComponent({ token }:{ token: string}) {
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const { register, handleSubmit, formState: { errors } } = useForm({
-        resolver: yupResolver(forgetPasswordSchema), // Integrate Yup for validation
+        resolver: yupResolver(changePasswordSchema), // Integrate Yup for validation
     });
-    const [requestData, setRequestData] = useState<ApiResponseDto<ResultForgetPasswordDto> | null>(null)
+    const [requestData, setRequestData] = useState<ApiResponseDto<BooleanResultDto<string>> | null>(null)
     const router = useRouter();
 
-    const submitFormData = async (data: ForgetPasswordDto) => {
+    const submitFormData = async (data: ChangePasswordDto) => {
         setIsLoading(true);
-        const result = await proceedForgetPassword(data);
-
+        const result = await proceedChangePassword({
+            ...data,
+            token: token
+        });
         setRequestData(result);
         setIsLoading(false);
-
-        if(result.status == true) {
-            router.push(`/auth/verify-token/${result?.data?.otpToken}`)
-        }
+        router.push("/");
     }
-
+    
     return (
         <>
             <div className="bg-white px-4 pb-1 pt-5 sm:p-6 sm:pb-4">
@@ -45,7 +45,7 @@ export default function ForgetPasswordComponent() {
                     </div>
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                         <h3 className="text-base font-semibold leading-6 text-gray-900">
-                            Forget Password
+                            Change Account Password
                         </h3>
                         <div className="mt-2">
                             <p className="text-sm text-gray-500">
@@ -64,7 +64,9 @@ export default function ForgetPasswordComponent() {
                                     <div className="border-0 border-gray-900/10 pb-4">
                                         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-3">
 
-                                            <InputFormComponent data={{ title: "Email" }} register={register} error={errors?.email} />
+                                            <InputFormComponent data={{ title: "Enter new password", name: 'password', type: 'password' }} register={register} error={errors?.password} />
+
+                                            <InputFormComponent data={{ title: "Confirm new password", name: 'confirmpassword', type: 'password' }} register={register} error={errors?.confirmpassword} />
 
                                         </div>
                                     </div>
@@ -76,13 +78,11 @@ export default function ForgetPasswordComponent() {
 
                                 {requestData?.status === false && <span className='text-red-500 mt-5'>{requestData?.message}</span>}
 
-                                {requestData?.status === true && <span className='text-green-500 mt-5'>{requestData?.data?.message}</span>}
-
                             </form>
                         </LoadingSpinnerComponent>
 
                         <div className="mt-3 flex items-center text-center justify-end gap-x-2 mb-4">
-                            Already have account ?
+                            Don't have account yet ?
 
                             <RegistrationPopupComponent>
                                 <Link href="/" className='text-indigo-600 font-bold text-sm'>Register now</Link>

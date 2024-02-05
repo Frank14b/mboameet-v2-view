@@ -36,5 +36,18 @@ export type ForgetPasswordDto = {
 }
 
 export type ResultForgetPasswordDto = {
+    otpToken: string,
+    message: string
+}
+
+export type VerifyOtpCodeDto = {
+    otp: number,
     token: string,
+    type: number
+}
+
+export type ChangePasswordDto = {
+    confirmpassword: string,
+    password: string,
+    token: string
 }

@@ -3,8 +3,17 @@
 import nodeCache from 'node-cache';
 import crypto from 'crypto';
 import { cookies } from 'next/headers';
+import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 
 const myCache = new nodeCache({ stdTTL: 3600 }); // Set default TTL to 60 minutes
+const tokenCookieskey: string[] = ['tokenHeader', 'tokenPayload', 'tokenSignature'];
+const sessionIdCookieKey: string = "sessionId";
+const cookieOptions: Partial<ResponseCookie> | undefined | [options: ResponseCookie] = {
+    httpOnly: true,
+    secure: process.env.APP_ENV == "live" ? true : false, // Only send over HTTPS
+    sameSite: 'strict', // Prevent cross-site request forgery (CSRF)
+    maxAge: 3600, // 1 hour in seconds
+}
 
 // Set item in cache
 export const setCache = (key: string, value: string) => {
@@ -29,14 +38,14 @@ export const hashingData = (value: string): string => {
     try {
         const password: string = process.env.ENCRYPT_PASSWORD ?? "";
         // SHA-256 (recommended for password hashing)
-        const hash: string = crypto.createHash('sha256').update(password).digest('hex');
+        const hash: string = crypto.createHash('sha256').update(value + password).digest('hex');
         return hash;
     } catch (error) {
         return value;
     }
 }
 
-export const setJwtCookie = (token: string): boolean => {
+export const setJwtCookie = ({id, token} : {id: string, token: string}): boolean => {
     try {
         const tokenParts: string[] = token.split('.');
 
@@ -45,9 +54,10 @@ export const setJwtCookie = (token: string): boolean => {
             const tokenPayload: string = tokenParts[1];
             const tokenSignature: string = tokenParts[2];
 
-            cookies().set(hashingData('tokenHeader'), tokenHeader);
-            cookies().set(hashingData('tokenPayload'), tokenPayload);
-            cookies().set(hashingData('tokenSignature'), tokenSignature);
+            cookies().set(hashingData(tokenCookieskey[0]), tokenHeader, cookieOptions);
+            cookies().set(hashingData(tokenCookieskey[1]), tokenPayload, cookieOptions);
+            cookies().set(hashingData(tokenCookieskey[2]), tokenSignature, cookieOptions);
+            cookies().set(hashingData(sessionIdCookieKey), id, cookieOptions);
             
             return true;
         }
@@ -60,8 +70,8 @@ export const setJwtCookie = (token: string): boolean => {
 
 export const isTokenExpired = (): boolean => {
     try {
-        const tokenHeader: string = cookies().get(hashingData('tokenHeader'))?.value ?? "";
-        const tokenPayload: string = cookies().get(hashingData('tokenPayload'))?.value ?? "";
+        const tokenHeader: string = cookies().get(hashingData(tokenCookieskey[0]))?.value ?? "";
+        const tokenPayload: string = cookies().get(hashingData(tokenCookieskey[1]))?.value ?? "";
 
         const decodedHeader: any = JSON.parse(Buffer.from(tokenHeader, 'base64').toString());
         const decodedPayload: any = JSON.parse(Buffer.from(tokenPayload, 'base64').toString());

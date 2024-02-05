@@ -1,15 +1,40 @@
 "use server";
 
 import axios, { CancelTokenSource } from 'axios';
-import { ApiResponseDto, RequestMethod } from '../types';
+import { ApiResponseDto, ObjectKeyDto, RequestMethod } from '../types';
+import { cookies } from 'next/headers'
 
+//create axios api call instance
 const instance = axios.create({
     baseURL: `${process.env.APP_ENV == 'live' ? process.env.LIVE_API : process.env.DEV_API}/${process.env.API_VERSION}`, // Set your base URL here
 });
 
+// setup an interceptor for all requests
+instance.interceptors.request.use((config: any) => {
+    // Modify request config here
+    // Add an authorization header
+
+    // const sessionId: string | undefined = cookies().get('sessionId')?.value;
+    const token: string | undefined = cookies().get('token')?.value;
+
+    if(token) {
+        config.headers.Authorization = `Bearer ${`${token}`}`;
+    }
+
+    return config;
+  },
+  (error) => {
+    // Handle request errors here
+    console.error('Request error:', error);
+    return Promise.reject(error); // Or custom error handling
+})
+
+// instance.interceptors.response.use()
+
 let requestSource: CancelTokenSource | null = null; // Store cancellation token for each request
 const cache: { [key: string]: any } = {}; // In-memory cache
 
+// create api call function for all methods with caching strategy
 export const apiCall = async ({
     method = "GET",
     url,
@@ -24,7 +49,7 @@ export const apiCall = async ({
     params?: any,
     headers?: any,
     revalidate?: boolean,
-}) => {
+}): Promise<ObjectKeyDto | undefined> => {
     try {
 
         const cacheKey: string = `${method}-${url}-${JSON.stringify(params)}`;

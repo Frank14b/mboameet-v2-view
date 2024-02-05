@@ -26,3 +26,19 @@ export const signUpSchema = yup.object({
 export const forgetPasswordSchema = yup.object({
     email: yup.string().email(invalidEmailErrorMessage).required(requiredEmailErrorMessage),
 })
+
+export const verifyOtpCodeSchema = yup.object({
+    otp: yup.number().min(6).required("OTP code is required"),
+    token: yup.string().default("xxx"),
+    type: yup.number().default(0)
+})
+
+export const changePasswordSchema = yup.object({
+    password: yup.string().matches(new RegExp(passwordRegex), {
+        message: passwordErrorMessage
+    }).required("Password is required"),
+    confirmpassword: yup.string().matches(new RegExp(passwordRegex), {
+        message: passwordErrorMessage
+    }).oneOf([yup.ref("password")], "Passwords must be same").required("Confirm password is required"),
+    token: yup.string().default("xxx"),
+})

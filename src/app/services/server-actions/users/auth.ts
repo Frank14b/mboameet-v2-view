@@ -1,19 +1,37 @@
 "use server";
 
-import { hashingData, setCache } from "@/app/lib/server-utils";
-import { ApiResponseDto, ForgetPasswordDto, LoginFormData, RegistrationFormData, ResultForgetPasswordDto, ResultloginDto } from "@/app/types/index";
+// import { hashingData, setCache } from "@/app/lib/server-utils";
+import { ApiResponseDto, 
+    BooleanResultDto, 
+    ChangePasswordDto, 
+    ForgetPasswordDto, 
+    LoginFormData, 
+    ObjectKeyDto, 
+    RegistrationFormData, 
+    ResultForgetPasswordDto, 
+    ResultloginDto, 
+    VerifyOtpCodeDto } from "@/app/types/index";
 import { ApiErrorMessage, ApiSuccessMessage, apiCall } from "../../api";
-import { cookies } from 'next/headers'
+import { setJwtCookie } from "@/app/lib/server-utils";
+
+const basePath = "/users";
+const urls = {
+    login: `${basePath}/auth`,
+    register: `${basePath}`,
+    forgetPassword: `${basePath}/forget-password`,
+    verifyOtp: `${basePath}/verify-token`,
+    changePassword: `${basePath}/change-password`
+}
 
 export const proceedLogin = async (data: LoginFormData): Promise<ApiResponseDto<ResultloginDto>> => {
     try {
-        const result: ResultloginDto = await apiCall({
+        const result: ObjectKeyDto | undefined = await apiCall({
             method: "POST",
-            url: "/users/auth",
+            url: urls.login,
             data,
         });
 
-        createUserSession(result);
+        if(result != undefined) createUserSession(result);
 
         return ApiSuccessMessage(result);
     } catch (error: any){
@@ -23,9 +41,9 @@ export const proceedLogin = async (data: LoginFormData): Promise<ApiResponseDto<
 
 export const proceedRegister = async (data: RegistrationFormData): Promise<ApiResponseDto<ResultloginDto>> => {
     try {
-        const result = await apiCall({
+        const result: ObjectKeyDto | undefined = await apiCall({
             method: "POST",
-            url: "/users",
+            url: urls.register,
             data,
         });
         
@@ -37,9 +55,9 @@ export const proceedRegister = async (data: RegistrationFormData): Promise<ApiRe
 
 export const proceedForgetPassword = async (data: ForgetPasswordDto): Promise<ApiResponseDto<ResultForgetPasswordDto>> => {
     try {
-        const result = await apiCall({
+        const result: ObjectKeyDto | undefined = await apiCall({
             method: "POST",
-            url: "/users/forget-password",
+            url: urls.forgetPassword,
             data,
         });
 
@@ -49,10 +67,34 @@ export const proceedForgetPassword = async (data: ForgetPasswordDto): Promise<Ap
     }
 }
 
-export const createUserSession = (user: ResultloginDto) => {
-    cookies().set('sessionId', user.id);
-    cookies().set('token', user.token);
+export const verifyOtpCode = async (data: VerifyOtpCodeDto): Promise<ApiResponseDto<BooleanResultDto<string>>> => {
+    try {
+        const result: ObjectKeyDto | undefined = await apiCall({
+            method: "POST",
+            url: urls.verifyOtp,
+            data,
+        });
 
-    const cackeKey: string = hashingData(`token-${user.id}`);
-    setCache(cackeKey, user.token);
+        return ApiSuccessMessage(result);
+    } catch (error) {
+        return  ApiErrorMessage(error)
+    }
+}
+
+export const proceedChangePassword = async (data: ChangePasswordDto): Promise<ApiResponseDto<BooleanResultDto<string>>> => {
+    try {
+        const result: ObjectKeyDto | undefined = await apiCall({
+            method: "POST",
+            url: urls.changePassword,
+            data,
+        });
+
+        return ApiSuccessMessage(result);
+    } catch (error) {
+        return  ApiErrorMessage(error)
+    }
+}
+
+export const createUserSession = (user: ResultloginDto | ObjectKeyDto) => {
+    setJwtCookie({id: user.id, token: user.token});
 }
