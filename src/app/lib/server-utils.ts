@@ -89,3 +89,15 @@ export const isTokenExpired = (): boolean => {
         return true;
     }
 }
+
+export const getToken = (): string => {
+    try {
+        const tokenHeader: string = cookies().get(hashingData(tokenCookieskey[0]))?.value ?? "";
+        const tokenPayload: string = cookies().get(hashingData(tokenCookieskey[1]))?.value ?? "";
+        const tokenSignature: string = cookies().get(hashingData(tokenCookieskey[2]))?.value ?? "";
+
+        return `${tokenHeader}.${tokenPayload}.${tokenSignature}`;
+    } catch (error) {
+        return "";
+    }
+}

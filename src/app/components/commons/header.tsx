@@ -164,7 +164,7 @@ export default function HeaderComponent() {
     }, []);
 
     return (
-        <Navbar placeholder={""} className="mx-auto w-full bg-indigo-900 px-4 py-2">
+        <Navbar fullWidth={true} placeholder={""} className="mx-auto w-full border-0 bg-indigo-900 px-4 py-4">
             <div className="flex items-center justify-between text-blue-gray-900">
                 <Typography
                     placeholder={"MboaMeet"}
@@ -189,27 +189,27 @@ export default function HeaderComponent() {
                 </IconButton>
 
                 {
-                    userState ?  (
+                    userState ? (
                         <Menu placement="bottom-end">
-                        <div className="hidden gap-2 lg:flex">
-                            <LoginPopupComponent>
-                                <Button placeholder={""} variant="gradient" size="sm" color="pink">
-                                    Log In
-                                </Button>
-                            </LoginPopupComponent>
-    
-                            <RegistrationPopupComponent>
-                                <Button placeholder={""} variant="gradient" size="sm">
-                                    Sign In
-                                </Button>
-                            </RegistrationPopupComponent>
-                        </div>
-                    </Menu>
+                            <div className="hidden gap-2 lg:flex">
+                                <LoginPopupComponent>
+                                    <Button placeholder={""} variant="gradient" size="sm" color="pink">
+                                        Log In
+                                    </Button>
+                                </LoginPopupComponent>
+
+                                <RegistrationPopupComponent>
+                                    <Button placeholder={""} variant="gradient" size="sm">
+                                        Sign In
+                                    </Button>
+                                </RegistrationPopupComponent>
+                            </div>
+                        </Menu>
                     ) : (
                         <><ProfileMenu /></>
                     )
                 }
-               
+
             </div>
             <Collapse open={isNavOpen} className="overflow-scroll">
                 <NavList />

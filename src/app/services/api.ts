@@ -2,7 +2,7 @@
 
 import axios, { CancelTokenSource } from 'axios';
 import { ApiResponseDto, ObjectKeyDto, RequestMethod } from '../types';
-import { cookies } from 'next/headers'
+import { getToken } from '../lib/server-utils';
 
 //create axios api call instance
 const instance = axios.create({
@@ -15,15 +15,15 @@ instance.interceptors.request.use((config: any) => {
     // Add an authorization header
 
     // const sessionId: string | undefined = cookies().get('sessionId')?.value;
-    const token: string | undefined = cookies().get('token')?.value;
+    const token: string = getToken();
 
-    if(token) {
+    if(token.length > 0) {
         config.headers.Authorization = `Bearer ${`${token}`}`;
     }
 
     return config;
   },
-  (error) => {
+  (error: any) => {
     // Handle request errors here
     console.error('Request error:', error);
     return Promise.reject(error); // Or custom error handling
