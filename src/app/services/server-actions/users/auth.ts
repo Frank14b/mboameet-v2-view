@@ -32,6 +32,7 @@ export const proceedLogin = async (data: LoginFormData): Promise<ApiResponseDto<
         });
 
         if(result != undefined) createUserSession(result);
+        console.log("🚀 ~ proceedLogin ~ result:", result)
 
         return ApiSuccessMessage(result);
     } catch (error: any){
