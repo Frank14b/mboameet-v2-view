@@ -7,6 +7,7 @@ import { ApiResponseDto, LoginFormData, ResultloginDto } from "@/app/types";
 import { signInSchema } from "@/app/validators";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "@material-tailwind/react";
+import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -81,10 +82,10 @@ export default function SignInPage() {
 
                                         <p className="flex justify-center mt-6 font-sans text-sm antialiased font-light leading-normal text-inherit">
                                             Don't have an account?
-                                            <a href="#signup"
+                                            <Link href="/auth/signup"
                                                 className="block ml-1 font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900">
                                                 Sign up
-                                            </a>
+                                            </Link>
                                         </p>
                                     </div>
                                 </form>
