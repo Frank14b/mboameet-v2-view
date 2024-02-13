@@ -16,19 +16,17 @@ export function MainWrapper({ children }: { children: any }) {
 
     return (
         <MainContext.Provider value={MainData}>
-            <ChatHubWrapper>
-                <HeaderComponent />
-                <main>
-                    <div
-                        className={``}
-                    >
-                        <QueryClientProvider client={queryClient}>
-                            {children}
-                        </QueryClientProvider>
-                    </div>
-                </main>
-                <FooterComponent />
-            </ChatHubWrapper>
+            {/* <HeaderComponent /> */}
+            <main>
+                <div
+                    className={``}
+                >
+                    <QueryClientProvider client={queryClient}>
+                        {children}
+                    </QueryClientProvider>
+                </div>
+            </main>
+            {/* <FooterComponent /> */}
         </MainContext.Provider>
     );
 }

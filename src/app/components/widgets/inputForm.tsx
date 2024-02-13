@@ -25,17 +25,8 @@ export default function InputFormComponent(
         }
     }
 
-    // const [inputValue, setInputValue] = useState<string | undefined>(data?.value)
-    // const onValueChange = (e: React.FormEvent<HTMLInputElement>) => {
-    //     setInputValue(e.currentTarget.value)
-    //     data?.onChange(e)
-    // }
-
     return <>
         <div className="w-full">
-            {/* <label htmlFor={data?.id ?? data.title.toLowerCase()} className="block text-sm font-medium leading-6 text-gray-900">
-                {data.title}
-            </label> */}
             <div className="mt-2">
                 <div className={`rounded-md relative ${error && "border-2 border-rose-500"} shadow-sm ring-1 ring-inset ring-gray-300 w-full`}>
                     <Input
@@ -61,6 +52,6 @@ export default function InputFormComponent(
             </div>
         </div>
 
-        {error && <span className='text-red-500 text-sm'>{error?.message}</span>}
+        {error && <div className='text-red-500 text-sm px-1 mt-2'>{error?.message}</div>}
     </>
 }
