@@ -24,6 +24,7 @@ const urls = {
 }
 
 export const proceedLogin = async (data: LoginFormData): Promise<ApiResponseDto<ResultloginDto>> => {
+    console.log("🚀 ~ proceedLogin ~ data:", data)
     try {
         const result: ObjectKeyDto | undefined = await apiCall({
             method: "POST",

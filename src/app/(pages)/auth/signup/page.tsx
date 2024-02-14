@@ -2,73 +2,12 @@
 
 import LoadingSpinnerComponent from "@/app/components/commons/loadingSpinner";
 import InputFormComponent from "@/app/components/widgets/inputForm";
-import { proceedRegister } from "@/app/services";
-import { ApiResponseDto, RegistrationFormData, ResultloginDto } from "@/app/types";
-import { signUpSchema } from "@/app/validators";
-import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useSignUpContext } from "./template";
 
 export default function SignUpPage() {
 
-    const [stepper, setStepper] = useState<number>(0);
-    const [open, setOpen] = useState(false)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({
-        resolver: yupResolver(signUpSchema), // Integrate Yup for validation
-    });
-    const [requestData, setRequestData] = useState<ApiResponseDto<ResultloginDto> | null>(null)
-
-    const submitFormData = async (data: RegistrationFormData) => {
-        if (stepper < 2) return;
-        setIsLoading(true);
-        const result = await proceedRegister(data);
-        setIsLoading(false);
-        setRequestData(result);
-
-        if (result.status === true) {
-            setStepper(stepper + 1);
-        }
-    }
-
-    useEffect(() => {
-        switchSepper()
-    }, [errors])
-
-    useEffect(() => {
-        if (isLoading) return;
-        reset();
-    }, [isLoading])
-
-    const switchSepper = () => {
-        setTimeout(() => {
-            if (stepper === 0) {
-                const username = watch("username");
-                const email = watch("email");
-
-                if (errors?.username == undefined &&
-                    username &&
-                    errors?.email == undefined &&
-                    email
-                ) {
-                    setStepper(stepper + 1);
-                }
-            } else if (stepper === 1) {
-                const phone = watch("phone");
-
-                if (errors?.phone == undefined &&
-                    phone
-                ) {
-                    setStepper(stepper + 1);
-                }
-            }
-        }, 100);
-    }
-
-    const switchbackStepper = () => {
-        setStepper(stepper - 1);
-    }
+    const signUpContext = useSignUpContext();
 
     return (
         <div className="mh-600">
@@ -98,22 +37,22 @@ export default function SignUpPage() {
                                 Fill the required fields bellow or use the secial button below
                             </p>
                             <div className="p-5">
-                                <LoadingSpinnerComponent isLoading={isLoading}>
-                                    <form method='post' onSubmit={handleSubmit(submitFormData)}>
+                                <LoadingSpinnerComponent isLoading={signUpContext.isLoading}>
+                                    <form method='post' onSubmit={signUpContext.handleSubmit(signUpContext.submitFormData)}>
                                         <div className="space-y-12">
                                             <div className="border-0 border-gray-900/10 pb-4">
                                                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-3">
 
-                                                    <div className={`mt-1 grid grid-cols-1 gap-x-6 ${stepper != 0 && "hidden"}`}>
+                                                    <div className={`mt-1 grid grid-cols-1 gap-x-6 ${signUpContext.stepper != 0 && "hidden"}`}>
                                                         <h3 className="mb-4 text-md font-medium font-700 leading-none text-pink-600 dark:text-pink-600">
                                                             Account Identity
                                                         </h3>
                                                         <div className="grid gap-4 mb-4 grid-cols-1">
                                                             <div>
-                                                                <InputFormComponent data={{ title: "How can we call you?", name: "Username" }} register={register} error={errors.username} />
+                                                                <InputFormComponent data={{ title: "How can we call you?", name: "Username" }} register={signUpContext.register} error={signUpContext.errors.username} />
                                                             </div>
                                                             <div>
-                                                                <InputFormComponent data={{ title: "What's your email address?", name: "Email", type: "email" }} register={register} error={errors.email} />
+                                                                <InputFormComponent data={{ title: "What's your email address?", name: "Email", type: "email" }} register={signUpContext.register} error={signUpContext.errors.email} />
                                                             </div>
                                                         </div>
                                                         <button type="submit" className="text-white mt-5 bg-pink-300 hover:bg-pink-400 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">
@@ -121,22 +60,22 @@ export default function SignUpPage() {
                                                         </button>
                                                     </div>
 
-                                                    <div className={`mt-1 grid grid-cols-1 gap-x-6 ${stepper != 1 && "hidden"}`}>
+                                                    <div className={`mt-1 grid grid-cols-1 gap-x-6 ${signUpContext.stepper != 1 && "hidden"}`}>
                                                         <h3 className="mb-4 text-md font-medium font-700 leading-none text-pink-600 dark:text-pink-600">Personal Information</h3>
                                                         <div className="grid gap-4 mb-4 grid-cols-1">
                                                             <div>
-                                                                <InputFormComponent data={{ title: "Firstname (Optional)", name: "Firstname" }} register={register} error={errors.firstname} />
+                                                                <InputFormComponent data={{ title: "Firstname (Optional)", name: "Firstname" }} register={signUpContext.register} error={signUpContext.errors.firstname} />
                                                             </div>
                                                             <div>
-                                                                <InputFormComponent data={{ title: "Lastname (Optional)", name: "Lastname" }} register={register} error={errors.lastname} />
+                                                                <InputFormComponent data={{ title: "Lastname (Optional)", name: "Lastname" }} register={signUpContext.register} error={signUpContext.errors.lastname} />
                                                             </div>
                                                             <div>
-                                                                <InputFormComponent data={{ title: "Phone Number (Optional)", name: "phone" }} register={register} error={errors.phone} />
+                                                                <InputFormComponent data={{ title: "Phone Number (Optional)", name: "phone" }} register={signUpContext.register} error={signUpContext.errors.phone} />
                                                             </div>
                                                         </div>
                                                         <div className="flex justify-between mt-5">
                                                             <button
-                                                                onClick={switchbackStepper}
+                                                                onClick={signUpContext.switchbackStepper}
                                                                 type="button"
                                                                 className="rounded-md border bg-white-600 w-1/2 px-3 py-2 text-sm font-semibold text-pink-300 hover:text-white shadow-sm hover:bg-pink-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                                             >
@@ -151,19 +90,19 @@ export default function SignUpPage() {
                                                         </div>
                                                     </div>
 
-                                                    <div className={`mt-1 grid grid-cols-1 gap-x-6 ${stepper != 2 && "hidden"}`}>
+                                                    <div className={`mt-1 grid grid-cols-1 gap-x-6 ${signUpContext.stepper != 2 && "hidden"}`}>
                                                         <h3 className="mb-4 text-md font-medium font-700 leading-none text-pink-600 dark:text-pink-600">Account Security</h3>
                                                         <div className="grid gap-4 mb-4 grid-cols-1">
                                                             <div>
-                                                                <InputFormComponent data={{ title: "Password", type: 'password' }} register={register} error={errors.password} />
+                                                                <InputFormComponent data={{ title: "Password", type: 'password' }} register={signUpContext.register} error={signUpContext.errors.password} />
                                                             </div>
                                                             <div>
-                                                                <InputFormComponent data={{ title: "Confirm Password", type: 'password', name: "confirmpassword" }} register={register} error={errors.confirmpassword} />
+                                                                <InputFormComponent data={{ title: "Confirm Password", type: 'password', name: "confirmpassword" }} register={signUpContext.register} error={signUpContext.errors.confirmpassword} />
                                                             </div>
                                                         </div>
                                                         <div className="flex justify-between mt-5">
                                                             <button
-                                                                onClick={switchbackStepper}
+                                                                onClick={signUpContext.switchbackStepper}
                                                                 type="button"
                                                                 className="rounded-md border bg-white-600 w-1/2 px-3 py-2 text-sm font-semibold text-pink-300 hover:text-white shadow-sm hover:bg-pink-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                                             >
@@ -178,17 +117,17 @@ export default function SignUpPage() {
                                                         </div>
                                                     </div>
 
-                                                    <div className={`mt-10 grid grid-cols-1 gap-x-6 text-center ${stepper != 3 && "hidden"}`}>
+                                                    <div className={`mt-10 grid grid-cols-1 gap-x-6 text-center ${signUpContext.stepper != 3 && "hidden"}`}>
                                                         <h3 className="mb-4 text-md font-medium font-bold leading-none text-green-600 dark:text-green-800">Congratulations</h3>
                                                         <div className="grid gap-4 mb-4 sm:grid-cols-1 bg-gray-100 p-3 rounded-md border">
                                                             <div>
-                                                                <h3>Your account <b>{requestData?.data?.email}</b> has been created successfully</h3>
+                                                                <h3>Your account <b>{signUpContext.requestData?.data?.email}</b> has been created successfully</h3>
                                                                 <p>Check your email address to activate your account</p>
                                                             </div>
                                                         </div>
                                                         <div className="flex justify-between mt-5">
                                                             <button
-                                                                onClick={() => { setOpen(false); setStepper(0) }}
+                                                                onClick={() => { signUpContext.setOpen(false); signUpContext.setStepper(0) }}
                                                                 type="button"
                                                                 className="rounded-md bg-pink-300 w-full px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                                             >
@@ -201,7 +140,7 @@ export default function SignUpPage() {
                                             </div>
                                         </div>
 
-                                        {requestData?.status === false && <span className='text-red-500 mt-5'>{requestData?.message}</span>}
+                                        {signUpContext.requestData?.status === false && <span className='text-red-500 mt-5'>{signUpContext.requestData?.message}</span>}
 
                                         <p className="flex justify-center mt-6 font-sans text-sm antialiased font-light leading-normal text-inherit">
                                             Already have an account?

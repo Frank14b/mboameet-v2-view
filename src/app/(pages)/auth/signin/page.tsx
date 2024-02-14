@@ -2,32 +2,13 @@
 
 import LoadingSpinnerComponent from "@/app/components/commons/loadingSpinner";
 import InputFormComponent from "@/app/components/widgets/inputForm";
-import { proceedLogin } from "@/app/services";
-import { ApiResponseDto, LoginFormData, ResultloginDto } from "@/app/types";
-import { signInSchema } from "@/app/validators";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "@material-tailwind/react";
 import Link from "next/link";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { SignInContextDto, useSignInContext } from "./template";
 
 export default function SignInPage() {
 
-    const [openLogin, setOpenLogin] = useState(false)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    const { register, handleSubmit, formState: { errors } } = useForm({
-        resolver: yupResolver(signInSchema), // Integrate Yup for validation
-    });
-    const [requestData, setRequestData] = useState<ApiResponseDto<ResultloginDto> | null>(null)
-
-    const submitFormData = async (data: LoginFormData) => {
-        setIsLoading(true);
-        const result = await proceedLogin(data);
-        setRequestData(result);
-        setIsLoading(false);
-
-        if (result.status === true) setOpenLogin(false);
-    }
+    const signInContext: SignInContextDto = useSignInContext();
 
     return (
         <div className="mh-600">
@@ -41,14 +22,14 @@ export default function SignInPage() {
                                     Sign In
                                 </h3>
                             </div>
-                            <LoadingSpinnerComponent isLoading={isLoading}>
-                                <form method='post' onSubmit={handleSubmit(submitFormData)}>
+                            <LoadingSpinnerComponent isLoading={signInContext.isLoading}>
+                                <form method='post' onSubmit={signInContext.handleSubmit(signInContext.submitFormData)}>
                                     <div className="flex flex-col gap-4 p-6">
                                         <div className="relative w-full min-w-[200px]">
-                                            <InputFormComponent data={{ title: "Username" }} register={register} error={errors?.username} />
+                                            <InputFormComponent data={{ title: "Username" }} register={signInContext.register} error={signInContext.errors?.username} />
                                         </div>
                                         <div className="relative w-full min-w-[200px]">
-                                            <InputFormComponent data={{ title: "Password", type: 'password' }} register={register} error={errors?.password} />
+                                            <InputFormComponent data={{ title: "Password", type: 'password' }} register={signInContext.register} error={signInContext.errors?.password} />
                                         </div>
                                         <div className="-ml-2.5">
                                             <div className="inline-flex items-center">
@@ -59,10 +40,10 @@ export default function SignInPage() {
                                                     <span
                                                         className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
                                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"
-                                                            stroke="currentColor" stroke-width="1">
-                                                            <path fill-rule="evenodd"
+                                                            stroke="currentColor" strokeWidth="1">
+                                                            <path fillRule="evenodd"
                                                                 d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                                clip-rule="evenodd"></path>
+                                                                clipRule="evenodd"></path>
                                                         </svg>
                                                     </span>
                                                 </label>
@@ -77,7 +58,7 @@ export default function SignInPage() {
                                         <Button type='submit' placeholder={""} color="blue" className='w-full bg-pink-300'>Proceed</Button>
 
                                         <p>
-                                            {requestData?.status === false && <span className='text-red-500 mt-5'>{requestData?.message}</span>}
+                                            {signInContext.requestData?.status === false && <span className='text-red-500 mt-5'>{signInContext.requestData?.message}</span>}
                                         </p>
 
                                         <p className="flex justify-center mt-6 font-sans text-sm antialiased font-light leading-normal text-inherit">
