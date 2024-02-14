@@ -40,7 +40,7 @@ export default function UserCardV2Component({ bgImage, image, title, description
                     )
                 }
 
-                <Typography placeholder={""} variant="h5" className="mb-4 text-gray-300 text-md">
+                <Typography placeholder={""} variant="h5" className="mb-4 text-gray-300 dark:text-gray-400 text-md">
                     {title}
                 </Typography>
                 <Avatar

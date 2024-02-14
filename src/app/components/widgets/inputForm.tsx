@@ -36,7 +36,7 @@ export default function InputFormComponent(
                         label={data.title}
                         id={data?.id ?? data.title.toLowerCase()}
                         autoComplete={data.title}
-                        className="block border-0 w-full bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                        className="block border-0 w-full bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 dark:text-gray-100 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder={data?.placeholder ?? data?.name ?? data.title}
                         defaultValue={data?.defaultValue}
                         {...register(`${data?.name?.toLowerCase() ?? data.title.toLowerCase()}`)}

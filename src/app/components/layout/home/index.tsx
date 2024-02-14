@@ -11,7 +11,7 @@ export default function HomePageComponent() {
     return (
         <div className="mh-600">
             <div className="flex">
-                <div className="w-1/4 bg-gray-100 h-screen overflowY">
+                <div className="w-1/4 bg-gray-100 dark:bg-gray-900	 h-screen overflowY">
                     <div className="flex flex-col items-center justify-center">
                         <figure className="relative h-40 w-full">
                             {/* <img
@@ -47,10 +47,10 @@ export default function HomePageComponent() {
                     </div>
 
                 </div>
-                <div className="w-1/2 bg-gray-100">
+                <div className="w-1/2 bg-gray-100 dark:bg-gray-900">
                     <div className="flex flex-col h-screen p-6 relative overflow-y-auto">
 
-                        <div className="w-full flex absolute right-0 px-5">
+                        <div className="w-full flex absolute dark:text-white right-0 px-5">
                             <div className="w-1/2"><Typography placeholder={""} className="font-bold px-1">Feeds</Typography></div>
                             <div className="w-1/2 text-xs flex justify-end pt-1">
                                 <span className="mx-2 cursor-pointer">Recents</span>
@@ -59,23 +59,23 @@ export default function HomePageComponent() {
                             </div>
                         </div>
 
-                        <div className="w-full px-3 mt-12 bg-white rounded-xl p-3">
+                        <div className="w-full px-3 mt-12 bg-white dark:bg-gray-800 rounded-xl p-3">
                             <FeedNewsComponent title="" icon={""} subTitle="" fileType="caroussel"/>
                         </div>
-                        <div className="w-full px-3 mt-3 bg-white rounded-xl p-3">
+                        <div className="w-full px-3 mt-3 bg-white dark:bg-gray-800 rounded-xl p-3">
                             <FeedNewsComponent title="" icon={""} subTitle=""/>
                         </div>
-                        <div className="w-full px-3 mt-3 bg-white rounded-xl p-3">
+                        <div className="w-full px-3 mt-3 bg-white dark:bg-gray-800 rounded-xl p-3">
                             <FeedNewsComponent title="" icon={""} subTitle="" fileType="images"/>
                         </div>
-                        <div className="w-full px-3 mt-3 bg-white rounded-xl p-3">
+                        <div className="w-full px-3 mt-3 bg-white dark:bg-gray-800 rounded-xl p-3">
                             <FeedNewsComponent title="" icon={""} subTitle="" fileType="video"/>
                         </div>
 
                     </div>
                 </div>
-                <div className="w-1/4 bg-gray-100">
-                    <div className="flex flex-col h-screen pt-6 overflow-y-auto">
+                <div className="w-1/4 bg-gray-100 dark:bg-gray-900">
+                    <div className="flex flex-col h-screen pt-6 overflow-y-auto dark:text-gray-300">
                         <div className="w-full pb-6">
                             <Typography placeholder={""} className="font-bold px-1 pb-4">Stories</Typography>
 

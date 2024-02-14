@@ -20,6 +20,7 @@ const config: Config | any = withMT({
     }
   },
   plugins: [],
+  // darkMode: 'class',
 });
 
 export default config;

@@ -21,10 +21,10 @@ export default function FeedNewsComponent({ title, icon, subTitle, fileType }: F
                             <Avatar placeholder={""} variant="circular" alt="candice" src={"https://docs.material-tailwind.com/img/face-1.jpg"} />
                         </ListItemPrefix>
                         <div>
-                            <Typography placeholder={""} variant="h6" color="blue-gray">
+                            <Typography placeholder={""} variant="h6"  color="blue-gray" className="dark:text-pink-200">
                                 George Lobko
                             </Typography>
-                            <Typography placeholder={""} variant="small" color="gray" className="font-normal">
+                            <Typography placeholder={""} variant="small" className="font-normal dark:text-gray-500">
                                 2 hours ago
                             </Typography>
                         </div>
@@ -32,7 +32,7 @@ export default function FeedNewsComponent({ title, icon, subTitle, fileType }: F
                 </List>
             </div>
 
-            <div className="grid justify-items-between rounded-xl px-3 text-sm text-black">
+            <div className="grid justify-items-between rounded-xl px-3 py-3 text-sm text-black dark:text-gray-300">
                 <p>
                     Hi everyone, todayi adlkasdkasd skdlsak sdlklkadf kldaslkadslksadf
                     Hi everyone, todayi adlkasdkasd skdlsak sdlklkadf kldakasd skdlsak sdlklkadf <a href="#">kldaslkadslksadf</a>
@@ -103,9 +103,9 @@ export default function FeedNewsComponent({ title, icon, subTitle, fileType }: F
 
 
             <div className="px-3 pt-2 flex">
-                <span className="flex text-gray-600 text-sm cursor-pointer"><EyeIcon className="h-5 w-5" />&nbsp;6356</span>
-                <span className="flex px-6 text-pink-300 text-sm cursor-pointer"><HeartIcon className="h-5 w-5" />&nbsp;Like</span>
-                <span className="flex text-gray-600 text-sm cursor-pointer"><ChatBubbleBottomCenterIcon className="h-5 w-5" />&nbsp;Comment</span>
+                <span className="flex text-gray-600 dark:text-gray-200 text-sm cursor-pointer"><EyeIcon className="h-5 w-5" />&nbsp;6356</span>
+                <span className="flex px-6 text-pink-300 dark:text-pink-300 text-sm cursor-pointer"><HeartIcon className="h-5 w-5" />&nbsp;Like</span>
+                <span className="flex text-gray-600 dark:text-gray-200 text-sm cursor-pointer"><ChatBubbleBottomCenterIcon className="h-5 w-5" />&nbsp;Comment</span>
             </div>
         </>
     )

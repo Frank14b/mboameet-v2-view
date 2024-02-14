@@ -17,7 +17,7 @@ export function MainWrapper({ children }: { children: any }) {
     return (
         <MainContext.Provider value={MainData}>
             {/* <HeaderComponent /> */}
-            <main>
+            <main className='dark'>
                 <div
                     className={``}
                 >

@@ -20,10 +20,10 @@ export default function SideBarMenuListUserComponent({ users }: { users: SideBar
                             <Avatar placeholder={""} variant="circular" alt="candice" src={user.image} />
                         </ListItemPrefix>
                         <div>
-                            <Typography placeholder={""} variant="h6" color="blue-gray">
+                            <Typography placeholder={""} variant="h6" color="blue-gray" className="dark:text-pink-200">
                                 {user.title}
                             </Typography>
-                            <Typography placeholder={""} variant="small" color="gray" className="font-normal">
+                            <Typography placeholder={""} variant="small" color="gray" className="font-normal dark:text-gray-500">
                                 Software Engineer @ Material
                             </Typography>
                         </div>
