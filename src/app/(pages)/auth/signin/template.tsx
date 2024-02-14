@@ -8,6 +8,7 @@ import { Dispatch, SetStateAction, createContext, useContext, useState } from "r
 import { FieldErrors, UseFormHandleSubmit, UseFormRegister, useForm } from "react-hook-form";
 
 export default function Template({ children }: { children: React.ReactNode }) {
+    //render the page
     return <SignInWrapper>{children}</SignInWrapper>
 }
 

@@ -27,7 +27,7 @@ export type UserCardV2 = {
 export type AboutCardComponent = { 
     title: string; 
     icon: any; 
-    subTitle: string 
+    subTitle: string;
 };
 
 export type SideBarMenuList = {
@@ -43,3 +43,10 @@ export type SideBarMenuListUser = {
 	active?: boolean;
 	badge?: string;
 }
+
+export type FeedNews = { 
+    title: string; 
+    icon: any; 
+    subTitle: string;
+	fileType?: string;
+};
