@@ -1,4 +1,4 @@
-import { UserCardV2Component } from "@/app/types";
+import { UserCardV2 } from "@/app/types";
 import {
     Card,
     CardHeader,
@@ -8,25 +8,25 @@ import {
 } from "@material-tailwind/react";
 
 
-export default function UserCardV2Component({ bgImage, image, title, description }: UserCardV2Component) {
+export default function UserCardV2Component({ bgImage, image, title, description }: UserCardV2) {
 
     return <>
         <Card
             placeholder={""}
-            shadow={true}
-            className="relative grid h-[20rem] w-full max-w-[100rem] items-end justify-center overflow-hidden text-center"
+            shadow={false}
+            className="relative grid h-[9rem] w-full max-w-[100rem] items-end justify-center overflow-hidden text-center"
         >
             <CardHeader
                 placeholder={""}
                 floated={false}
-                shadow={true}
+                shadow={false}
                 color="transparent"
                 style={{ background: `url(${bgImage}) center/cover` }}
                 className={`absolute inset-0 m-0 h-full w-full rounded-none bg-cover bg-center`}
             >
                 <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-t from-black/80 via-black/50 backdrop-blur-sm" />
             </CardHeader>
-            <CardBody placeholder={""} className="relative py-14 px-6 md:px-12">
+            <CardBody placeholder={""} className="relative py-10 px-6 md:px-12">
                 {
                     description && (
                         <Typography
@@ -44,6 +44,7 @@ export default function UserCardV2Component({ bgImage, image, title, description
                     {title}
                 </Typography>
                 <Avatar
+                    style={{ minWidth: "50px", minHeight: "50px" }}
                     placeholder={""}
                     size="xl"
                     variant="circular"

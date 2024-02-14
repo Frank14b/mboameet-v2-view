@@ -17,7 +17,7 @@ export type UserCardComponent = {
 	description?: string;
 };
 
-export type UserCardV2Component = {
+export type UserCardV2 = {
 	bgImage: string;
 	image: string;
 	title: string;
@@ -29,3 +29,17 @@ export type AboutCardComponent = {
     icon: any; 
     subTitle: string 
 };
+
+export type SideBarMenuList = {
+	title: string; 
+    icon: any;
+	active?: boolean;
+	badge?: string;
+}
+
+export type SideBarMenuListUser = {
+	title: string; 
+    image?: any;
+	active?: boolean;
+	badge?: string;
+}
