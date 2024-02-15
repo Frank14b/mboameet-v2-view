@@ -6,11 +6,13 @@ import {
     ListItemPrefix,
     ListItemSuffix,
 } from "@material-tailwind/react";
+import Link from "next/link";
 
-export default function SideBarMenuListComponent({ title, icon, active = false, badge }: SideBarMenuList) {
+export default function SideBarMenuListComponent({ title, icon, active = false, badge, link }: SideBarMenuList) {
 
     return (
-        <ListItem placeholder={""} className={`group rounded-xl py-1.5 px-3 my-1 dark:text-gray-400 text-sm font-normal ${active ? 'bg-black text-white' : 'text-blue-gray-900'}  hover:bg-pink-400 hover:text-white focus:bg-pink-500 focus:text-white`}>
+        <Link href={`${link ? link : '#'}`}>
+            <ListItem placeholder={""} className={`group rounded-xl py-1.5 px-3 my-1 dark:text-gray-400 text-sm font-normal ${active ? 'bg-black text-white' : 'text-blue-gray-900'}  hover:bg-pink-400 hover:text-white focus:bg-pink-500 focus:text-white`}>
             <ListItemPrefix placeholder={""}>
                 <span className={`h-5 w-5 ${active ? 'text-white' : 'text-dark'}`}>{icon}</span>
             </ListItemPrefix>
@@ -27,6 +29,7 @@ export default function SideBarMenuListComponent({ title, icon, active = false, 
                     </ListItemSuffix>
                 )
             }
-        </ListItem>
+            </ListItem>
+        </Link>
     )
 }

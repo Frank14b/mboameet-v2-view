@@ -35,6 +35,7 @@ export type SideBarMenuList = {
     icon: any;
 	active?: boolean;
 	badge?: string;
+	link?: string;
 }
 
 export type SideBarMenuListUser = {
