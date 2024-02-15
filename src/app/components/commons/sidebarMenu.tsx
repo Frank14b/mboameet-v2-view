@@ -11,7 +11,7 @@ export default function SideBarMenuComponent({ children }: { children: any }) {
                                 src="../full-shot-people-use-apps-make-friends.jpg"
                                 alt="nature image"
                             /> */}
-                <figcaption className="absolute text-center bottom-8 left-2/4 flex w-[calc(100%-4rem)] -translate-x-2/4 justify-between rounded-xl border border-white bg-white/75 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">
+                <figcaption className="absolute text-center bottom-8 left-2/4 flex w-[calc(100%-4rem)] -translate-x-2/4 justify-between rounded-xl border border-white dark:border-0 bg-white/75 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">
                     <Typography placeholder={""} variant="h5" color="blue-gray">
                         Sara Lamalo
                     </Typography>

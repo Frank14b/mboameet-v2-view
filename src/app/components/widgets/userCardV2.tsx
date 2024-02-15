@@ -14,7 +14,7 @@ export default function UserCardV2Component({ bgImage, image, title, description
         <Card
             placeholder={""}
             shadow={false}
-            className="relative grid h-[9rem] w-full max-w-[100rem] items-end justify-center overflow-hidden text-center"
+            className="relative grid h-[9rem] w-full max-w-[100rem] border-0 rounded-lg bg-transparent items-end justify-center overflow-hidden text-center"
         >
             <CardHeader
                 placeholder={""}
@@ -22,7 +22,7 @@ export default function UserCardV2Component({ bgImage, image, title, description
                 shadow={false}
                 color="transparent"
                 style={{ background: `url(${bgImage}) center/cover` }}
-                className={`absolute inset-0 m-0 h-full w-full rounded-none bg-cover bg-center`}
+                className={`absolute inset-0 m-0 h-full w-full rounded-none bg-cover bg-center dark:border-0`}
             >
                 <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-t from-black/80 via-black/50 backdrop-blur-sm" />
             </CardHeader>

@@ -51,3 +51,9 @@ export type FeedNews = {
     subTitle: string;
 	fileType?: string;
 };
+
+export type FeedForm = { 
+	children: React.ReactNode,
+    title?: string; 
+    icon?: any;
+};

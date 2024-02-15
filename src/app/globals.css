@@ -2,40 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-/* :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
-*/
-
-/* body {
-  color: rgb(var(--foreground-rgb));
-  background: url("/bgac72c497338f11a05d3d.jpg") center/cover;
-} */
-
-/*
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-} */
-
 .password-eye {
   position: absolute;
   right: 10px;
   top: 10px;
   z-index: 9;
-  width: 15px;
+  width: 10px;
   cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 5px; /* Adjust width as needed */
+  height: 5px; /* Adjust height as needed */
+}
+
+::-webkit-scrollbar-track {
+  background: #f5f5f5; /* Customize track color */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #999; /* Customize thumb color */
+  border-radius: 0px; /* Add rounded corners */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ccc; /* Change thumb color on hover */
 }
