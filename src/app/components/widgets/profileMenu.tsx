@@ -7,10 +7,12 @@ import {
     Avatar,
     Typography,
 } from "@material-tailwind/react";
+import { useRouter } from "next/navigation";
 
 export function ProfileMenuComponent() {
 
     const mainContext = useMainContext();
+    const router = useRouter();
 
     return (
         <Menu>
@@ -31,7 +33,7 @@ export function ProfileMenuComponent() {
                 </div>
             </MenuHandler>
             <MenuList placeholder={""}>
-                <MenuItem placeholder={""} className="flex items-center gap-2">
+                <MenuItem placeholder={""} className="flex items-center gap-2" onClick={() => router.push("/profile")}>
                     <svg
                         width="16"
                         height="16"
@@ -51,7 +53,7 @@ export function ProfileMenuComponent() {
                         My Profile
                     </Typography>
                 </MenuItem>
-                <MenuItem placeholder={""} className="flex items-center gap-2">
+                {/* <MenuItem placeholder={""} className="flex items-center gap-2">
                     <svg
                         width="16"
                         height="16"
@@ -70,8 +72,8 @@ export function ProfileMenuComponent() {
                     <Typography placeholder={""} variant="small" className="font-medium">
                         Edit Profile
                     </Typography>
-                </MenuItem>
-                <MenuItem placeholder={""} className="flex items-center gap-2">
+                </MenuItem> */}
+                {/* <MenuItem placeholder={""} className="flex items-center gap-2">
                     <svg
                         width="14"
                         height="14"
@@ -90,7 +92,7 @@ export function ProfileMenuComponent() {
                     <Typography placeholder={""} variant="small" className="font-medium">
                         Inbox
                     </Typography>
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem placeholder={""} className="flex items-center gap-2">
                     <svg
                         width="16"
