@@ -12,16 +12,16 @@
 }
 
 ::-webkit-scrollbar {
-	width: 5px; /* Adjust width as needed */
+	width: 3.5px; /* Adjust width as needed */
 	height: 5px; /* Adjust height as needed */
 }
 
 ::-webkit-scrollbar-track {
-	background: #f5f5f5; /* Customize track color */
+	background: #f5f5f516; /* Customize track color */
 }
 
 ::-webkit-scrollbar-thumb {
-	background: #999; /* Customize thumb color */
+	background: #99999944; /* Customize thumb color */
 	border-radius: 0px; /* Add rounded corners */
 }
 

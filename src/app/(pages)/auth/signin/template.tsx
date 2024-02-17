@@ -1,9 +1,11 @@
 "use client";
 
 import { proceedLogin } from "@/app/services";
+import useUserStore from "@/app/store/userStore";
 import { ApiResponseDto, LoginFormData, ResultloginDto } from "@/app/types";
 import { signInSchema } from "@/app/validators";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, createContext, useContext, useState } from "react"
 import { FieldErrors, UseFormHandleSubmit, UseFormRegister, useForm } from "react-hook-form";
 
@@ -15,26 +17,35 @@ export default function Template({ children }: { children: React.ReactNode }) {
 const SignInContext = createContext<any>({});
 export function SignInWrapper({ children }: { children: any }) {
 
-    const [openLogin, setOpenLogin] = useState(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(signInSchema), // Integrate Yup for validation
     });
     //
     const [requestData, setRequestData] = useState<ApiResponseDto<ResultloginDto> | null>(null)
+    const { setUserConnected, setUser, setLoading, userConnected } = useUserStore();
+    const router = useRouter();
 
     const submitFormData = async (data: LoginFormData) => {
         setIsLoading(true);
         const result = await proceedLogin(data);
         setRequestData(result);
+        inituserStoreSession(result?.data ?? null);
         setIsLoading(false);
 
-        if (result.status === true) setOpenLogin(false);
+        if (result.status === true) {
+            router.push('/')
+            setLoading(false);
+        };
+    }
+
+    const inituserStoreSession = (data: ResultloginDto | null) => {
+        setLoading(true);
+        setUser(data);
+        setUserConnected(true);
     }
 
     const data: SignInContextDto = {
-        openLogin,
-        setOpenLogin,
         isLoading,
         setIsLoading,
         register,
@@ -49,7 +60,7 @@ export function SignInWrapper({ children }: { children: any }) {
             <div
                 className={``}
             >
-                {children}
+                {!userConnected && children}
             </div>
         </SignInContext.Provider>
     );
@@ -58,8 +69,6 @@ export function SignInWrapper({ children }: { children: any }) {
 export const useSignInContext = (): SignInContextDto => useContext(SignInContext);
 
 export type SignInContextDto = {
-    openLogin: boolean,
-    setOpenLogin: Dispatch<SetStateAction<boolean>>,
     isLoading: boolean,
     setIsLoading: Dispatch<SetStateAction<boolean>>,
     register: UseFormRegister<any>,

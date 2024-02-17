@@ -20,11 +20,11 @@ const urls = {
     register: `${basePath}`,
     forgetPassword: `${basePath}/forget-password`,
     verifyOtp: `${basePath}/verify-token`,
-    changePassword: `${basePath}/change-password`
+    changePassword: `${basePath}/change-password`,
+    validateToken: `${basePath}/validate-token`
 }
 
 export const proceedLogin = async (data: LoginFormData): Promise<ApiResponseDto<ResultloginDto>> => {
-    console.log("🚀 ~ proceedLogin ~ data:", data)
     try {
         const result: ObjectKeyDto | undefined = await apiCall({
             method: "POST",
@@ -33,7 +33,6 @@ export const proceedLogin = async (data: LoginFormData): Promise<ApiResponseDto<
         });
 
         if(result != undefined) createUserSession(result);
-        console.log("🚀 ~ proceedLogin ~ result:", result)
 
         return ApiSuccessMessage(result);
     } catch (error: any){
@@ -89,6 +88,19 @@ export const proceedChangePassword = async (data: ChangePasswordDto): Promise<Ap
             method: "POST",
             url: urls.changePassword,
             data,
+        });
+
+        return ApiSuccessMessage(result);
+    } catch (error) {
+        return  ApiErrorMessage(error)
+    }
+}
+
+export const validatToken = async () => {
+    try {
+        const result: ObjectKeyDto | undefined = await apiCall({
+            method: "GET",
+            url: urls.validateToken,
         });
 
         return ApiSuccessMessage(result);

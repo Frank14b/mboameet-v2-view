@@ -36,6 +36,8 @@ export const checkCache = (key: string): boolean => {
 
 export const hashingData = (value: string): string => {
     try {
+        if(process.env.NEXT_PUBLIC_APP_ENV == "dev") return value;
+
         const password: string = process.env.ENCRYPT_PASSWORD ?? "";
         // SHA-256 (recommended for password hashing)
         const hash: string = crypto.createHash('sha256').update(value + password).digest('hex');
@@ -96,8 +98,26 @@ export const getToken = (): string => {
         const tokenPayload: string = cookies().get(hashingData(tokenCookieskey[1]))?.value ?? "";
         const tokenSignature: string = cookies().get(hashingData(tokenCookieskey[2]))?.value ?? "";
 
-        return `${tokenHeader}.${tokenPayload}.${tokenSignature}`;
+        const token = `${tokenHeader}.${tokenPayload}.${tokenSignature}`.trim();
+
+        if(token.length < 50) {
+            return "";
+        }
+
+        return token;
     } catch (error) {
         return "";
+    }
+}
+
+export const deleteToken = (): boolean => {
+    try {
+        cookies().delete(hashingData(tokenCookieskey[0]));
+        cookies().delete(hashingData(tokenCookieskey[1]));
+        cookies().delete(hashingData(tokenCookieskey[2]));
+
+        return true;
+    } catch (error) {
+        return false;
     }
 }
