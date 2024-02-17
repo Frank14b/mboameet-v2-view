@@ -4,6 +4,7 @@ import LoadingSpinnerComponent from "@/app/components/commons/loadingSpinner";
 import InputFormComponent from "@/app/components/widgets/inputForm";
 import Link from "next/link";
 import { useSignUpContext } from "./template";
+import { Button } from "@material-tailwind/react";
 
 export default function SignUpPage() {
 
@@ -55,7 +56,7 @@ export default function SignUpPage() {
                                                                 <InputFormComponent data={{ title: "What's your email address?", name: "Email", type: "email" }} register={signUpContext.register} error={signUpContext.errors.email} />
                                                             </div>
                                                         </div>
-                                                        <button type="submit" className="text-white mt-5 bg-pink-300 hover:bg-pink-400 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">
+                                                        <button type="submit" className="rounded-md bg-pink-300 w-full px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                                                             Next Step: Personal Details
                                                         </button>
                                                     </div>
@@ -133,6 +134,7 @@ export default function SignUpPage() {
                                                             >
                                                                 Close
                                                             </button>
+                                                            <Button type='button' placeholder={""} color="pink" className='w-full bg-indigo-600'>Proceed</Button>
                                                         </div>
                                                     </div>
 
