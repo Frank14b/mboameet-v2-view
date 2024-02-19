@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import SideBarMenuComponent from '../components/commons/sidebarMenu';
 import AsideBarMenuComponent from '../components/commons/asidebarMenu';
 import useUserStore from '../store/userStore';
-import { deleteToken } from '../lib/server-utils';
+import { deleteToken, isTokenExpired } from '../lib/server-utils';
 import { usePathname, useRouter } from 'next/navigation';
 
 const MainContext = createContext<any>({});
@@ -24,7 +24,7 @@ export function MainWrapper({ children }: { children: any }) {
         deleteToken();
         setUserConnected(false);
         useUserStore.persist.clearStorage();
-        
+
         setTimeout(() => {
             router.push("/auth/signin");
         }, 300);
@@ -40,6 +40,16 @@ export function MainWrapper({ children }: { children: any }) {
     useEffect(() => {
         setLoading(false);
     }, [])
+
+    useEffect(() => {
+        if(userConnected === true) {
+            const tokenExpired: boolean = isTokenExpired();
+            if (tokenExpired) {
+                // logout();
+            }
+        }
+        
+    }, [router, loading])
 
     return (
         <MainContext.Provider value={MainData}>

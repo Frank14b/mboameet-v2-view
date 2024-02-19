@@ -2,8 +2,6 @@
 
 import { Typography } from "@material-tailwind/react";
 import FeedNewsComponent from "../../widgets/feedNews";
-import SideBarMenuComponent from "../../commons/sidebarMenu";
-import AsideBarMenuComponent from "../../commons/asidebarMenu";
 import FeedFormCardComponent from "../../widgets/feedFormCard";
 
 export default function HomePageComponent() {

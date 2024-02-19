@@ -1,5 +1,5 @@
 import type { NextRequest } from 'next/server';
-import { getToken } from '../lib/server-utils';
+import { getToken, isTokenExpired } from '../lib/server-utils';
 
 export const protectedPages = [
 	'/profile',
@@ -10,7 +10,9 @@ export const protectedPages = [
 const isUserAuthenticated = async (request: NextRequest) => {
 	try {
 		const authToken = getToken();
-		if (authToken?.length > 0) {
+		const tokenIsExpired = isTokenExpired();
+
+		if (authToken?.length > 0 && !tokenIsExpired) {
 			if (request.nextUrl.pathname.startsWith('/auth')) {
 				return true;
 			}
@@ -24,6 +26,7 @@ const isUserAuthenticated = async (request: NextRequest) => {
 const isUserNotAuthenticated = async (request: NextRequest) => {
 	try {
 		const authToken = getToken();
+		// const tokenIsExpired = isTokenExpired();
 
 		if (authToken.length == 0) {
 			if (request.nextUrl.pathname == '/') {

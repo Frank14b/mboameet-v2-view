@@ -78,13 +78,15 @@ export const isTokenExpired = (): boolean => {
         const decodedHeader: any = JSON.parse(Buffer.from(tokenHeader, 'base64').toString());
         const decodedPayload: any = JSON.parse(Buffer.from(tokenPayload, 'base64').toString());
 
-        if(decodedHeader.alg === 'HS256') {
-            if(decodedHeader.typ === 'JWT') {
+        // if(decodedHeader.alg === 'HS256') {
+        //     if(decodedHeader.typ === 'JWT') {
                 if(decodedPayload.exp > Date.now() / 1000) {
                     return false;
                 }
-            }
-        }
+        //     }
+        // }
+
+        // deleteToken();
 
         return true;
     } catch (error) {
