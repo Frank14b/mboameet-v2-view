@@ -14,9 +14,7 @@ const MainContext = createContext<any>({});
 export function MainWrapper({ children }: { children: any }) {
 
     const queryClient = new QueryClient();
-
     const { userConnected, setUserConnected, user, loading, setLoading, theme, setTheme } = useUserStore();
-
     const router = useRouter();
     const pathname = usePathname();
 
@@ -41,15 +39,12 @@ export function MainWrapper({ children }: { children: any }) {
         setLoading(false);
     }, [])
 
-    useEffect(() => {
-        if(userConnected === true) {
-            const tokenExpired: boolean = isTokenExpired();
-            if (tokenExpired) {
-                // logout();
-            }
-        }
-        
-    }, [router, loading])
+    // useEffect(() => {
+    //     if (userConnected === true) {
+    //         isTokenExpired();
+    //     }
+
+    // }, [router, loading])
 
     return (
         <MainContext.Provider value={MainData}>

@@ -30,10 +30,10 @@ export function SignInWrapper({ children }: { children: any }) {
         setIsLoading(true);
         const result = await proceedLogin(data);
         setRequestData(result);
-        inituserStoreSession(result?.data ?? null);
         setIsLoading(false);
 
         if (result.status === true) {
+            inituserStoreSession(result?.data ?? null);
             router.push('/')
             setLoading(false);
         };

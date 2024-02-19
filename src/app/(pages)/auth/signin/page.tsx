@@ -57,7 +57,7 @@ export default function SignInPage() {
 
                                         <Button type='submit' placeholder={""} color="blue" className='w-full bg-pink-300'>Proceed</Button>
 
-                                        <p>
+                                        <p className="mt-3">
                                             {signInContext.requestData?.status === false && <span className='text-red-500 mt-5'>{signInContext.requestData?.message}</span>}
                                         </p>
 

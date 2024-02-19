@@ -26,7 +26,6 @@ const isUserAuthenticated = async (request: NextRequest) => {
 const isUserNotAuthenticated = async (request: NextRequest) => {
 	try {
 		const authToken = getToken();
-		// const tokenIsExpired = isTokenExpired();
 
 		if (authToken.length == 0) {
 			if (request.nextUrl.pathname == '/') {

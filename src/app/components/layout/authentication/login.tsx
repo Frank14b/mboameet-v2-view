@@ -30,7 +30,7 @@ export default function LoginPopupComponent({ children }: { children: React.Reac
         setRequestData(result);
         setIsLoading(false);
 
-        if(result.status === true) setOpenLogin(false);
+        if (result.status === true) setOpenLogin(false);
     }
 
     return (
