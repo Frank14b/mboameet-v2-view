@@ -16,7 +16,7 @@ export default function ProfilePage() {
         <div className="w-full flex absolute dark:text-white right-0 px-5">
             <div className="w-1/2"><Typography placeholder={""} className="font-bold px-1">Profile</Typography></div>
             <div className="w-1/2 text-xs flex justify-end pt-1">
-                <span className="mx-2 cursor-pointer font-bold flex cursor-pointer">Edit&nbsp;<PencilIcon width={15} height={15} /></span>
+                <span className="mx-2 cursor-pointer font-bold flex cursor-pointer" onClick={() => profileContext.handleOpenEditProfile()}>Edit&nbsp;<PencilIcon width={15} height={15} /></span>
             </div>
         </div>
         {/*  */}

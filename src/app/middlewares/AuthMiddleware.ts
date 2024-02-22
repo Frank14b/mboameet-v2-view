@@ -10,7 +10,7 @@ export const protectedPages = [
 const isUserAuthenticated = async (request: NextRequest) => {
 	try {
 		const authToken = getToken();
-		const tokenIsExpired = isTokenExpired();
+		const tokenIsExpired = await isTokenExpired();
 
 		if (authToken?.length > 0 && !tokenIsExpired) {
 			if (request.nextUrl.pathname.startsWith('/auth')) {

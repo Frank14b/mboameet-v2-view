@@ -98,7 +98,7 @@ export const setJwtCookie = ({
 	}
 };
 
-export const isTokenExpired = (): boolean => {
+export const isTokenExpired = async (): Promise<boolean> => {
 	try {
 		// const tokenHeader: string =
 		// 	cookies().get(hashingData(tokenCookieskey[0]))?.value ?? "";

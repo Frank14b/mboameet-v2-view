@@ -13,7 +13,7 @@ export const signUpSchema = yup.object({
     firstname: yup.string().notRequired(),
     lastname: yup.string().notRequired(),
     email: yup.string().email(invalidEmailErrorMessage).required(requiredEmailErrorMessage),
-    phone: yup.number().positive().integer().required("Phone number is required"),
+    phone: yup.number().positive().nullable().integer().required("Phone number is required"),
     countryCode: yup.string().notRequired(),
     password: yup.string().matches(new RegExp(passwordRegex), {
         message: passwordErrorMessage
@@ -41,4 +41,16 @@ export const changePasswordSchema = yup.object({
         message: passwordErrorMessage
     }).oneOf([yup.ref("password")], "Passwords must be same").required("Confirm password is required"),
     token: yup.string().default("xxx"),
+})
+
+export const UpdateProfileSchema = yup.object({
+    // userName: yup.string().notRequired(),
+    firstName: yup.string().notRequired(),
+    lastName: yup.string().notRequired(),
+    email: yup.string().email(invalidEmailErrorMessage).required(requiredEmailErrorMessage),
+    // phone: yup.number().positive().nullable().integer().required("Phone number is required"),
+    // countryCode: yup.string().notRequired(),
+    password: yup.string().matches(new RegExp(passwordRegex), {
+        message: passwordErrorMessage
+    }).required("Current password is required")
 })

@@ -35,16 +35,19 @@ export function MainWrapper({ children }: { children: any }) {
         logout: logout
     };
 
+     const checkExpiredToken = async () => {
+        const expired = await isTokenExpired();
+        if(expired) {
+            logout();
+        }
+     }
+
     useEffect(() => {
+        if (userConnected === true) {
+            checkExpiredToken();
+        }
         setLoading(false);
-    }, [])
-
-    // useEffect(() => {
-    //     if (userConnected === true) {
-    //         isTokenExpired();
-    //     }
-
-    // }, [router, loading])
+    }, [loading, pathname, userConnected])
 
     return (
         <MainContext.Provider value={MainData}>
