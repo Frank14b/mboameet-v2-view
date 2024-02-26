@@ -1,16 +1,16 @@
 "use client";
 
-import { useMainContext } from "@/app/contexts/main";
+import { MainDataType, useMainContext } from "@/app/contexts/main";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { Typography } from "@material-tailwind/react";
-import { useProfileContext } from "./template";
+import { ProfileContextDto, useProfileContext } from "./template";
 import ProfileImageComponent from "@/app/components/layout/profile/profileImage";
 import ProfileDetailsComponent from "@/app/components/layout/profile/profileDetails";
 
 export default function ProfilePage() {
 
-    const mainContext = useMainContext();
-    const profileContext = useProfileContext();
+    const mainContext: MainDataType = useMainContext();
+    const profileContext: ProfileContextDto = useProfileContext();
 
     return <>
         <div className="w-full flex absolute dark:text-white right-0 px-5">

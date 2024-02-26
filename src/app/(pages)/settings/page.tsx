@@ -59,35 +59,6 @@ export default function SettingsPage() {
                     </div>
                 </li>
                 <li className="relative flex flex-col gap-2 h-28">
-                    <span className="absolute left-0 grid !w-[78px] justify-center bg-transparent transition-opacity duration-200">
-                        <span className="h-full w-0.5 bg-blue-gray-100"></span>
-                    </span>
-                    <div
-                        className="relative flex items-center gap-4 py-3 pl-4 pr-8 bg-white  dark:bg-black/35 dark:border-0 border shadow-lg rounded-xl border-blue-gray-50 shadow-blue-gray-900/5">
-                        <span
-                            className="relative z-[2] w-max flex-shrink-0 overflow-hidden rounded-full bg-red-500/10 p-3 text-red-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
-                                className="w-5 h-5">
-                                <path
-                                    d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z">
-                                </path>
-                                <path fillRule="evenodd"
-                                    d="M3.087 9l.54 9.176A3 3 0 006.62 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087zm6.163 3.75A.75.75 0 0110 12h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z"
-                                    clipRule="evenodd"></path>
-                            </svg>
-                        </span>
-                        <div className="flex flex-col gap-1">
-                            <h6
-                                className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
-                                New order #1832412
-                            </h6>
-                            <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700">
-                                21 DEC 11 PM
-                            </p>
-                        </div>
-                    </div>
-                </li>
-                <li className="relative flex flex-col gap-2 h-28">
                     <div
                         className="relative flex items-center gap-4 py-3 pl-4 pr-8 bg-white  dark:bg-black/35 dark:border-0 border shadow-lg rounded-xl border-blue-gray-50 shadow-blue-gray-900/5">
                         <span

@@ -5,6 +5,8 @@ export const protectedPages = [
 	'/profile',
 	'/settings',
 	'/chats',
+	'/friends',
+	'/galleries'
 ];
 
 const isUserAuthenticated = async (request: NextRequest) => {

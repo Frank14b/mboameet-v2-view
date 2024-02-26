@@ -1,11 +1,11 @@
 'use client';
 
-import { ResultloginDto } from "@/app/types";
+import { ObjectKeyDto, ResultloginDto } from "@/app/types";
 import { EnvelopeIcon, UserIcon } from "@heroicons/react/24/solid";
 
 export default function ProfileDetailsComponent(
     { connectedUser }: {
-        connectedUser: ResultloginDto}) {
+        connectedUser: ResultloginDto | ObjectKeyDto | null}) {
 
     return (
         <>

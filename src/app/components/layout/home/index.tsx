@@ -16,20 +16,20 @@ export default function HomePageComponent() {
                 </div>
             </div>
             {/*  */}
-            <div className="w-full px-3 mt-12 bg-white dark:bg-gray-800 rounded-xl p-3">
+            <div className="w-full px-3 mt-12 bg-white dark:bg-black/15 rounded-xl p-3">
                 <FeedFormCardComponent title="" icon={""}><></></FeedFormCardComponent>
             </div>
 
-            <div className="w-full px-3 mt-12 bg-white dark:bg-gray-800 rounded-xl p-3">
+            <div className="w-full px-3 mt-12 bg-white dark:bg-black/15 rounded-xl p-3">
                 <FeedNewsComponent title="" icon={""} subTitle="" fileType="caroussel" />
             </div>
-            <div className="w-full px-3 mt-3 bg-white dark:bg-gray-800 rounded-xl p-3">
+            <div className="w-full px-3 mt-3 bg-white dark:bg-black/15 rounded-xl p-3">
                 <FeedNewsComponent title="" icon={""} subTitle="" />
             </div>
-            <div className="w-full px-3 mt-3 bg-white dark:bg-gray-800 rounded-xl p-3">
+            <div className="w-full px-3 mt-3 bg-white dark:bg-black/15 rounded-xl p-3">
                 <FeedNewsComponent title="" icon={""} subTitle="" fileType="images" />
             </div>
-            <div className="w-full px-3 mt-3 bg-white dark:bg-gray-800 rounded-xl p-3">
+            <div className="w-full px-3 mt-3 bg-white dark:bg-black/15 rounded-xl p-3">
                 <FeedNewsComponent title="" icon={""} subTitle="" fileType="video" />
             </div>
             {/*  */}

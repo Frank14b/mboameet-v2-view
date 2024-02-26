@@ -1,4 +1,4 @@
-import { List, Typography } from "@material-tailwind/react";
+import { List } from "@material-tailwind/react";
 import SideBarMenuListComponent from "../widgets/sidebar/menuList";
 import { ChatBubbleBottomCenterIcon, Cog6ToothIcon, EnvelopeIcon, UsersIcon, VideoCameraIcon } from "@heroicons/react/24/solid";
 import { usePathname } from "next/navigation";

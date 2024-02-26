@@ -43,7 +43,7 @@ export function UpdateProfileFormComponent() {
               <InputFormComponent
                 data={{
                   title: "Firstname",
-                  defaultValue: mainContext.connectedUser.firstName,
+                  defaultValue: mainContext.connectedUser?.firstName,
                 }}
                 register={profileContext.register}
                 error={profileContext.errors?.firstName}
@@ -52,7 +52,7 @@ export function UpdateProfileFormComponent() {
               <InputFormComponent
                 data={{
                   title: "Lastname",
-                  defaultValue: mainContext.connectedUser.lastName,
+                  defaultValue: mainContext.connectedUser?.lastName,
                 }}
                 register={profileContext.register}
                 error={profileContext.errors?.lastName}
@@ -61,7 +61,7 @@ export function UpdateProfileFormComponent() {
               <InputFormComponent
                 data={{
                   title: "Email",
-                  defaultValue: mainContext.connectedUser.email,
+                  defaultValue: mainContext.connectedUser?.email,
                 }}
                 register={profileContext.register}
                 error={profileContext.errors?.email}

@@ -2,6 +2,7 @@
 
 import CropProfileImage from "@/app/components/layout/profile/cropProfileImage";
 import { UpdateProfileFormComponent } from "@/app/components/layout/profile/updateProfile";
+import { useAppHubContext } from "@/app/contexts/appHub";
 import { proceedUpdateProfile } from "@/app/services";
 import { ResultUpdateProfileData, UpdateProfileFormData, ApiResponseDto } from "@/app/types";
 import { UpdateProfileSchema } from "@/app/validators";
@@ -13,6 +14,7 @@ import {
   SetStateAction,
   createContext,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import {
@@ -43,6 +45,8 @@ export function ProfileWrapper({ children }: { children: any }) {
   } = useForm({
     resolver: yupResolver(UpdateProfileSchema), // Integrate Yup for validation
   });
+   
+  const appHubContext = useAppHubContext();
 
   const changeProfilePicture = async (data: ChangeEvent<HTMLInputElement>) => {
     if (!data?.target?.files?.[0]) return; // if no file found return immediately
@@ -54,6 +58,7 @@ export function ProfileWrapper({ children }: { children: any }) {
     const result = await proceedUpdateProfile(data);
     setRequestData(result);
     setIsLoading(false);
+    appHubContext.userHubs.updateProfile();
 
     if (result.status === true) {
       setValue("password", "");

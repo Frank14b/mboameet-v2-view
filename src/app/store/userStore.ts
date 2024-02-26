@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { ObjectKeyDto, ResultloginDto } from '../types';
 
-type StoreType = {
+export type StoreType = {
   user: ResultloginDto | ObjectKeyDto | null;
   loading: boolean;
   userConnected: boolean;

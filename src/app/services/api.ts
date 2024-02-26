@@ -10,12 +10,12 @@ const instance = axios.create({
 });
 
 // setup an interceptor for all requests
-instance.interceptors.request.use((config: any) => {
+instance.interceptors.request.use(async (config: any) => {
     // Modify request config here
     // Add an authorization header
 
     // const sessionId: string | undefined = cookies().get('sessionId')?.value;
-    const token: string = getToken();
+    const token: string = await getToken();
 
     if(token.length > 0) {
         config.headers.Authorization = `Bearer ${`${token}`}`;

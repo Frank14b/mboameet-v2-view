@@ -17,3 +17,5 @@ export type ResultUpdateProfileData = {
     phone?: Maybe<number | undefined>,
     countryCode?: Maybe<string | undefined>
 }
+
+export type ResultProfileData = ResultUpdateProfileData;
