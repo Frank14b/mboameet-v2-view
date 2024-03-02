@@ -11,12 +11,15 @@ class UserHubs {
     this.userStore = userStore;
 
     this.getProfileDetails();
+    this.updateProfile();
   }
 
   getProfileDetails(): void {
-    this.connection.on("UserProfile", (message: any) => {
-      console.log("🚀 ~ connection.on ~ message:", message);
-      this.userStore.setUser(message)
+    this.connection.on("UserProfile", (user: any) => {
+      if(user?.id) {
+        this.userStore.setUserConnected(true);
+        this.userStore.setUser(user);
+      }
     });
   };
 

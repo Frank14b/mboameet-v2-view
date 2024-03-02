@@ -5,6 +5,8 @@ import * as signalR from "@microsoft/signalr";
 import UserHubs from "../services/hubs/users";
 import { getToken } from "../lib/server-utils";
 import useUserStore from "../store/userStore";
+import { useMainContext } from "./main";
+import { usePathname } from "next/navigation";
 
 const AppHubContext = createContext<any>({});
 
@@ -14,31 +16,46 @@ export function AppHubWrapper({ children }: { children: any }) {
   );
   const [userHubs, setUserHubs] = useState<any>(null);
   const userStore = useUserStore();
+  const mainContext = useMainContext();
+  const pathname = usePathname();
 
   useEffect(() => {
-    try {
-      const protocol: signalR.JsonHubProtocol = new signalR.JsonHubProtocol();
-      const transport: signalR.HttpTransportType =
-        signalR.HttpTransportType.WebSockets;
-      const options: signalR.IHttpConnectionOptions = {
-        transport,
-        logMessageContent: true,
-        logger: signalR.LogLevel.Error,
-        accessTokenFactory: async () => await getToken(),
-      };
-      const connection = new signalR.HubConnectionBuilder()
-        .withUrl("http://localhost:5000/apphub", options) // replace with your URL
-        .withHubProtocol(protocol)
-        .build();
-
-      connection.start().then(() => {
-        setConnection(connection);
-        //
-        setUserHubs(new UserHubs(connection, userStore));
-      });
-    } catch (error) {
-        console.log("🚀 ~ useEffect ~ error:", error)
+    //
+    if (connection) return;
+    if (userStore.userConnected !== true){
+        if(!pathname.startsWith("/auth")) {
+            mainContext.logout();
+        }
+        return;
     }
+
+    const protocol: signalR.JsonHubProtocol = new signalR.JsonHubProtocol();
+    const transport: signalR.HttpTransportType =
+      signalR.HttpTransportType.WebSockets;
+    const options: signalR.IHttpConnectionOptions = {
+      transport,
+      logMessageContent: true,
+      logger: signalR.LogLevel.Error,
+      accessTokenFactory: async () => await getToken(),
+    };
+
+    const _connection = new signalR.HubConnectionBuilder()
+      .withUrl("http://localhost:5000/apphub", options) // hub api link
+      .withHubProtocol(protocol)
+      .build();
+
+    if (!_connection) return;
+
+    _connection
+      .start()
+      .then(() => {
+        setConnection(_connection);
+        //
+        setUserHubs(new UserHubs(_connection, userStore));
+      })
+      .catch(() => {
+        mainContext.logout();
+      });
   }, []);
 
   const closeConnection = () => {

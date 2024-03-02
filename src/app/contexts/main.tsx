@@ -52,26 +52,32 @@ export function MainWrapper({ children }: { children: any }) {
   };
 
   useEffect(() => {
-    // initialize the session worker if user is connected
     if (userConnected === true) {
       checkExpiredToken();
-      sessionTimeOut({ logout });
     }
 
     setLoading(false);
   }, [pathname, userConnected]);
 
+  useEffect(() => {
+    // initialize the session worker if user is connected
+    if (userConnected === true) {
+      sessionTimeOut({ logout });
+    }
+    
+    setLoading(false);
+  }, [userConnected]);
+
   return (
     <MainContext.Provider value={MainData}>
-      {/* <HeaderComponent /> */}
-      <QueryClientProvider client={queryClient}>
+      {/* <QueryClientProvider client={queryClient}> */}
         {loading ? (
           <></>
         ) : (
           <>
             <main className={`${theme}`}>
-              {userConnected === true ? (
-                <AppHubWrapper>
+              <AppHubWrapper>
+                {userConnected === true ? (
                   <>
                     <div className="mh-600 bg-gray-200 dark:bg-gray-800">
                       <div className="flex xxl:container">
@@ -97,15 +103,14 @@ export function MainWrapper({ children }: { children: any }) {
                       </div>
                     </div>
                   </>
-                </AppHubWrapper>
-              ) : (
-                <>{pathname.startsWith("/auth") ? children : <></>}</>
-              )}
+                ) : (
+                  <>{pathname.startsWith("/auth") ? children : <></>}</>
+                )}
+              </AppHubWrapper>
             </main>
           </>
         )}
-      </QueryClientProvider>
-      {/* <FooterComponent /> */}
+      {/* </QueryClientProvider> */}
     </MainContext.Provider>
   );
 }

@@ -10,7 +10,7 @@ export const sessionTimeOut = async ({ logout }: { logout: () => {} }) => {
       return;
     }
 
-    const myWorker = new Worker("./workers/sessionTimeOut.js");
+    const myWorker = new Worker("http://localhost:4009/workers/sessionTimeOut.js");
 
     const validity: number = await getTokenExpiredTime();
 
