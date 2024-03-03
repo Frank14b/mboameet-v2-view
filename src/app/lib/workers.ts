@@ -10,7 +10,8 @@ export const sessionTimeOut = async ({ logout }: { logout: () => {} }) => {
       return;
     }
 
-    const myWorker = new Worker("http://localhost:4009/workers/sessionTimeOut.js");
+    const myWorker = new SharedWorker("./workers/sessionTimeOut.js", { name: 'user-session' });
+    myWorker.port.start();
 
     const validity: number = await getTokenExpiredTime();
 
@@ -19,10 +20,11 @@ export const sessionTimeOut = async ({ logout }: { logout: () => {} }) => {
       window.location.reload();
       return;
     }
-    myWorker.postMessage(validity);
+
+    myWorker.port.postMessage(validity);
     console.log("Message posted to worker");
 
-    myWorker.onmessage = function (e) {
+    myWorker.port.onmessage = function (e) {
       if (e.data.status === true) {
         isTokenExpired();
         logout()

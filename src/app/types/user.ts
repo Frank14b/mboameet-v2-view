@@ -10,12 +10,17 @@ export type UpdateProfileFormData = {
 }
 
 export type ResultUpdateProfileData = {
-    username?: string,
-    firstname?: Maybe<string | undefined>,
-    lastname?: Maybe<string | undefined>,
+    userName?: string,
+    firstName?: Maybe<string | undefined>,
+    lastName?: Maybe<string | undefined>,
     email: string,
     phone?: Maybe<number | undefined>,
     countryCode?: Maybe<string | undefined>
+    createdAt: Date,
+    updatedAt: Date,
+    age: number,
+    lastLogin: Date,
+    photo?: string,
 }
 
 export type ResultProfileData = ResultUpdateProfileData;

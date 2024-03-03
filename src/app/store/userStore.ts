@@ -1,14 +1,14 @@
 // user store
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { ObjectKeyDto, ResultloginDto } from '../types';
+import { ObjectKeyDto, ResultUpdateProfileData, ResultloginDto } from '../types';
 
 export type StoreType = {
   user: ResultloginDto | ObjectKeyDto | null;
   loading: boolean;
   userConnected: boolean;
   theme: string;
-  setUser: (userData: ResultloginDto | ObjectKeyDto | null) => void;
+  setUser: (userData: ResultloginDto | ObjectKeyDto | ResultUpdateProfileData | null) => void;
   setLoading: (newLoading: boolean) => void;
   setUserConnected: (connectedStatus: boolean) => void;
   setTheme: (userTheme: string) => void;

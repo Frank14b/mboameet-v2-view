@@ -1,11 +1,13 @@
 'use client';
 
+import { defaultProfileImg } from "@/app/lib/utils";
 import { Avatar } from "@material-tailwind/react";
 import { ChangeEvent } from "react";
 
 export default function ProfileImageComponent(
-    { username, changeProfilePicture }: {
+    { username, photo, changeProfilePicture }: {
         username: string,
+        photo: string,
         changeProfilePicture: (e: ChangeEvent<HTMLInputElement>) => void
     }) {
 
@@ -26,7 +28,7 @@ export default function ProfileImageComponent(
                             alt={username}
                             size="xxl"
                             className="cursor-pointer mt-5 border-2 border-pink-100"
-                            src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
+                            src={photo?.length > 0 ? photo : defaultProfileImg}
                         ></Avatar>
                     </div>
                     <input onChange={(e: ChangeEvent<HTMLInputElement>) => changeProfilePicture(e)} id="dropzone-file" type="file" className="hidden" />

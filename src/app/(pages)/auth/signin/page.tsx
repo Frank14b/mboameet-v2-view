@@ -13,9 +13,9 @@ export default function SignInPage() {
     return (
         <div className="mh-600">
             <div className="flex">
-                <div className="w-1/2 bg-gray-200 dark:bg-gray-900">
+                <div className="w-1/2 bg-gray-200 dark:bg-gray-800">
                     <div className="flex flex-col items-center justify-center h-screen">
-                        <div className="relative flex flex-col text-gray-700 bg-white dark:bg-gray-800 shadow-md w-96 rounded-xl bg-clip-border">
+                        <div className="relative flex flex-col text-gray-700 bg-white dark:bg-gray-900 shadow-md w-96 rounded-xl bg-clip-border">
                             <div
                                 className="relative grid mx-4 mb-4 -mt-6 overflow-hidden text-white shadow-lg h-28 place-items-center rounded-xl bg-pink-300 from-gray-900 to-gray-800 bg-clip-border shadow-gray-900/20">
                                 <h3 className="block font-sans text-3xl antialiased font-semibold leading-snug tracking-normal text-white">
@@ -47,7 +47,7 @@ export default function SignInPage() {
                                                         </svg>
                                                     </span>
                                                 </label>
-                                                <label className="mt-px font-light text-gray-700 cursor-pointer select-none" htmlFor="checkbox">
+                                                <label className="mt-px font-light text-gray-700 cursor-pointer select-none dark:text-gray-400" htmlFor="checkbox">
                                                     Remember Me
                                                 </label>
                                             </div>
@@ -64,7 +64,7 @@ export default function SignInPage() {
                                         <p className="flex justify-center mt-6 font-sans text-sm antialiased font-light leading-normal text-inherit">
                                             Don't have an account?
                                             <Link href="/auth/signup"
-                                                className="block ml-1 font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900">
+                                                className="block ml-1 font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900 dark:text-gray-500">
                                                 Sign up
                                             </Link>
                                         </p>

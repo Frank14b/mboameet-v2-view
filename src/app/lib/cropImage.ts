@@ -24,13 +24,20 @@ export function rotateSize(width: number, height: number, rotation: number) {
     };
 }
 
-export async function getCroppedImg(
-    imageSrc: string,
-    pixelCrop: Area,
+export async function getCroppedImg({
+    imageSrc,
+    pixelCrop,
     rotation = 0,
     flip = { horizontal: false, vertical: false },
-    base64: boolean = true
-) {
+    fileType = "base64",
+}: {
+    imageSrc: string,
+    pixelCrop: Area,
+    rotation?: number,
+    flip?: { horizontal: boolean, vertical: boolean },
+    fileType?: string,
+}
+): Promise<Blob | string | null> {
     const image: any = await createImage(imageSrc);
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -72,16 +79,17 @@ export async function getCroppedImg(
 
     return new Promise((resolve, reject) => {
         canvas.toBlob((file: any) => {
-            if (base64) resolve(blobToBase64(file));
+            if (fileType == 'blob') resolve(file);
+            if (fileType == 'base64') resolve(blobToBase64(file));
             resolve(URL.createObjectURL(file));
         }, "image/jpeg");
     });
 }
 
-export const blobToBase64 = async (blob: Blob) => {
+export const blobToBase64 = async (blob: Blob): Promise<string> => {
     return new Promise((resolve, _) => {
         const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
+        reader.onloadend = () => resolve(reader.result as string);
         reader.readAsDataURL(blob);
     });
 }

@@ -3,7 +3,8 @@
 import CropProfileImage from "@/app/components/layout/profile/cropProfileImage";
 import { UpdateProfileFormComponent } from "@/app/components/layout/profile/updateProfile";
 import { useAppHubContext } from "@/app/contexts/appHub";
-import { proceedUpdateProfile } from "@/app/services";
+import { proceedUpdateProfile, updateProfileImage } from "@/app/services";
+import useUserStore from "@/app/store/userStore";
 import { ResultUpdateProfileData, UpdateProfileFormData, ApiResponseDto } from "@/app/types";
 import { UpdateProfileSchema } from "@/app/validators";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -45,6 +46,7 @@ export function ProfileWrapper({ children }: { children: any }) {
   } = useForm({
     resolver: yupResolver(UpdateProfileSchema), // Integrate Yup for validation
   });
+  const { setUser } = useUserStore();
    
   const appHubContext = useAppHubContext();
 
@@ -66,6 +68,19 @@ export function ProfileWrapper({ children }: { children: any }) {
     }
   };
 
+  const uploadProfileImage = async (image: string | Blob) => {
+    const formData = new FormData();
+
+    const imageBlob: any = image;
+    formData.append('image', imageBlob, 'profileImage.jpg');
+    const result = await updateProfileImage(formData);
+
+    if(result.status === true && result?.data) {
+      setImage(null);
+      setUser(result.data);
+    }
+  }
+
   const data: ProfileContextDto = {
     isLoading,
     setIsLoading,
@@ -83,7 +98,7 @@ export function ProfileWrapper({ children }: { children: any }) {
       <div className={``}>
         {children}
 
-        {image && <CropProfileImage image={image} />}
+        {image && <CropProfileImage image={image} croppedImage={uploadProfileImage} returnType={'blob'} />}
 
         <Dialog
           placeholder={""}

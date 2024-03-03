@@ -1,4 +1,5 @@
 import { useMainContext } from "@/app/contexts/main";
+import { defaultProfileImg } from "@/app/lib/utils";
 import {
     Menu,
     MenuHandler,
@@ -22,7 +23,7 @@ export function ProfileMenuComponent() {
                     placeholder={""}
                     variant="circular"
                     alt="tania andrew"
-                    src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
+                    src={`${process.env.NEXT_PUBLIC_API_PUBLIC_FILES_LINK}${mainContext.connectedUser?.id}/${mainContext.connectedUser?.photo ?? defaultProfileImg}`}
                 ></Avatar>
                 <Typography
                     placeholder={""}

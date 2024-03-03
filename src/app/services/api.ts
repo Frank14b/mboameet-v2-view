@@ -49,7 +49,7 @@ export const apiCall = async ({
     params?: any,
     headers?: any,
     revalidate?: boolean,
-}): Promise<ObjectKeyDto | undefined> => {
+}): Promise<ApiResponseDto<any>> => {
     try {
 
         const cacheKey: string = `${method}-${url}-${JSON.stringify(params)}`;
@@ -76,14 +76,18 @@ export const apiCall = async ({
             cache[cacheKey] = response.data;
         }
 
-        return response.data;
+
+        return ApiSuccessMessage(response.data);
+        // return response.data;
 
     } catch (error) {
+        // console.log("🚀 ~ error:", error)
+
         if (axios.isCancel(error)) {
             console.log('Request canceled');
-        } else {
-            throw error; // Re-throw the error for further handling
         }
+
+        return ApiErrorMessage(error);
     } finally {
         if (requestSource) {
             requestSource.cancel(); // Clean up cancellation token

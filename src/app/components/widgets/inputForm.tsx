@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-
+import { useState } from "react";
 import { InpputFormComponent } from "@/app/types/index";
 import { UseFormRegister } from "react-hook-form";
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
@@ -28,15 +27,16 @@ export default function InputFormComponent(
     return <>
         <div className="w-full">
             <div className="mt-2">
-                <div className={`rounded-md relative ${error && "border-2 border-rose-500"} shadow-sm ring-1 ring-inset ring-gray-300 w-full`}>
+                <div className={`rounded-md relative ${error && "border-2 border-rose-500"} shadow-sm ring-0 ring-inset ring-gray-700 w-full`}>
                     <Input
+                        variant={'static'}
                         error={error ? true : false}
                         crossOrigin={""}
                         type={type}
-                        label={data.title}
+                        // label={data.title}
                         id={data?.id ?? data.title.toLowerCase()}
                         autoComplete={data.title}
-                        className="block border-0 w-full bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 dark:text-gray-100 focus:ring-0 sm:text-sm sm:leading-6"
+                        className="block border-0 w-full bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 dark:text-gray-100 ring-0 sm:text-sm sm:leading-6"
                         placeholder={data?.placeholder ?? data?.name ?? data.title}
                         defaultValue={data?.defaultValue}
                         {...register(`${data?.name?.toLowerCase() ?? data.title.toLowerCase()}`)}

@@ -10,7 +10,7 @@ import Cropper, { Area, Point } from 'react-easy-crop';
 import { dismissType } from '@material-tailwind/react/types/generic';
 import { getCroppedImg } from '@/app/lib/cropImage';
 
-export default function CropProfileImage({ image }: { image: string }) {
+export default function CropProfileImage({ image, croppedImage, returnType }: { image: string, croppedImage: (image: string | Blob) => any, returnType: string }) {
 
     const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
     const [zoom, setZoom] = useState<number>(1.1)
@@ -27,8 +27,8 @@ export default function CropProfileImage({ image }: { image: string }) {
     }
     
     const handleCropImage = async (data: Area) => {
-        const croppedImg = await getCroppedImg(image, data);
-        console.log("🚀 ~ handleCropImage ~ croppedImg:", croppedImg)
+        const croppedImg: any = await getCroppedImg({imageSrc: image, pixelCrop: data, fileType: returnType});
+        croppedImage(croppedImg);
     }
 
     const dismiss:dismissType = {

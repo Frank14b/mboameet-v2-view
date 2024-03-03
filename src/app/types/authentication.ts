@@ -28,7 +28,8 @@ export type ResultloginDto = {
     createdAt: Date,
     updatedAt: Date,
     age: number,
-    lastLogin: Date
+    lastLogin: Date,
+    photo?: string,
 }
 
 export type ForgetPasswordDto = {
