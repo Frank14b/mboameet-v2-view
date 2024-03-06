@@ -28,7 +28,7 @@ export default function ProfileImageComponent(
                             alt={username}
                             size="xxl"
                             className="cursor-pointer mt-5 border-2 border-pink-100"
-                            src={photo?.length > 0 ? photo : defaultProfileImg}
+                            src={photo}
                         ></Avatar>
                     </div>
                     <input onChange={(e: ChangeEvent<HTMLInputElement>) => changeProfilePicture(e)} id="dropzone-file" type="file" className="hidden" />

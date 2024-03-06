@@ -5,10 +5,12 @@ import InputFormComponent from "@/app/components/widgets/inputForm";
 import Link from "next/link";
 import { useSignUpContext } from "./template";
 import { Button } from "@material-tailwind/react";
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
 
     const signUpContext = useSignUpContext();
+    const router = useRouter();
 
     return (
         <div className="mh-600">
@@ -127,14 +129,14 @@ export default function SignUpPage() {
                                                             </div>
                                                         </div>
                                                         <div className="flex justify-between mt-5">
-                                                            <button
+                                                            {/* <button
                                                                 onClick={() => { signUpContext.setOpen(false); signUpContext.setStepper(0) }}
                                                                 type="button"
                                                                 className="rounded-md bg-pink-300 w-full px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                                             >
                                                                 Close
-                                                            </button>
-                                                            <Button type='button' placeholder={""} color="pink" className='w-full bg-indigo-600'>Proceed</Button>
+                                                            </button> */}
+                                                            <Button onClick={() => router.push("/auth/signin")} type='button' placeholder={""} color="pink" className='w-full bg-pink-300'>Go to signin</Button>
                                                         </div>
                                                     </div>
 

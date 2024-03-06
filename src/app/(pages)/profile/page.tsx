@@ -6,6 +6,7 @@ import { Typography } from "@material-tailwind/react";
 import { ProfileContextDto, useProfileContext } from "./template";
 import ProfileImageComponent from "@/app/components/layout/profile/profileImage";
 import ProfileDetailsComponent from "@/app/components/layout/profile/profileDetails";
+import { defaultProfileImg } from "@/app/lib/utils";
 
 export default function ProfilePage() {
 
@@ -25,7 +26,7 @@ export default function ProfilePage() {
 
             <ProfileImageComponent
                 username={mainContext.connectedUser?.userName}
-                photo={`${process.env.NEXT_PUBLIC_API_PUBLIC_FILES_LINK}${mainContext.connectedUser?.id}/${mainContext.connectedUser?.photo ?? ""}`}
+                photo={mainContext.connectedUser?.photo?.url?.length > 0 ? `${process.env.NEXT_PUBLIC_API_PUBLIC_FILES_LINK}${mainContext.connectedUser?.id}/${mainContext.connectedUser?.photo.url ?? ""}` : defaultProfileImg}
                 changeProfilePicture={profileContext.changeProfilePicture}
             />
 
