@@ -97,3 +97,13 @@
 }
 
 /* 404 page not found css */
+
+.hashtag {
+	color: rgba(255, 0, 136, 0.872);
+	font-weight: bold;
+}
+
+.arobasetag {
+	color: #151723;
+	font-weight: bold;
+}

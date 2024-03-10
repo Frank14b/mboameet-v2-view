@@ -1,6 +1,7 @@
 export * from "./authentication";
 export * from "./widget";
 export * from "./user";
+export * from "./feed";
 
 export type RequestMethod = "POST"|"GET"|"DELETE"|"PUT"|"PATCH";
 
@@ -17,3 +18,5 @@ export type BooleanResultDto<T> = {
 }
 
 export type ObjectKeyDto = {[key: string]: any}
+
+export type EmojiSelected = { emoji: string; emojiUrl: string }

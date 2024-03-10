@@ -23,7 +23,7 @@ export function ProfileMenuComponent() {
                     placeholder={""}
                     variant="circular"
                     alt="tania andrew"
-                    src={mainContext.connectedUser?.photo?.url?.length > 0 ? `${process.env.NEXT_PUBLIC_API_PUBLIC_FILES_LINK}${mainContext.connectedUser?.id}/${mainContext.connectedUser?.photo.url}` : defaultProfileImg}
+                    src={mainContext.connectedUser?.photo?.length > 0 ? `${process.env.NEXT_PUBLIC_API_PUBLIC_FILES_LINK}${mainContext.connectedUser?.id}/${mainContext.connectedUser?.photo}` : defaultProfileImg}
                 ></Avatar>
                 <Typography
                     placeholder={""}

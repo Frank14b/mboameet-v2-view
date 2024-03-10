@@ -3,9 +3,10 @@
 import CropProfileImage from "@/app/components/layout/profile/cropProfileImage";
 import { UpdateProfileFormComponent } from "@/app/components/layout/profile/updateProfile";
 import { useAppHubContext } from "@/app/contexts/appHub";
+import { createFileUploadString } from "@/app/lib/utils";
 import { proceedUpdateProfile, updateProfileImage } from "@/app/services";
 import useUserStore from "@/app/store/userStore";
-import { ResultUpdateProfileData, UpdateProfileFormData, ApiResponseDto } from "@/app/types";
+import { ResultUpdateProfileData, UpdateProfileFormData, ApiResponseDto, ObjectKeyDto } from "@/app/types";
 import { UpdateProfileSchema } from "@/app/validators";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Dialog } from "@material-tailwind/react";
@@ -15,7 +16,6 @@ import {
   SetStateAction,
   createContext,
   useContext,
-  useEffect,
   useState,
 } from "react";
 import {
@@ -51,8 +51,7 @@ export function ProfileWrapper({ children }: { children: any }) {
   const appHubContext = useAppHubContext();
 
   const changeProfilePicture = async (data: ChangeEvent<HTMLInputElement>) => {
-    if (!data?.target?.files?.[0]) return; // if no file found return immediately
-    setImage(URL.createObjectURL(data.target.files[0]));
+    setImage(createFileUploadString(data));
   };
 
   const editProfile = async (data: UpdateProfileFormData) => {
@@ -68,7 +67,7 @@ export function ProfileWrapper({ children }: { children: any }) {
     }
   };
 
-  const uploadProfileImage = async (image: string | Blob) => {
+  const uploadProfileImage = async (image: string | Blob| ObjectKeyDto) => {
     const formData = new FormData();
 
     const imageBlob: any = image;

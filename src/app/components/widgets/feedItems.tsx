@@ -9,7 +9,7 @@ import {
     Typography,
 } from "@material-tailwind/react";
 
-export default function FeedNewsComponent({ title, icon, subTitle, fileType }: FeedNews) {
+export default function FeedItemsComponent({ title, icon, subTitle, fileType }: FeedNews) {
 
     return (
         <>

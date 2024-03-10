@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from 'react';
 import {
     Button,
@@ -9,8 +11,9 @@ import {
 import Cropper, { Area, Point } from 'react-easy-crop';
 import { dismissType } from '@material-tailwind/react/types/generic';
 import { getCroppedImg } from '@/app/lib/cropImage';
+import { ObjectKeyDto } from '@/app/types';
 
-export default function CropProfileImage({ image, croppedImage, returnType }: { image: string, croppedImage: (image: string | Blob) => any, returnType: string }) {
+export default function CropProfileImage({ image, croppedImage, returnType }: { image: string, croppedImage: (image: string | Blob| ObjectKeyDto) => any, returnType: string }) {
 
     const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
     const [zoom, setZoom] = useState<number>(1.1)

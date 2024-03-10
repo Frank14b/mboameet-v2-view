@@ -16,6 +16,7 @@
     "@microsoft/signalr": "^8.0.0",
     "axios": "^1.6.7",
     "crypto": "^1.0.1",
+    "emoji-picker-react": "^4.8.0",
     "ioredis": "^5.3.2",
     "next": "14.1.0",
     "node-cache": "^5.1.2",

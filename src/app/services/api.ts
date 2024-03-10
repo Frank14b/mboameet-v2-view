@@ -80,14 +80,14 @@ export const apiCall = async ({
         return ApiSuccessMessage(response.data);
         // return response.data;
 
-    } catch (error) {
-        // console.log("🚀 ~ error:", error)
+    } catch (error: any) {
+        console.log("🚀 ~ error:", error.response)
 
         if (axios.isCancel(error)) {
             console.log('Request canceled');
         }
 
-        return ApiErrorMessage(error);
+        return ApiErrorMessage(error.response);
     } finally {
         if (requestSource) {
             requestSource.cancel(); // Clean up cancellation token

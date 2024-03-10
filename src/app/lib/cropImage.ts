@@ -1,4 +1,5 @@
 import { Area } from "react-easy-crop";
+import { ObjectKeyDto } from "../types";
 
 export const createImage = (url: any) =>
     new Promise((resolve, reject) => {
@@ -37,7 +38,7 @@ export async function getCroppedImg({
     flip?: { horizontal: boolean, vertical: boolean },
     fileType?: string,
 }
-): Promise<Blob | string | null> {
+): Promise<Blob | string | null | ObjectKeyDto> {
     const image: any = await createImage(imageSrc);
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -78,7 +79,13 @@ export async function getCroppedImg({
     ctx.putImageData(data, 0, 0);
 
     return new Promise((resolve, reject) => {
-        canvas.toBlob((file: any) => {
+        canvas.toBlob(async (file: any) => {
+            if (fileType == "object") {
+                resolve({
+                    base64: await blobToBase64(file),
+                    blob: file
+                })
+            }
             if (fileType == 'blob') resolve(file);
             if (fileType == 'base64') resolve(blobToBase64(file));
             resolve(URL.createObjectURL(file));

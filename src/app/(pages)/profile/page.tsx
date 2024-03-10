@@ -26,7 +26,7 @@ export default function ProfilePage() {
 
             <ProfileImageComponent
                 username={mainContext.connectedUser?.userName}
-                photo={mainContext.connectedUser?.photo?.url?.length > 0 ? `${process.env.NEXT_PUBLIC_API_PUBLIC_FILES_LINK}${mainContext.connectedUser?.id}/${mainContext.connectedUser?.photo.url ?? ""}` : defaultProfileImg}
+                photo={mainContext.connectedUser?.photo?.length > 0 ? `${process.env.NEXT_PUBLIC_API_PUBLIC_FILES_LINK}${mainContext.connectedUser?.id}/${mainContext.connectedUser?.photo ?? ""}` : defaultProfileImg}
                 changeProfilePicture={profileContext.changeProfilePicture}
             />
 

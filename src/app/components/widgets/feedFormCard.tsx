@@ -1,84 +1,227 @@
-import { FeedForm } from "@/app/types";
+"use client";
+
+import { fileExtFromBase64, focusOnLastText, formatHashTags } from "@/app/lib/utils";
+import { EmojiSelected, FeedForm, ObjectKeyDto } from "@/app/types";
 import {
-    Card,
-    CardBody,
-    Input,
-    Typography,
-    Textarea,
-    IconButton
+  Button,
+  Card,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Typography,
 } from "@material-tailwind/react";
+import { useEffect, useState } from "react";
+import EmojiPickerButton from "../commons/emojiPickerButton";
+import { proceedSubmitFeed } from "@/app/services/server-actions/feeds";
+import FeedFilesUploadComponent from "./feedFilesUpload";
+import { PhotoIcon } from "@heroicons/react/24/solid";
 
-export default function FeedFormCardComponent({ children, title, icon }: FeedForm) {
+export default function FeedFormCardComponent({
+  children,
+  openFeedForm,
+  handleOpenFeedForm,
+  formFiles,
+  openFormFiles
+}: FeedForm) {
+  //
+  const [linkedImages, setLinkedImages] = useState<ObjectKeyDto[] | null>(null);
 
-    return (
-        <>
-            <div className="flex w-full flex-row items-center gap-2 rounded-[99px] border border-gray-900/10 bg-gray-900/5 p-2">
-                <div className="flex">
-                    <IconButton placeholder={""} variant="text" className="rounded-full dark:text-gray-300">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={2}
-                            stroke="currentColor"
-                            className="h-5 w-5"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-                            />
-                        </svg>
-                    </IconButton>
-                    <IconButton placeholder={""} variant="text" className="rounded-full dark:text-gray-300">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            className="h-5 w-5"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
-                            />
-                        </svg>
-                    </IconButton>
-                </div>
-                <Textarea
-                    rows={1}
-                    resize={false}
-                    placeholder="Your Message"
-                    className="min-h-full !border-0 focus:border-transparent dark:text-gray-300"
-                    containerProps={{
-                        className: "grid h-full",
-                    }}
-                    labelProps={{
-                        className: "before:content-none after:content-none",
-                    }}
-                />
-                <div>
-                    <IconButton placeholder={""} variant="text" className="rounded-full dark:text-gray-300">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            className="h-5 w-5"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
-                            />
-                        </svg>
-                    </IconButton>
-                </div>
+  const [feedInputValue] = useState<string>(
+    "@feed"
+  );
+
+  const handleKeyPress = (e: KeyboardEvent) => {
+    const contentEditableDiv = document.getElementById(
+      "feedFormEditable"
+    ) as HTMLDivElement;
+
+    if (e.key == " ") {
+      contentEditableDiv.innerHTML = formatHashTags(
+        contentEditableDiv.innerText
+      );
+      focusOnLastText(contentEditableDiv);
+    }
+  };
+
+  useEffect(() => {
+    const contentEditableDiv = document.getElementById(
+      "feedFormEditable"
+    ) as HTMLDivElement;
+
+    if (!contentEditableDiv) return;
+    // format hahstags on first load if text available
+    contentEditableDiv.innerHTML = formatHashTags(contentEditableDiv.innerText);
+    contentEditableDiv?.addEventListener("keyup", handleKeyPress);
+  }, [openFeedForm]);
+
+  const addSelectedEmoji = (data: EmojiSelected) => {
+    const contentEditableDiv = document.getElementById(
+      "feedFormEditable"
+    ) as HTMLDivElement;
+
+    contentEditableDiv.innerHTML =
+      formatHashTags(contentEditableDiv.innerText) + data.emoji;
+  };
+
+  const handleSubmitFeed = async () => {
+    const contentEditableDiv = document.getElementById(
+      "feedFormEditable"
+    ) as HTMLDivElement;
+
+    const message = contentEditableDiv.innerText;
+    if (message.trim().length == 0) return;
+
+    const formData = new FormData();
+    if(linkedImages && linkedImages.length > 0) {
+      for (let i = 0; i < linkedImages.length; i++) {
+        formData.append('images', linkedImages[i].blob, `feed-${i}.${fileExtFromBase64(linkedImages[i].base64)}`);
+      }
+    }
+    formData.append('message', message);
+
+    const result = await proceedSubmitFeed(formData);
+    if (result.status) {
+      contentEditableDiv.innerHTML = "";
+      handleOpenFeedForm(false);
+    }
+  };
+
+  const selectedImageFile = (image: string | Blob | ObjectKeyDto) => {
+    let currentData = linkedImages;
+    const tmpImage: any = image;
+
+    if(currentData) {
+      currentData.push({
+        ...tmpImage,
+        id: currentData.length + 1
+      });
+    }else{
+      currentData = [{
+        ...tmpImage,
+        id: 1
+      }]
+    }
+    
+    setLinkedImages(currentData);
+  };
+
+  const handleCloseImageForm = (value: boolean) => {
+    openFormFiles(value)
+    handleOpenFeedForm(true);
+  }
+
+  return (
+    <>
+      <Dialog
+        placeholder={""}
+        open={openFeedForm}
+        handler={handleOpenFeedForm}
+        dismiss={{
+          escapeKey: false,
+          outsidePress: true,
+        }}
+      >
+        <Card
+          placeholder={""}
+          className="mx-auto w-full max-w-[54rem] dark:bg-gray-600"
+        >
+          <div className="flex items-center justify-between">
+            <DialogHeader
+              placeholder={""}
+              className="flex flex-col items-start"
+            >
+              {" "}
+              <Typography placeholder={""} className="mb-1" variant="h4">
+                @New_Feed{" "}
+              </Typography>
+            </DialogHeader>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="mr-3 h-5 w-5 cursor-pointer"
+              onClick={() => handleOpenFeedForm(false)}
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          <DialogBody placeholder={""}>
+            <Typography
+              placeholder={""}
+              className="mb-10 -mt-7 "
+              color="gray"
+              variant="lead"
+            >
+              Write the message and then click button.
+            </Typography>
+            <div className="grid gap-6 max-h-96 overflow-y-auto overflow-x-hidden w-full mx-w-full">
+              <div className="w-full emoji-container">
+                <EmojiPickerButton selected={addSelectedEmoji}>
+                  <></>
+                </EmojiPickerButton>
+              </div>
+
+              <div
+                id="feedFormEditable"
+                className="textarea text-gray-800 p-3 min-h-40 rounded border border-gray-900/30"
+                role="textbox"
+                contentEditable={true}
+                suppressContentEditableWarning={true}
+              >
+                {" "}
+                <>{feedInputValue}</>{" "}
+              </div>
             </div>
-            {children}
-        </>
-    )
+            {/* // */}
+            {linkedImages && linkedImages?.length > 0 && (
+              <div className="w-full overflow-y-hidden overflow-x-auto flex gap-2 pt-5">
+                {linkedImages.map((image: ObjectKeyDto, index: number) => (
+                  <div key={index}>
+                    <img
+                      className="rounded shadow cursor-pointer"
+                      src={image?.base64}
+                      style={{ width: "100px", height: "100px" }}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </DialogBody>
+          <DialogFooter placeholder={""} className="space-x-2">
+            <Button
+              placeholder={""}
+              variant="text"
+              color="gray"
+              onClick={() => openFormFiles(true)}
+            >
+              <PhotoIcon width={20} height={20} />
+            </Button>
+            <Button
+              placeholder={""}
+              variant="gradient"
+              color="gray"
+              onClick={() => handleSubmitFeed()}
+            >
+              Post Now
+            </Button>
+          </DialogFooter>
+        </Card>
+      </Dialog>
+
+      <FeedFilesUploadComponent
+        openFeedFiles={formFiles}
+        handleOpenFeedFiles={handleCloseImageForm}
+        selectedImageFile={selectedImageFile}
+      >
+        <></>
+      </FeedFilesUploadComponent>
+
+      {children}
+    </>
+  );
 }
