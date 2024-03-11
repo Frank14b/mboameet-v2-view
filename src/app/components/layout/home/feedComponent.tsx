@@ -16,7 +16,7 @@ export default function FeedComponent({
       {!isLoading &&
         (feeds.length > 0 ? (
           feeds.map((feed: ResultFeed, index: number) => (
-            <div className="w-full px-3 mt-3 bg-white dark:bg-black/15 rounded-xl p-3" key={index}>
+            <div className="w-full mt-3 bg-white dark:bg-black/15 rounded-xl" key={index}>
               <FeedItemsComponent
                 data={feed}
                 fileType="caroussel"
