@@ -15,8 +15,8 @@ export type ResultFeed = {
     id: number;
     message: string
     user: ResultUserDto;
-    feedFiles: FeedFilesData;
-    feedComments: string;
+    feedFiles: FeedFilesData[];
+    feedComments: string[];
     status: boolean;
     createdAt: Date;
 }

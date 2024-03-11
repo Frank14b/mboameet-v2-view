@@ -101,9 +101,11 @@
 .hashtag {
 	color: rgba(255, 0, 136, 0.872);
 	font-weight: bold;
+	cursor: pointer;
 }
 
 .arobasetag {
 	color: #151723;
 	font-weight: bold;
+	cursor: pointer;
 }

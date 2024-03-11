@@ -37,11 +37,16 @@ export function MainWrapper({ children }: { children: any }) {
     }, 300);
   };
 
+  const getFileUrl = (link: string) => {
+    return `${process.env.NEXT_PUBLIC_API_PUBLIC_FILES_LINK}${user?.id}/${link}`;
+  };
+
   const MainData: MainDataType = {
     connectedUser: user,
     theme: theme,
     setTheme: setTheme,
     logout: logout,
+    getFileUrl: getFileUrl,
   };
 
   const checkExpiredToken = async () => {
@@ -64,52 +69,52 @@ export function MainWrapper({ children }: { children: any }) {
     if (userConnected === true) {
       sessionTimeOut({ logout });
     }
-    
+
     setLoading(false);
   }, [userConnected]);
 
   return (
     <MainContext.Provider value={MainData}>
       {/* <QueryClientProvider client={queryClient}> */}
-        {loading ? (
-          <></>
-        ) : (
-          <>
-            <main className={`${theme}`}>
-              <AppHubWrapper>
-                {userConnected === true ? (
-                  <>
-                    <div className="mh-600 bg-gray-200 dark:bg-gray-800">
-                      <div className="flex xxl:container">
-                        <div className="w-1/4 sm:fixed xs:fixed xs:left-0 xs:w-[300px] xs:z-50 lg:relative bg-gray-100 dark:bg-gray-900 h-screen">
-                          <SideBarMenuComponent>
+      {loading ? (
+        <></>
+      ) : (
+        <>
+          <main className={`${theme}`}>
+            <AppHubWrapper>
+              {userConnected === true ? (
+                <>
+                  <div className="mh-600 bg-gray-200 dark:bg-gray-800">
+                    <div className="flex xxl:container">
+                      <div className="w-1/4 sm:fixed xs:fixed xs:left-0 xs:w-[300px] xs:z-50 lg:relative bg-gray-100 dark:bg-gray-900 h-screen">
+                        <SideBarMenuComponent>
+                          <></>
+                        </SideBarMenuComponent>
+                      </div>
+
+                      <div className="w-1/2 sm:w-full xs:w-full lg:w-1/2 bg-gray-100 z-10 dark:bg-gray-900">
+                        <div className="flex flex-col h-screen p-6 relative overflow-y-auto">
+                          {children}
+                        </div>
+                      </div>
+
+                      <div className="w-1/4 sm:w-1/3 xs:fixed lg:w-1/4 xs:right-0 xs:z-50 xs:w-[300px] xs:px-6 px-3 bg-gray-100 dark:bg-gray-900">
+                        <div className="flex flex-col h-screen pt-6 overflow-y-auto dark:text-gray-300">
+                          <AsideBarMenuComponent>
                             <></>
-                          </SideBarMenuComponent>
-                        </div>
-
-                        <div className="w-1/2 sm:w-full xs:w-full lg:w-1/2 bg-gray-100 z-10 dark:bg-gray-900">
-                          <div className="flex flex-col h-screen p-6 relative overflow-y-auto">
-                            {children}
-                          </div>
-                        </div>
-
-                        <div className="w-1/4 sm:w-1/3 xs:fixed lg:w-1/4 xs:right-0 xs:z-50 xs:w-[300px] xs:px-6 px-3 bg-gray-100 dark:bg-gray-900">
-                          <div className="flex flex-col h-screen pt-6 overflow-y-auto dark:text-gray-300">
-                            <AsideBarMenuComponent>
-                              <></>
-                            </AsideBarMenuComponent>
-                          </div>
+                          </AsideBarMenuComponent>
                         </div>
                       </div>
                     </div>
-                  </>
-                ) : (
-                  <>{pathname.startsWith("/auth") ? children : <></>}</>
-                )}
-              </AppHubWrapper>
-            </main>
-          </>
-        )}
+                  </div>
+                </>
+              ) : (
+                <>{pathname.startsWith("/auth") ? children : <></>}</>
+              )}
+            </AppHubWrapper>
+          </main>
+        </>
+      )}
       {/* </QueryClientProvider> */}
     </MainContext.Provider>
   );
@@ -122,4 +127,5 @@ export type MainDataType = {
   theme: string;
   setTheme: (userTheme: string) => void;
   logout: () => Promise<void>;
+  getFileUrl: (link: string) => string;
 };

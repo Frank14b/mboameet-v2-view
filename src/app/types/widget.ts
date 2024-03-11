@@ -48,7 +48,7 @@ export type SideBarMenuListUser = {
 
 export type FeedItem = {
   data: ResultFeed,
-  fileType?: string;
+  fileType?: "caroussel" | "images" | "video" | "image";
 };
 
 export type FeedForm = {
