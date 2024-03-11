@@ -11,39 +11,47 @@ export default function FeedComponent({
 }) {
   return (
     <>
-      <FeedSkeletonComponent isLoading={isLoading} count={3} />
+      <FeedSkeletonComponent isLoading={isLoading} count={5} />
 
       {!isLoading &&
         (feeds.length > 0 ? (
-          <>
-            <div className="w-full px-3 mt-6 bg-white dark:bg-black/15 rounded-xl p-3">
+          feeds.map((feed: ResultFeed, index: number) => (
+            <div className="w-full px-3 mt-3 bg-white dark:bg-black/15 rounded-xl p-3" key={index}>
               <FeedItemsComponent
-                title=""
-                icon={""}
-                subTitle=""
+                data={feed}
                 fileType="caroussel"
               />
             </div>
-            <div className="w-full px-3 mt-3 bg-white dark:bg-black/15 rounded-xl p-3">
-              <FeedItemsComponent title="" icon={""} subTitle="" />
-            </div>
-            <div className="w-full px-3 mt-3 bg-white dark:bg-black/15 rounded-xl p-3">
-              <FeedItemsComponent
-                title=""
-                icon={""}
-                subTitle=""
-                fileType="images"
-              />
-            </div>
-            <div className="w-full px-3 mt-3 bg-white dark:bg-black/15 rounded-xl p-3">
-              <FeedItemsComponent
-                title=""
-                icon={""}
-                subTitle=""
-                fileType="video"
-              />
-            </div>
-          </>
+          ))
+          // <>
+          //   <div className="w-full px-3 mt-6 bg-white dark:bg-black/15 rounded-xl p-3">
+          //     <FeedItemsComponent
+          //       title=""
+          //       icon={""}
+          //       subTitle=""
+          //       fileType="caroussel"
+          //     />
+          //   </div>
+          //   <div className="w-full px-3 mt-3 bg-white dark:bg-black/15 rounded-xl p-3">
+          //     <FeedItemsComponent title="" icon={""} subTitle="" />
+          //   </div>
+          //   <div className="w-full px-3 mt-3 bg-white dark:bg-black/15 rounded-xl p-3">
+          //     <FeedItemsComponent
+          //       title=""
+          //       icon={""}
+          //       subTitle=""
+          //       fileType="images"
+          //     />
+          //   </div>
+          //   <div className="w-full px-3 mt-3 bg-white dark:bg-black/15 rounded-xl p-3">
+          //     <FeedItemsComponent
+          //       title=""
+          //       icon={""}
+          //       subTitle=""
+          //       fileType="video"
+          //     />
+          //   </div>
+          // </>
         ) : (
           <></>
         ))}

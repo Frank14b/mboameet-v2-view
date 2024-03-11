@@ -4,28 +4,31 @@ import { IconButton, Typography } from "@material-tailwind/react";
 import FeedFormCardComponent from "../../widgets/feedFormCard";
 import { useEffect, useState } from "react";
 import FeedComponent from "./feedComponent";
-import { ApiResponseDto, ResultFeed } from "@/app/types";
+import { ApiResponseDto, ResultFeed, ResultPaginate } from "@/app/types";
 import { getFeeds } from "@/app/services/server-actions/feeds";
 
 export default function HomePageComponent() {
   //
   const [openFeedForm, handleOpenFeedForm] = useState<boolean>(false);
-  const [openFeedFormImages, handleOpenFeedFormImages] = useState<boolean>(false);
+  const [openFeedFormImages, handleOpenFeedFormImages] =
+    useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [feeds, setFeeds] = useState<ResultFeed[]>([])
+  const [feeds, setFeeds] = useState<ResultFeed[]>([]);
 
   const fetchFeeds = async () => {
-    const result: ApiResponseDto<ResultFeed[]> = await getFeeds();
-    if(result.status && result?.data) {
-      setFeeds(result.data)
+    const result: ApiResponseDto<ResultPaginate<ResultFeed[]>> = await getFeeds({
+      revalidate: true,
+    });
+    console.log("🚀 ~ fetchFeeds ~ result:", result);
+    if (result.status && result?.data?.data) {
+      setFeeds(result.data.data);
     }
-    // setLoading(false);
-  }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    fetchFeeds()
-  }, [])
-  
+    fetchFeeds();
+  }, []);
 
   return (
     <>
@@ -106,7 +109,7 @@ export default function HomePageComponent() {
         </div>
       </div>
 
-      <FeedComponent isLoading={loading} feeds={feeds}/>
+      <FeedComponent isLoading={loading} feeds={feeds} />
 
       {/*  */}
     </>

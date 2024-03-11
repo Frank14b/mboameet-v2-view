@@ -17,6 +17,14 @@ export type BooleanResultDto<T> = {
     data?: Array<T> | object | string | number | undefined | T | ObjectKeyDto
 }
 
+export type ResultPaginate<T> = {
+    data: T,
+    skip: number,
+    limit: number,
+    total: number,
+    sort: string
+}
+
 export type ObjectKeyDto = {[key: string]: any}
 
 export type EmojiSelected = { emoji: string; emojiUrl: string }

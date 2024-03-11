@@ -24,3 +24,13 @@ export type ResultUpdateProfileData = {
 }
 
 export type ResultProfileData = ResultUpdateProfileData;
+
+export type ResultUserDto = {
+    userName?: string,
+    firstName?: Maybe<string | undefined>,
+    lastName?: Maybe<string | undefined>,
+    email: string,
+    phone?: Maybe<number | undefined>,
+    countryCode?: Maybe<string | undefined>
+    photo?: string,
+}

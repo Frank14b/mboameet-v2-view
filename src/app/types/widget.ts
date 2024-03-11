@@ -1,5 +1,5 @@
 import { Dispatch, HTMLInputTypeAttribute, SetStateAction } from "react";
-import { ObjectKeyDto } from ".";
+import { ObjectKeyDto, ResultFeed } from ".";
 
 export type InpputFormComponent = {
   title: string;
@@ -46,10 +46,8 @@ export type SideBarMenuListUser = {
   badge?: string;
 };
 
-export type FeedNews = {
-  title: string;
-  icon: any;
-  subTitle: string;
+export type FeedItem = {
+  data: ResultFeed,
   fileType?: string;
 };
 

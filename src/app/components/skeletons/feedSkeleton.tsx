@@ -27,7 +27,7 @@ export default function FeedSkeletonComponent({
             placeholder={""}
             className="mt-0 w-full animate-pulse dark:bg-gray-800"
           >
-            {value != 1 && (
+            {value%Math.floor(Math.random() * 4) == 0 && (
               <CardHeader
                 placeholder={""}
                 shadow={false}

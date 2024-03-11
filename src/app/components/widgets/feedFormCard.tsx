@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import EmojiPickerButton from "../commons/emojiPickerButton";
 import { proceedSubmitFeed } from "@/app/services/server-actions/feeds";
 import FeedFilesUploadComponent from "./feedFilesUpload";
-import { PhotoIcon } from "@heroicons/react/24/solid";
+import { PhotoIcon, VideoCameraIcon } from "@heroicons/react/24/solid";
 
 export default function FeedFormCardComponent({
   children,
@@ -193,6 +193,14 @@ export default function FeedFormCardComponent({
             )}
           </DialogBody>
           <DialogFooter placeholder={""} className="space-x-2">
+            <Button
+              placeholder={""}
+              variant="text"
+              color="gray"
+              onClick={() => openFormFiles(true)}
+            >
+              <VideoCameraIcon width={20} height={20} />
+            </Button>
             <Button
               placeholder={""}
               variant="text"
