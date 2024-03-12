@@ -109,3 +109,7 @@
 	font-weight: bold;
 	cursor: pointer;
 }
+
+.dark .arobasetag {
+	color: #fff;
+}

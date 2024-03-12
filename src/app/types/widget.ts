@@ -49,6 +49,7 @@ export type SideBarMenuListUser = {
 export type FeedItem = {
   data: ResultFeed,
   fileType?: "caroussel" | "images" | "video" | "image";
+  onActionDelete: ({ itemId }: { itemId: number }) => void
 };
 
 export type FeedForm = {
@@ -57,6 +58,7 @@ export type FeedForm = {
   handleOpenFeedForm: Dispatch<SetStateAction<boolean>>;
   formFiles: boolean;
   openFormFiles: Dispatch<SetStateAction<boolean>>;
+  updateItem?: ResultFeed
 };
 
 export type FeedFormFiles = {

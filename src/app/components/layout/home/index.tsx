@@ -12,23 +12,6 @@ export default function HomePageComponent() {
   const [openFeedForm, handleOpenFeedForm] = useState<boolean>(false);
   const [openFeedFormImages, handleOpenFeedFormImages] =
     useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [feeds, setFeeds] = useState<ResultFeed[]>([]);
-
-  const fetchFeeds = async () => {
-    const result: ApiResponseDto<ResultPaginate<ResultFeed[]>> = await getFeeds({
-      revalidate: true,
-    });
-    console.log("🚀 ~ fetchFeeds ~ result:", result);
-    if (result.status && result?.data?.data) {
-      setFeeds(result.data.data);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchFeeds();
-  }, []);
 
   return (
     <>
@@ -56,7 +39,7 @@ export default function HomePageComponent() {
         </FeedFormCardComponent>
 
         {/*  */}
-        <div className="w-full px-3 mt-12 bg-white dark:bg-black/15 rounded-xl p-3">
+        <div className="w-full px-3 mt-12 bg-white dark:bg-black/15 rounded-xl p-3  border border-gray-200 dark:border-gray-800">
           <div className="flex w-full flex-row items-center gap-2 rounded-[99px] border border-gray-900/10 bg-gray-900/5 p-2">
             <div className="flex">
               <IconButton
@@ -109,7 +92,7 @@ export default function HomePageComponent() {
         </div>
       </div>
 
-      <FeedComponent isLoading={loading} feeds={feeds} />
+      <FeedComponent />
 
       {/*  */}
     </>

@@ -5,57 +5,93 @@ import {
   ChatBubbleBottomCenterIcon,
   EyeIcon,
   HeartIcon,
+  ListBulletIcon,
+  PencilIcon,
+  TrashIcon,
 } from "@heroicons/react/24/solid";
 import {
   Avatar,
   Card,
   Carousel,
-  List,
-  ListItem,
-  ListItemPrefix,
+  Menu,
+  MenuHandler,
+  MenuItem,
+  MenuList,
   Typography,
 } from "@material-tailwind/react";
 
-export default function FeedItemsComponent({ data, fileType }: FeedItem) {
+export default function FeedItemsComponent({ data, fileType, onActionDelete }: FeedItem) {
   const mainContext = useMainContext();
 
   return (
     <>
-      <Card placeholder={""} className="pb-3 pl-0 pr-0 w-full dark:bg-gray-800">
-        <div className="grid justify-items-between">
-          <List placeholder={""} className="px-0">
-            <ListItem
+      <Card
+        placeholder={""}
+        className="pb-3 pl-0 pr-0 w-full border border-gray-200 dark:border-gray-800 dark:bg-gray-900"
+      >
+        <div className="grid justify-items-between w-full p-3">
+          <div className="flex gap-3 w-full">
+            <Avatar
               placeholder={""}
-              disabled={false}
-              className="px-3 bg-transparent"
-            >
-              <ListItemPrefix placeholder={""}>
-                <Avatar
-                  placeholder={""}
-                  variant="circular"
-                  alt="candice"
-                  src={"https://docs.material-tailwind.com/img/face-1.jpg"}
-                />
-              </ListItemPrefix>
-              <div>
-                <Typography
-                  placeholder={""}
-                  variant="h6"
-                  color="blue-gray"
-                  className="dark:text-pink-200"
-                >
-                  {data.user.userName}
-                </Typography>
-                <Typography
-                  placeholder={""}
-                  variant="small"
-                  className="font-normal dark:text-gray-500"
-                >
-                  {new Date(data.createdAt).toDateString()}
-                </Typography>
-              </div>
-            </ListItem>
-          </List>
+              variant="circular"
+              alt="candice"
+              src={"https://docs.material-tailwind.com/img/face-1.jpg"}
+              className="cursor-pointer"
+            />
+            <div>
+              <Typography
+                placeholder={""}
+                variant="h6"
+                color="blue-gray"
+                className="dark:text-pink-200 cursor-pointer"
+              >
+                {data.user.userName}
+              </Typography>
+              <Typography
+                placeholder={""}
+                variant="small"
+                className="font-normal dark:text-gray-500"
+              >
+                {new Date(data.createdAt).toDateString()}
+              </Typography>
+            </div>
+            <div className="absolute right-5">
+              <Menu placement="bottom-end">
+                <MenuHandler>
+                  <ListBulletIcon className="h-6 w-6 dark:text-gray-500 cursor-pointer" />
+                </MenuHandler>
+                <MenuList placeholder={""} className="p-0">
+                  <MenuItem
+                    placeholder={""}
+                    className="flex items-center gap-2"
+                  >
+                    <PencilIcon className="h-4 w-5" />
+                    <Typography
+                      placeholder={"Delete"}
+                      variant="small"
+                      className="font-medium"
+                    >
+                      Edit
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem
+                    placeholder={""}
+                    className="flex items-center gap-2"
+                    onClick={() => onActionDelete({itemId: data.id})}
+                  >
+                    <TrashIcon className="h-4 w-5" />
+                    <Typography
+                      placeholder={"Delete"}
+                      variant="small"
+                      className="font-medium"
+                    >
+                      Delete
+                    </Typography>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </div>
+          </div>
         </div>
 
         <div
@@ -87,7 +123,7 @@ export default function FeedItemsComponent({ data, fileType }: FeedItem) {
 
             {fileType == "image" && (
               <>
-                <div className="grid min-h-[140px] w-full place-items-center overflow-x-scroll lg:overflow-visible bg-white dark:bg-gray-900">
+                <div className="grid my-3 min-h-[140px] w-full place-items-center overflow-x-scroll lg:overflow-visible bg-white dark:bg-gray-900">
                   <div className="grid grid-cols-1">
                     <div>
                       <img
@@ -103,7 +139,7 @@ export default function FeedItemsComponent({ data, fileType }: FeedItem) {
 
             {fileType == "images" && (
               <>
-                <div className="grid min-h-[140px] w-full place-items-center overflow-x-scroll lg:overflow-visible bg-white dark:bg-gray-900">
+                <div className="grid my-3 min-h-[140px] w-full place-items-center overflow-x-scroll lg:overflow-visible bg-white dark:bg-gray-900">
                   <div className="grid grid-cols-2">
                     {data.feedFiles.map(
                       (image: FeedFilesData, index: number) => (
@@ -123,7 +159,7 @@ export default function FeedItemsComponent({ data, fileType }: FeedItem) {
 
             {fileType == "video" && (
               <>
-                <div className="p-3 h-100">
+                <div className="p-3 my-3 h-100">
                   <video
                     className="h-full w-full rounded-lg objectfit-cover"
                     controls

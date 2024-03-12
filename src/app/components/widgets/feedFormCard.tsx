@@ -1,6 +1,10 @@
 "use client";
 
-import { fileExtFromBase64, focusOnLastText, formatHashTags } from "@/app/lib/utils";
+import {
+  fileExtFromBase64,
+  focusOnLastText,
+  formatHashTags,
+} from "@/app/lib/utils";
 import { EmojiSelected, FeedForm, ObjectKeyDto } from "@/app/types";
 import {
   Button,
@@ -22,14 +26,13 @@ export default function FeedFormCardComponent({
   openFeedForm,
   handleOpenFeedForm,
   formFiles,
-  openFormFiles
+  openFormFiles,
+  updateItem,
 }: FeedForm) {
   //
   const [linkedImages, setLinkedImages] = useState<ObjectKeyDto[] | null>(null);
 
-  const [feedInputValue] = useState<string>(
-    "@feed"
-  );
+  const [feedInputValue] = useState<string>("@feed");
 
   const handleKeyPress = (e: KeyboardEvent) => {
     const contentEditableDiv = document.getElementById(
@@ -64,7 +67,34 @@ export default function FeedFormCardComponent({
       formatHashTags(contentEditableDiv.innerText) + data.emoji;
   };
 
-  const handleSubmitFeed = async () => {
+  const selectedImageFile = (image: string | Blob | ObjectKeyDto) => {
+    let currentData = linkedImages;
+    const tmpImage: any = image;
+
+    if (currentData) {
+      currentData.push({
+        ...tmpImage,
+        id: currentData.length + 1,
+      });
+    } else {
+      currentData = [
+        {
+          ...tmpImage,
+          id: 1,
+        },
+      ];
+    }
+
+    setLinkedImages(currentData);
+  };
+
+  const handleCloseImageForm = (value: boolean) => {
+    openFormFiles(value);
+    handleOpenFeedForm(true);
+  };
+
+  // process to feed creation
+  const handleSubmitFeed = async () => {  
     const contentEditableDiv = document.getElementById(
       "feedFormEditable"
     ) as HTMLDivElement;
@@ -73,12 +103,16 @@ export default function FeedFormCardComponent({
     if (message.trim().length == 0) return;
 
     const formData = new FormData();
-    if(linkedImages && linkedImages.length > 0) {
+    if (linkedImages && linkedImages.length > 0) {
       for (let i = 0; i < linkedImages.length; i++) {
-        formData.append('images', linkedImages[i].blob, `feed-${i}.${fileExtFromBase64(linkedImages[i].base64)}`);
+        formData.append(
+          "images",
+          linkedImages[i].blob,
+          `feed-${i}.${fileExtFromBase64(linkedImages[i].base64)}`
+        );
       }
     }
-    formData.append('message', message);
+    formData.append("message", message);
 
     const result = await proceedSubmitFeed(formData);
     if (result.status) {
@@ -87,28 +121,13 @@ export default function FeedFormCardComponent({
     }
   };
 
-  const selectedImageFile = (image: string | Blob | ObjectKeyDto) => {
-    let currentData = linkedImages;
-    const tmpImage: any = image;
-
-    if(currentData) {
-      currentData.push({
-        ...tmpImage,
-        id: currentData.length + 1
-      });
-    }else{
-      currentData = [{
-        ...tmpImage,
-        id: 1
-      }]
-    }
-    
-    setLinkedImages(currentData);
-  };
-
-  const handleCloseImageForm = (value: boolean) => {
-    openFormFiles(value)
-    handleOpenFeedForm(true);
+  // proceed to feed update (only text content can be update here)
+  const handleSubmitUpdatedFeed = async () => {
+    // const result = await proceedSubmitFeed();
+    // if (result.status) {
+      // contentEditableDiv.innerHTML = "";
+      handleOpenFeedForm(false);
+    // }
   }
 
   return (
@@ -178,7 +197,7 @@ export default function FeedFormCardComponent({
               </div>
             </div>
             {/* // */}
-            {linkedImages && linkedImages?.length > 0 && (
+            {!updateItem && linkedImages && linkedImages?.length > 0 && (
               <div className="w-full overflow-y-hidden overflow-x-auto flex gap-2 pt-5">
                 {linkedImages.map((image: ObjectKeyDto, index: number) => (
                   <div key={index}>
@@ -193,30 +212,47 @@ export default function FeedFormCardComponent({
             )}
           </DialogBody>
           <DialogFooter placeholder={""} className="space-x-2">
-            <Button
-              placeholder={""}
-              variant="text"
-              color="gray"
-              onClick={() => openFormFiles(true)}
-            >
-              <VideoCameraIcon width={20} height={20} />
-            </Button>
-            <Button
-              placeholder={""}
-              variant="text"
-              color="gray"
-              onClick={() => openFormFiles(true)}
-            >
-              <PhotoIcon width={20} height={20} />
-            </Button>
-            <Button
-              placeholder={""}
-              variant="gradient"
-              color="gray"
-              onClick={() => handleSubmitFeed()}
-            >
-              Post Now
-            </Button>
+            {!updateItem && (
+              <>
+                <Button
+                  placeholder={""}
+                  variant="text"
+                  color="gray"
+                  onClick={() => openFormFiles(true)}
+                >
+                  <VideoCameraIcon width={20} height={20} />
+                </Button>
+                <Button
+                  placeholder={""}
+                  variant="text"
+                  color="gray"
+                  onClick={() => openFormFiles(true)}
+                >
+                  <PhotoIcon width={20} height={20} />
+                </Button>
+                <Button
+                  placeholder={""}
+                  variant="gradient"
+                  color="gray"
+                  onClick={() => handleSubmitFeed()}
+                >
+                  Post Now
+                </Button>
+              </>
+            )}
+
+            {updateItem && (
+              <>
+                <Button
+                  placeholder={""}
+                  variant="gradient"
+                  color="gray"
+                  onClick={() => handleSubmitUpdatedFeed()}
+                >
+                  Update Now
+                </Button>
+              </>
+            )}
           </DialogFooter>
         </Card>
       </Dialog>
