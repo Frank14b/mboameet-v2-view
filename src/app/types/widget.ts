@@ -58,7 +58,7 @@ export type FeedForm = {
   handleOpenFeedForm: Dispatch<SetStateAction<boolean>>;
   formFiles: boolean;
   openFormFiles: Dispatch<SetStateAction<boolean>>;
-  updateItem?: ResultFeed
+  updateItem?: ResultFeed | null
 };
 
 export type FeedFormFiles = {

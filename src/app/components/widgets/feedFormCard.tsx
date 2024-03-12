@@ -31,40 +31,42 @@ export default function FeedFormCardComponent({
 }: FeedForm) {
   //
   const [linkedImages, setLinkedImages] = useState<ObjectKeyDto[] | null>(null);
-
   const [feedInputValue] = useState<string>("@feed");
 
-  const handleKeyPress = (e: KeyboardEvent) => {
+  const getFeedContentEditable = () => {
     const contentEditableDiv = document.getElementById(
       "feedFormEditable"
     ) as HTMLDivElement;
 
+    return contentEditableDiv;
+  }
+
+  const handleKeyPress = (e: KeyboardEvent) => {
+    const content = getFeedContentEditable();
     if (e.key == " ") {
-      contentEditableDiv.innerHTML = formatHashTags(
-        contentEditableDiv.innerText
+      content.innerHTML = formatHashTags(
+        content.innerText
       );
-      focusOnLastText(contentEditableDiv);
+      focusOnLastText(content);
     }
   };
 
   useEffect(() => {
-    const contentEditableDiv = document.getElementById(
-      "feedFormEditable"
-    ) as HTMLDivElement;
-
-    if (!contentEditableDiv) return;
-    // format hahstags on first load if text available
-    contentEditableDiv.innerHTML = formatHashTags(contentEditableDiv.innerText);
-    contentEditableDiv?.addEventListener("keyup", handleKeyPress);
-  }, [openFeedForm]);
+    const content = getFeedContentEditable();
+    if(updateItem) {
+      content.innerHTML = formatHashTags(updateItem.message);
+    }else{
+      // format hahstags on first load if text available
+      if(!content) return;
+      content.innerHTML = formatHashTags(content.innerText);
+    }
+    content?.addEventListener("keyup", handleKeyPress);
+  }, [openFeedForm, updateItem]);
 
   const addSelectedEmoji = (data: EmojiSelected) => {
-    const contentEditableDiv = document.getElementById(
-      "feedFormEditable"
-    ) as HTMLDivElement;
-
-    contentEditableDiv.innerHTML =
-      formatHashTags(contentEditableDiv.innerText) + data.emoji;
+    const content = getFeedContentEditable();
+    content.innerHTML =
+      formatHashTags(content.innerText) + data.emoji;
   };
 
   const selectedImageFile = (image: string | Blob | ObjectKeyDto) => {
@@ -94,12 +96,10 @@ export default function FeedFormCardComponent({
   };
 
   // process to feed creation
-  const handleSubmitFeed = async () => {  
-    const contentEditableDiv = document.getElementById(
-      "feedFormEditable"
-    ) as HTMLDivElement;
+  const handleSubmitFeed = async () => {
+    const content = getFeedContentEditable();
 
-    const message = contentEditableDiv.innerText;
+    const message = content.innerText;
     if (message.trim().length == 0) return;
 
     const formData = new FormData();
@@ -116,7 +116,7 @@ export default function FeedFormCardComponent({
 
     const result = await proceedSubmitFeed(formData);
     if (result.status) {
-      contentEditableDiv.innerHTML = "";
+      content.innerHTML = "";
       handleOpenFeedForm(false);
     }
   };
@@ -125,10 +125,10 @@ export default function FeedFormCardComponent({
   const handleSubmitUpdatedFeed = async () => {
     // const result = await proceedSubmitFeed();
     // if (result.status) {
-      // contentEditableDiv.innerHTML = "";
-      handleOpenFeedForm(false);
+    // contentEditableDiv.innerHTML = "";
+    handleOpenFeedForm(false);
     // }
-  }
+  };
 
   return (
     <>
@@ -257,13 +257,17 @@ export default function FeedFormCardComponent({
         </Card>
       </Dialog>
 
-      <FeedFilesUploadComponent
-        openFeedFiles={formFiles}
-        handleOpenFeedFiles={handleCloseImageForm}
-        selectedImageFile={selectedImageFile}
-      >
-        <></>
-      </FeedFilesUploadComponent>
+      {!updateItem && (
+        <>
+          <FeedFilesUploadComponent
+            openFeedFiles={formFiles}
+            handleOpenFeedFiles={handleCloseImageForm}
+            selectedImageFile={selectedImageFile}
+          >
+            <></>
+          </FeedFilesUploadComponent>
+        </>
+      )}
 
       {children}
     </>

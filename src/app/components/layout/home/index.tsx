@@ -2,16 +2,12 @@
 
 import { IconButton, Typography } from "@material-tailwind/react";
 import FeedFormCardComponent from "../../widgets/feedFormCard";
-import { useEffect, useState } from "react";
 import FeedComponent from "./feedComponent";
-import { ApiResponseDto, ResultFeed, ResultPaginate } from "@/app/types";
-import { getFeeds } from "@/app/services/server-actions/feeds";
+import { useHomeContext } from "@/app/template";
 
 export default function HomePageComponent() {
   //
-  const [openFeedForm, handleOpenFeedForm] = useState<boolean>(false);
-  const [openFeedFormImages, handleOpenFeedFormImages] =
-    useState<boolean>(false);
+  const homeContext = useHomeContext();
 
   return (
     <>
@@ -30,10 +26,11 @@ export default function HomePageComponent() {
         </div>
 
         <FeedFormCardComponent
-          openFeedForm={openFeedForm}
-          handleOpenFeedForm={handleOpenFeedForm}
-          formFiles={openFeedFormImages}
-          openFormFiles={handleOpenFeedFormImages}
+          openFeedForm={homeContext.openFeedForm}
+          handleOpenFeedForm={homeContext.handleOpenFeedForm}
+          formFiles={homeContext.openFeedFormImages}
+          openFormFiles={homeContext.handleOpenFeedFormImages}
+          updateItem={homeContext.updateFeedItem}
         >
           <></>
         </FeedFormCardComponent>
@@ -46,7 +43,7 @@ export default function HomePageComponent() {
                 placeholder={""}
                 variant="text"
                 className="rounded-full dark:text-gray-300"
-                onClick={() => handleOpenFeedFormImages(true)}
+                onClick={() => homeContext.handleOpenFeedFormImages(true)}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -67,7 +64,7 @@ export default function HomePageComponent() {
             <div className="w-full"></div>
             <div>
               <IconButton
-                onClick={() => handleOpenFeedForm(true)}
+                onClick={() => homeContext.handleOpenFeedForm(true)}
                 placeholder={""}
                 variant="text"
                 className="rounded-full dark:text-gray-300"

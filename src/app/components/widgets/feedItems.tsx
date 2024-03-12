@@ -1,5 +1,6 @@
 import { useMainContext } from "@/app/contexts/main";
 import { formatHashTags } from "@/app/lib/utils";
+import { useHomeContext } from "@/app/template";
 import { FeedFilesData, FeedItem } from "@/app/types";
 import {
   ChatBubbleBottomCenterIcon,
@@ -22,6 +23,12 @@ import {
 
 export default function FeedItemsComponent({ data, fileType, onActionDelete }: FeedItem) {
   const mainContext = useMainContext();
+  const homeContext = useHomeContext();
+
+  const onActionEdit = () => {
+    homeContext.setUpdateFeedItem(data)
+    homeContext.handleOpenFeedForm(true);
+  }
 
   return (
     <>
@@ -64,6 +71,7 @@ export default function FeedItemsComponent({ data, fileType, onActionDelete }: F
                   <MenuItem
                     placeholder={""}
                     className="flex items-center gap-2"
+                    onClick={() => onActionEdit()}
                   >
                     <PencilIcon className="h-4 w-5" />
                     <Typography
@@ -178,16 +186,16 @@ export default function FeedItemsComponent({ data, fileType, onActionDelete }: F
         )}
 
         <div className="px-3 pt-2 flex">
-          <span className="flex text-gray-600 dark:text-gray-200 text-sm cursor-pointer">
-            <EyeIcon className="h-5 w-5" />
-            &nbsp;6356
+          <span className="flex text-gray-600 dark:text-gray-200 text-xs cursor-pointer">
+            <EyeIcon className="h-4 w-4" />
+            &nbsp;0
           </span>
-          <span className="flex px-6 text-pink-300 dark:text-pink-300 text-sm cursor-pointer">
-            <HeartIcon className="h-5 w-5" />
+          <span className="flex px-6 text-gray-600 dark:text-gray-200 text-xs cursor-pointer">
+            <HeartIcon className="h-4 w-4" />
             &nbsp;Like
           </span>
-          <span className="flex text-gray-600 dark:text-gray-200 text-sm cursor-pointer">
-            <ChatBubbleBottomCenterIcon className="h-5 w-5" />
+          <span className="flex text-gray-600 dark:text-gray-200 text-xs cursor-pointer">
+            <ChatBubbleBottomCenterIcon className="h-4 w-4" />
             &nbsp;Comment
           </span>
         </div>

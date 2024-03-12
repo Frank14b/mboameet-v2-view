@@ -6,6 +6,7 @@ import {
   SetStateAction,
   createContext,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import {
@@ -15,6 +16,7 @@ import {
   useForm,
 } from "react-hook-form";
 import { CreateFeedSchema } from "./validators";
+import { ResultFeed } from "./types";
 
 export default function Template({ children }: { children: React.ReactNode }) {
   //render the page
@@ -32,6 +34,16 @@ export function HomeWrapper({ children }: { children: any }) {
     resolver: yupResolver(CreateFeedSchema), // Integrate Yup for validation
   });
   //
+  const [openFeedForm, handleOpenFeedForm] = useState<boolean>(false);
+  const [openFeedFormImages, handleOpenFeedFormImages] =
+    useState<boolean>(false);
+  const [updateFeedItem, setUpdateFeedItem] = useState<ResultFeed | null>(null);
+
+  useEffect(() => {
+    if(!openFeedForm) {
+      setUpdateFeedItem(null);
+    }
+  }, [openFeedForm])
 
   const data: HomeContextDto = {
     isLoading,
@@ -39,6 +51,12 @@ export function HomeWrapper({ children }: { children: any }) {
     register,
     handleSubmit,
     errors,
+    openFeedForm,
+    handleOpenFeedForm,
+    openFeedFormImages,
+    handleOpenFeedFormImages,
+    updateFeedItem,
+    setUpdateFeedItem
   };
 
   return (
@@ -57,4 +75,10 @@ export type HomeContextDto = {
   register: UseFormRegister<any>;
   handleSubmit: UseFormHandleSubmit<any>;
   errors: FieldErrors<any>;
+  openFeedForm: boolean;
+  handleOpenFeedForm: Dispatch<SetStateAction<boolean>>;
+  openFeedFormImages: boolean;
+  handleOpenFeedFormImages: Dispatch<SetStateAction<boolean>>;
+  updateFeedItem: ResultFeed | null;
+  setUpdateFeedItem: Dispatch<SetStateAction<ResultFeed | null>>;
 };
