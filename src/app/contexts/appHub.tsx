@@ -1,12 +1,13 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import { getToken } from "../lib/server-utils";
 import * as signalR from "@microsoft/signalr";
 import UserHubs from "../services/hubs/users";
-import { getToken } from "../lib/server-utils";
 import useUserStore from "../store/userStore";
-import { useMainContext } from "./main";
 import { usePathname } from "next/navigation";
+import FeedHubs from "../services/hubs/feeds";
+import { useMainContext } from "./main";
 
 const AppHubContext = createContext<any>({});
 
@@ -15,6 +16,7 @@ export function AppHubWrapper({ children }: { children: any }) {
     null
   );
   const [userHubs, setUserHubs] = useState<any>(null);
+  const [feedHubs, setFeedHubs] = useState<any>(null);
   const userStore = useUserStore();
   const mainContext = useMainContext();
   const pathname = usePathname();
@@ -52,6 +54,7 @@ export function AppHubWrapper({ children }: { children: any }) {
         setConnection(_connection);
         //
         setUserHubs(new UserHubs(_connection, userStore));
+        setFeedHubs(new FeedHubs(_connection));
       })
       .catch(() => {
         mainContext.logout();
@@ -67,6 +70,7 @@ export function AppHubWrapper({ children }: { children: any }) {
   const AppHubData: AppHubDataType = {
     closeConnection,
     userHubs,
+    feedHubs,
   };
 
   return (
@@ -81,4 +85,5 @@ export const useAppHubContext = (): AppHubDataType => useContext(AppHubContext);
 export type AppHubDataType = {
   closeConnection: () => (() => Promise<void>) | undefined;
   userHubs: UserHubs;
+  feedHubs: FeedHubs;
 };

@@ -16,7 +16,8 @@ export default function FeedFilesUploadComponent({
   children,
   openFeedFiles,
   handleOpenFeedFiles,
-  selectedImageFile
+  selectedImageFile,
+  cropSize
 }: FeedFormFiles) {
   //
   const [image, setImage] = useState<string>("");
@@ -80,7 +81,7 @@ export default function FeedFilesUploadComponent({
         </Card>
       </Dialog>
 
-      {image.length > 1 && <CropProfileImage image={image} croppedImage={uploadProfileImage} returnType={'object'} />}
+      {image.length > 1 && <CropProfileImage image={image} croppedImage={uploadProfileImage} returnType={'object'} cropSize={cropSize} />}
 
       {children}
     </>

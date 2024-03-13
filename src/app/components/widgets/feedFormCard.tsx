@@ -20,6 +20,7 @@ import EmojiPickerButton from "../commons/emojiPickerButton";
 import { proceedSubmitFeed } from "@/app/services/server-actions/feeds";
 import FeedFilesUploadComponent from "./feedFilesUpload";
 import { PhotoIcon, VideoCameraIcon } from "@heroicons/react/24/solid";
+import { useRouter } from "next/navigation";
 
 export default function FeedFormCardComponent({
   children,
@@ -32,6 +33,7 @@ export default function FeedFormCardComponent({
   //
   const [linkedImages, setLinkedImages] = useState<ObjectKeyDto[] | null>(null);
   const [feedInputValue] = useState<string>("@feed");
+  const router = useRouter();
 
   const getFeedContentEditable = () => {
     const contentEditableDiv = document.getElementById(
@@ -39,25 +41,23 @@ export default function FeedFormCardComponent({
     ) as HTMLDivElement;
 
     return contentEditableDiv;
-  }
+  };
 
   const handleKeyPress = (e: KeyboardEvent) => {
     const content = getFeedContentEditable();
     if (e.key == " ") {
-      content.innerHTML = formatHashTags(
-        content.innerText
-      );
+      content.innerHTML = formatHashTags(content.innerText);
       focusOnLastText(content);
     }
   };
 
   useEffect(() => {
     const content = getFeedContentEditable();
-    if(updateItem) {
+    if (updateItem) {
       content.innerHTML = formatHashTags(updateItem.message);
-    }else{
+    } else {
       // format hahstags on first load if text available
-      if(!content) return;
+      if (!content) return;
       content.innerHTML = formatHashTags(content.innerText);
     }
     content?.addEventListener("keyup", handleKeyPress);
@@ -65,8 +65,7 @@ export default function FeedFormCardComponent({
 
   const addSelectedEmoji = (data: EmojiSelected) => {
     const content = getFeedContentEditable();
-    content.innerHTML =
-      formatHashTags(content.innerText) + data.emoji;
+    content.innerHTML = formatHashTags(content.innerText) + data.emoji;
   };
 
   const selectedImageFile = (image: string | Blob | ObjectKeyDto) => {
@@ -118,6 +117,7 @@ export default function FeedFormCardComponent({
     if (result.status) {
       content.innerHTML = "";
       handleOpenFeedForm(false);
+      router.refresh();
     }
   };
 
@@ -263,6 +263,7 @@ export default function FeedFormCardComponent({
             openFeedFiles={formFiles}
             handleOpenFeedFiles={handleCloseImageForm}
             selectedImageFile={selectedImageFile}
+            cropSize={{ width: 700, height: 360 }}
           >
             <></>
           </FeedFilesUploadComponent>

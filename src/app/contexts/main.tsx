@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
+// import { QueryClient, QueryClientProvider } from "react-query";
 import { AppHubWrapper } from "./appHub";
 import SideBarMenuComponent from "../components/commons/sidebarMenu";
 import AsideBarMenuComponent from "../components/commons/asidebarMenu";
@@ -14,7 +14,6 @@ import { ObjectKeyDto, ResultloginDto } from "../types";
 const MainContext = createContext<any>({});
 
 export function MainWrapper({ children }: { children: any }) {
-  const queryClient = new QueryClient();
   const {
     userConnected,
     setUserConnected,

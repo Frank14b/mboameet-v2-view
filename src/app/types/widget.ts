@@ -1,5 +1,6 @@
-import { Dispatch, HTMLInputTypeAttribute, SetStateAction } from "react";
+import { Dispatch, HTMLInputTypeAttribute, MutableRefObject, SetStateAction } from "react";
 import { ObjectKeyDto, ResultFeed } from ".";
+import { Size } from "react-easy-crop";
 
 export type InpputFormComponent = {
   title: string;
@@ -49,7 +50,7 @@ export type SideBarMenuListUser = {
 export type FeedItem = {
   data: ResultFeed,
   fileType?: "caroussel" | "images" | "video" | "image";
-  onActionDelete: ({ itemId }: { itemId: number }) => void
+  onActionDelete: ({ itemId, itemRef }: { itemId: number, itemRef: string }) => void
 };
 
 export type FeedForm = {
@@ -66,4 +67,5 @@ export type FeedFormFiles = {
   openFeedFiles: boolean;
   handleOpenFeedFiles: (value: boolean) => void;
   selectedImageFile: (image: string | Blob | ObjectKeyDto) => void;
+  cropSize?: Size
 };

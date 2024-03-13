@@ -8,12 +8,18 @@ import {
     DialogBody,
     DialogFooter,
 } from "@material-tailwind/react";
-import Cropper, { Area, Point } from 'react-easy-crop';
+import Cropper, { Area, Point, Size } from 'react-easy-crop';
 import { dismissType } from '@material-tailwind/react/types/generic';
 import { getCroppedImg } from '@/app/lib/cropImage';
 import { ObjectKeyDto } from '@/app/types';
 
-export default function CropProfileImage({ image, croppedImage, returnType }: { image: string, croppedImage: (image: string | Blob| ObjectKeyDto) => any, returnType: string }) {
+export default function CropProfileImage({ image, croppedImage, returnType, cropSize }: 
+    {
+        image: string, 
+        croppedImage: (image: string | Blob| ObjectKeyDto) => any, 
+        returnType: string, 
+        cropSize?: Size 
+    }) {
 
     const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
     const [zoom, setZoom] = useState<number>(1.1)
@@ -52,7 +58,7 @@ export default function CropProfileImage({ image, croppedImage, returnType }: { 
                     onCropChange={setCrop}
                     onCropComplete={onCropComplete}
                     onZoomChange={setZoom}
-                    cropSize={{width: 400, height: 400}}
+                    cropSize={cropSize ?? {width: 400, height: 400}}
                 />
                 {/*  */}
             </DialogBody>

@@ -6,14 +6,15 @@ import {
 } from "@/app/types";
 import FeedItemsComponent from "../../widgets/feedItems";
 import FeedSkeletonComponent from "../../skeletons/feedSkeleton";
-import { useEffect, useState } from "react";
-import { getFeeds } from "@/app/services/server-actions/feeds";
-import { useHomeContext } from "@/app/template";
+import { MutableRefObject, useEffect, useState } from "react";
+import { getFeeds, proceedDeleteFeed } from "@/app/services/server-actions/feeds";
+import { useAppHubContext } from "@/app/contexts/appHub";
 
 export default function FeedComponent() {
-  const homeContext = useHomeContext();
   const [loading, setLoading] = useState<boolean>(true);
   const [feeds, setFeeds] = useState<ResultFeed[]>([]);
+
+  const hubContent = useAppHubContext();
 
   const fetchFeeds = async () => {
     const result: ApiResponseDto<ResultPaginate<ResultFeed[]>> = await getFeeds(
@@ -29,7 +30,17 @@ export default function FeedComponent() {
 
   useEffect(() => {
     fetchFeeds();
-  }, []);
+  }, [hubContent.feedHubs?.newFeed]);
+
+  useEffect(() => {
+    if(hubContent.feedHubs?.deletedFeed) {
+      let currentFeeds = feeds;
+      const deletedFeedIndex = currentFeeds.findIndex((f: ResultFeed) => f.id == hubContent.feedHubs.deletedFeed)
+      if(deletedFeedIndex == -1) return;
+      currentFeeds = currentFeeds.splice(deletedFeedIndex, 1);
+      setFeeds(currentFeeds);
+    }
+  }, [hubContent.feedHubs?.deletedFeed])
 
   const getFileType = (files: FeedFilesData[]) => {
     if (files.length > 2) return "caroussel";
@@ -37,8 +48,11 @@ export default function FeedComponent() {
     return "images";
   };
 
-  const deleteItem = async ({ itemId }: { itemId: number }) => {
-    await fetchFeeds();
+  const deleteItem = async ({ itemId, itemRef }: { itemId: number, itemRef: string}) => {
+    const result = await proceedDeleteFeed(itemId);
+    if(result.status) {
+      document.getElementById(itemRef)?.remove();
+    }
   };
 
   return (

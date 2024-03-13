@@ -1,7 +1,7 @@
 "use server";
 
 import axios, { CancelTokenSource } from 'axios';
-import { ApiResponseDto, ObjectKeyDto, RequestMethod } from '../types';
+import { ApiResponseDto, RequestMethod } from '../types';
 import { getToken } from '../lib/server-utils';
 
 //create axios api call instance
@@ -80,7 +80,7 @@ export const apiCall = async ({
         // return response.data;
 
     } catch (error: any) {
-        console.log("🚀 ~ error:", error.response)
+        console.log("🚀 ~ error:", error)
 
         if (axios.isCancel(error)) {
             console.log('Request canceled');

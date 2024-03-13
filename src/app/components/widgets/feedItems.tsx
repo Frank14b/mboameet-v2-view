@@ -20,6 +20,7 @@ import {
   MenuList,
   Typography,
 } from "@material-tailwind/react";
+import { useState } from "react";
 
 export default function FeedItemsComponent({ data, fileType, onActionDelete }: FeedItem) {
   const mainContext = useMainContext();
@@ -30,8 +31,20 @@ export default function FeedItemsComponent({ data, fileType, onActionDelete }: F
     homeContext.handleOpenFeedForm(true);
   }
 
+  const [deleteting, setDeleteting] = useState<boolean>(false);
+  const referenceId: string = `feed-card-item-${data.id}`;
+
+  const deleteItem = () => {
+    setDeleteting(true);
+    onActionDelete({itemId: data.id, itemRef: referenceId});
+
+    setTimeout(() => {
+      return setDeleteting(false);
+    }, (10000));
+  }
+
   return (
-    <>
+    <div id={referenceId}>
       <Card
         placeholder={""}
         className="pb-3 pl-0 pr-0 w-full border border-gray-200 dark:border-gray-800 dark:bg-gray-900"
@@ -85,7 +98,7 @@ export default function FeedItemsComponent({ data, fileType, onActionDelete }: F
                   <MenuItem
                     placeholder={""}
                     className="flex items-center gap-2"
-                    onClick={() => onActionDelete({itemId: data.id})}
+                    onClick={() => deleteItem()}
                   >
                     <TrashIcon className="h-4 w-5" />
                     <Typography
@@ -114,7 +127,7 @@ export default function FeedItemsComponent({ data, fileType, onActionDelete }: F
                 <Carousel
                   placeholder={""}
                   loop={true}
-                  autoplay={true}
+                  autoplay={false}
                   className=""
                 >
                   {data.feedFiles.map((image: FeedFilesData, index: number) => (
@@ -199,7 +212,12 @@ export default function FeedItemsComponent({ data, fileType, onActionDelete }: F
             &nbsp;Comment
           </span>
         </div>
+
+        {
+          deleteting && <div className="absolute bg-white bg-opacity-60 dark:bg-gray-700 dark:bg-opacity-60 top-0 bottom-0 left-0 w-full z-index-999 rounded-lg"></div>
+        }
+        
       </Card>
-    </>
+    </div>
   );
 }
