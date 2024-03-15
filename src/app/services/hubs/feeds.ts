@@ -1,45 +1,35 @@
+"use client";
+import { StoreType } from "@/app/store/feedStore";
+import { ObjectKeyDto, ResultFeed } from "@/app/types";
+import { Dispatch, SetStateAction } from "react";
+
 class FeedHubs {
-  
-  connection: signalR.HubConnection;
-  newFeedId: number | null;
-  deletedFeedId: number | null;
+  _connection: signalR.HubConnection;
+  _feedStore: StoreType;
 
   constructor(
-    connection: signalR.HubConnection,
+    connection: signalR.HubConnection, 
+    feedStore: StoreType
   ) {
     // initialize my class
-    this.connection = connection;
-    this.newFeedId = null;
-    this.deletedFeedId = null;
+    this._connection = connection;
+    this._feedStore = feedStore;
     this.init();
   }
 
-  get newFeed () {
-    return this.newFeedId;
-  }
-
-  set newFeed(feed: number | null) {
-    this.newFeedId = feed;
-  }
-
-  get deletedFeed () {
-    return this.deletedFeedId;
-  }
-
-  set deletedFeed (feed: number | null) {
-    this.deletedFeedId = feed;
-  }
-
   init(): void {
-    this.connection.on("NewFeedAdded", (feedId: number) => {
-        this.newFeedId = feedId;
+    this._connection.on("NewFeedAdded", (feed: ResultFeed) => {
+      this._feedStore.setFeed(feed)
     });
-    
-    this.connection.on("FeedDeleted", (feedId: number) => {
-        this.deletedFeedId = feedId;
-    });
-  };
 
+    this._connection.on("FeedDeleted", (feedId: number) => {
+      this._feedStore.setDeletedFeed(feedId)
+    })
+
+    this._connection.on("FeedUpdated", (feed: ResultFeed) => {
+      this._feedStore.setUpdatedFeed(feed)
+    });
+  }
 }
 
 export default FeedHubs;

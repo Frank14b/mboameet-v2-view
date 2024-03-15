@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect } from "react";
+import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from "react";
 // import { QueryClient, QueryClientProvider } from "react-query";
 import { AppHubWrapper } from "./appHub";
 import SideBarMenuComponent from "../components/commons/sidebarMenu";
@@ -36,8 +36,8 @@ export function MainWrapper({ children }: { children: any }) {
     }, 300);
   };
 
-  const getFileUrl = (link: string) => {
-    return `${process.env.NEXT_PUBLIC_API_PUBLIC_FILES_LINK}${user?.id}/${link}`;
+  const getFileUrl = (link: string, userId?: number) => {
+    return `${process.env.NEXT_PUBLIC_API_PUBLIC_FILES_LINK}${userId ?? user?.id}/${link}`;
   };
 
   const MainData: MainDataType = {
@@ -126,5 +126,5 @@ export type MainDataType = {
   theme: string;
   setTheme: (userTheme: string) => void;
   logout: () => Promise<void>;
-  getFileUrl: (link: string) => string;
+  getFileUrl: (link: string, userId?: number) => string;
 };

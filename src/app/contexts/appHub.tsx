@@ -5,6 +5,7 @@ import { getToken } from "../lib/server-utils";
 import * as signalR from "@microsoft/signalr";
 import UserHubs from "../services/hubs/users";
 import useUserStore from "../store/userStore";
+import useFeedStore from "../store/feedStore";
 import { usePathname } from "next/navigation";
 import FeedHubs from "../services/hubs/feeds";
 import { useMainContext } from "./main";
@@ -18,6 +19,7 @@ export function AppHubWrapper({ children }: { children: any }) {
   const [userHubs, setUserHubs] = useState<any>(null);
   const [feedHubs, setFeedHubs] = useState<any>(null);
   const userStore = useUserStore();
+  const feedStore = useFeedStore();
   const mainContext = useMainContext();
   const pathname = usePathname();
 
@@ -54,7 +56,7 @@ export function AppHubWrapper({ children }: { children: any }) {
         setConnection(_connection);
         //
         setUserHubs(new UserHubs(_connection, userStore));
-        setFeedHubs(new FeedHubs(_connection));
+        setFeedHubs(new FeedHubs(_connection, feedStore));
       })
       .catch(() => {
         mainContext.logout();

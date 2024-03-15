@@ -3,6 +3,7 @@
 import {
   fileExtFromBase64,
   focusOnLastText,
+  focusPosition,
   formatHashTags,
 } from "@/app/lib/utils";
 import { EmojiSelected, FeedForm, ObjectKeyDto } from "@/app/types";
@@ -16,10 +17,13 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
-import EmojiPickerButton from "../commons/emojiPickerButton";
-import { proceedSubmitFeed } from "@/app/services/server-actions/feeds";
+import EmojiPickerButton from "../../commons/emojiPickerButton";
+import {
+  proceedSubmitFeed,
+  proceedUpdateFeed,
+} from "@/app/services/server-actions/feeds";
 import FeedFilesUploadComponent from "./feedFilesUpload";
-import { PhotoIcon, VideoCameraIcon } from "@heroicons/react/24/solid";
+import { PhotoIcon, TrashIcon, VideoCameraIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
 
 export default function FeedFormCardComponent({
@@ -54,7 +58,7 @@ export default function FeedFormCardComponent({
   useEffect(() => {
     const content = getFeedContentEditable();
     if (updateItem) {
-      content.innerHTML = formatHashTags(updateItem.message);
+      content.innerHTML = formatHashTags(updateItem.message); //set updated feed message
     } else {
       // format hahstags on first load if text available
       if (!content) return;
@@ -94,12 +98,20 @@ export default function FeedFormCardComponent({
     handleOpenFeedForm(true);
   };
 
+  const handleGetCursorPosition = () => {
+    const content = getFeedContentEditable();
+    focusPosition(content);
+  };
+
+  const removeSelectedImage = (index: number) => {
+    let currentData = linkedImages;
+    currentData?.splice(index, 1);
+    setLinkedImages(currentData);
+  }
+
   // process to feed creation
   const handleSubmitFeed = async () => {
     const content = getFeedContentEditable();
-
-    const message = content.innerText;
-    if (message.trim().length == 0) return;
 
     const formData = new FormData();
     if (linkedImages && linkedImages.length > 0) {
@@ -111,23 +123,35 @@ export default function FeedFormCardComponent({
         );
       }
     }
+    let message = content.innerText;
+
+    if (message.trim().length == 0) {
+      message = "@feed";
+    }
     formData.append("message", message);
 
     const result = await proceedSubmitFeed(formData);
     if (result.status) {
       content.innerHTML = "";
       handleOpenFeedForm(false);
-      router.refresh();
+      setLinkedImages(null);
     }
   };
 
   // proceed to feed update (only text content can be update here)
   const handleSubmitUpdatedFeed = async () => {
-    // const result = await proceedSubmitFeed();
-    // if (result.status) {
-    // contentEditableDiv.innerHTML = "";
-    handleOpenFeedForm(false);
-    // }
+    if (!updateItem) return;
+    const content = getFeedContentEditable();
+
+    const result = await proceedUpdateFeed({
+      feedId: updateItem.id,
+      message: content.innerText,
+    });
+
+    if (result.status) {
+      content.innerHTML = "";
+      handleOpenFeedForm(false);
+    }
   };
 
   return (
@@ -191,6 +215,7 @@ export default function FeedFormCardComponent({
                 role="textbox"
                 contentEditable={true}
                 suppressContentEditableWarning={true}
+                onClick={() => handleGetCursorPosition()}
               >
                 {" "}
                 <>{feedInputValue}</>{" "}
@@ -200,12 +225,16 @@ export default function FeedFormCardComponent({
             {!updateItem && linkedImages && linkedImages?.length > 0 && (
               <div className="w-full overflow-y-hidden overflow-x-auto flex gap-2 pt-5">
                 {linkedImages.map((image: ObjectKeyDto, index: number) => (
-                  <div key={index}>
+                  <div key={index} className="relative">
                     <img
-                      className="rounded shadow cursor-pointer"
+                      className="rounded shadow object-center"
                       src={image?.base64}
-                      style={{ width: "100px", height: "100px" }}
+                      style={{ width: "110px", height: "70px" }}
                     />
+                    <div className="absolute bg-gray-900 top-0 left-0 w-full bottom-0 rounded-lg bg-opacity-40"></div>
+                    <span onClick={() => removeSelectedImage(index)} className="absolute cursor-pointer right-2 top-2">
+                      <TrashIcon className="h-4 w-4 text-red-400"/>
+                    </span>
                   </div>
                 ))}
               </div>

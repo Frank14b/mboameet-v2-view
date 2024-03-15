@@ -1,7 +1,7 @@
 "use client";
 
 import { IconButton, Typography } from "@material-tailwind/react";
-import FeedFormCardComponent from "../../widgets/feedFormCard";
+import FeedFormCardComponent from "../../widgets/feeds/feedFormCard";
 import FeedComponent from "./feedComponent";
 import { useHomeContext } from "@/app/template";
 
@@ -36,8 +36,8 @@ export default function HomePageComponent() {
         </FeedFormCardComponent>
 
         {/*  */}
-        <div className="w-full px-3 mt-12 bg-white dark:bg-black/15 rounded-xl p-3  border border-gray-200 dark:border-gray-800">
-          <div className="flex w-full flex-row items-center gap-2 rounded-[99px] border border-gray-900/10 bg-gray-900/5 p-2">
+        <div className="w-full px-3 mt-12 bg-white dark:bg-black/15 rounded-xl py-2 border border-gray-200 dark:border-gray-800">
+          <div className="flex w-full flex-row items-center gap-2 rounded-[99px] border border-gray-900/10 bg-gray-900/5 px-2">
             <div className="flex">
               <IconButton
                 placeholder={""}
