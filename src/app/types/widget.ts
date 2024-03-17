@@ -1,56 +1,57 @@
+import { HTMLInputTypeAttribute } from "react";
 import {
-  Dispatch,
-  HTMLInputTypeAttribute,
-  MutableRefObject,
-  SetStateAction,
-} from "react";
-import { FeedCommentData, ObjectKeyDto, ResultFeed } from ".";
+  ApiResponseDto,
+  FeedCommentData,
+  ObjectKeyDto,
+  ResultFeed,
+  ResultFeedCommentDto,
+} from ".";
 import { Size } from "react-easy-crop";
 
-export type InpputFormComponent = {
+export interface InpputFormComponent {
   title: string;
   name?: string;
   type?: HTMLInputTypeAttribute;
   id?: string;
-  onChange?: (e: React.FormEvent<HTMLInputElement>) => void;
   value?: string;
   defaultValue?: string | number;
   placeholder?: string;
-};
+  onChange?: (e: React.FormEvent<HTMLInputElement>) => void;
+}
 
-export type UserCardComponent = {
+export interface UserCardComponent {
   image?: string;
   title?: string;
   description?: string;
-};
+}
 
-export type UserCardV2 = {
+export interface UserCardV2 {
   bgImage: string;
   image: string;
   title: string;
   description?: string;
-};
+}
 
-export type AboutCardComponent = {
+export interface AboutCardComponent {
   title: string;
   icon: any;
   subTitle: string;
-};
+}
 
-export type SideBarMenuList = {
+export interface SideBarMenuList {
   title: string;
   icon: any;
   active?: boolean;
   badge?: string;
   link?: string;
-};
+}
 
-export type SideBarMenuListUser = {
+export interface SideBarMenuListUser {
   title: string;
   image?: any;
   active?: boolean;
   badge?: string;
-};
+}
 
 export type FeedItem = {
   data: ResultFeed;
@@ -73,19 +74,62 @@ export type FeedComments = {
   fetchComments: () => void;
 };
 
+export interface FeedCommentFormProps {
+  id?: number;
+  feedId: number;
+  updateItem?: FeedCommentData;
+  onComment?: ({
+    formRef,
+    feedId,
+  }: {
+    formRef: string;
+    feedId: number;
+  }) => Promise<ApiResponseDto<ResultFeedCommentDto> | null>;
+  onEditComment?: ({
+    formRef,
+    feedId,
+    id,
+  }: {
+    formRef: string;
+    feedId: number;
+    id: number;
+  }) => Promise<ApiResponseDto<ResultFeedCommentDto> | null>;
+}
+
+export interface FeedCommentItemProps {
+  index: number;
+  feedId: number;
+  comment: FeedCommentData;
+  onEditComment?: ({
+    formRef,
+    feedId,
+    id,
+  }: {
+    formRef: string;
+    feedId: number;
+    id: number;
+  }) => Promise<ApiResponseDto<ResultFeedCommentDto> | null>; 
+}
+
 export type FeedForm = {
   children: React.ReactNode;
   openFeedForm: boolean;
-  handleOpenFeedForm: Dispatch<SetStateAction<boolean>>;
-  formFiles: boolean;
-  openFormFiles: Dispatch<SetStateAction<boolean>>;
   updateItem?: ResultFeed | null;
+  formFiles: boolean;
 };
 
 export type FeedFormFiles = {
   children: React.ReactNode;
   openFeedFiles: boolean;
+  cropSize?: Size;
   handleOpenFeedFiles: (value: boolean) => void;
   selectedImageFile: (image: string | Blob | ObjectKeyDto) => void;
-  cropSize?: Size;
 };
+
+export interface AlertConfirmationProps {
+  title?: string;
+  message: string;
+  defaultStatus: boolean;
+  onConfirm?: () => void;
+  onCancel?: () => void;
+}

@@ -3,6 +3,7 @@
 import axios, { CancelTokenSource } from 'axios';
 import { ApiResponseDto, RequestMethod } from '../types';
 import { getToken } from '../lib/server-utils';
+import { redirect } from 'next/navigation'
 
 //create axios api call instance
 const instance = axios.create({
@@ -56,7 +57,11 @@ export const apiCall = async ({
 
         // Check cache first
         if (!revalidate && cache[cacheKey]) {
-            return cache[cacheKey];
+            return {
+                status: true,
+                message: 'Cached result',
+                data: cache[cacheKey]
+            };
         }
 
         requestSource = axios.CancelToken.source();
@@ -80,9 +85,14 @@ export const apiCall = async ({
         // return response.data;
 
     } catch (error: any) {
-        console.log("🚀 ~ error:", error)
+        // console.log("🚀 ~ error:", error)
         if (axios.isCancel(error)) {
             console.log('Request canceled');
+        }
+
+        if(error.response?.status == 401) {
+            console.log('Unauthorized User');
+            redirect('/auth/signin');
         }
 
         return ApiErrorMessage(error);

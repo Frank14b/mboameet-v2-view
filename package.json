@@ -6,7 +6,9 @@
     "dev": "next dev -p 4009",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.18",
@@ -18,6 +20,7 @@
     "crypto": "^1.0.1",
     "emoji-picker-react": "^4.8.0",
     "ioredis": "^5.3.2",
+    "luxon": "^3.4.4",
     "next": "14.1.0",
     "node-cache": "^5.1.2",
     "react": "^18",
@@ -29,6 +32,7 @@
     "zustand": "^4.5.0"
   },
   "devDependencies": {
+    "@types/luxon": "^3.4.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

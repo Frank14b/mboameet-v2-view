@@ -10,15 +10,17 @@ import { useEffect } from "react";
 import useFeedStore from "@/app/store/feedStore";
 import { referenceKeyword } from "@/app/lib/utils";
 import { useHomeContext } from "@/app/template";
+import { useAppHubContext } from "@/app/contexts/appHub";
 
 //
 export default function FeedComponent() {
   const feedStore = useFeedStore();
   const homeContext = useHomeContext();
+  const hubContext = useAppHubContext();
 
   useEffect(() => {
     homeContext.fetchFeeds();
-  }, [feedStore.feed]);
+  }, [feedStore.feed, hubContext.connection]);
 
   useEffect(() => {
     if (feedStore.deletedFeedId != null) {

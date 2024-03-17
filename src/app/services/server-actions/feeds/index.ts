@@ -5,6 +5,7 @@ import {
   BooleanResultDto,
   FeedCommentData,
   ResultFeed,
+  ResultFeedCommentDto,
   ResultPaginate,
 } from "@/app/types";
 import { apiCall } from "../../api";
@@ -15,7 +16,7 @@ const urls = {
   getFeeds: `${basePath}`,
   deleteFeed: `${basePath}`,
   updateFeed: `${basePath}`,
-  likeFeed: `${basePath}`
+  likeFeed: `${basePath}`,
 };
 
 export const proceedSubmitFeed = async (formData: FormData) => {
@@ -56,16 +57,16 @@ export const proceedUpdateFeed = async ({
   message: string;
 }) => {
   //
-  if(message.trim().length == 0) {
-    message = "@feed"
+  if (message.trim().length == 0) {
+    message = "@feed";
   }
 
   const result: ApiResponseDto<ResultFeed> = await apiCall({
     method: "PUT",
     url: `${urls.updateFeed}/${feedId}`,
     data: {
-      message: message
-    }
+      message: message,
+    },
   });
 
   return result;
@@ -78,7 +79,7 @@ export const proceedLikeFeed = async (feedId: number) => {
   });
 
   return result;
-}
+};
 
 export const proceedDesLikeFeed = async (feedId: number) => {
   const result: ApiResponseDto<BooleanResultDto<null>> = await apiCall({
@@ -87,13 +88,50 @@ export const proceedDesLikeFeed = async (feedId: number) => {
   });
 
   return result;
-}
+};
 
 export const getFeedComments = async (feedId: number) => {
-  const result: ApiResponseDto<ResultPaginate<FeedCommentData[]>> = await apiCall({
-    method: "GET",
+  const result: ApiResponseDto<ResultPaginate<FeedCommentData[]>> =
+    await apiCall({
+      method: "GET",
+      url: `${urls.getFeeds}/${feedId}/comments?skip=0&limit=20&sort=desc`,
+    });
+    
+  return result;
+};
+
+export const proceedSubmitFeedComment = async ({
+  formData,
+  feedId,
+}: {
+  formData: FormData;
+  feedId: number;
+}) => {
+  const result: ApiResponseDto<ResultFeedCommentDto> = await apiCall({
+    method: "POST",
     url: `${urls.getFeeds}/${feedId}/comments`,
+    data: formData,
+  });
+
+  console.log("🚀 ~ result:", result)
+
+  return result;
+};
+
+export const proceedSubmitEditFeedComment = async ({
+  formData,
+  feedId,
+  id,
+}: {
+  formData: FormData;
+  feedId: number;
+  id: number
+}) => {
+  const result: ApiResponseDto<ResultFeedCommentDto> = await apiCall({
+    method: "PUT",
+    url: `${urls.getFeeds}/${feedId}/comments/${id}`,
+    data: formData,
   });
 
   return result;
-}
+};

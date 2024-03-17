@@ -52,6 +52,8 @@ export function HomeWrapper({ children }: { children: any }) {
   const [updateFeedItem, setUpdateFeedItem] = useState<ResultFeed | null>(null);
   const [feeds, setFeeds] = useState<ResultFeed[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [openComment, setOpenComment] = useState<number>(0);
+  const [editCommentId, setEditCommentId] = useState<number>(0);
 
   useEffect(() => {
     if (!openFeedForm) {
@@ -106,6 +108,10 @@ export function HomeWrapper({ children }: { children: any }) {
     updateFeedItem,
     loading,
     feeds,
+    editCommentId, 
+    openComment, 
+    setOpenComment,
+    setEditCommentId,
     setIsLoading,
     register,
     handleSubmit,
@@ -149,4 +155,8 @@ export type HomeContextDto = {
     itemRef: string;
   }) => void;
   fetchFeeds: () => void;
+  editCommentId: number,
+  setEditCommentId: Dispatch<SetStateAction<number>>;
+  openComment: number;
+  setOpenComment: Dispatch<SetStateAction<number>>;
 };

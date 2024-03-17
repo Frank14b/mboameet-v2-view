@@ -27,9 +27,7 @@ export default function HomePageComponent() {
 
         <FeedFormCardComponent
           openFeedForm={homeContext.openFeedForm}
-          handleOpenFeedForm={homeContext.handleOpenFeedForm}
           formFiles={homeContext.openFeedFormImages}
-          openFormFiles={homeContext.handleOpenFeedFormImages}
           updateItem={homeContext.updateFeedItem}
         >
           <></>

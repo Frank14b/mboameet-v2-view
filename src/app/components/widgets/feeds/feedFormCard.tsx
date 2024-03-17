@@ -1,10 +1,12 @@
 "use client";
 
 import {
+  feedFormEditable,
   fileExtFromBase64,
   focusOnLastText,
   focusPosition,
   formatHashTags,
+  getContentEditable,
 } from "@/app/lib/utils";
 import { EmojiSelected, FeedForm, ObjectKeyDto } from "@/app/types";
 import {
@@ -24,31 +26,21 @@ import {
 } from "@/app/services/server-actions/feeds";
 import FeedFilesUploadComponent from "./feedFilesUpload";
 import { PhotoIcon, TrashIcon, VideoCameraIcon } from "@heroicons/react/24/solid";
-import { useRouter } from "next/navigation";
+import { useHomeContext } from "@/app/template";
 
 export default function FeedFormCardComponent({
   children,
   openFeedForm,
-  handleOpenFeedForm,
   formFiles,
-  openFormFiles,
   updateItem,
 }: FeedForm) {
   //
+  const homeContext = useHomeContext();
   const [linkedImages, setLinkedImages] = useState<ObjectKeyDto[] | null>(null);
   const [feedInputValue] = useState<string>("@feed");
-  const router = useRouter();
-
-  const getFeedContentEditable = () => {
-    const contentEditableDiv = document.getElementById(
-      "feedFormEditable"
-    ) as HTMLDivElement;
-
-    return contentEditableDiv;
-  };
 
   const handleKeyPress = (e: KeyboardEvent) => {
-    const content = getFeedContentEditable();
+    const content = getContentEditable(feedFormEditable);
     if (e.key == " ") {
       content.innerHTML = formatHashTags(content.innerText);
       focusOnLastText(content);
@@ -56,7 +48,7 @@ export default function FeedFormCardComponent({
   };
 
   useEffect(() => {
-    const content = getFeedContentEditable();
+    const content = getContentEditable(feedFormEditable);
     if (updateItem) {
       content.innerHTML = formatHashTags(updateItem.message); //set updated feed message
     } else {
@@ -68,7 +60,7 @@ export default function FeedFormCardComponent({
   }, [openFeedForm, updateItem]);
 
   const addSelectedEmoji = (data: EmojiSelected) => {
-    const content = getFeedContentEditable();
+    const content = getContentEditable(feedFormEditable);
     content.innerHTML = formatHashTags(content.innerText) + data.emoji;
   };
 
@@ -94,12 +86,12 @@ export default function FeedFormCardComponent({
   };
 
   const handleCloseImageForm = (value: boolean) => {
-    openFormFiles(value);
-    handleOpenFeedForm(true);
+    homeContext.handleOpenFeedFormImages(value);
+    homeContext.handleOpenFeedForm(true);
   };
 
   const handleGetCursorPosition = () => {
-    const content = getFeedContentEditable();
+    const content = getContentEditable(feedFormEditable);
     focusPosition(content);
   };
 
@@ -111,7 +103,7 @@ export default function FeedFormCardComponent({
 
   // process to feed creation
   const handleSubmitFeed = async () => {
-    const content = getFeedContentEditable();
+    const content = getContentEditable(feedFormEditable);
 
     const formData = new FormData();
     if (linkedImages && linkedImages.length > 0) {
@@ -133,7 +125,7 @@ export default function FeedFormCardComponent({
     const result = await proceedSubmitFeed(formData);
     if (result.status) {
       content.innerHTML = "";
-      handleOpenFeedForm(false);
+      homeContext.handleOpenFeedForm(false);
       setLinkedImages(null);
     }
   };
@@ -141,7 +133,7 @@ export default function FeedFormCardComponent({
   // proceed to feed update (only text content can be update here)
   const handleSubmitUpdatedFeed = async () => {
     if (!updateItem) return;
-    const content = getFeedContentEditable();
+    const content = getContentEditable(feedFormEditable);
 
     const result = await proceedUpdateFeed({
       feedId: updateItem.id,
@@ -150,7 +142,7 @@ export default function FeedFormCardComponent({
 
     if (result.status) {
       content.innerHTML = "";
-      handleOpenFeedForm(false);
+      homeContext.handleOpenFeedForm(false);
     }
   };
 
@@ -159,7 +151,7 @@ export default function FeedFormCardComponent({
       <Dialog
         placeholder={""}
         open={openFeedForm}
-        handler={handleOpenFeedForm}
+        handler={homeContext.handleOpenFeedForm}
         dismiss={{
           escapeKey: false,
           outsidePress: true,
@@ -184,7 +176,7 @@ export default function FeedFormCardComponent({
               viewBox="0 0 24 24"
               fill="currentColor"
               className="mr-3 h-5 w-5 cursor-pointer"
-              onClick={() => handleOpenFeedForm(false)}
+              onClick={() => homeContext.handleOpenFeedForm(false)}
             >
               <path
                 fillRule="evenodd"
@@ -210,7 +202,7 @@ export default function FeedFormCardComponent({
               </div>
 
               <div
-                id="feedFormEditable"
+                id={`${feedFormEditable}`}
                 className="textarea text-gray-800 p-3 min-h-40 rounded border border-gray-900/30"
                 role="textbox"
                 contentEditable={true}
@@ -247,7 +239,7 @@ export default function FeedFormCardComponent({
                   placeholder={""}
                   variant="text"
                   color="gray"
-                  onClick={() => openFormFiles(true)}
+                  onClick={() => homeContext.handleOpenFeedFormImages(true)}
                 >
                   <VideoCameraIcon width={20} height={20} />
                 </Button>
@@ -255,7 +247,7 @@ export default function FeedFormCardComponent({
                   placeholder={""}
                   variant="text"
                   color="gray"
-                  onClick={() => openFormFiles(true)}
+                  onClick={() => homeContext.handleOpenFeedFormImages(true)}
                 >
                   <PhotoIcon width={20} height={20} />
                 </Button>

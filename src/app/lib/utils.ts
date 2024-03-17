@@ -1,4 +1,5 @@
 import { ChangeEvent } from "react";
+import { DateTime } from "luxon";
 
 export const passwordRegex: string =
   "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
@@ -11,6 +12,8 @@ export const defaultProfileImg =
   "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80";
 
 export const referenceKeyword: string = `feed-card-item-`;
+export const feedFormEditable: string = `feedFormEditable`;
+export const feedCommentFormEditable: string = `feedCommentFormEditable`;
 
 // export const generateBrowserId = async (): Promise<string | null> => {
 //     if (!window) return null; // Check for window object (client-side)
@@ -121,13 +124,51 @@ export const createFileUploadString = (e: ChangeEvent<HTMLInputElement>) => {
 };
 
 export const fileExtFromBase64 = (base64: string) => {
-  return base64.substring(base64.indexOf('/') + 1, base64.indexOf(';base64'));
-}
+  return base64.substring(base64.indexOf("/") + 1, base64.indexOf(";base64"));
+};
 
 export const range = (start: number, end: number) => {
   var ans = [];
   for (let i = start; i <= end; i++) {
-      ans.push(i);
+    ans.push(i);
   }
   return ans;
-}
+};
+
+export const getContentEditable = (id: string) => {
+  const contentEditableDiv = document.getElementById(`${id}`) as HTMLDivElement;
+
+  return contentEditableDiv;
+};
+
+type DateFormatType = "ago" | "datetime" | "time" | "date";
+
+const validateDateAgo = (date: Date) => {
+  const units: any = [
+    "year",
+    "month",
+    "week",
+    "day",
+    "hour",
+    "minute",
+    "second",
+  ];
+
+  let dateTime = DateTime.fromISO(`${date}`);
+  const diff = dateTime.diffNow().shiftTo(...units);
+  const unit = units.find((unit: any) => diff.get(unit) !== 0) || "second";
+
+  const relativeFormatter = new Intl.RelativeTimeFormat("en", {
+    numeric: "auto",
+  });
+  return relativeFormatter.format(Math.trunc(diff.as(unit)), unit);
+};
+
+export const formatDate = (date: Date, format: DateFormatType): string => {
+  switch (format) {
+    case "ago":
+      return validateDateAgo(date); //=> '20 hours and 55 minutes'
+    default:
+      return "";
+  }
+};

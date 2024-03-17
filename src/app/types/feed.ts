@@ -16,6 +16,7 @@ export type FeedCommentData = {
   content: string;
   user: ResultFeedUserDto;
   url: string;
+  createdAt: Date;
 };
 
 export type ResultFeedUserDto = {
@@ -30,7 +31,14 @@ export type ResultFeedUserDto = {
 export type ResultFeedLikeDto = {
   id: string;
   count: number;
-  createdat: Date;
+  createdAt: Date;
+};
+
+export type ResultFeedCommentDto = {
+  id: string;
+  content: number;
+  createdAt: Date;
+  user: ResultFeedUserDto;
 };
 
 export type ResultFeed = {
@@ -38,7 +46,7 @@ export type ResultFeed = {
   message: string;
   user: ResultFeedUserDto;
   feedFiles: FeedFilesData[] | null;
-  feedComments: string[] | null;
+  feedComments: ResultFeedCommentDto[] | null;
   status: boolean;
   createdAt: Date;
   likes: number;

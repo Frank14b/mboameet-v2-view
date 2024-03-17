@@ -1,0 +1,97 @@
+import { AlertConfirmationProps } from "@/app/types";
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Typography,
+} from "@material-tailwind/react";
+import { useState } from "react";
+
+export default function ConfirmationComponent({
+  title = "Your Attention is Required!",
+  message = "",
+  defaultStatus = false,
+  onConfirm,
+  onCancel,
+}: AlertConfirmationProps) {
+  const [open, setOpen] = useState<boolean>(defaultStatus);
+
+  const handleOpen = () => setOpen(!open);
+
+  return (
+    <>
+      <Dialog
+        placeholder={"Confirmation"}
+        open={open}
+        size="xs"
+        handler={handleOpen}
+        animate={{
+          mount: { scale: 1, y: 0 },
+          unmount: { scale: 0.9, y: -100 },
+        }}
+      >
+        <DialogHeader placeholder={""} className="grid place-items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="h-8 w-8 text-red-500"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <Typography
+            placeholder={""}
+            variant="h6"
+            color="blue-gray"
+            className="text-center"
+          >
+            {title}
+          </Typography>
+        </DialogHeader>
+        <DialogBody
+          placeholder={""}
+          divider
+          className="grid place-items-center gap-4"
+        >
+          <Typography placeholder={""} className="text-center font-normal">
+            {message}
+          </Typography>
+        </DialogBody>
+        <DialogFooter placeholder={""} className="space-x-2">
+          {onCancel && (
+            <Button
+              placeholder={""}
+              variant="text"
+              color="blue-gray"
+              onClick={() => {
+                onCancel();
+                handleOpen();
+              }}
+            >
+              close
+            </Button>
+          )}
+
+          {onConfirm && (
+            <Button
+              placeholder={""}
+              variant="gradient"
+              onClick={() => {
+                onConfirm();
+                handleOpen();
+              }}
+            >
+              Ok, Got it
+            </Button>
+          )}
+        </DialogFooter>
+      </Dialog>
+    </>
+  );
+}

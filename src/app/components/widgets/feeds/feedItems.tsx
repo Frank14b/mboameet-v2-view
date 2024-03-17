@@ -1,26 +1,30 @@
 "use client";
 
 import { useMainContext } from "@/app/contexts/main";
-import { formatHashTags, referenceKeyword } from "@/app/lib/utils";
+import { formatDate, formatHashTags, referenceKeyword } from "@/app/lib/utils";
 import useFeedStore from "@/app/store/feedStore";
 import { useHomeContext } from "@/app/template";
-import { FeedCommentData, FeedFilesData, FeedItem, ResultFeed } from "@/app/types";
+import {
+  FeedCommentData,
+  FeedFilesData,
+  FeedItem,
+  ResultFeed,
+} from "@/app/types";
 import { Avatar, Card, Carousel, Typography } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import FeedItemActionMenuComponent from "./feedMenuActions";
 import FeedCommentComponent from "./feedComments";
 
-export default function FeedItemsComponent({
-  data,
-  fileType
-}: FeedItem) {
+export default function FeedItemsComponent({ data, fileType }: FeedItem) {
   //
   const mainContext = useMainContext();
   const homeContext = useHomeContext();
   const feedStore = useFeedStore();
 
   const [feedData, setFeedData] = useState<ResultFeed>(data);
-  const [feedComments, setFeedComments] = useState<FeedCommentData[] | null>(null);
+  const [feedComments, setFeedComments] = useState<FeedCommentData[] | null>(
+    null
+  );
 
   const [userLiked, setUserLiked] = useState<boolean>(
     data?.feedLikes && data?.feedLikes?.length == 1 ? true : false
@@ -54,9 +58,9 @@ export default function FeedItemsComponent({
   };
 
   const fetchComments = async () => {
-    const result = await homeContext.fetchComments({itemId: data.id});
+    const result = await homeContext.fetchComments({ itemId: data.id });
     setFeedComments(result);
-  }
+  };
 
   useEffect(() => {
     if (feedStore.updatedFeed?.id == data.id) {
@@ -96,16 +100,14 @@ export default function FeedItemsComponent({
                 placeholder={""}
                 variant="h6"
                 color="blue-gray"
-                className="dark:text-pink-200 cursor-pointer"
+                className="dark:text-pink-200 cursor-pointer text-sm mt-1"
               >
-                {feedData.user.userName}
-              </Typography>
-              <Typography
-                placeholder={""}
-                variant="small"
-                className="font-normal dark:text-gray-500"
-              >
-                {new Date(feedData.createdAt).toDateString()}
+                <>
+                  <p className="capitalize">{feedData.user.userName}</p>
+                  <p className="text-gray-700 font-normal">
+                    <small>{formatDate(feedData.createdAt, "ago")}</small>
+                  </p>
+                </>
               </Typography>
             </div>
 
