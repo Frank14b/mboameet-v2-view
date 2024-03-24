@@ -56,13 +56,13 @@ export const apiCall = async ({
         const cacheKey: string = `${method}-${url}-${JSON.stringify(params)}`;
 
         // Check cache first
-        if (!revalidate && cache[cacheKey]) {
-            return {
-                status: true,
-                message: 'Cached result',
-                data: cache[cacheKey]
-            };
-        }
+        // if (!revalidate && cache[cacheKey]) {
+        //     return {
+        //         status: true,
+        //         message: 'Cached result',
+        //         data: cache[cacheKey]
+        //     };
+        // }
 
         requestSource = axios.CancelToken.source();
 

@@ -2,6 +2,8 @@
 
 import { getContentEditable } from "@/app/lib/utils";
 import {
+  getFeedComments,
+  proceedSubmitDeleteFeedComment,
   proceedSubmitEditFeedComment,
   proceedSubmitFeedComment,
 } from "@/app/services/server-actions/feeds";
@@ -16,6 +18,7 @@ import { useEffect, useState } from "react";
 import FeedCommentFormComponent from "./feedCommentForm";
 import FeedCommentItemComponent from "./feedCommentItem";
 import { useHomeContext } from "@/app/template";
+import { useQuery } from "react-query";
 
 export default function FeedCommentComponent({
   feedData,
@@ -29,7 +32,7 @@ export default function FeedCommentComponent({
   const homeContext = useHomeContext();
 
   useEffect(() => {
-    if (homeContext.openComment != 0) {
+    if (homeContext.openComment == feedData.id) {
       fetchComments();
     }
   }, [homeContext.openComment]);
@@ -92,6 +95,23 @@ export default function FeedCommentComponent({
     return result;
   };
 
+  const handleDeleteFeedComment = async ({
+    id,
+    feedId,
+  }: {
+    id: number;
+    feedId: number;
+  }) => {
+    const result = await proceedSubmitDeleteFeedComment({
+      feedId: feedId,
+      id: id,
+    });
+    if(result.status) {
+      fetchComments();
+    }
+    return result;
+  };
+
   return (
     <>
       <div className="px-3 pt-2 flex">
@@ -147,6 +167,7 @@ export default function FeedCommentComponent({
                       index={index}
                       comment={comment}
                       onEditComment={handleSubmitEditFeedComment}
+                      onDeleteComment={handleDeleteFeedComment}
                     />
                   ))}
                 </Timeline>

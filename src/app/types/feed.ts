@@ -15,8 +15,8 @@ export type FeedCommentData = {
   id: number;
   content: string;
   user: ResultFeedUserDto;
-  url: string;
   createdAt: Date;
+  updatedAt: Date;
 };
 
 export type ResultFeedUserDto = {
@@ -29,15 +29,16 @@ export type ResultFeedUserDto = {
 };
 
 export type ResultFeedLikeDto = {
-  id: string;
+  id: number;
   count: number;
   createdAt: Date;
 };
 
 export type ResultFeedCommentDto = {
-  id: string;
-  content: number;
+  id: number;
+  content: string;
   createdAt: Date;
+  updatedAt: Date;
   user: ResultFeedUserDto;
 };
 

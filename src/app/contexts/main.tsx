@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from "react";
-// import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider, useQueryClient } from "react-query";
 import { AppHubWrapper } from "./appHub";
 import SideBarMenuComponent from "../components/commons/sidebarMenu";
 import AsideBarMenuComponent from "../components/commons/asidebarMenu";
@@ -10,6 +10,7 @@ import { deleteToken, isTokenExpired } from "../lib/server-utils";
 import { usePathname, useRouter } from "next/navigation";
 import { sessionTimeOut } from "../lib/workers";
 import { ObjectKeyDto, ResultloginDto } from "../types";
+import { mainDivComponentId } from "../lib/utils";
 
 const MainContext = createContext<any>({});
 
@@ -25,6 +26,10 @@ export function MainWrapper({ children }: { children: any }) {
   } = useUserStore();
   const router = useRouter();
   const pathname = usePathname();
+
+  const [mainScroll, setMainScroll] = useState<any>(null);
+
+  const queryClient = new QueryClient();
 
   const logout = async () => {
     deleteToken();
@@ -43,9 +48,11 @@ export function MainWrapper({ children }: { children: any }) {
   const MainData: MainDataType = {
     connectedUser: user,
     theme: theme,
+    mainScroll,
     setTheme: setTheme,
     logout: logout,
     getFileUrl: getFileUrl,
+    setMainScroll
   };
 
   const checkExpiredToken = async () => {
@@ -74,7 +81,7 @@ export function MainWrapper({ children }: { children: any }) {
 
   return (
     <MainContext.Provider value={MainData}>
-      {/* <QueryClientProvider client={queryClient}> */}
+      <QueryClientProvider client={queryClient}>
       {loading ? (
         <></>
       ) : (
@@ -92,7 +99,7 @@ export function MainWrapper({ children }: { children: any }) {
                       </div>
 
                       <div className="w-1/2 sm:w-full xs:w-full lg:w-1/2 bg-gray-100 z-10 dark:bg-gray-900">
-                        <div className="flex flex-col h-screen p-6 relative overflow-y-auto">
+                        <div className="flex flex-col h-screen p-6 relative overflow-y-auto" id={mainDivComponentId}>
                           {children}
                         </div>
                       </div>
@@ -114,7 +121,7 @@ export function MainWrapper({ children }: { children: any }) {
           </main>
         </>
       )}
-      {/* </QueryClientProvider> */}
+      </QueryClientProvider>
     </MainContext.Provider>
   );
 }
@@ -127,4 +134,6 @@ export type MainDataType = {
   setTheme: (userTheme: string) => void;
   logout: () => Promise<void>;
   getFileUrl: (link: string, userId?: number) => string;
+  mainScroll: any, 
+  setMainScroll: Dispatch<SetStateAction<any>>;
 };

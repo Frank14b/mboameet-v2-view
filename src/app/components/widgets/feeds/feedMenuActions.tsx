@@ -3,7 +3,6 @@
 import useUserStore from "@/app/store/userStore";
 import { FeedItemMenuAction } from "@/app/types";
 import {
-  ListBulletIcon,
   PencilIcon,
   ShareIcon,
   TrashIcon,
@@ -29,10 +28,23 @@ export default function FeedItemActionMenuComponent({
     <div className="absolute right-5">
       <Menu placement="bottom-end">
         <MenuHandler>
-          <ListBulletIcon className="h-6 w-6 dark:text-gray-500 cursor-pointer" />
+          {/* <ListBulletIcon className="h-6 w-6 dark:text-gray-500 cursor-pointer" /> */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6 cursor-pointer"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
+            />
+          </svg>
         </MenuHandler>
         <MenuList placeholder={""} className="p-0">
-
           <MenuItem
             placeholder={"Share"}
             className="flex items-center gap-2"
@@ -51,7 +63,7 @@ export default function FeedItemActionMenuComponent({
           {feedData.user.id === userStore.user?.id && (
             <>
               <MenuItem
-                placeholder={"Edit"}
+                placeholder={""}
                 className="flex items-center gap-2"
                 onClick={() => onActionEdit()}
               >
@@ -65,7 +77,7 @@ export default function FeedItemActionMenuComponent({
                 </Typography>
               </MenuItem>
               <MenuItem
-                placeholder={"Delete"}
+                placeholder={""}
                 className="flex items-center gap-2"
                 onClick={() => deleteItem()}
               >

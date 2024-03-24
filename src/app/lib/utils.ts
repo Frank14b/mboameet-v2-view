@@ -11,27 +11,15 @@ export const requiredEmailErrorMessage: string = "Email address is required";
 export const defaultProfileImg =
   "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80";
 
+export const mainDivComponentId: string = `main-app-div`
 export const referenceKeyword: string = `feed-card-item-`;
+export const referenceCommentKeyword: string = `feed-item-ref-comment-`;
 export const feedFormEditable: string = `feedFormEditable`;
 export const feedCommentFormEditable: string = `feedCommentFormEditable`;
-
-// export const generateBrowserId = async (): Promise<string | null> => {
-//     if (!window) return null; // Check for window object (client-side)
-
-//     // Use modern properties for navigator information:
-//     const navigatorInfo = navigator.userAgent;
-
-//     // Avoid plugins for compatibility and privacy:
-//     const screenResolution = `${screen.width}x${screen.height}`;
-//     const timeZone = new Date().getTimezoneOffset();
-
-//     // Compose browserId without plugins:
-//     const browserId = `${navigatorInfo}${screenResolution}${timeZone}`;
-
-//     // Hash the browserId using a more secure algorithm:
-//     const hashedBrowserId = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(browserId))
-//     //   .then(hashedBuffer => btoa(String.fromCharCode(...new Uint8Array(hashedBuffer))));
-//   };
+export const feedInputFile: string = `custom-feed-input-file`;
+export const feedInputVideoFile: string = `custom-feed-input-video-file`;
+export const feedVideoPreviewId: string = `feed-video-preview`;
+export const feedVideoReaderId: string = `feed-video-reader`;
 
 export const replaceLineBreaks = (text: string) => {
   return text.replace(/\n/g, "<br>");
@@ -127,6 +115,46 @@ export const fileExtFromBase64 = (base64: string) => {
   return base64.substring(base64.indexOf("/") + 1, base64.indexOf(";base64"));
 };
 
+export const createVideoPreview = (file: File, previewId: string) => {
+  //
+  const videoPreview = document.getElementById(
+    `${previewId}`
+  ) as HTMLVideoElement;
+  videoPreview.innerHTML = "";
+
+  const reader = new FileReader();
+
+  reader.onload = function (e: any) {
+    const videoSource = document.createElement("source");
+    videoSource.setAttribute("src", e.target.result);
+    videoPreview.appendChild(videoSource);
+    videoPreview.load();
+    videoPreview.play();
+  };
+
+  reader.readAsDataURL(file);
+
+  return file;
+};
+
+export const validateFileUploadType = (
+  file: File,
+  expectedType: "video" | "image"
+) => {
+  if (!file) return null; // if no file found return immediately
+
+  console.log("🚀 ~ file.type:", file.type);
+
+  if (file.type.includes(expectedType)) {
+    return {
+      status: true,
+      file: file,
+    };
+  }
+
+  return { status: false };
+};
+
 export const range = (start: number, end: number) => {
   var ans = [];
   for (let i = start; i <= end; i++) {
@@ -139,6 +167,11 @@ export const getContentEditable = (id: string) => {
   const contentEditableDiv = document.getElementById(`${id}`) as HTMLDivElement;
 
   return contentEditableDiv;
+};
+
+export const clickFileUpload = (id: string) => {
+  const contentInputFile = document.getElementById(`${id}`) as HTMLInputElement;
+  contentInputFile?.click();
 };
 
 type DateFormatType = "ago" | "datetime" | "time" | "date";
@@ -172,3 +205,24 @@ export const formatDate = (date: Date, format: DateFormatType): string => {
       return "";
   }
 };
+
+export const handleScrollEvent = ({
+  elementId,
+  callback,
+}: {
+  elementId?: string;
+  callback: (event: any) => void;
+}) => {
+
+  let element: Document | HTMLElement = document;
+
+  if(elementId) {
+    element = getContentEditable(elementId);
+  }
+
+  element.addEventListener('scroll', (event: any) => {
+    return callback(event)
+  })
+};
+
+export const getWidgetScreenPosition = (content: HTMLElement) => {};

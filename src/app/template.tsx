@@ -73,7 +73,7 @@ export function HomeWrapper({ children }: { children: any }) {
     setLoading(false);
   };
 
-  const deleteItem = async ({
+  const deleteItemAsync = async ({
     itemId,
     itemRef,
   }: {
@@ -100,7 +100,7 @@ export function HomeWrapper({ children }: { children: any }) {
     return null;
   };
 
-  const data: HomeContextDto = {
+  const contextData: HomeContextDto = {
     isLoading,
     errors,
     openFeedForm,
@@ -121,11 +121,11 @@ export function HomeWrapper({ children }: { children: any }) {
     likeFeed,
     desLikeFeed,
     fetchComments,
-    deleteItem,
+    deleteItemAsync,
     fetchFeeds,
   };
 
-  return <HomeContext.Provider value={data}>{children}</HomeContext.Provider>;
+  return <HomeContext.Provider value={contextData}>{children}</HomeContext.Provider>;
 }
 
 export const useHomeContext = (): HomeContextDto => useContext(HomeContext);
@@ -138,7 +138,7 @@ export type HomeContextDto = {
   updateFeedItem: ResultFeed | null;
   loading: boolean;
   feeds: ResultFeed[];
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setIsLoading?: Dispatch<SetStateAction<boolean>>;
   register: UseFormRegister<any>;
   handleSubmit: UseFormHandleSubmit<any>;
   handleOpenFeedForm: Dispatch<SetStateAction<boolean>>;
@@ -147,13 +147,13 @@ export type HomeContextDto = {
   likeFeed: ({ itemId }: { itemId: number }) => void;
   desLikeFeed: ({ itemId }: { itemId: number }) => void;
   fetchComments: ({ itemId }: { itemId: number }) => Promise<FeedCommentData[] | null>;
-  deleteItem: ({
+  deleteItemAsync: ({
     itemId,
     itemRef,
   }: {
     itemId: number;
     itemRef: string;
-  }) => void;
+  }) => Promise<void>;
   fetchFeeds: () => void;
   editCommentId: number,
   setEditCommentId: Dispatch<SetStateAction<number>>;

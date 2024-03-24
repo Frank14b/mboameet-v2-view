@@ -1,6 +1,7 @@
 import { HTMLInputTypeAttribute } from "react";
 import {
   ApiResponseDto,
+  BooleanResultDto,
   FeedCommentData,
   ObjectKeyDto,
   ResultFeed,
@@ -54,7 +55,7 @@ export interface SideBarMenuListUser {
 }
 
 export type FeedItem = {
-  data: ResultFeed;
+  feed: ResultFeed;
   fileType?: "caroussel" | "images" | "video" | "image";
 };
 
@@ -109,6 +110,13 @@ export interface FeedCommentItemProps {
     feedId: number;
     id: number;
   }) => Promise<ApiResponseDto<ResultFeedCommentDto> | null>; 
+  onDeleteComment?:  ({
+    feedId,
+    id,
+  }: {
+    feedId: number;
+    id: number;
+  }) => Promise<ApiResponseDto<BooleanResultDto<null>> | null>; 
 }
 
 export type FeedForm = {

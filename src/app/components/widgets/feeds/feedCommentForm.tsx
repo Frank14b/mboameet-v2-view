@@ -53,7 +53,7 @@ export default function FeedCommentFormComponent({
   const handleUpdateFeedComment = async () => {
     if (!onEditComment || !updateItem) return;
 
-    await onEditComment({
+    const data = await onEditComment({
       feedId: feedId,
       id: updateItem.id,
       formRef: formRef,

@@ -1,22 +1,27 @@
 "use client";
 
-import {
-  FeedFilesData,
-  ResultFeed,
-} from "@/app/types";
+import { FeedFilesData, ResultFeed } from "@/app/types";
 import FeedItemsComponent from "../../widgets/feeds/feedItems";
 import FeedSkeletonComponent from "../../skeletons/feedSkeleton";
 import { useEffect } from "react";
 import useFeedStore from "@/app/store/feedStore";
-import { referenceKeyword } from "@/app/lib/utils";
+import {
+  getContentEditable,
+  handleScrollEvent,
+  mainDivComponentId,
+  referenceCommentKeyword,
+  referenceKeyword,
+} from "@/app/lib/utils";
 import { useHomeContext } from "@/app/template";
 import { useAppHubContext } from "@/app/contexts/appHub";
+import { useMainContext } from "@/app/contexts/main";
 
 //
 export default function FeedComponent() {
   const feedStore = useFeedStore();
   const homeContext = useHomeContext();
   const hubContext = useAppHubContext();
+  const mainContext = useMainContext();
 
   useEffect(() => {
     homeContext.fetchFeeds();
@@ -24,15 +29,35 @@ export default function FeedComponent() {
 
   useEffect(() => {
     if (feedStore.deletedFeedId != null) {
-      document.getElementById(`${referenceKeyword}-${feedStore.deletedFeedId}`)?.remove();
+      getContentEditable(
+        `${referenceKeyword}-${feedStore.deletedFeedId}`
+      )?.remove();
     }
   }, [feedStore.deletedFeedId]);
 
+  useEffect(() => {
+    if (feedStore.deletedFeedCommentId != null) {
+      getContentEditable(
+        `${referenceCommentKeyword}-${feedStore.deletedFeedCommentId}`
+      )?.remove();
+    }
+  }, [feedStore.deletedFeedCommentId]);
+
   const getFileType = (files: FeedFilesData[]) => {
     if (files.length > 2) return "caroussel";
-    if (files.length == 1) return "image";
+    if (files.length == 1) {
+      if (files[0].url.includes(".mp4")) return "video";
+      return "image";
+    }
     return "images";
   };
+
+  useEffect(() => {
+    handleScrollEvent({
+      elementId: mainDivComponentId,
+      callback: mainContext.setMainScroll,
+    });
+  }, [])
 
   return (
     <>
@@ -48,7 +73,7 @@ export default function FeedComponent() {
               >
                 {feed.feedFiles != null && (
                   <FeedItemsComponent
-                    data={feed}
+                    feed={feed}
                     fileType={getFileType(feed.feedFiles)}
                   />
                 )}

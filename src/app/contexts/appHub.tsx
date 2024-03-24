@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { getToken } from "../lib/server-utils";
+import { getToken, isTokenExpired } from "../lib/server-utils";
 import * as signalR from "@microsoft/signalr";
 import UserHubs from "../services/hubs/users";
 import useUserStore from "../store/userStore";
@@ -30,11 +30,11 @@ export function AppHubWrapper({ children }: { children: any }) {
     initHub();
   }, []);
 
-  const initHub = () => {
+  const initHub = async () => {
     setErrorSocket(false);
-    
+
     if (connection) return;
-    if (userStore.userConnected !== true) {
+    if (userStore.userConnected !== true || (await isTokenExpired()) == true) {
       if (!pathname.startsWith("/auth")) {
         mainContext.logout();
       }
@@ -67,16 +67,19 @@ export function AppHubWrapper({ children }: { children: any }) {
         setUserHubs(new UserHubs(_connection, userStore));
         setFeedHubs(new FeedHubs(_connection, feedStore));
       })
-      .catch(() => {
+      .catch(async (error: any) => {
+        if (error.response.status == 401 || (await isTokenExpired()) == true) {
+          mainContext.logout();
+        }
         setErrorSocket(true);
         setConnection(null);
         // mainContext.logout();
       });
 
-      _connection.onclose(() => {
-        setErrorSocket(true);
-        setConnection(null);
-      })
+    _connection.onclose(() => {
+      setErrorSocket(true);
+      setConnection(null);
+    });
   };
 
   const closeConnection = () => {

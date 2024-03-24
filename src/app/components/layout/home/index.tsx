@@ -4,6 +4,7 @@ import { IconButton, Typography } from "@material-tailwind/react";
 import FeedFormCardComponent from "../../widgets/feeds/feedFormCard";
 import FeedComponent from "./feedComponent";
 import { useHomeContext } from "@/app/template";
+import { clickFileUpload, feedInputFile } from "@/app/lib/utils";
 
 export default function HomePageComponent() {
   //
@@ -41,7 +42,10 @@ export default function HomePageComponent() {
                 placeholder={""}
                 variant="text"
                 className="rounded-full dark:text-gray-300"
-                onClick={() => homeContext.handleOpenFeedFormImages(true)}
+                onClick={() => {
+                  homeContext.handleOpenFeedForm(true);
+                  clickFileUpload(feedInputFile);
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

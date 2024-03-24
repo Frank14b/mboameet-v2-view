@@ -1,12 +1,19 @@
 "use client";
 
 import {
+  clickFileUpload,
+  createFileUploadString,
+  createVideoPreview,
   feedFormEditable,
+  feedInputFile,
+  feedInputVideoFile,
+  feedVideoPreviewId,
   fileExtFromBase64,
   focusOnLastText,
   focusPosition,
   formatHashTags,
   getContentEditable,
+  validateFileUploadType,
 } from "@/app/lib/utils";
 import { EmojiSelected, FeedForm, ObjectKeyDto } from "@/app/types";
 import {
@@ -18,15 +25,19 @@ import {
   DialogHeader,
   Typography,
 } from "@material-tailwind/react";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import EmojiPickerButton from "../../commons/emojiPickerButton";
 import {
   proceedSubmitFeed,
   proceedUpdateFeed,
 } from "@/app/services/server-actions/feeds";
-import FeedFilesUploadComponent from "./feedFilesUpload";
-import { PhotoIcon, TrashIcon, VideoCameraIcon } from "@heroicons/react/24/solid";
+import {
+  PhotoIcon,
+  TrashIcon,
+  VideoCameraIcon,
+} from "@heroicons/react/24/solid";
 import { useHomeContext } from "@/app/template";
+import CropProfileImage from "../../layout/profile/cropProfileImage";
 
 export default function FeedFormCardComponent({
   children,
@@ -37,7 +48,9 @@ export default function FeedFormCardComponent({
   //
   const homeContext = useHomeContext();
   const [linkedImages, setLinkedImages] = useState<ObjectKeyDto[] | null>(null);
+  const [linkedVideos, setLinkedVideos] = useState<File[] | null>(null);
   const [feedInputValue] = useState<string>("@feed");
+  const [image, setImage] = useState<string>("");
 
   const handleKeyPress = (e: KeyboardEvent) => {
     const content = getContentEditable(feedFormEditable);
@@ -85,11 +98,6 @@ export default function FeedFormCardComponent({
     setLinkedImages(currentData);
   };
 
-  const handleCloseImageForm = (value: boolean) => {
-    homeContext.handleOpenFeedFormImages(value);
-    homeContext.handleOpenFeedForm(true);
-  };
-
   const handleGetCursorPosition = () => {
     const content = getContentEditable(feedFormEditable);
     focusPosition(content);
@@ -99,7 +107,7 @@ export default function FeedFormCardComponent({
     let currentData = linkedImages;
     currentData?.splice(index, 1);
     setLinkedImages(currentData);
-  }
+  };
 
   // process to feed creation
   const handleSubmitFeed = async () => {
@@ -115,6 +123,11 @@ export default function FeedFormCardComponent({
         );
       }
     }
+
+    if (linkedVideos && linkedVideos.length > 0) {
+      formData.append("video", linkedVideos[0]);
+    }
+
     let message = content.innerText;
 
     if (message.trim().length == 0) {
@@ -146,6 +159,29 @@ export default function FeedFormCardComponent({
     }
   };
 
+  const uploadProfileImage = async (data: string | Blob | ObjectKeyDto) => {
+    setLinkedVideos(null);
+    selectedImageFile(data);
+    setImage("");
+  };
+
+  const hendleSelectFeedVideo = (e: ChangeEvent<HTMLInputElement>) => {
+    setLinkedImages(null);
+
+    if (!e?.target?.files?.[0]) return;
+
+    const data = validateFileUploadType(e.target.files[0], "video");
+    if (data?.status == false || !data?.file) return;
+
+    setLinkedVideos([data.file]);
+  };
+
+  useEffect(() => {
+    if (linkedVideos && linkedVideos?.length > 0) {
+      createVideoPreview(linkedVideos[0], feedVideoPreviewId);
+    }
+  }, [linkedVideos]);
+
   return (
     <>
       <Dialog
@@ -154,7 +190,7 @@ export default function FeedFormCardComponent({
         handler={homeContext.handleOpenFeedForm}
         dismiss={{
           escapeKey: false,
-          outsidePress: true,
+          outsidePress: false,
         }}
       >
         <Card
@@ -203,7 +239,7 @@ export default function FeedFormCardComponent({
 
               <div
                 id={`${feedFormEditable}`}
-                className="textarea text-gray-800 p-3 min-h-40 rounded border border-gray-900/30"
+                className="textarea text-gray-800 p-3 min-h-40 rounded-xl border border-gray-900/30"
                 role="textbox"
                 contentEditable={true}
                 suppressContentEditableWarning={true}
@@ -224,33 +260,51 @@ export default function FeedFormCardComponent({
                       style={{ width: "110px", height: "70px" }}
                     />
                     <div className="absolute bg-gray-900 top-0 left-0 w-full bottom-0 rounded-lg bg-opacity-40"></div>
-                    <span onClick={() => removeSelectedImage(index)} className="absolute cursor-pointer right-2 top-2">
-                      <TrashIcon className="h-4 w-4 text-red-400"/>
+                    <span
+                      onClick={() => removeSelectedImage(index)}
+                      className="absolute cursor-pointer right-2 top-2"
+                    >
+                      <TrashIcon className="h-4 w-4 text-red-400" />
                     </span>
                   </div>
                 ))}
+              </div>
+            )}
+            {!updateItem && linkedVideos && linkedVideos?.length > 0 && (
+              <div className="pt-6">
+                <video
+                  id={feedVideoPreviewId}
+                  controls
+                  className="h-15 w-full rounded-xl"
+                ></video>
               </div>
             )}
           </DialogBody>
           <DialogFooter placeholder={""} className="space-x-2">
             {!updateItem && (
               <>
-                <Button
-                  placeholder={""}
-                  variant="text"
-                  color="gray"
-                  onClick={() => homeContext.handleOpenFeedFormImages(true)}
-                >
-                  <VideoCameraIcon width={20} height={20} />
-                </Button>
-                <Button
-                  placeholder={""}
-                  variant="text"
-                  color="gray"
-                  onClick={() => homeContext.handleOpenFeedFormImages(true)}
-                >
-                  <PhotoIcon width={20} height={20} />
-                </Button>
+                {!linkedImages && (
+                  <Button
+                    placeholder={""}
+                    variant="text"
+                    color="gray"
+                    onClick={() => clickFileUpload(feedInputVideoFile)}
+                  >
+                    <VideoCameraIcon width={20} height={20} />
+                  </Button>
+                )}
+
+                {!linkedVideos && (
+                  <Button
+                    placeholder={""}
+                    variant="text"
+                    color="gray"
+                    onClick={() => clickFileUpload(feedInputFile)}
+                  >
+                    <PhotoIcon width={20} height={20} />
+                  </Button>
+                )}
+
                 <Button
                   placeholder={""}
                   variant="gradient"
@@ -280,14 +334,35 @@ export default function FeedFormCardComponent({
 
       {!updateItem && (
         <>
-          <FeedFilesUploadComponent
-            openFeedFiles={formFiles}
-            handleOpenFeedFiles={handleCloseImageForm}
-            selectedImageFile={selectedImageFile}
-            cropSize={{ width: 700, height: 360 }}
-          >
-            <></>
-          </FeedFilesUploadComponent>
+          <input
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setImage(createFileUploadString(e))
+            }
+            id={feedInputFile}
+            accept="image/*"
+            type="file"
+            className="hidden"
+          />
+          <input
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              hendleSelectFeedVideo(e)
+            }
+            id={feedInputVideoFile}
+            accept="video/*"
+            type="file"
+            className="hidden"
+          />
+
+          {image.length > 1 && (
+            <>
+              <CropProfileImage
+                image={image}
+                croppedImage={uploadProfileImage}
+                returnType={"object"}
+                cropSize={{ width: 700, height: 360 }}
+              />
+            </>
+          )}
         </>
       )}
 

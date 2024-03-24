@@ -113,8 +113,6 @@ export const proceedSubmitFeedComment = async ({
     data: formData,
   });
 
-  console.log("🚀 ~ result:", result)
-
   return result;
 };
 
@@ -125,12 +123,27 @@ export const proceedSubmitEditFeedComment = async ({
 }: {
   formData: FormData;
   feedId: number;
-  id: number
+  id: number;
 }) => {
   const result: ApiResponseDto<ResultFeedCommentDto> = await apiCall({
     method: "PUT",
     url: `${urls.getFeeds}/${feedId}/comments/${id}`,
     data: formData,
+  });
+
+  return result;
+};
+
+export const proceedSubmitDeleteFeedComment = async ({
+  feedId,
+  id,
+}: {
+  feedId: number;
+  id: number;
+}) => {
+  const result: ApiResponseDto<BooleanResultDto<null>> = await apiCall({
+    method: "DELETE",
+    url: `${urls.getFeeds}/${feedId}/comments/${id}`,
   });
 
   return result;
