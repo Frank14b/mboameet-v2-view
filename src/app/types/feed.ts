@@ -52,5 +52,6 @@ export type ResultFeed = {
   createdAt: Date;
   likes: number;
   views: number;
+  comments: number;
   feedLikes: ResultFeedLikeDto[] | null;
 };

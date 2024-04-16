@@ -5,7 +5,7 @@ import {
   formatDate,
   formatHashTags,
   getContentEditable,
-  referenceCommentKeyword,
+  referenceCommentKeyword
 } from "@/app/lib/utils";
 import { FeedCommentItemProps } from "@/app/types";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
@@ -13,7 +13,6 @@ import {
   Avatar,
   IconButton,
   Spinner,
-  TimelineBody,
   TimelineHeader,
   TimelineIcon,
   TimelineItem,
@@ -22,24 +21,22 @@ import {
 import FeedCommentFormComponent from "./feedCommentForm";
 import { useMainContext } from "@/app/contexts/main";
 import useUserStore from "@/app/store/userStore";
-import { useHomeContext } from "@/app/template";
-import { useEffect, useState } from "react";
+import { useFeedContext } from "@/app/contexts/pages/feeds";
+import { useEffect, useRef, useState } from "react";
 import useFeedStore from "@/app/store/feedStore";
 
 export default function FeedCommentItemComponent({
   feedId,
   index,
   comment,
-  onEditComment,
-  onDeleteComment,
 }: FeedCommentItemProps) {
   //
   const mainContext = useMainContext();
   const userStore = useUserStore();
   const feedStore = useFeedStore();
-  const homeContext = useHomeContext();
+  const feedContext = useFeedContext();
   const deleteRef = `${referenceCommentKeyword}-${comment.id}`;
-
+  const itemRef = useRef(null);
   const [updateSpinner, setUpdateSpinner] = useState<{
     status: boolean;
     error: string;
@@ -53,45 +50,48 @@ export default function FeedCommentItemComponent({
     feedId: number;
     id: number;
   }) => {
+    //
     setUpdateSpinner({ status: true, error: "" });
-
     const content = getContentEditable(`${data.formRef}`);
     const currentContext = comment.content;
     comment.content = content.innerText; // set the current updated content to the comment
-    homeContext.setEditCommentId(0); // reset comment edit id
+    feedContext.setEditCommentId(0); // reset comment edit id
 
-    const result = await onEditComment?.(data);
+    const formData = new FormData();
+    let message = content.innerText;
+    if (message.trim().length == 0) {
+      return null;
+    }
+    formData.append("content", message);
+
+    const result = await feedContext.handleSubmitEditFeedComment({...data, formData});
     if (result?.status != true) {
       comment.content = currentContext; // revert the previous content if the update failed
       setUpdateSpinner({
         status: false,
-        error: result?.message ?? "An error occcured",
+        error: result?.message ?? "An error occurred",
       });
       return null;
     }
-
+    content.innerHTML = "";
     setUpdateSpinner({ status: false, error: "" });
     return result;
   };
 
   const handleDeleteComment = async () => {
     setUpdateSpinner({ status: true, error: "" });
-
-    const content = getContentEditable(`${deleteRef}`);
-
-    const result = await onDeleteComment?.({ 
+    //
+    const result = await feedContext.handleDeleteFeedComment({
       id: comment.id,
       feedId: feedId,
     });
     if (result?.status != true) {
       setUpdateSpinner({
         status: false,
-        error: result?.message ?? "An error occcured",
+        error: result?.message ?? "An error occurred",
       });
       return null;
     }
-
-    content.remove(); // revert the previous content if the update faile
     return result;
   };
 
@@ -103,10 +103,10 @@ export default function FeedCommentItemComponent({
         comment.updatedAt = feedStore.updatedFeedComment.updatedAt;
       }
     }
-  }, [feedStore.updatedFeedComment]);
+  }, [feedStore.updatedFeedComment, comment]);
 
   return (
-    <TimelineItem key={index} id={deleteRef}>
+    <TimelineItem key={index} id={deleteRef} ref={itemRef}>
       {/* <TimelineConnector className="border-pink-300"/> */}
       <TimelineHeader>
         <TimelineIcon className="p-0">
@@ -138,9 +138,9 @@ export default function FeedCommentItemComponent({
                 <span className="absolute right-0 top-0">
                   <IconButton
                     onClick={() => {
-                      homeContext.editCommentId != comment.id
-                        ? homeContext.setEditCommentId(comment.id)
-                        : homeContext.setEditCommentId(0);
+                      feedContext.editCommentId != comment.id
+                        ? feedContext.setEditCommentId(comment.id)
+                        : feedContext.setEditCommentId(0);
                     }}
                     placeholder={""}
                     variant="text"
@@ -166,10 +166,10 @@ export default function FeedCommentItemComponent({
       </TimelineHeader>
       <div
         className={`"pb-0 pr-2 pl-12 ${
-          homeContext.editCommentId == comment.id ? "grid" : "flex"
+          feedContext.editCommentId == comment.id ? "grid" : "flex"
         }"`}
       >
-        {homeContext.editCommentId != comment.id ? (
+        {feedContext.editCommentId != comment.id ? (
           <div className="font-normal text-sm text-gray-600 dark:text-gray-300">
             <div
               dangerouslySetInnerHTML={{

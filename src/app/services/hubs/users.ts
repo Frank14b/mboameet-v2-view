@@ -2,10 +2,10 @@ import { StoreType } from "@/app/store/userStore";
 
 class UserHubs {
   
-  connection: any;
+  connection: signalR.HubConnection;
   userStore: StoreType;
 
-  constructor(connection: any, userStore: StoreType) {
+  constructor(connection: signalR.HubConnection, userStore: StoreType) {
 
     this.connection = connection;
     this.userStore = userStore;

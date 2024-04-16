@@ -14,9 +14,9 @@ export type StoreType = {
   setLoading: (newLoading: boolean) => void;
   setDeletedFeed: (id: number) => void;
   setUpdatedFeed: (feed: ResultFeed) => void;
-  setDeletedFeedComment: (comment: number) => void;
-  setUpdatedFeedComment: (comment: ResultFeedCommentDto) => void;
-  setCreatedFeedComment: (comment: ResultFeedCommentDto) => void;
+  setDeletedFeedComment: (comment: number | null) => void;
+  setUpdatedFeedComment: (comment: ResultFeedCommentDto | null) => void;
+  setCreatedFeedComment: (comment: ResultFeedCommentDto | null) => void;
 }
 
 const useFeedStore = create<StoreType>()((set, get) => ({
@@ -31,9 +31,9 @@ const useFeedStore = create<StoreType>()((set, get) => ({
   setFeed: (feedData: ResultFeed) => set({ feed: feedData }), // Action to update user info
   setDeletedFeed: (id: number) => set({deletedFeedId: id}),
   setUpdatedFeed: (feed: ResultFeed) => set({updatedFeed: feed}),
-  setDeletedFeedComment: (comment: number) => set({deletedFeedCommentId: comment}),
-  setUpdatedFeedComment: (comment: ResultFeedCommentDto) => set({updatedFeedComment: comment}),
-  setCreatedFeedComment: (comment: ResultFeedCommentDto) => set({createdFeedComment: comment}),
+  setDeletedFeedComment: (comment: number | null) => set({deletedFeedCommentId: comment}),
+  setUpdatedFeedComment: (comment: ResultFeedCommentDto | null) => set({updatedFeedComment: comment}),
+  setCreatedFeedComment: (comment: ResultFeedCommentDto | null) => set({createdFeedComment: comment}),
 }));
 
 export default useFeedStore;

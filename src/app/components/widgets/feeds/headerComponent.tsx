@@ -2,33 +2,33 @@ import { formatDate, referenceKeyword } from "@/app/lib/utils";
 import { ResultFeed } from "@/app/types";
 import { Avatar, Typography } from "@material-tailwind/react";
 import FeedItemActionMenuComponent from "./feedMenuActions";
-import { HomeContextDto, useHomeContext } from "@/app/template";
+import { FeedContextDto, useFeedContext } from "@/app/contexts/pages/feeds";
 
 export default function FeedHeaderComponent({
   feedData,
   userPhoto,
-  setDeleteting
+  setDeleting: setDeleting
 }: {
   feedData: ResultFeed;
   userPhoto: string;
-  setDeleteting: any
+  setDeleting: any
 }) {
   //
-  const homeContext: HomeContextDto = useHomeContext();
+  const feedContext: FeedContextDto = useFeedContext();
 
   const onActionEdit = () => {
-    homeContext.setUpdateFeedItem(feedData);
-    homeContext.handleOpenFeedForm(true);
+    feedContext.setUpdateFeedItem(feedData);
+    feedContext.handleOpenFeedForm(true);
   };
 
   const referenceId: string = `${referenceKeyword}-${feedData.id}`;
 
   const deleteItem = () => {
-    setDeleteting(true);
-    homeContext.deleteItemAsync({ itemId: feedData.id, itemRef: referenceId });
-
+    setDeleting(true);
+    feedContext.deleteItemAsync({ itemId: feedData.id, itemRef: referenceId });
+    // remove the loader is the delete process failed
     setTimeout(() => {
-      return setDeleteting(false);
+      return setDeleting(false);
     }, 10000);
   };
 

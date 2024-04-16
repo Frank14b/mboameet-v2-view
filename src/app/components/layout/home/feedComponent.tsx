@@ -12,19 +12,19 @@ import {
   referenceCommentKeyword,
   referenceKeyword,
 } from "@/app/lib/utils";
-import { useHomeContext } from "@/app/template";
+import { useFeedContext } from "@/app/contexts/pages/feeds";
 import { useAppHubContext } from "@/app/contexts/appHub";
 import { useMainContext } from "@/app/contexts/main";
 
 //
 export default function FeedComponent() {
   const feedStore = useFeedStore();
-  const homeContext = useHomeContext();
+  const feedContext = useFeedContext();
   const hubContext = useAppHubContext();
   const mainContext = useMainContext();
 
   useEffect(() => {
-    homeContext.fetchFeeds();
+    feedContext.fetchFeeds();
   }, [feedStore.feed, hubContext.connection]);
 
   useEffect(() => {
@@ -35,16 +35,8 @@ export default function FeedComponent() {
     }
   }, [feedStore.deletedFeedId]);
 
-  useEffect(() => {
-    if (feedStore.deletedFeedCommentId != null) {
-      getContentEditable(
-        `${referenceCommentKeyword}-${feedStore.deletedFeedCommentId}`
-      )?.remove();
-    }
-  }, [feedStore.deletedFeedCommentId]);
-
   const getFileType = (files: FeedFilesData[]) => {
-    if (files.length > 2) return "caroussel";
+    if (files.length > 2) return "carousel";
     if (files.length == 1) {
       if (files[0].url.includes(".mp4")) return "video";
       return "image";
@@ -61,12 +53,12 @@ export default function FeedComponent() {
 
   return (
     <>
-      <FeedSkeletonComponent isLoading={homeContext.loading} count={5} />
+      <FeedSkeletonComponent isLoading={feedContext.loading} count={5} />
 
-      {!homeContext.loading &&
-        (homeContext.feeds.length > 0 ? (
+      {!feedContext.loading &&
+        (feedContext.feeds.length > 0 ? (
           <>
-            {homeContext.feeds.map((feed: ResultFeed, index: number) => (
+            {feedContext.feeds.map((feed: ResultFeed, index: number) => (
               <div
                 className="w-full mt-3 bg-white dark:bg-black/15 rounded-xl"
                 key={index}

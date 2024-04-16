@@ -45,7 +45,7 @@ export function MainWrapper({ children }: { children: any }) {
     return `${process.env.NEXT_PUBLIC_API_PUBLIC_FILES_LINK}${userId ?? user?.id}/${link}`;
   };
 
-  const MainData: MainDataType = {
+  const MainData: MainContextDto = {
     connectedUser: user,
     theme: theme,
     mainScroll,
@@ -126,9 +126,9 @@ export function MainWrapper({ children }: { children: any }) {
   );
 }
 
-export const useMainContext = (): MainDataType => useContext(MainContext);
+export const useMainContext = (): MainContextDto => useContext(MainContext);
 
-export type MainDataType = {
+export type MainContextDto = {
   connectedUser: ResultloginDto | ObjectKeyDto | null;
   theme: string;
   setTheme: (userTheme: string) => void;

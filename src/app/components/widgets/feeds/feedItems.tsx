@@ -3,53 +3,45 @@
 import { useMainContext } from "@/app/contexts/main";
 import { formatHashTags, referenceKeyword } from "@/app/lib/utils";
 import useFeedStore from "@/app/store/feedStore";
-import { useHomeContext } from "@/app/template";
+import { useFeedContext } from "@/app/contexts/pages/feeds";
 import {
-  FeedCommentData,
   FeedFilesData,
   FeedItem,
   ResultFeed,
 } from "@/app/types";
 import { Card, Carousel } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
-import FeedCommentComponent from "./feedComments";
-import FeedVideoReaderComponent from "./videoReaderComponent";
-import FeedHeaderComponent from "./hederComponent";
-import FeedImageViewComponent from "./imageViewComponent";
+import FeedCommentComponent from "./comments/feedComments";
+import FeedVideoReaderComponent from "./files/videoReaderComponent";
+import FeedHeaderComponent from "./headerComponent";
+import FeedImageViewComponent from "./files/imageViewComponent";
 
 export default function FeedItemsComponent({ feed, fileType }: FeedItem) {
   //
   const mainContext = useMainContext();
-  const homeContext = useHomeContext();
+  const feedContext = useFeedContext();
   const feedStore = useFeedStore();
 
   const [feedData, setFeedData] = useState<ResultFeed>(feed);
-  const [feedComments, setFeedComments] = useState<FeedCommentData[] | null>(
-    null
-  );
 
   const [userLiked, setUserLiked] = useState<boolean>(
     feed?.feedLikes && feed?.feedLikes?.length == 1 ? true : false
   );
 
-  const [deleteting, setDeleteting] = useState<boolean>(false);
+  const [deleting, setDeleting] = useState<boolean>(false);
   const referenceId: string = `${referenceKeyword}-${feed.id}`;
 
   const likeItem = () => {
     setUserLiked(true);
-    homeContext.likeFeed({ itemId: feedData.id });
+    feedContext.likeFeed({ itemId: feedData.id });
   };
 
   const desLikeItem = () => {
     setUserLiked(false);
-    homeContext.desLikeFeed({ itemId: feedData.id });
+    feedContext.desLikeFeed({ itemId: feedData.id });
   };
 
-  const fetchComments = async () => {
-    const result = await homeContext.fetchComments({ itemId: feedData.id });
-    setFeedComments(result);
-  };
-
+  /** update feed data (likes, comments, content, on socket event...) */
   useEffect(() => {
     if (feedStore.updatedFeed?.id == feed.id) {
       setFeedData({
@@ -57,9 +49,10 @@ export default function FeedItemsComponent({ feed, fileType }: FeedItem) {
         message: feedStore.updatedFeed.message,
         likes: feedStore.updatedFeed.likes,
         views: feedStore.updatedFeed.views,
+        comments: feedStore.updatedFeed.comments,
       });
     }
-  }, [feedStore.updatedFeed]);
+  }, [feedStore.updatedFeed, feed.id]);
 
   return (
     <div id={referenceId}>
@@ -74,7 +67,7 @@ export default function FeedItemsComponent({ feed, fileType }: FeedItem) {
               ? mainContext.getFileUrl(feedData.user.photo, feedData.user.id)
               : "https://docs.material-tailwind.com/img/face-1.jpg"
           }
-          setDeleteting={setDeleteting}
+          setDeleting={setDeleting}
         />
 
         <div
@@ -84,7 +77,7 @@ export default function FeedItemsComponent({ feed, fileType }: FeedItem) {
 
         {feedData.feedFiles != null && feedData.feedFiles.length > 0 && (
           <>
-            {fileType == "caroussel" && (
+            {fileType == "carousel" && (
               <div className="p-0 my-3 h-80">
                 <Carousel
                   placeholder={""}
@@ -129,11 +122,9 @@ export default function FeedItemsComponent({ feed, fileType }: FeedItem) {
           userLiked={userLiked}
           likeItem={likeItem}
           desLikeItem={desLikeItem}
-          comments={feedComments}
-          fetchComments={fetchComments}
         />
 
-        {deleteting && (
+        {deleting && (
           <div className="absolute bg-white bg-opacity-60 dark:bg-gray-700 dark:bg-opacity-60 top-0 bottom-0 left-0 w-full z-index-999 rounded-lg"></div>
         )}
       </Card>

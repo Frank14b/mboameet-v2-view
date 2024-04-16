@@ -6,7 +6,7 @@ import InputFormComponent from '../../widgets/inputForm'
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { verifyOtpCodeSchema } from '@/app/validators'
-import { verifyOtpCode } from '@/app/services';
+import { verifyOtpCode } from '@/app/services/server-actions';
 import { ApiResponseDto, VerifyOtpCodeDto, BooleanResultDto } from '@/app/types';
 import LoadingSpinnerComponent from '../../commons/loadingSpinner';
 import RegistrationPopupComponent from './register';
@@ -15,7 +15,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 //
-export default function VerifAuthTokenComponent({ token, otp }:{ token:string, otp?: number }) {
+export default function VerifyAuthTokenComponent({ token, otp }:{ token:string, otp?: number }) {
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const { register, handleSubmit, formState: { errors } } = useForm({

@@ -37,6 +37,8 @@ export const getFeeds = async ({ revalidate }: { revalidate: boolean }) => {
     revalidate: revalidate,
   });
 
+  console.log("🚀 ~ getFeeds ~ result:", result.data?.data[0])
+
   return result;
 };
 
@@ -94,7 +96,7 @@ export const getFeedComments = async (feedId: number) => {
   const result: ApiResponseDto<ResultPaginate<FeedCommentData[]>> =
     await apiCall({
       method: "GET",
-      url: `${urls.getFeeds}/${feedId}/comments?skip=0&limit=20&sort=desc`,
+      url: `${urls.getFeeds}/${feedId}/comments?page=1&limit=20&sort=desc`,
     });
     
   return result;

@@ -1,6 +1,6 @@
 "use client";
 import { StoreType } from "@/app/store/feedStore";
-import { ResultFeed, ResultFeedCommentDto } from "@/app/types";
+import { ApiResponseDto, ResultFeed, ResultFeedCommentDto } from "@/app/types";
 
 class FeedHubs {
   _connection: signalR.HubConnection;
@@ -28,15 +28,17 @@ class FeedHubs {
 
     this._connection.on(
       "FeedCommentCreated",
-      (comment: ResultFeedCommentDto) => {
-        this._feedStore.setCreatedFeedComment(comment);
+      (comment: ApiResponseDto<ResultFeedCommentDto>) => {
+        if(!comment.data) return;
+        this._feedStore.setCreatedFeedComment(comment.data);
       }
     );
 
     this._connection.on(
       "FeedCommentUpdated",
-      (comment: ResultFeedCommentDto) => {
-        this._feedStore.setUpdatedFeedComment(comment);
+      (comment: ApiResponseDto<ResultFeedCommentDto>) => {
+        if(!comment.data) return;
+        this._feedStore.setUpdatedFeedComment(comment.data);
       }
     );
 

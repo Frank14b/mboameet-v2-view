@@ -169,6 +169,12 @@ export const getContentEditable = (id: string) => {
   return contentEditableDiv;
 };
 
+export const removeItem = (itemRef: React.RefObject<any>) => {
+  if (itemRef.current) {
+    itemRef.current.parentNode.removeChild(itemRef.current);
+  }
+};
+
 export const clickFileUpload = (id: string) => {
   const contentInputFile = document.getElementById(`${id}`) as HTMLInputElement;
   contentInputFile?.click();

@@ -6,7 +6,7 @@ import InputFormComponent from '../../widgets/inputForm'
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { changePasswordSchema } from '@/app/validators'
-import { proceedChangePassword } from '@/app/services';
+import { proceedChangePassword } from '@/app/services/server-actions';
 import { ApiResponseDto, BooleanResultDto, ChangePasswordDto } from '@/app/types';
 import LoadingSpinnerComponent from '../../commons/loadingSpinner';
 import RegistrationPopupComponent from './register';

@@ -17,8 +17,8 @@ export function AppHubWrapper({ children }: { children: any }) {
   const [connection, setConnection] = useState<signalR.HubConnection | null>(
     null
   );
-  const [userHubs, setUserHubs] = useState<any>(null);
-  const [feedHubs, setFeedHubs] = useState<any>(null);
+  const [userHubs, setUserHubs] = useState<UserHubs | null>(null);
+  const [feedHubs, setFeedHubs] = useState<FeedHubs | null>(null);
   const [errorSocket, setErrorSocket] = useState<boolean>(false);
   const userStore = useUserStore();
   const feedStore = useFeedStore();
@@ -31,6 +31,7 @@ export function AppHubWrapper({ children }: { children: any }) {
   }, []);
 
   const initHub = async () => {
+    //
     setErrorSocket(false);
 
     if (connection) return;
@@ -41,45 +42,57 @@ export function AppHubWrapper({ children }: { children: any }) {
       return;
     }
 
-    const protocol: signalR.JsonHubProtocol = new signalR.JsonHubProtocol();
-    const transport: signalR.HttpTransportType =
-      signalR.HttpTransportType.WebSockets;
-    const options: signalR.IHttpConnectionOptions = {
-      transport,
-      logMessageContent: true,
-      logger: signalR.LogLevel.Error,
-      accessTokenFactory: async () => await getToken(),
-    };
+    let _connection: signalR.HubConnection | null = null;
 
-    const _connection = new signalR.HubConnectionBuilder()
-      .withUrl("http://localhost:5000/apphub", options) // hub api link
-      .withHubProtocol(protocol)
-      .build();
+    try {
+      const protocol: signalR.JsonHubProtocol = new signalR.JsonHubProtocol();
+      const transport: signalR.HttpTransportType =
+        signalR.HttpTransportType.WebSockets;
+      const options: signalR.IHttpConnectionOptions = {
+        transport,
+        logMessageContent: true,
+        logger: signalR.LogLevel.Error,
+        accessTokenFactory: async () => await getToken(),
+      };
 
-    if (!_connection) return;
+      _connection = new signalR.HubConnectionBuilder()
+        .withUrl("http://localhost:5000/apphub", options) // hub api link
+        .withHubProtocol(protocol)
+        .build();
 
-    _connection
-      .start()
-      .then(() => {
-        setConnection(_connection);
-        //
-        setErrorSocket(false);
-        setUserHubs(new UserHubs(_connection, userStore));
-        setFeedHubs(new FeedHubs(_connection, feedStore));
-      })
-      .catch(async (error: any) => {
-        if (error.response.status == 401 || (await isTokenExpired()) == true) {
-          mainContext.logout();
-        }
-        setErrorSocket(true);
-        setConnection(null);
-        // mainContext.logout();
-      });
+      if (_connection) {
+        _connection
+          .start()
+          .then(() => {
+            setConnection(_connection);
+            //
+            setErrorSocket(false);
+            setUserHubs(
+              new UserHubs(_connection as signalR.HubConnection, userStore)
+            );
+            setFeedHubs(
+              new FeedHubs(_connection as signalR.HubConnection, feedStore)
+            );
+          })
+          .catch(async (error: any) => {
+            if (
+              error.response?.status == 401 ||
+              (await isTokenExpired()) == true
+            ) {
+              mainContext.logout();
+            }
+            setErrorSocket(true);
+            setConnection(null);
+          });
 
-    _connection.onclose(() => {
-      setErrorSocket(true);
+        _connection.onclose(() => {
+          setErrorSocket(true);
+          setConnection(null);
+        });
+      }
+    } catch (error) {
       setConnection(null);
-    });
+    }
   };
 
   const closeConnection = () => {
@@ -90,8 +103,8 @@ export function AppHubWrapper({ children }: { children: any }) {
 
   const AppHubData: AppHubDataType = {
     closeConnection,
-    userHubs,
-    feedHubs,
+    userHubs: userHubs as UserHubs,
+    feedHubs: feedHubs as FeedHubs,
     connection,
   };
 

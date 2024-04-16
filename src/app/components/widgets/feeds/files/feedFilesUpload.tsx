@@ -10,7 +10,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import { ChangeEvent, useState } from "react";
-import CropProfileImage from "../../layout/profile/cropProfileImage";
+import CropProfileImage from "../../../layout/profile/cropProfileImage";
 
 export default function FeedFilesUploadComponent({
   children,

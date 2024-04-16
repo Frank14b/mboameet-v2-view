@@ -2,7 +2,6 @@
 
 import { getContentEditable } from "@/app/lib/utils";
 import {
-  getFeedComments,
   proceedSubmitDeleteFeedComment,
   proceedSubmitEditFeedComment,
   proceedSubmitFeedComment,
@@ -17,25 +16,31 @@ import { Timeline } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import FeedCommentFormComponent from "./feedCommentForm";
 import FeedCommentItemComponent from "./feedCommentItem";
-import { useHomeContext } from "@/app/template";
-import { useQuery } from "react-query";
+import { useFeedContext } from "@/app/contexts/pages/feeds";
+import useFeedStore from "@/app/store/feedStore";
 
 export default function FeedCommentComponent({
   feedData,
   userLiked,
-  comments,
   desLikeItem,
   likeItem,
-  fetchComments,
 }: FeedComments) {
   //
-  const homeContext = useHomeContext();
+  const feedContext = useFeedContext();
+  const [comments, setFeedComments] = useState<FeedCommentData[] | null>(null);
+  const feedStore = useFeedStore();
+  //
 
   useEffect(() => {
-    if (homeContext.openComment == feedData.id) {
+    if (feedContext.openComment == feedData.id) {
       fetchComments();
     }
-  }, [homeContext.openComment]);
+  }, [feedContext.openComment, feedData.id]);
+
+  const fetchComments = async () => {
+    const result = await feedContext.fetchComments({ itemId: feedData.id });
+    setFeedComments(result ?? []);
+  };
 
   // process to feed comment
   const handleSubmitFeedComment = async ({
@@ -60,57 +65,25 @@ export default function FeedCommentComponent({
       feedId: feedId,
     });
     if (result.status) {
+      await fetchComments();
       content.innerHTML = "";
     }
     return result;
   };
 
-  const handleSubmitEditFeedComment = async ({
-    id,
-    feedId,
-    formRef,
-  }: {
-    id: number;
-    feedId: number;
-    formRef: string;
-  }) => {
-    const content = getContentEditable(`${formRef}`);
-
-    const formData = new FormData();
-    let message = content.innerText;
-
-    if (message.trim().length == 0) {
-      return null;
+  useEffect(() => {
+    if (feedContext.openComment == feedData.id) {
+      if (feedStore.deletedFeedCommentId && comments != null) {
+        let data = comments;
+        const index = data.findIndex(comment => comment.id === feedStore.deletedFeedCommentId);
+        if(index != -1) {
+          setFeedComments(null);
+          data.splice(index, 1);
+          setFeedComments(data);
+        }
+      }
     }
-    formData.append("content", message);
-
-    const result = await proceedSubmitEditFeedComment({
-      formData,
-      feedId: feedId,
-      id: id,
-    });
-    if (result.status) {
-      content.innerHTML = "";
-    }
-    return result;
-  };
-
-  const handleDeleteFeedComment = async ({
-    id,
-    feedId,
-  }: {
-    id: number;
-    feedId: number;
-  }) => {
-    const result = await proceedSubmitDeleteFeedComment({
-      feedId: feedId,
-      id: id,
-    });
-    if(result.status) {
-      fetchComments();
-    }
-    return result;
-  };
+  }, [feedStore.deletedFeedCommentId, feedContext.openComment, feedData.id]);
 
   return (
     <>
@@ -134,20 +107,20 @@ export default function FeedCommentComponent({
         </span>
         <span
           onClick={() => {
-            homeContext.setEditCommentId(0); 
-            homeContext.setOpenComment(feedData.id)
+            feedContext.setEditCommentId(0);
+            feedContext.setOpenComment(feedData.id);
           }}
           className="flex text-gray-600 dark:text-gray-200 text-xs cursor-pointer"
         >
           <ChatBubbleBottomCenterTextIcon className="h-4 w-4" />
-          &nbsp;Comment
+          &nbsp;Comment {feedData.comments}
         </span>
       </div>
       {/* ---- */}
-      {homeContext.openComment == feedData.id && (
+      {feedContext.openComment == feedData.id && (
         <div className="w-full p-3">
           {/* --- form comment --- */}
-          {homeContext.editCommentId == 0 && (
+          {feedContext.editCommentId == 0 && (
             <FeedCommentFormComponent
               feedId={feedData.id}
               onComment={handleSubmitFeedComment}
@@ -166,8 +139,6 @@ export default function FeedCommentComponent({
                       feedId={feedData.id}
                       index={index}
                       comment={comment}
-                      onEditComment={handleSubmitEditFeedComment}
-                      onDeleteComment={handleDeleteFeedComment}
                     />
                   ))}
                 </Timeline>

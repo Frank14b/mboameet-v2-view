@@ -4,7 +4,7 @@ import LoadingSpinnerComponent from "@/app/components/commons/loadingSpinner";
 import InputFormComponent from "@/app/components/widgets/inputForm";
 import { Button } from "@material-tailwind/react";
 import Link from "next/link";
-import { SignInContextDto, useSignInContext } from "./template";
+import { SignInContextDto, useSignInContext } from "@/app/contexts/pages/auth/signIn";
 
 export default function SignInPage() {
 

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
     description: "Find your perfect matches",
 };
 
-export default function RootLayout({
+export default function SignInLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;

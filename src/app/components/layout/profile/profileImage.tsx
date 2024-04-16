@@ -1,6 +1,5 @@
 'use client';
 
-import { defaultProfileImg } from "@/app/lib/utils";
 import { Avatar } from "@material-tailwind/react";
 import { ChangeEvent } from "react";
 

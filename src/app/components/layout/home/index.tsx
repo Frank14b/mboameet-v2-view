@@ -3,12 +3,12 @@
 import { IconButton, Typography } from "@material-tailwind/react";
 import FeedFormCardComponent from "../../widgets/feeds/feedFormCard";
 import FeedComponent from "./feedComponent";
-import { useHomeContext } from "@/app/template";
+import { useFeedContext } from "@/app/contexts/pages/feeds";
 import { clickFileUpload, feedInputFile } from "@/app/lib/utils";
 
 export default function HomePageComponent() {
   //
-  const homeContext = useHomeContext();
+  const feedContext = useFeedContext();
 
   return (
     <>
@@ -20,16 +20,16 @@ export default function HomePageComponent() {
             </Typography>
           </div>
           <div className="w-1/2 text-xs flex justify-end pt-1">
-            <span className="mx-2 cursor-pointer">Recents</span>
+            <span className="mx-2 cursor-pointer">Recent</span>
             <span className="mx-2 cursor-pointer font-bold">Friends</span>
             <span className="mx-2 cursor-pointer">Popular</span>
           </div>
         </div>
 
         <FeedFormCardComponent
-          openFeedForm={homeContext.openFeedForm}
-          formFiles={homeContext.openFeedFormImages}
-          updateItem={homeContext.updateFeedItem}
+          openFeedForm={feedContext.openFeedForm}
+          formFiles={feedContext.openFeedFormImages}
+          updateItem={feedContext.updateFeedItem}
         >
           <></>
         </FeedFormCardComponent>
@@ -43,7 +43,7 @@ export default function HomePageComponent() {
                 variant="text"
                 className="rounded-full dark:text-gray-300"
                 onClick={() => {
-                  homeContext.handleOpenFeedForm(true);
+                  feedContext.handleOpenFeedForm(true);
                   clickFileUpload(feedInputFile);
                 }}
               >
@@ -66,7 +66,7 @@ export default function HomePageComponent() {
             <div className="w-full"></div>
             <div>
               <IconButton
-                onClick={() => homeContext.handleOpenFeedForm(true)}
+                onClick={() => feedContext.handleOpenFeedForm(true)}
                 placeholder={""}
                 variant="text"
                 className="rounded-full dark:text-gray-300"

@@ -3,7 +3,7 @@
 import LoadingSpinnerComponent from "@/app/components/commons/loadingSpinner";
 import InputFormComponent from "@/app/components/widgets/inputForm";
 import Link from "next/link";
-import { useSignUpContext } from "./template";
+import { useSignUpContext } from "@/app/contexts/pages/auth/signUp";
 import { Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 

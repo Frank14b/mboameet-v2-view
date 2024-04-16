@@ -9,7 +9,7 @@ import {
 } from ".";
 import { Size } from "react-easy-crop";
 
-export interface InpputFormComponent {
+export interface InputFormComponent {
   title: string;
   name?: string;
   type?: HTMLInputTypeAttribute;
@@ -56,7 +56,7 @@ export interface SideBarMenuListUser {
 
 export type FeedItem = {
   feed: ResultFeed;
-  fileType?: "caroussel" | "images" | "video" | "image";
+  fileType?: "carousel" | "images" | "video" | "image";
 };
 
 export type FeedItemMenuAction = {
@@ -69,10 +69,8 @@ export type FeedItemMenuAction = {
 export type FeedComments = {
   feedData: ResultFeed;
   userLiked: boolean;
-  comments: FeedCommentData[] | null;
   desLikeItem: () => void;
   likeItem: () => void;
-  fetchComments: () => void;
 };
 
 export interface FeedCommentFormProps {
@@ -101,22 +99,6 @@ export interface FeedCommentItemProps {
   index: number;
   feedId: number;
   comment: FeedCommentData;
-  onEditComment?: ({
-    formRef,
-    feedId,
-    id,
-  }: {
-    formRef: string;
-    feedId: number;
-    id: number;
-  }) => Promise<ApiResponseDto<ResultFeedCommentDto> | null>; 
-  onDeleteComment?:  ({
-    feedId,
-    id,
-  }: {
-    feedId: number;
-    id: number;
-  }) => Promise<ApiResponseDto<BooleanResultDto<null>> | null>; 
 }
 
 export type FeedForm = {

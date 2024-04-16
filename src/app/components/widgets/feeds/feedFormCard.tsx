@@ -36,7 +36,7 @@ import {
   TrashIcon,
   VideoCameraIcon,
 } from "@heroicons/react/24/solid";
-import { useHomeContext } from "@/app/template";
+import { useFeedContext } from "@/app/contexts/pages/feeds";
 import CropProfileImage from "../../layout/profile/cropProfileImage";
 
 export default function FeedFormCardComponent({
@@ -46,7 +46,7 @@ export default function FeedFormCardComponent({
   updateItem,
 }: FeedForm) {
   //
-  const homeContext = useHomeContext();
+  const feedContext = useFeedContext();
   const [linkedImages, setLinkedImages] = useState<ObjectKeyDto[] | null>(null);
   const [linkedVideos, setLinkedVideos] = useState<File[] | null>(null);
   const [feedInputValue] = useState<string>("@feed");
@@ -65,7 +65,7 @@ export default function FeedFormCardComponent({
     if (updateItem) {
       content.innerHTML = formatHashTags(updateItem.message); //set updated feed message
     } else {
-      // format hahstags on first load if text available
+      // format hash tags on first load if text available
       if (!content) return;
       content.innerHTML = formatHashTags(content.innerText);
     }
@@ -109,7 +109,7 @@ export default function FeedFormCardComponent({
     setLinkedImages(currentData);
   };
 
-  // process to feed creation
+  /** process to feed creation */
   const handleSubmitFeed = async () => {
     const content = getContentEditable(feedFormEditable);
 
@@ -138,12 +138,12 @@ export default function FeedFormCardComponent({
     const result = await proceedSubmitFeed(formData);
     if (result.status) {
       content.innerHTML = "";
-      homeContext.handleOpenFeedForm(false);
+      feedContext.handleOpenFeedForm(false);
       setLinkedImages(null);
     }
   };
 
-  // proceed to feed update (only text content can be update here)
+  /** proceed to feed update (only text content can be updated here) */
   const handleSubmitUpdatedFeed = async () => {
     if (!updateItem) return;
     const content = getContentEditable(feedFormEditable);
@@ -155,7 +155,7 @@ export default function FeedFormCardComponent({
 
     if (result.status) {
       content.innerHTML = "";
-      homeContext.handleOpenFeedForm(false);
+      feedContext.handleOpenFeedForm(false);
     }
   };
 
@@ -165,7 +165,7 @@ export default function FeedFormCardComponent({
     setImage("");
   };
 
-  const hendleSelectFeedVideo = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleSelectFeedVideo = (e: ChangeEvent<HTMLInputElement>) => {
     setLinkedImages(null);
 
     if (!e?.target?.files?.[0]) return;
@@ -187,7 +187,7 @@ export default function FeedFormCardComponent({
       <Dialog
         placeholder={""}
         open={openFeedForm}
-        handler={homeContext.handleOpenFeedForm}
+        handler={feedContext.handleOpenFeedForm}
         dismiss={{
           escapeKey: false,
           outsidePress: false,
@@ -212,7 +212,7 @@ export default function FeedFormCardComponent({
               viewBox="0 0 24 24"
               fill="currentColor"
               className="mr-3 h-5 w-5 cursor-pointer"
-              onClick={() => homeContext.handleOpenFeedForm(false)}
+              onClick={() => feedContext.handleOpenFeedForm(false)}
             >
               <path
                 fillRule="evenodd"
@@ -345,7 +345,7 @@ export default function FeedFormCardComponent({
           />
           <input
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              hendleSelectFeedVideo(e)
+              handleSelectFeedVideo(e)
             }
             id={feedInputVideoFile}
             accept="video/*"

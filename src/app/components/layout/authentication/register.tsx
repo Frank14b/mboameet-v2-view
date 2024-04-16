@@ -8,7 +8,7 @@ import { ApiResponseDto, RegistrationFormData, ResultloginDto } from '@/app/type
 import { signUpSchema } from '@/app/validators'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
-import { proceedRegister } from '@/app/services'
+import { proceedRegister } from '@/app/services/server-actions'
 import LoadingSpinnerComponent from '../../commons/loadingSpinner'
 
 
