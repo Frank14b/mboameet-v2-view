@@ -1,9 +1,9 @@
 import { Maybe } from "yup"
 
 export type UpdateProfileFormData = {
-    username?: Maybe<string | undefined>,
-    firstname?: Maybe<string | undefined>,
-    lastname?: Maybe<string | undefined>,
+    userName?: Maybe<string | undefined>,
+    firstName?: Maybe<string | undefined>,
+    lastName?: Maybe<string | undefined>,
     email: string,
     phone?: Maybe<number | undefined>,
     countryCode?: Maybe<string | undefined>

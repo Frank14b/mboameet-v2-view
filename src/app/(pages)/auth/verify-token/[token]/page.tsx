@@ -1,6 +1,6 @@
 "use client";
 
-import VerifyAuthTokenComponent from "@/app/components/layout/authentication/verifyAuthToken";
+import VerifyAuthTokenComponent from "@/app/components/layout/authentication/verifyAuthTokenComponent";
 
 export default function VerifyTokenPage({ params }: {params: { token: string }}) {
     return (

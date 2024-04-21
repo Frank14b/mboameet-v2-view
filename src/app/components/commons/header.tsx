@@ -23,8 +23,8 @@ import {
     Bars2Icon,
     ChevronDownIcon,
 } from "@heroicons/react/24/solid";
-import LoginPopupComponent from "../layout/authentication/login";
-import RegistrationPopupComponent from "../layout/authentication/register";
+import LoginPopupComponent from "../layout/authentication/loginComponent";
+import RegistrationPopupComponent from "../layout/authentication/registerComponent";
 import useUserStore from "@/app/store/userStore";
 
 
@@ -192,11 +192,11 @@ export default function HeaderComponent() {
                     userState ? (
                         <Menu placement="bottom-end">
                             <div className="hidden gap-2 lg:flex">
-                                <LoginPopupComponent>
+                                {/* <LoginPopupComponent>
                                     <Button placeholder={""} variant="gradient" size="sm" color="pink">
                                         Log In
                                     </Button>
-                                </LoginPopupComponent>
+                                </LoginPopupComponent> */}
 
                                 <RegistrationPopupComponent>
                                     <Button placeholder={""} variant="gradient" size="sm">

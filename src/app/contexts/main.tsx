@@ -9,7 +9,7 @@ import useUserStore from "../store/userStore";
 import { deleteToken, isTokenExpired } from "../lib/server-utils";
 import { usePathname, useRouter } from "next/navigation";
 import { sessionTimeOut } from "../lib/workers";
-import { ObjectKeyDto, ResultloginDto } from "../types";
+import { ObjectKeyDto, ResultLoginDto } from "../types";
 import { mainDivComponentId } from "../lib/utils";
 
 const MainContext = createContext<any>({});
@@ -26,7 +26,6 @@ export function MainWrapper({ children }: { children: any }) {
   } = useUserStore();
   const router = useRouter();
   const pathname = usePathname();
-
   const [mainScroll, setMainScroll] = useState<any>(null);
 
   const queryClient = new QueryClient();
@@ -49,9 +48,9 @@ export function MainWrapper({ children }: { children: any }) {
     connectedUser: user,
     theme: theme,
     mainScroll,
-    setTheme: setTheme,
-    logout: logout,
-    getFileUrl: getFileUrl,
+    setTheme,
+    logout,
+    getFileUrl,
     setMainScroll
   };
 
@@ -129,11 +128,11 @@ export function MainWrapper({ children }: { children: any }) {
 export const useMainContext = (): MainContextDto => useContext(MainContext);
 
 export type MainContextDto = {
-  connectedUser: ResultloginDto | ObjectKeyDto | null;
+  connectedUser: ResultLoginDto | ObjectKeyDto | null;
   theme: string;
+  mainScroll: any,
   setTheme: (userTheme: string) => void;
   logout: () => Promise<void>;
   getFileUrl: (link: string, userId?: number) => string;
-  mainScroll: any, 
   setMainScroll: Dispatch<SetStateAction<any>>;
 };

@@ -2,7 +2,7 @@ import { formatDate, referenceKeyword } from "@/app/lib/utils";
 import { ResultFeed } from "@/app/types";
 import { Avatar, Typography } from "@material-tailwind/react";
 import FeedItemActionMenuComponent from "./feedMenuActions";
-import { FeedContextDto, useFeedContext } from "@/app/contexts/pages/feeds";
+import { useFeedContext } from "@/app/contexts/pages/feeds";
 
 export default function FeedHeaderComponent({
   feedData,
@@ -14,7 +14,7 @@ export default function FeedHeaderComponent({
   setDeleting: any
 }) {
   //
-  const feedContext: FeedContextDto = useFeedContext();
+  const feedContext = useFeedContext();
 
   const onActionEdit = () => {
     feedContext.setUpdateFeedItem(feedData);

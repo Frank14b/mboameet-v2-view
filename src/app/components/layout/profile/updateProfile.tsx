@@ -6,10 +6,10 @@ import {
   CardFooter,
   Typography,
 } from "@material-tailwind/react";
-import { useProfileContext } from "@/app/(pages)/profile/template";
-import InputFormComponent from "../../widgets/inputForm";
+import InputFormComponent from "../../widgets/inputField";
 import { useMainContext } from "@/app/contexts/main";
-import LoadingSpinnerComponent from "../../commons/loadingSpinner";
+import LoadingSpinnerComponent from "../../widgets/loadingSpinner";
+import { useProfileContext } from "@/app/contexts/pages/profile";
 export function UpdateProfileFormComponent() {
   const profileContext = useProfileContext();
   const mainContext = useMainContext();

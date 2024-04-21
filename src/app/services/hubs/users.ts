@@ -1,3 +1,4 @@
+import { hubConstants } from "@/app/lib/constants/hubs";
 import { StoreType } from "@/app/store/userStore";
 
 class UserHubs {
@@ -15,7 +16,7 @@ class UserHubs {
   }
 
   getProfileDetails(): void {
-    this.connection.on("UserProfile", (user: any) => {
+    this.connection.on(hubConstants.users.profile, (user: any) => {
       if(user?.id) {
         this.userStore.setUserConnected(true);
         this.userStore.setUser(user);
@@ -25,10 +26,9 @@ class UserHubs {
 
   updateProfile = () => {
     if (this.connection) {
-      this.connection.invoke("GetProfile");
+      this.connection.invoke(hubConstants.users.getProfile);
     }
   };
-
 }
 
 export default UserHubs;

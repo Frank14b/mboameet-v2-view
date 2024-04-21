@@ -1,21 +1,22 @@
 import { Maybe } from "yup"
 
 export type LoginFormData = {
-    username: string,
+    userName: string,
     password: string
 }
 
 export type RegistrationFormData = {
-    username: string,
-    firstname?: Maybe<string | undefined>,
-    lastname?: Maybe<string | undefined>,
+    userName: string,
+    firstName?: Maybe<string | undefined>,
+    lastName?: Maybe<string | undefined>,
     email: string,
-    phone?: Maybe<number | undefined>,
+    phone: string,
     countryCode?: Maybe<string | undefined>,
-    password: string
+    password: string,
+    confirmPassword: string
 }
 
-export type ResultloginDto = {
+export type ResultLoginDto = {
     id: string,
     userName: string,
     firstName: string,
@@ -48,7 +49,7 @@ export type VerifyOtpCodeDto = {
 }
 
 export type ChangePasswordDto = {
-    confirmpassword: string,
+    confirmPassword: string,
     password: string,
     token: string
 }

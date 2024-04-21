@@ -1,25 +1,18 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
-  Dispatch,
-  SetStateAction,
   createContext,
   useContext,
   useEffect,
   useState,
 } from "react";
 import {
-  FieldErrors,
-  UseFormHandleSubmit,
-  UseFormRegister,
   useForm,
 } from "react-hook-form";
 import { CreateFeedSchema } from "../../../validators";
 import {
   ApiResponseDto,
-  BooleanResultDto,
-  FeedCommentData,
+  FeedContextDto,
   ResultFeed,
-  ResultFeedCommentDto,
   ResultPaginate,
 } from "../../../types";
 import {
@@ -30,8 +23,8 @@ import {
   proceedLikeFeed,
   proceedSubmitDeleteFeedComment,
   proceedSubmitEditFeedComment,
+  proceedSubmitFeedComment,
 } from "../../../services/server-actions";
-import { getContentEditable } from "@/app/lib/utils";
 
 const FeedContext = createContext<any>({});
 export function FeedWrapper({ children }: { children: any }) {
@@ -48,7 +41,7 @@ export function FeedWrapper({ children }: { children: any }) {
   const [openFeedFormImages, handleOpenFeedFormImages] =
     useState<boolean>(false);
   const [updateFeedItem, setUpdateFeedItem] = useState<ResultFeed | null>(null);
-  const [feeds, setFeeds] = useState<ResultFeed[]>([]);
+  // const [feeds, setFeeds] = useState<ResultFeed[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [openComment, setOpenComment] = useState<number>(0);
   const [editCommentId, setEditCommentId] = useState<number>(0);
@@ -65,10 +58,13 @@ export function FeedWrapper({ children }: { children: any }) {
         revalidate: true,
       }
     );
-    if (result.status && result?.data?.data) {
-      setFeeds(result.data.data);
-    }
+
     setLoading(false);
+    if (result.status && result?.data?.data) {
+      return result.data.data;
+    }
+    
+    return [];
   };
 
   const deleteItemAsync = async ({
@@ -115,7 +111,7 @@ export function FeedWrapper({ children }: { children: any }) {
   const handleSubmitEditFeedComment = async ({
     id,
     feedId,
-    formData
+    formData,
   }: {
     id: number;
     feedId: number;
@@ -129,6 +125,20 @@ export function FeedWrapper({ children }: { children: any }) {
     return result;
   };
 
+  const handleSubmitFeedComment = async ({
+    feedId,
+    formData,
+  }: {
+    feedId: number;
+    formData: FormData;
+  }) => {
+    const result = await proceedSubmitFeedComment({
+      formData,
+      feedId: feedId,
+    });
+    return result;
+  };
+
   const contextData: FeedContextDto = {
     isLoading,
     errors,
@@ -136,7 +146,6 @@ export function FeedWrapper({ children }: { children: any }) {
     openFeedFormImages,
     updateFeedItem,
     loading,
-    feeds,
     editCommentId,
     openComment,
     setOpenComment,
@@ -154,6 +163,7 @@ export function FeedWrapper({ children }: { children: any }) {
     fetchFeeds,
     handleDeleteFeedComment,
     handleSubmitEditFeedComment,
+    handleSubmitFeedComment,
   };
 
   return (
@@ -163,53 +173,3 @@ export function FeedWrapper({ children }: { children: any }) {
 
 export const useFeedContext = (): FeedContextDto => useContext(FeedContext);
 
-export type FeedContextDto = {
-  isLoading: boolean;
-  errors: FieldErrors<any>;
-  openFeedForm: boolean;
-  openFeedFormImages: boolean;
-  updateFeedItem: ResultFeed | null;
-  loading: boolean;
-  feeds: ResultFeed[];
-  setIsLoading?: Dispatch<SetStateAction<boolean>>;
-  register: UseFormRegister<any>;
-  handleSubmit: UseFormHandleSubmit<any>;
-  handleOpenFeedForm: Dispatch<SetStateAction<boolean>>;
-  handleOpenFeedFormImages: Dispatch<SetStateAction<boolean>>;
-  setUpdateFeedItem: Dispatch<SetStateAction<ResultFeed | null>>;
-  likeFeed: ({ itemId }: { itemId: number }) => void;
-  desLikeFeed: ({ itemId }: { itemId: number }) => void;
-  fetchComments: ({
-    itemId,
-  }: {
-    itemId: number;
-  }) => Promise<FeedCommentData[] | null>;
-  deleteItemAsync: ({
-    itemId,
-    itemRef,
-  }: {
-    itemId: number;
-    itemRef: string;
-  }) => Promise<void>;
-  fetchFeeds: () => void;
-  editCommentId: number;
-  setEditCommentId: Dispatch<SetStateAction<number>>;
-  openComment: number;
-  setOpenComment: Dispatch<SetStateAction<number>>;
-  handleDeleteFeedComment: ({
-    feedId,
-    id,
-  }: {
-    feedId: number;
-    id: number;
-  }) => Promise<BooleanResultDto<any> | null>;
-  handleSubmitEditFeedComment: ({
-    id,
-    feedId,
-    formData
-  }: {
-    id: number;
-    feedId: number;
-    formData: FormData;
-  }) => Promise<ApiResponseDto<ResultFeedCommentDto> | null>
-};

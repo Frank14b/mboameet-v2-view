@@ -1,24 +1,11 @@
-import { HTMLInputTypeAttribute } from "react";
 import {
   ApiResponseDto,
-  BooleanResultDto,
   FeedCommentData,
   ObjectKeyDto,
   ResultFeed,
   ResultFeedCommentDto,
 } from ".";
 import { Size } from "react-easy-crop";
-
-export interface InputFormComponent {
-  title: string;
-  name?: string;
-  type?: HTMLInputTypeAttribute;
-  id?: string;
-  value?: string;
-  defaultValue?: string | number;
-  placeholder?: string;
-  onChange?: (e: React.FormEvent<HTMLInputElement>) => void;
-}
 
 export interface UserCardComponent {
   image?: string;
@@ -95,20 +82,7 @@ export interface FeedCommentFormProps {
   }) => Promise<ApiResponseDto<ResultFeedCommentDto> | null>;
 }
 
-export interface FeedCommentItemProps {
-  index: number;
-  feedId: number;
-  comment: FeedCommentData;
-}
-
-export type FeedForm = {
-  children: React.ReactNode;
-  openFeedForm: boolean;
-  updateItem?: ResultFeed | null;
-  formFiles: boolean;
-};
-
-export type FeedFormFiles = {
+export type FormFilesProps = {
   children: React.ReactNode;
   openFeedFiles: boolean;
   cropSize?: Size;

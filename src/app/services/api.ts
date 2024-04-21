@@ -85,14 +85,13 @@ export const apiCall = async ({
         // return response.data;
 
     } catch (error: any) {
-        // console.log("🚀 ~ error:", error)
         if (axios.isCancel(error)) {
             console.log('Request canceled');
         }
 
         if(error.response?.status == 401) {
             console.log('Unauthorized User');
-            redirect('/auth/signin');
+            // redirect('/auth/signin');
         }
 
         return ApiErrorMessage(error);

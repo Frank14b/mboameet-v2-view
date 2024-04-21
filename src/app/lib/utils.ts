@@ -21,6 +21,11 @@ export const feedInputVideoFile: string = `custom-feed-input-video-file`;
 export const feedVideoPreviewId: string = `feed-video-preview`;
 export const feedVideoReaderId: string = `feed-video-reader`;
 
+export const validPhoneNumber = (number: string): boolean => {
+  const regex: RegExp = /^[0-9-]+$/;
+  return regex.test(number);
+}
+
 export const replaceLineBreaks = (text: string) => {
   return text.replace(/\n/g, "<br>");
 };

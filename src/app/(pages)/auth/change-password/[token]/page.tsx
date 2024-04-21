@@ -1,8 +1,6 @@
 "use client";
 
-import ChangePasswordComponent from "@/app/components/layout/authentication/changePassword";
-// import { useEffect } from "react";
-
+import ChangePasswordComponent from "@/app/components/layout/authentication/changePasswordComponent";
 
 export default function ChangePasswordPage({ params }: {params: { token: string }}) {
     return (
