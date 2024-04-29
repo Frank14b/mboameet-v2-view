@@ -1,10 +1,11 @@
 "use client";
 
 import LoadingSpinnerComponent from "../../widgets/loadingSpinner";
-import useSignUp from "@/app/hooks/pages/auth/signUp";
+import useSignUp from "@/app/hooks/pages/auth/useSignUp";
 import Link from "next/link";
 import SignUpFormComponent from "./registerFormComponent";
 import AnimateFadeOut from "../../widgets/motions/animateFadeOut";
+import Image from "next/image";
 
 export default function SignInComponent() {
   //
@@ -18,9 +19,12 @@ export default function SignInComponent() {
           <div className="flex flex-col items-center justify-end">
             <div className="w-full">
               <div className="flex flex-col items-center">
-                <img
-                  src="../communication-social-media-icons-smartphone-device.jpg"
-                  className="h-screen object-cover w-full"
+                <Image
+                  alt=""
+                  width={2000}
+                  height={2000}
+                  src="/communication-social-media-icons-smartphone-device.jpg"
+                  className="h-screen object-cover w-full relative"
                 />
               </div>
             </div>

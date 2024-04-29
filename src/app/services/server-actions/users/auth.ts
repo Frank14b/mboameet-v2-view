@@ -11,7 +11,7 @@ import {
   RegistrationFormData,
   ResultForgetPasswordDto,
   ResultProfileData,
-  ResultloginDto,
+  ResultLoginDto,
   VerifyOtpCodeDto,
 } from "@/app/types/index";
 import { apiCall } from "../../api";
@@ -23,14 +23,15 @@ const urls = {
   register: `${basePath}`,
   forgetPassword: `${basePath}/forget-password`,
   verifyOtp: `${basePath}/verify-token`,
+  resendOtp: `${basePath}/resend-token`,
   changePassword: `${basePath}/change-password`,
   validateToken: `${basePath}/validate-token`,
 };
 
 export const proceedLogin = async (
   data: LoginFormData
-): Promise<ApiResponseDto<ResultloginDto>> => {
-  const result: ApiResponseDto<ResultloginDto> = await apiCall({
+): Promise<ApiResponseDto<ResultLoginDto>> => {
+  const result: ApiResponseDto<ResultLoginDto> = await apiCall({
     method: "POST",
     url: urls.login,
     data,
@@ -43,8 +44,8 @@ export const proceedLogin = async (
 
 export const proceedRegister = async (
   data: RegistrationFormData
-): Promise<ApiResponseDto<ResultloginDto>> => {
-  const result: ApiResponseDto<ResultloginDto> = await apiCall({
+): Promise<ApiResponseDto<ResultLoginDto>> => {
+  const result: ApiResponseDto<ResultLoginDto> = await apiCall({
     method: "POST",
     url: urls.register,
     data,
@@ -69,8 +70,27 @@ export const verifyOtpCode = async (
   data: VerifyOtpCodeDto
 ): Promise<ApiResponseDto<BooleanResultDto<string>>> => {
   const result: ApiResponseDto<BooleanResultDto<string>> = await apiCall({
+    headers: {
+      Authorization: "Bearer " + data.accessToken,
+    },
     method: "POST",
     url: urls.verifyOtp,
+    data,
+  });
+
+  return result;
+};
+
+export const proceedResendOtpCode = async (data: {
+  accessToken: string;
+  token: string;
+}): Promise<ApiResponseDto<BooleanResultDto<string>>> => {
+  const result: ApiResponseDto<BooleanResultDto<string>> = await apiCall({
+    headers: {
+      Authorization: "Bearer " + data.accessToken,
+    },
+    method: "POST",
+    url: urls.resendOtp,
     data,
   });
 
@@ -81,6 +101,9 @@ export const proceedChangePassword = async (
   data: ChangePasswordDto
 ): Promise<ApiResponseDto<BooleanResultDto<string>>> => {
   const result: ApiResponseDto<BooleanResultDto<string>> = await apiCall({
+    headers: {
+      Authorization: "Bearer " + data.accessToken,
+    },
     method: "POST",
     url: urls.changePassword,
     data,
@@ -98,6 +121,6 @@ export const validatToken = async () => {
   return result;
 };
 
-export const createUserSession = (user: ResultloginDto | ObjectKeyDto) => {
+export const createUserSession = (user: ResultLoginDto | ObjectKeyDto) => {
   setJwtCookie({ id: user.id, token: user.token });
 };

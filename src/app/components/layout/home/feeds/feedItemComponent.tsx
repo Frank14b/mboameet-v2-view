@@ -1,58 +1,59 @@
 "use client";
 
 import { useMainContext } from "@/app/contexts/main";
-import { formatHashTags, referenceKeyword } from "@/app/lib/utils";
-import useFeedStore from "@/app/store/feedStore";
-import { useFeedContext } from "@/app/contexts/pages/feeds";
-import {
-  FeedFilesData,
-  FeedItem,
-  ResultFeed,
-} from "@/app/types";
+import { formatHashTags } from "@/app/lib/utils";
+import { FeedFilesData, FeedItem } from "@/app/types";
 import { Card, Carousel } from "@material-tailwind/react";
-import { useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import FeedCommentComponent from "./comments/feedCommentComponent";
 import FeedVideoReaderComponent from "./files/videoReaderComponent";
-import FeedHeaderComponent from "../../../widgets/feeds/headerComponent";
+import FeedHeaderComponent from "./feedHeaderComponent";
 import FeedImageViewComponent from "./files/feedImageComponent";
+import Image from "next/image";
+import { FeedHookDto } from "@/app/hooks/pages/feeds/useFeed";
+import { FeedFormHookDto } from "@/app/hooks/pages/feeds/useFeedForm";
+import { referenceKeyword } from "@/app/lib/constants/app";
 
-export default function FeedItemComponent({ feed, fileType }: FeedItem) {
+export default function FeedItemComponent({
+  feed,
+  fileType,
+  feedHook,
+  feedFormHook,
+}: FeedItem<FeedHookDto, FeedFormHookDto>) {
   //
+  const referenceId: string = `${referenceKeyword}-${feed.id}`;
   const mainContext = useMainContext();
-  const feedContext = useFeedContext();
-  const feedStore = useFeedStore();
-
-  const [feedData, setFeedData] = useState<ResultFeed>(feed);
-
-  const [userLiked, setUserLiked] = useState<boolean>(
+  const { updatedFeed, deleteItemAsync, likeFeed, desLikeFeed, canEditFeed } =
+    feedHook;
+  const { setUpdateFeedItem, handleOpenFeedForm } = feedFormHook;
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [isUserLiked, setIsUserLiked] = useState<boolean>(
     feed?.feedLikes && feed?.feedLikes?.length == 1 ? true : false
   );
 
-  const [deleting, setDeleting] = useState<boolean>(false);
-  const referenceId: string = `${referenceKeyword}-${feed.id}`;
+  const feedData = useMemo(() => {
+    if (!updatedFeed) return feed;
 
-  const likeItem = () => {
-    setUserLiked(true);
-    feedContext.likeFeed({ itemId: feedData.id });
-  };
+    if (updatedFeed.id != feed.id) return feed;
 
-  const desLikeItem = () => {
-    setUserLiked(false);
-    feedContext.desLikeFeed({ itemId: feedData.id });
-  };
+    return {
+      ...feed,
+      message: updatedFeed.message,
+      likes: updatedFeed.likes,
+      views: updatedFeed.views,
+      comments: updatedFeed.comments,
+    };
+  }, [feed, updatedFeed]);
 
-  /** update feed data (likes, comments, content, on socket event...) */
-  useEffect(() => {
-    if (feedStore.updatedFeed?.id == feed.id) {
-      setFeedData({
-        ...feedData,
-        message: feedStore.updatedFeed.message,
-        likes: feedStore.updatedFeed.likes,
-        views: feedStore.updatedFeed.views,
-        comments: feedStore.updatedFeed.comments,
-      });
+  const handleReaction = useCallback(() => {
+    if (isUserLiked) {
+      setIsUserLiked(false);
+      desLikeFeed({ id: feedData.id });
+    } else {
+      setIsUserLiked(true);
+      likeFeed({ id: feedData.id });
     }
-  }, [feedStore.updatedFeed, feed.id]);
+  }, [isUserLiked, feedData.id, desLikeFeed, likeFeed]);
 
   return (
     <div id={referenceId}>
@@ -63,22 +64,19 @@ export default function FeedItemComponent({ feed, fileType }: FeedItem) {
         <FeedHeaderComponent
           feedData={feedData}
           userPhoto={
-            feedData.user.photo != null
-              ? mainContext.getFileUrl(feedData.user.photo, feedData.user.id)
-              : "https://docs.material-tailwind.com/img/face-1.jpg"
+            mainContext.getFileUrl(feedData.user.photo, feedData.user.id)
           }
-          setDeleting={setDeleting}
+          setDeleting={setIsDeleting}
+          setUpdateFeedItem={setUpdateFeedItem}
+          handleOpenFeedForm={handleOpenFeedForm}
+          deleteItemAsync={deleteItemAsync}
+          canEditFeed={canEditFeed}
         />
-
-        <div
-          className="rounded-xl px-3 py-3 text-sm text-black dark:text-gray-300"
-          dangerouslySetInnerHTML={{ __html: formatHashTags(feedData.message) }}
-        ></div>
 
         {feedData.feedFiles != null && feedData.feedFiles.length > 0 && (
           <>
             {fileType == "carousel" && (
-              <div className="p-0 my-3 h-80">
+              <div className="p-0 mt-0 h-80">
                 <Carousel
                   placeholder={""}
                   loop={true}
@@ -87,7 +85,8 @@ export default function FeedItemComponent({ feed, fileType }: FeedItem) {
                 >
                   {feedData.feedFiles.map(
                     (image: FeedFilesData, index: number) => (
-                      <img
+                      <Image
+                        fill={true}
                         key={index}
                         src={mainContext.getFileUrl(
                           image.url,
@@ -102,29 +101,28 @@ export default function FeedItemComponent({ feed, fileType }: FeedItem) {
               </div>
             )}
 
-            <FeedImageViewComponent
-              fileType={fileType}
-              feed={feedData}
-            />
+            <FeedImageViewComponent fileType={fileType} feed={feedData} />
 
             {fileType == "video" && (
               <>
-                <FeedVideoReaderComponent
-                  feed={feedData}
-                />
+                <FeedVideoReaderComponent feed={feedData} />
               </>
             )}
           </>
         )}
 
+        <div
+          className="rounded-xl px-3 pb-3 mb-3 text-sm text-black dark:text-gray-300"
+          dangerouslySetInnerHTML={{ __html: formatHashTags(feedData.message) }}
+        ></div>
+
         <FeedCommentComponent
           feedData={feedData}
-          userLiked={userLiked}
-          likeItem={likeItem}
-          desLikeItem={desLikeItem}
+          userLiked={isUserLiked}
+          handleReaction={handleReaction}
         />
 
-        {deleting && (
+        {isDeleting && (
           <div className="absolute bg-white bg-opacity-60 dark:bg-gray-700 dark:bg-opacity-60 top-0 bottom-0 left-0 w-full z-index-999 rounded-lg"></div>
         )}
       </Card>

@@ -48,11 +48,11 @@ export default function InputField({
     } else {
       setError(null);
     }
-  }, [errors]);
+  }, [errors, fieldKey]);
 
   useEffect(() => {
     checkError();
-  }, [watchField]);
+  }, [watchField, checkError]);
 
   const handleOnChange = (e: any) => {
     setValue(`${fieldKey}`, e.target.value, {
@@ -66,7 +66,8 @@ export default function InputField({
     <>
       <div className="w-full">
         <div className="mt-2">
-          <div
+          <label
+            htmlFor={data?.id ?? data.title.toLowerCase()}
             className={`rounded-md relative shadow-sm ring-0 ring-inset ring-gray-700 w-full`}
           >
             <Input
@@ -92,7 +93,7 @@ export default function InputField({
                 )}
               </span>
             )}
-          </div>
+          </label>
         </div>
       </div>
       {error && (

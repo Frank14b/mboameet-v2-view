@@ -1,30 +1,12 @@
 import { ChangeEvent } from "react";
 import { DateTime } from "luxon";
+import secureLocalStorage from "react-secure-storage";
 
-export const passwordRegex: string =
-  "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
-export const passwordErrorMessage: string =
-  "Password must contains upper, lowercase, number, special char and min 8 digits";
-export const invalidEmailErrorMessage: string =
-  "Invalid email e.g: example@test.com";
-export const requiredEmailErrorMessage: string = "Email address is required";
-export const defaultProfileImg =
-  "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80";
-
-export const mainDivComponentId: string = `main-app-div`
-export const referenceKeyword: string = `feed-card-item-`;
-export const referenceCommentKeyword: string = `feed-item-ref-comment-`;
-export const feedFormEditable: string = `feedFormEditable`;
-export const feedCommentFormEditable: string = `feedCommentFormEditable`;
-export const feedInputFile: string = `custom-feed-input-file`;
-export const feedInputVideoFile: string = `custom-feed-input-video-file`;
-export const feedVideoPreviewId: string = `feed-video-preview`;
-export const feedVideoReaderId: string = `feed-video-reader`;
 
 export const validPhoneNumber = (number: string): boolean => {
   const regex: RegExp = /^[0-9-]+$/;
   return regex.test(number);
-}
+};
 
 export const replaceLineBreaks = (text: string) => {
   return text.replace(/\n/g, "<br>");
@@ -148,8 +130,6 @@ export const validateFileUploadType = (
 ) => {
   if (!file) return null; // if no file found return immediately
 
-  console.log("🚀 ~ file.type:", file.type);
-
   if (file.type.includes(expectedType)) {
     return {
       status: true,
@@ -224,16 +204,38 @@ export const handleScrollEvent = ({
   elementId?: string;
   callback: (event: any) => void;
 }) => {
-
   let element: Document | HTMLElement = document;
 
-  if(elementId) {
+  if (elementId) {
     element = getContentEditable(elementId);
   }
 
-  element.addEventListener('scroll', (event: any) => {
-    return callback(event)
-  })
+  element.addEventListener("scroll", (event: any) => {
+    return callback(event);
+  });
 };
 
 export const getWidgetScreenPosition = (content: HTMLElement) => {};
+
+// local storage utils
+export const setLocalStorage = (
+  key: string,
+  value: string,
+  secure: boolean
+) => {
+  if (!secure) localStorage.setItem(key, value);
+
+  secureLocalStorage.setItem(key, value);
+};
+
+export const getLocalStorage = (key: string, secure: boolean) => {
+  if (!secure) return localStorage.getItem(key);
+
+  return secureLocalStorage.getItem(key);
+};
+
+export const removeLocalStorage = (key: string, secure: boolean) => {
+  if (!secure) localStorage.removeItem(key);
+
+  secureLocalStorage.removeItem(key);
+};

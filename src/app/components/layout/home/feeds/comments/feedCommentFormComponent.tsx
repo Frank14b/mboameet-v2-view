@@ -1,15 +1,15 @@
 "use client";
 
 import {
-  feedCommentFormEditable,
   focusOnLastText,
   formatHashTags,
   getContentEditable,
 } from "@/app/lib/utils";
 import { FeedCommentFormProps } from "@/app/types";
 import { IconButton } from "@material-tailwind/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { feedCommentFormEditable } from "@/app/lib/constants/app";
 
 export default function FeedCommentFormComponent({
   feedId,
@@ -26,13 +26,18 @@ export default function FeedCommentFormComponent({
     updateItem ? `100%` : `60px`
   );
 
-  const handleKeyPress = (e: KeyboardEvent) => {
-    const content = getContentEditable(formRef);
-    if (e.key == " ") {
-      content.innerHTML = formatHashTags(content.innerText);
-      focusOnLastText(content);
-    }
-  };
+  console.log("🚀 ~ formDivWidth:", formDivWidth)
+
+  const handleKeyPress = useCallback(
+    (e: KeyboardEvent) => {
+      const content = getContentEditable(formRef);
+      if (e.key == " ") {
+        content.innerHTML = formatHashTags(content.innerText);
+        focusOnLastText(content);
+      }
+    },
+    [formRef]
+  );
 
   useEffect(() => {
     const content = getContentEditable(`${formRef}`);
@@ -45,7 +50,7 @@ export default function FeedCommentFormComponent({
     }
 
     handleKeyPress && content?.addEventListener("keyup", handleKeyPress);
-  }, [updateItem]);
+  }, [updateItem, handleKeyPress, formRef]);
 
   // process to feed comment
   const handleFeedComment = async () => {
@@ -55,15 +60,15 @@ export default function FeedCommentFormComponent({
   };
 
   // process to feed edit comment
-  const handleUpdateFeedComment = async () => {
+  const handleUpdateFeedComment = useCallback(async () => {
     if (!onEditComment || !updateItem) return;
 
-    const data = await onEditComment({
+    await onEditComment({
       feedId: feedId,
-      id: updateItem.id,
+      updateItem: updateItem,
       formRef: formRef,
     });
-  };
+  }, [updateItem, feedId, formRef, onEditComment]);
 
   return (
     <>

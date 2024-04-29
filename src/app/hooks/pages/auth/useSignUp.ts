@@ -14,6 +14,7 @@ import {
 } from "react";
 import { UseFormHandleSubmit } from "react-hook-form";
 import useAppForm from "../../useForm";
+import { notification } from "@/app/lib/notifications";
 
 function useSignUp() {
   //
@@ -34,7 +35,7 @@ function useSignUp() {
       lastName: "",
       email: "",
       phone: "",
-      countryCode: "+971",
+      country: null,
       password: "",
       confirmPassword: "",
     },
@@ -48,25 +49,22 @@ function useSignUp() {
       if (stepper < 3) return;
       setIsLoading(true);
       const result = await proceedRegister(data);
+      
       setIsLoading(false);
-      setResponseData(result);
+      notification.apiNotify<ResultLoginDto>(result);
 
       if (result.status === true) {
         setStepper(stepper + 1);
       }
     },
-    [stepper, proceedRegister]
+    [stepper]
   );
-
-  useEffect(() => {
-    switchStepper();
-  }, [errors]);
 
   useEffect(() => {
     if (isLoading) return;
     if (!responseData?.status) return;
     reset();
-  }, [isLoading]);
+  }, [isLoading, reset, responseData]);
 
   const switchStepper = useCallback(() => {
     setTimeout(() => {
@@ -90,7 +88,11 @@ function useSignUp() {
         }
       }
     }, 100);
-  }, [errors, stepper]);
+  }, [errors, stepper, setStepper, watch]);
+
+  useEffect(() => {
+    switchStepper();
+  }, [switchStepper]);
 
   const switchbackStepper = () => {
     setStepper(stepper - 1);

@@ -1,9 +1,11 @@
 "use client";
 
 import LoadingSpinner from "../../widgets/loadingSpinner";
-import useSignIn from "@/app/hooks/pages/auth/signIn";
+import useSignIn from "@/app/hooks/pages/auth/useSignIn";
 import LoginFormComponent from "./loginFormComponent";
 import AnimateFadeOut from "../../widgets/motions/animateFadeOut";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function LoginComponent() {
   //
@@ -27,6 +29,24 @@ export default function LoginComponent() {
                     <LoginFormComponent signInHook={signInHook} />
                   </form>
                 </LoadingSpinner>
+
+                <p className="flex justify-center mb-3 font-sans text-sm antialiased font-light leading-normal text-inherit">
+                  {`Don't have an account?`}
+                  <Link
+                    href="/auth/signup"
+                    className="block ml-1 font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900 dark:text-gray-500"
+                  >
+                    Sign up
+                  </Link>
+                </p>
+                <p className="flex justify-center mb-6 font-sans text-sm antialiased font-light leading-normal text-inherit">
+                  <Link
+                    href="/auth/forget-password"
+                    className="block ml-1 font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900 dark:text-gray-500"
+                  >
+                    Reset Password Here!
+                  </Link>
+                </p>
               </div>
             </div>
           </AnimateFadeOut>
@@ -36,9 +56,12 @@ export default function LoginComponent() {
           <div className="flex flex-col items-center justify-end">
             <div className="w-full">
               <div className="flex flex-col items-center">
-                <img
-                  src="../full-shot-people-use-apps-make-friends.jpg"
-                  className="h-screen object-cover w-full"
+                <Image
+                  alt=""
+                  width={2000}
+                  height={2000}
+                  src="/full-shot-people-use-apps-make-friends.jpg"
+                  className="h-screen object-cover w-full relative"
                 />
               </div>
             </div>

@@ -37,8 +37,6 @@ export const getFeeds = async ({ revalidate }: { revalidate: boolean }) => {
     revalidate: revalidate,
   });
 
-  console.log("🚀 ~ getFeeds ~ result:", result.data?.data[0])
-
   return result;
 };
 

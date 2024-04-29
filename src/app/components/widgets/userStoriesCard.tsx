@@ -1,4 +1,4 @@
-import { UserCardV2 } from "@/app/types";
+import { UserStoriesCardProps } from "@/app/types";
 import {
     Card,
     CardHeader,
@@ -8,7 +8,7 @@ import {
 } from "@material-tailwind/react";
 
 
-export default function UserCardV2Component({ bgImage, image, title, description }: UserCardV2) {
+export default function UserStoriesCard({ bgImage, image, title, description }: UserStoriesCardProps) {
 
     return <>
         <Card

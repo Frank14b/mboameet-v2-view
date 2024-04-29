@@ -11,6 +11,9 @@ import {
   UseFormHandleSubmit,
 } from "react-hook-form";
 import useAppForm from "../../useForm";
+import { getLocalStorage } from "@/app/lib/utils";
+import { localStorageKey } from "@/app/lib/constants/app";
+import { notification } from "@/app/lib/notifications";
 
 function useChangePassword(): ChangePasswordHookDto {
   //
@@ -25,6 +28,7 @@ function useChangePassword(): ChangePasswordHookDto {
       password: "",
       confirmPassword: "",
       token: "",
+      accessToken: getLocalStorage(localStorageKey.authToken, true) as string,
     },
   });
 
@@ -39,9 +43,13 @@ function useChangePassword(): ChangePasswordHookDto {
       ...data,
       token: token,
     });
-    setResponseData(result);
+
     setIsLoading(false);
-    router.push("/");
+    notification.apiNotify<BooleanResultDto<string>>(result);
+
+    if(result.status) {
+      return router.push("/auth/signin");
+    }
   };
   //
 

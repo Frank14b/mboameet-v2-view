@@ -1,31 +1,44 @@
-import { formatDate, referenceKeyword } from "@/app/lib/utils";
+import { formatDate } from "@/app/lib/utils";
 import { ResultFeed } from "@/app/types";
 import { Avatar, Typography } from "@material-tailwind/react";
 import FeedItemActionMenuComponent from "./feedMenuActions";
-import { useFeedContext } from "@/app/contexts/pages/feeds";
+import { Dispatch, SetStateAction } from "react";
+import { referenceKeyword } from "@/app/lib/constants/app";
 
 export default function FeedHeaderComponent({
   feedData,
   userPhoto,
-  setDeleting: setDeleting
+  setDeleting,
+  setUpdateFeedItem,
+  handleOpenFeedForm,
+  deleteItemAsync,
+  canEditFeed,
 }: {
   feedData: ResultFeed;
   userPhoto: string;
-  setDeleting: any
+  setDeleting: any;
+  deleteItemAsync: ({
+    itemId,
+    itemRef,
+  }: {
+    itemId: number;
+    itemRef: string;
+  }) => Promise<void>;
+  setUpdateFeedItem: Dispatch<SetStateAction<ResultFeed | null>>;
+  handleOpenFeedForm: Dispatch<SetStateAction<boolean>>;
+  canEditFeed: (feed: ResultFeed) => boolean;
 }) {
   //
-  const feedContext = useFeedContext();
-
   const onActionEdit = () => {
-    feedContext.setUpdateFeedItem(feedData);
-    feedContext.handleOpenFeedForm(true);
+    setUpdateFeedItem(feedData);
+    handleOpenFeedForm(true);
   };
 
   const referenceId: string = `${referenceKeyword}-${feedData.id}`;
 
   const deleteItem = () => {
     setDeleting(true);
-    feedContext.deleteItemAsync({ itemId: feedData.id, itemRef: referenceId });
+    deleteItemAsync({ itemId: feedData.id, itemRef: referenceId });
     // remove the loader is the delete process failed
     setTimeout(() => {
       return setDeleting(false);
@@ -64,6 +77,7 @@ export default function FeedHeaderComponent({
             onActionEdit={onActionEdit}
             deleteItem={deleteItem}
             onShare={() => {}}
+            canEditFeed={canEditFeed}
           />
         </div>
       </div>

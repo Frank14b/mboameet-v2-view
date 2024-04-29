@@ -1,11 +1,12 @@
 "use client";
 
-import { UserCircleIcon } from "@heroicons/react/24/outline";
 import LoadingSpinner from "../../widgets/loadingSpinner";
 import Link from "next/link";
 import ChangePasswordFormComponent from "./changePasswordFormComponent";
-import useChangePassword from "@/app/hooks/pages/auth/changePassword";
+import useChangePassword from "@/app/hooks/pages/auth/useChangePassword";
 import { useEffect } from "react";
+import AnimateFadeOut from "../../widgets/motions/animateFadeOut";
+import Image from "next/image";
 
 export default function ChangePasswordComponent({ token }: { token: string }) {
   //
@@ -14,46 +15,66 @@ export default function ChangePasswordComponent({ token }: { token: string }) {
 
   useEffect(() => {
     setToken(token);
-  }, []);
+  }, [token, setToken]);
 
   return (
     <>
-      <div className="bg-white px-4 pb-1 pt-5 sm:p-6 sm:pb-4">
-        <div className="sm:flex sm:items-start">
-          <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-            <UserCircleIcon
-              className="h-6 w-6 text-blue-600"
-              aria-hidden="true"
-            />
-          </div>
-          <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-            <h3 className="text-base font-semibold leading-6 text-gray-900">
-              Change Account Password
-            </h3>
-            <div className="mt-2">
-              <p className="text-sm text-gray-500">
-                Fill the required fields bellow or use the social button below
-              </p>
+      {/* // */}
+      <div className="flex">
+        <div className="w-1/2 bg-pink-300">
+          <div className="flex flex-col items-center justify-end">
+            <div className="w-full">
+              <div className="flex flex-col items-center">
+                <Image
+                  alt=""
+                  width={2000}
+                  height={2000}
+                  src="/full-shot-people-use-apps-make-friends.jpg"
+                  className="h-screen object-cover w-full relative"
+                />
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="px-1 relative">
-          <div>
-            <LoadingSpinner isLoading={isLoading}>
-              <form method="post" onSubmit={handleSubmit(submitFormData)}>
-                <ChangePasswordFormComponent formHook={formHook} />
-              </form>
-            </LoadingSpinner>
+        <div className="w-full bg-gray-200 dark:bg-gray-800">
+          <AnimateFadeOut>
+            <div className="flex flex-col items-center justify-center h-screen">
+              <div className="relative flex flex-col text-gray-700 bg-white dark:bg-gray-900 shadow-md w-96 rounded-xl bg-clip-border">
+                <div className="relative grid mx-4 mb-4 -mt-6 overflow-hidden text-white shadow-lg h-28 place-items-center rounded-xl bg-pink-300 from-gray-900 to-gray-800 bg-clip-border shadow-gray-900/20">
+                  <h3 className="block font-sans text-2xl antialiased font-semibold leading-snug tracking-normal text-white">
+                    Change Account Password
+                  </h3>
+                </div>
+                <LoadingSpinner isLoading={isLoading}>
+                  <form method="post" onSubmit={handleSubmit(submitFormData)}>
+                    <ChangePasswordFormComponent formHook={formHook} />
+                  </form>
+                </LoadingSpinner>
 
-            <div className="mt-3 flex items-center text-center justify-end gap-x-2 mb-4">
-              Don't have account yet ?
-              <Link href="/" className="text-indigo-600 font-bold text-sm">
-                Register now
-              </Link>
+                <p className="flex justify-center mb-3 font-sans text-sm antialiased font-light leading-normal text-inherit">
+                  {`Recovered your password?`}
+                  <Link
+                    href="/auth/signin"
+                    className="block ml-1 font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900 dark:text-gray-500"
+                  >
+                    Sign in
+                  </Link>
+                </p>
+                <p className="flex justify-center mb-6 font-sans text-sm antialiased font-light leading-normal text-inherit">
+                  {`Don't have account?`}
+                  <Link
+                    href="/auth/signup"
+                    className="block ml-1 font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900 dark:text-gray-500"
+                  >
+                    Sign up
+                  </Link>
+                </p>
+              </div>
             </div>
-          </div>
+          </AnimateFadeOut>
         </div>
+        {/* // */}
       </div>
     </>
   );

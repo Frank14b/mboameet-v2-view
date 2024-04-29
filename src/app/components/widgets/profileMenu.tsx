@@ -1,5 +1,5 @@
 import { useMainContext } from "@/app/contexts/main";
-import { defaultProfileImg } from "@/app/lib/utils";
+import { defaultProfileImg } from "@/app/lib/constants/app";
 import {
     Menu,
     MenuHandler,

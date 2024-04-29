@@ -1,25 +1,17 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import { ChangeEvent, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { CreateFeedSchema } from "../../../validators";
 import {
-  ApiResponseDto,
-  EmojiSelected,
-  FeedHookDto,
-  ObjectKeyDto,
-  ResultFeed,
-  ResultPaginate,
-} from "../../../types";
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
+import { EmojiSelected, ObjectKeyDto, ResultFeed } from "../../../types";
 import {
-  getFeeds,
-  proceedDeleteFeed,
   proceedSubmitFeed,
   proceedUpdateFeed,
 } from "../../../services/server-actions";
 import {
   createVideoPreview,
-  feedFormEditable,
-  feedVideoPreviewId,
   fileExtFromBase64,
   focusOnLastText,
   focusPosition,
@@ -27,24 +19,17 @@ import {
   getContentEditable,
   validateFileUploadType,
 } from "@/app/lib/utils";
+import { feedFormEditable, feedVideoPreviewId } from "@/app/lib/constants/app";
+import { notification } from "@/app/lib/notifications";
 
-export function useFeedHook(): FeedHookDto {
+export function useFeedForm(): FeedFormHookDto {
   //
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(CreateFeedSchema), // Integrate Yup for validation
-  });
   //
   const [openFeedForm, handleOpenFeedForm] = useState<boolean>(false);
   const [openFeedFormImages, handleOpenFeedFormImages] =
     useState<boolean>(false);
   const [updateFeedItem, setUpdateFeedItem] = useState<ResultFeed | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-
   ////
   const [linkedImages, setLinkedImages] = useState<ObjectKeyDto[] | null>(null);
   const [linkedVideos, setLinkedVideos] = useState<File[] | null>(null);
@@ -69,7 +54,7 @@ export function useFeedHook(): FeedHookDto {
       content.innerHTML = formatHashTags(content.innerText);
     }
     content?.addEventListener("keyup", handleKeyPress);
-  }, [openFeedForm, updateFeedItem]);
+  }, [updateFeedItem]);
 
   const addSelectedEmoji = (data: EmojiSelected) => {
     const content = getContentEditable(feedFormEditable);
@@ -77,24 +62,23 @@ export function useFeedHook(): FeedHookDto {
   };
 
   const selectedImageFile = (image: string | Blob | ObjectKeyDto) => {
-    let currentData = linkedImages;
+    let currentLinkedImages = linkedImages;
     const tmpImage: any = image;
 
-    if (currentData) {
-      currentData.push({
+    if (currentLinkedImages) {
+      currentLinkedImages.push({
         ...tmpImage,
-        id: currentData.length + 1,
+        id: currentLinkedImages.length + 1,
       });
     } else {
-      currentData = [
+      currentLinkedImages = [
         {
           ...tmpImage,
           id: 1,
         },
       ];
     }
-
-    setLinkedImages(currentData);
+    setLinkedImages(currentLinkedImages);
   };
 
   const handleGetCursorPosition = () => {
@@ -103,9 +87,9 @@ export function useFeedHook(): FeedHookDto {
   };
 
   const removeSelectedImage = (index: number) => {
-    let currentData = linkedImages;
-    currentData?.splice(index, 1);
-    setLinkedImages(currentData);
+    let currentLinkedImages = linkedImages;
+    currentLinkedImages?.splice(index, 1);
+    setLinkedImages(currentLinkedImages);
   };
 
   /** process to feed creation */
@@ -130,11 +114,14 @@ export function useFeedHook(): FeedHookDto {
     let message = content.innerText;
 
     if (message.trim().length == 0) {
-      message = "@feed";
+      message = "Hi!";
     }
     formData.append("message", message);
 
     const result = await proceedSubmitFeed(formData);
+
+    notification.apiNotify<ResultFeed>(result);
+
     if (result.status) {
       content.innerHTML = "";
       handleOpenFeedForm(false);
@@ -152,13 +139,15 @@ export function useFeedHook(): FeedHookDto {
       message: content.innerText,
     });
 
+    notification.apiNotify<ResultFeed>(result);
+    
     if (result.status) {
       content.innerHTML = "";
       handleOpenFeedForm(false);
     }
   };
 
-  const uploadProfileImage = async (data: string | Blob | ObjectKeyDto) => {
+  const uploadFeedImage = async (data: string | Blob | ObjectKeyDto) => {
     setLinkedVideos(null);
     selectedImageFile(data);
     setImage("");
@@ -188,56 +177,22 @@ export function useFeedHook(): FeedHookDto {
     }
   }, [openFeedForm]);
 
-  const fetchFeeds = async () => {
-    const result: ApiResponseDto<ResultPaginate<ResultFeed[]>> = await getFeeds(
-      {
-        revalidate: true,
-      }
-    );
-
-    setLoading(false);
-    if (result.status && result?.data?.data) {
-      return result.data.data;
-    }
-
-    return [];
-  };
-
-  const deleteItemAsync = async ({
-    itemId,
-    itemRef,
-  }: {
-    itemId: number;
-    itemRef: string;
-  }) => {
-    const result = await proceedDeleteFeed(itemId);
-    if (result.status) {
-      document.getElementById(itemRef)?.remove();
-    }
-  };
-
-  const data: FeedHookDto = {
+  const data: FeedFormHookDto = {
     isLoading,
-    errors,
     openFeedForm,
     openFeedFormImages,
     updateFeedItem,
-    loading,
     image,
     feedInputValue,
     linkedImages,
     linkedVideos,
     setImage,
     setIsLoading,
-    register,
-    handleSubmit,
     handleOpenFeedForm,
     handleOpenFeedFormImages,
     setUpdateFeedItem,
-    deleteItemAsync,
-    fetchFeeds,
     handleGetCursorPosition,
-    uploadProfileImage,
+    uploadFeedImage,
     handleSelectFeedVideo,
     addSelectedEmoji,
     removeSelectedImage,
@@ -248,4 +203,27 @@ export function useFeedHook(): FeedHookDto {
   return { ...data };
 }
 
-export default useFeedHook;
+export default useFeedForm;
+
+export interface FeedFormHookDto {
+  isLoading: boolean;
+  openFeedForm: boolean;
+  openFeedFormImages: boolean;
+  updateFeedItem: ResultFeed | null;
+  image: string;
+  feedInputValue: string;
+  linkedImages: ObjectKeyDto[] | null;
+  linkedVideos: File[] | null;
+  setImage: Dispatch<SetStateAction<string>>;
+  setIsLoading?: Dispatch<SetStateAction<boolean>>;
+  handleOpenFeedForm: Dispatch<SetStateAction<boolean>>;
+  handleOpenFeedFormImages: Dispatch<SetStateAction<boolean>>;
+  setUpdateFeedItem: Dispatch<SetStateAction<ResultFeed | null>>;
+  handleGetCursorPosition: () => void;
+  uploadFeedImage: (data: string | Blob | ObjectKeyDto) => Promise<void>;
+  handleSelectFeedVideo: (e: ChangeEvent<HTMLInputElement>) => void;
+  addSelectedEmoji: (data: EmojiSelected) => void;
+  removeSelectedImage: (index: number) => void;
+  handleSubmitFeed: () => void;
+  handleSubmitUpdatedFeed: () => void;
+}

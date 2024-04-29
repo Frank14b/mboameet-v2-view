@@ -26,7 +26,7 @@ const useAppForm = <T extends FormValues>({
 
   useEffect(() => {
     setReactHookUseForm(hookForm);
-  }, []);
+  }, [hookForm, setReactHookUseForm]);
 
   return hookForm;
 };

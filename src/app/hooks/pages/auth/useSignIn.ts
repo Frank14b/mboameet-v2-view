@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { UseFormHandleSubmit } from "react-hook-form";
 import useAppForm from "../../useForm";
+import { notification } from "@/app/lib/notifications";
 
 function useSignIn(): SignInHookDto {
   //
@@ -24,11 +25,21 @@ function useSignIn(): SignInHookDto {
   const { setUserConnected, setUser, setLoading } = useUserStore();
   const router = useRouter();
 
+  const initUserStoreSession = useCallback(
+    (data: ResultLoginDto | null) => {
+      setLoading(true);
+      setUser(data);
+      setUserConnected(true);
+    },
+    [setUserConnected, setUser, setLoading]
+  );
+
   const submitFormData = useCallback(
     async (data: LoginFormData) => {
       setIsLoading(true);
       const result = await proceedLogin(data);
-      setResponseData(result);
+      
+      notification.apiNotify<ResultLoginDto>(result);
       setIsLoading(false);
 
       if (result.status === true) {
@@ -37,14 +48,8 @@ function useSignIn(): SignInHookDto {
         setLoading(false);
       }
     },
-    [proceedLogin]
+    [initUserStoreSession, router, setLoading]
   );
-
-  const initUserStoreSession = (data: ResultLoginDto | null) => {
-    setLoading(true);
-    setUser(data);
-    setUserConnected(true);
-  };
   //
 
   const data: SignInHookDto = {

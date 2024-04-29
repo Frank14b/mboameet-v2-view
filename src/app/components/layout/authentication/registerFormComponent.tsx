@@ -1,6 +1,6 @@
 "use client";
 
-import { SignUpHookDto } from "@/app/hooks/pages/auth/signUp";
+import { SignUpHookDto } from "@/app/hooks/pages/auth/useSignUp";
 import SignUpStepOneComponent from "./sign-up-stepper/stepOneComponent";
 import SignUpStepTwoComponent from "./sign-up-stepper/stepTwoComponent";
 import SignUpStepThreeComponent from "./sign-up-stepper/stepThreeComponent";

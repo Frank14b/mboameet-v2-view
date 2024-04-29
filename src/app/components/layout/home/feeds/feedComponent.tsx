@@ -3,22 +3,25 @@
 import { Button, Typography } from "@material-tailwind/react";
 import FeedFormComponent from "./feedFormComponent";
 import FeedCardComponent from "./feedCardComponent";
-import useFeedHook from "@/app/hooks/pages/feeds";
+import useFeedForm from "@/app/hooks/pages/feeds/useFeedForm";
+import useFeed from "@/app/hooks/pages/feeds/useFeed";
 
 export default function FeedComponent() {
-  //
-  const feedHook = useFeedHook();
+  // custom hooks
+  const feedFormHook = useFeedForm();
+  const feedHook = useFeed();
+  const { handleOpenFeedForm } = feedFormHook;
 
   return (
     <>
       <div className="feed-form-container">
         <div className="w-full flex absolute dark:text-white right-0 px-5">
-          <div className="w-1/2">
+          <div className="w-1/2 px-5">
             <Typography placeholder={""} className="font-bold px-1">
               Feeds
               <Button
                 onClick={() => {
-                  feedHook.handleOpenFeedForm(true);
+                  handleOpenFeedForm(true);
                 }}
                 placeholder={""}
                 size="sm"
@@ -28,27 +31,16 @@ export default function FeedComponent() {
               </Button>
             </Typography>
           </div>
-          <div className="w-1/2 text-xs flex justify-end pt-1">
-            <span className="mx-2 cursor-pointer">Recent</span>
-            <span className="mx-2 cursor-pointer font-bold">Friends</span>
-            <span className="mx-2 cursor-pointer">Popular</span>
-          </div>
         </div>
 
-        <FeedFormComponent
-          feedHook={feedHook}
-        >
+        <FeedFormComponent feedFormHook={feedFormHook}>
           <></>
         </FeedFormComponent>
-
-        {/*  */}
       </div>
 
       <div className="mt-12">
-        <FeedCardComponent feedHook={feedHook} />
+        <FeedCardComponent feedHook={feedHook} feedFormHook={feedFormHook} />
       </div>
-
-      {/*  */}
     </>
   );
 }

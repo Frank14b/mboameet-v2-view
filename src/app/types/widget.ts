@@ -13,7 +13,7 @@ export interface UserCardComponent {
   description?: string;
 }
 
-export interface UserCardV2 {
+export interface UserStoriesCardProps {
   bgImage: string;
   image: string;
   title: string;
@@ -41,9 +41,11 @@ export interface SideBarMenuListUser {
   badge?: string;
 }
 
-export type FeedItem = {
+export type FeedItem<T, TT> = {
   feed: ResultFeed;
   fileType?: "carousel" | "images" | "video" | "image";
+  feedHook: T;
+  feedFormHook: TT;
 };
 
 export type FeedItemMenuAction = {
@@ -51,14 +53,14 @@ export type FeedItemMenuAction = {
   onShare: () => void;
   onActionEdit: () => void;
   deleteItem: () => void;
+  canEditFeed: (feed: ResultFeed) => boolean;
 };
 
-export type FeedComments = {
+export interface FeedComments {
   feedData: ResultFeed;
   userLiked: boolean;
-  desLikeItem: () => void;
-  likeItem: () => void;
-};
+  handleReaction: () => void;
+}
 
 export interface FeedCommentFormProps {
   id?: number;
@@ -74,11 +76,11 @@ export interface FeedCommentFormProps {
   onEditComment?: ({
     formRef,
     feedId,
-    id,
+    updateItem,
   }: {
     formRef: string;
     feedId: number;
-    id: number;
+    updateItem: FeedCommentData;
   }) => Promise<ApiResponseDto<ResultFeedCommentDto> | null>;
 }
 

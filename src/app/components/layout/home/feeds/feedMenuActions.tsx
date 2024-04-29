@@ -1,6 +1,5 @@
 "use client";
 
-import useUserStore from "@/app/store/userStore";
 import { FeedItemMenuAction } from "@/app/types";
 import {
   PencilIcon,
@@ -14,16 +13,20 @@ import {
   SpeedDialContent,
   SpeedDialHandler,
 } from "@material-tailwind/react";
-import SpeedDialButtonComponent from "../speedDialButton";
+import SpeedDialButtonComponent from "../../../widgets/speedDialButton";
+import { useMemo } from "react";
 
 export default function FeedItemActionMenuComponent({
   feedData,
   onShare,
   onActionEdit,
   deleteItem,
+  canEditFeed
 }: FeedItemMenuAction) {
   //
-  const userStore = useUserStore();
+  const userCanEditFeed = useMemo(() => {
+    return canEditFeed(feedData);
+  }, [canEditFeed, feedData]);
 
   return (
     <>
@@ -41,12 +44,12 @@ export default function FeedItemActionMenuComponent({
             </IconButton>
           </SpeedDialHandler>
           <SpeedDialContent placeholder={""} className="flex-row">
-            {feedData.user.id === userStore.user?.id && (
+            {userCanEditFeed && (
               <SpeedDialButtonComponent onClick={() => onActionEdit()}>
                 <PencilIcon className="h-3 w-3 dark:text-gray-400" />
               </SpeedDialButtonComponent>
             )}
-            {feedData.user.id === userStore.user?.id && (
+            {userCanEditFeed && (
               <SpeedDialButtonComponent onClick={() => deleteItem()}>
                 <TrashIcon className="h-3 w-3 dark:text-gray-400" />
               </SpeedDialButtonComponent>

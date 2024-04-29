@@ -1,4 +1,4 @@
-import { SignUpHookDto } from "@/app/hooks/pages/auth/signUp";
+import { SignUpHookDto } from "@/app/hooks/pages/auth/useSignUp";
 import { Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 

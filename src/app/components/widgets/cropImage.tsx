@@ -13,7 +13,7 @@ import { dismissType } from '@material-tailwind/react/types/generic';
 import { getCroppedImg } from '@/app/lib/cropImage';
 import { ObjectKeyDto } from '@/app/types';
 
-export default function CropProfileImage({ image, croppedImage, returnType, cropSize }: 
+export default function CropImage({ image, croppedImage, returnType, cropSize }: 
     {
         image: string, 
         croppedImage: (image: string | Blob| ObjectKeyDto) => any, 

@@ -23,6 +23,8 @@ export type ResultPaginate<T> = {
   limit: number;
   total: number;
   sort: string;
+  currentPage: number;
+  lastPage: number;
 };
 
 export type ObjectKeyDto = { [key: string]: any };

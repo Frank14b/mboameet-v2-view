@@ -1,11 +1,8 @@
 "use client";
 
 import {
-  defaultProfileImg,
   formatDate,
   formatHashTags,
-  getContentEditable,
-  referenceCommentKeyword,
 } from "@/app/lib/utils";
 import { FeedCommentData } from "@/app/types";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
@@ -24,104 +21,49 @@ import {
 import FeedCommentFormComponent from "./feedCommentFormComponent";
 import { useMainContext } from "@/app/contexts/main";
 import useUserStore from "@/app/store/userStore";
-import { useFeedContext } from "@/app/contexts/pages/feeds";
-import { useEffect, useRef, useState } from "react";
-import useFeedStore from "@/app/store/feedStore";
+import { useEffect, useRef } from "react";
 import SpeedDialButton from "../../../../widgets/speedDialButton";
+import { FeedCommentHookDto } from "@/app/hooks/pages/feeds/comments/useFeedComment";
+import { defaultProfileImg, referenceCommentKeyword } from "@/app/lib/constants/app";
 
 export interface FeedCommentItemProps {
-  index: number;
   feedId: number;
   comment: FeedCommentData;
+  commentHook: FeedCommentHookDto;
 }
 
 export default function FeedCommentItemComponent({
   feedId,
-  index,
   comment,
+  commentHook,
 }: FeedCommentItemProps) {
   //
   const mainContext = useMainContext();
   const userStore = useUserStore();
-  const feedStore = useFeedStore();
-  const feedContext = useFeedContext();
   const deleteRef = `${referenceCommentKeyword}-${comment.id}`;
   const itemRef = useRef(null);
-  const [updateSpinner, setUpdateSpinner] = useState<{
-    status: boolean;
-    error: string;
-  }>({
-    status: false,
-    error: "",
-  });
 
-  const handleEditComment = async (data: {
-    formRef: string;
-    feedId: number;
-    id: number;
-  }) => {
-    //
-    setUpdateSpinner({ status: true, error: "" });
-    const content = getContentEditable(`${data.formRef}`);
-    const currentContext = comment.content;
-    comment.content = content.innerText; // set the current updated content to the comment
-    feedContext.setEditCommentId(0); // reset comment edit id
-
-    const formData = new FormData();
-    let message = content.innerText;
-    if (message.trim().length == 0) {
-      return null;
-    }
-    formData.append("content", message);
-
-    const result = await feedContext.handleSubmitEditFeedComment({
-      ...data,
-      formData,
-    });
-    if (result?.status != true) {
-      comment.content = currentContext; // revert the previous content if the update failed
-      setUpdateSpinner({
-        status: false,
-        error: result?.message ?? "An error occurred",
-      });
-      return null;
-    }
-    content.innerHTML = "";
-    setUpdateSpinner({ status: false, error: "" });
-    return result;
-  };
-
-  const handleDeleteComment = async () => {
-    setUpdateSpinner({ status: true, error: "" });
-    //
-    const result = await feedContext.handleDeleteFeedComment({
-      id: comment.id,
-      feedId: feedId,
-    });
-    if (result?.status != true) {
-      setUpdateSpinner({
-        status: false,
-        error: result?.message ?? "An error occurred",
-      });
-      return;
-    }
-    setUpdateSpinner({ status: false, error: "" });
-    return;
-  };
+  const {
+    setEditCommentId,
+    editCommentId,
+    updatedFeedComment,
+    updateSpinner,
+    handleEditComment,
+    handleDeleteComment,
+  } = commentHook;
 
   useEffect(() => {
     // update current feed comment for all user if in the list on websocket event
-    if (feedStore.updatedFeedComment != null) {
-      if (feedStore.updatedFeedComment.id == comment.id) {
-        comment.content = feedStore.updatedFeedComment.content;
-        comment.updatedAt = feedStore.updatedFeedComment.updatedAt;
+    if (updatedFeedComment != null) {
+      if (updatedFeedComment.id == comment.id) {
+        comment.content = updatedFeedComment.content;
+        comment.updatedAt = updatedFeedComment.updatedAt;
       }
     }
-  }, [feedStore.updatedFeedComment, comment]);
+  }, [updatedFeedComment, comment]);
 
   return (
-    <TimelineItem key={index} id={deleteRef} ref={itemRef}>
-      {/* <TimelineConnector className="border-pink-300"/> */}
+    <TimelineItem id={deleteRef} ref={itemRef}>
       <TimelineHeader>
         <TimelineIcon className="p-0">
           <Avatar
@@ -165,15 +107,15 @@ export default function FeedCommentItemComponent({
                     <SpeedDialContent placeholder={""} className="flex-row">
                       <SpeedDialButton
                         onClick={() => {
-                          feedContext.editCommentId != comment.id
-                            ? feedContext.setEditCommentId(comment.id)
-                            : feedContext.setEditCommentId(0);
+                          editCommentId != comment.id
+                            ? setEditCommentId(comment.id)
+                            : setEditCommentId(0);
                         }}
                       >
                         <PencilIcon className="h-3 w-3 dark:text-gray-400" />
                       </SpeedDialButton>
                       <SpeedDialButton
-                        onClick={() => handleDeleteComment()}
+                        onClick={() => handleDeleteComment(comment.id)}
                       >
                         <TrashIcon className="h-3 w-3 dark:text-gray-400" />
                       </SpeedDialButton>
@@ -186,10 +128,10 @@ export default function FeedCommentItemComponent({
       </TimelineHeader>
       <div
         className={`"pb-0 pr-2 pl-12 ${
-          feedContext.editCommentId == comment.id ? "grid" : "flex"
+          editCommentId == comment.id ? "grid" : "flex"
         }"`}
       >
-        {feedContext.editCommentId != comment.id ? (
+        {editCommentId != comment.id ? (
           <div className="font-normal text-sm text-gray-600 dark:text-gray-300">
             <div
               dangerouslySetInnerHTML={{
@@ -206,12 +148,18 @@ export default function FeedCommentItemComponent({
             />
           </div>
         )}
-        {updateSpinner.error.length > 0 && (
-          <span className="text-red-600">
-            <small>{updateSpinner.error}</small>
-          </span>
+        
+        {editCommentId == comment.id && (
+          <>
+            {updateSpinner.error.length > 0 && (
+              <span className="text-red-600">
+                <small>{updateSpinner.error}</small>
+              </span>
+            )}
+            {updateSpinner.status && <Spinner height={15} width={15} />}
+          </>
         )}
-        {updateSpinner.status && <Spinner height={15} width={15} />}
+
         <br />
       </div>
     </TimelineItem>

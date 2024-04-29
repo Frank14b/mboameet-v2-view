@@ -11,7 +11,11 @@ export type RegistrationFormData = {
     lastName?: Maybe<string | undefined>,
     email: string,
     phone: string,
-    countryCode?: Maybe<string | undefined>,
+    country: {
+        callingCode: string,
+        name: string
+    }
+    // countryCode?: Maybe<string | undefined>,
     password: string,
     confirmPassword: string
 }
@@ -39,17 +43,20 @@ export type ForgetPasswordDto = {
 
 export type ResultForgetPasswordDto = {
     otpToken: string,
+    accessToken: string;
     message: string
 }
 
 export type VerifyOtpCodeDto = {
     otp: number,
     token: string,
-    type: number
+    type: number,
+    accessToken: string,
 }
 
 export type ChangePasswordDto = {
     confirmPassword: string,
     password: string,
-    token: string
+    token: string,
+    accessToken: string,
 }

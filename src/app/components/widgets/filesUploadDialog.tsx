@@ -10,7 +10,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import { ChangeEvent, useCallback, useState } from "react";
-import CropProfileImage from "../layout/profile/cropProfileImage";
+import CropImage from "./cropImage";
 
 export default function FilesUploadDialog({
   children,
@@ -28,7 +28,7 @@ export default function FilesUploadDialog({
       handleOpenFeedFiles(false);
       setImage("");
     },
-    [image, selectedImageFile, openFeedFiles]
+    [selectedImageFile, handleOpenFeedFiles]
   );
 
   return (
@@ -112,7 +112,7 @@ export default function FilesUploadDialog({
       </Dialog>
 
       {image.length > 1 && (
-        <CropProfileImage
+        <CropImage
           image={image}
           croppedImage={uploadProfileImage}
           returnType={"object"}

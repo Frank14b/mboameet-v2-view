@@ -33,17 +33,20 @@ export default function CheckboxField({
     } else {
       setError(null);
     }
-  }, [errors]);
+  }, [errors, fieldKey]);
 
   useEffect(() => {
     checkError();
-  }, [watchField]);
+  }, [watchField, checkError]);
 
-  if(!reactHookUseForm) return <></>
+  if (!reactHookUseForm) return <></>;
   return (
     <>
       <div className="relative">
-        <div className="w-full">
+        <label
+          className="w-full"
+          htmlFor={data?.id ?? data.title.toLowerCase()}
+        >
           <Checkbox
             className={`${error ? "border-red-400" : ""}`}
             type={data?.type ?? "checkbox"}
@@ -56,7 +59,7 @@ export default function CheckboxField({
             defaultChecked={data?.checked ?? false}
             {...register(`${fieldKey}`)}
           />
-        </div>
+        </label>
 
         {error && (
           <div className="text-red-500 px-3 text-sm">{error?.message}</div>

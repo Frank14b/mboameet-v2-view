@@ -3,7 +3,7 @@
 import InputField from "../../widgets/inputField";
 import Link from "next/link";
 import { Button } from "@material-tailwind/react";
-import { SignInHookDto } from "@/app/hooks/pages/auth/signIn";
+import { SignInHookDto } from "@/app/hooks/pages/auth/useSignIn";
 import CheckboxField from "../../widgets/checkboxField";
 import AnimateFadeOut from "../../widgets/motions/animateFadeOut";
 
@@ -50,16 +50,6 @@ export default function LoginFormComponent({
           {responseData?.status === false && (
             <span className="text-red-500 mt-5">{responseData?.message}</span>
           )}
-        </p>
-
-        <p className="flex justify-center mt-6 font-sans text-sm antialiased font-light leading-normal text-inherit">
-          Don't have an account?
-          <Link
-            href="/auth/signup"
-            className="block ml-1 font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900 dark:text-gray-500"
-          >
-            Sign up
-          </Link>
         </p>
       </div>
     </>

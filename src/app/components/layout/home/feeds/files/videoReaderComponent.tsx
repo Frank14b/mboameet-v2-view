@@ -1,29 +1,21 @@
 import { useMainContext } from "@/app/contexts/main";
-import { feedVideoReaderId, getContentEditable } from "@/app/lib/utils";
+import { feedVideoReaderId } from "@/app/lib/constants/app";
 import { ResultFeed } from "@/app/types";
-import { useEffect } from "react";
 
 export default function FeedVideoReaderComponent({
   feed,
 }: {
   feed: ResultFeed;
 }) {
-  if (!feed.feedFiles) return <>No video file was found</>;
-
   const mainContext = useMainContext();
-
-  const src: string = mainContext.getFileUrl(
-    feed.feedFiles[0].url,
-    feed.user.id
-  );
   //
 
-  useEffect(() => {
-    const currentElement = getContentEditable(`${feedVideoReaderId}-${feed.id}`);
-    // currentElement.scrollTop
+  const src: string = mainContext.getFileUrl(
+    feed.feedFiles?.[0].url ?? "",
+    feed.user.id
+  );
 
-    // console.log("🚀 ~ useEffect ~ currentElement.scrollTop:", currentElement?.offsetTop)
-  }, [mainContext.mainScroll])
+  if (!feed.feedFiles) return <>No video file was found</>;
    
   return (
     <>

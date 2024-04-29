@@ -7,19 +7,18 @@ import {
 import { forgetPasswordSchema } from "@/app/validators";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
-import {
-  UseFormHandleSubmit,
-} from "react-hook-form";
+import { UseFormHandleSubmit } from "react-hook-form";
 import useAppForm from "../../useForm";
+import { setLocalStorage } from "@/app/lib/utils";
+import { localStorageKey } from "@/app/lib/constants/app";
+import { notification } from "@/app/lib/notifications";
 
 function useForgetPassword(): ForgetPasswordHookDto {
   //
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [token, setToken] = useState<string>("");
-  
-  const {
-    handleSubmit,
-  } = useAppForm({
+
+  const { handleSubmit } = useAppForm({
     schema: forgetPasswordSchema,
     defaultValues: {
       email: "",
@@ -35,11 +34,18 @@ function useForgetPassword(): ForgetPasswordHookDto {
     const result = await proceedForgetPassword({
       ...data,
     });
-    setResponseData(result);
+
     setIsLoading(false);
-    router.push("/");
+    notification.apiNotify<ResultForgetPasswordDto>(result);
+
+    if (result.status && result.data) {
+      //
+      setLocalStorage(localStorageKey.authToken, result.data.accessToken, true);
+      return router.push(`/auth/verify-token/${result.data.otpToken}`);
+    }
+
+    notification.notifyError(`${result.message}`);
   };
-  //
 
   const data: ForgetPasswordHookDto = {
     isLoading,
@@ -58,7 +64,7 @@ export default useForgetPassword;
 export type ForgetPasswordHookDto = {
   isLoading: boolean;
   responseData: ApiResponseDto<ResultForgetPasswordDto> | null;
-  submitFormData: (data: ForgetPasswordDto) => void;
+  submitFormData: (data: ForgetPasswordDto) => Promise<void>;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   handleSubmit: UseFormHandleSubmit<any>;
   setToken: Dispatch<SetStateAction<string>>;

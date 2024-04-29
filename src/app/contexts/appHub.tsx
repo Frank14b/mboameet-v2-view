@@ -1,15 +1,22 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { getToken, isTokenExpired } from "../lib/server-utils";
 import * as signalR from "@microsoft/signalr";
 import UserHubs from "../services/hubs/users";
 import useUserStore from "../store/userStore";
 import useFeedStore from "../store/feedStore";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import FeedHubs from "../services/hubs/feeds";
 import { useMainContext } from "./main";
 import ConfirmationComponent from "../components/commons/alerts/confirmation";
+import { loginPathUrl } from "../lib/constants/app";
 
 const AppHubContext = createContext<any>({});
 
@@ -22,22 +29,16 @@ export function AppHubWrapper({ children }: { children: any }) {
   const [errorSocket, setErrorSocket] = useState<boolean>(false);
   const userStore = useUserStore();
   const feedStore = useFeedStore();
-  const mainContext = useMainContext();
+  const { userConnected } = useMainContext();
   const pathname = usePathname();
+  const router = useRouter();
 
-  useEffect(() => {
-    // init the app websocket client hub
-    initHub();
-  }, []);
-
-  const initHub = async () => {
+  const initHub = useCallback(async () => {
     //
-    setErrorSocket(false);
-
     if (connection) return;
     if (userStore.userConnected !== true || (await isTokenExpired()) == true) {
       if (!pathname.startsWith("/auth")) {
-        mainContext.logout();
+        router.push(loginPathUrl)
       }
       return;
     }
@@ -79,7 +80,7 @@ export function AppHubWrapper({ children }: { children: any }) {
               error.response?.status == 401 ||
               (await isTokenExpired()) == true
             ) {
-              mainContext.logout();
+              router.push(loginPathUrl)
             }
             setErrorSocket(true);
             setConnection(null);
@@ -93,13 +94,23 @@ export function AppHubWrapper({ children }: { children: any }) {
     } catch (error) {
       setConnection(null);
     }
-  };
+  }, [userStore, router, connection, feedStore, pathname, setErrorSocket]);
+
+  useEffect(() => {
+    // init the app websocket client hub
+    initHub();
+  }, [initHub]);
 
   const closeConnection = () => {
     if (!connection) return;
-
-    return () => connection.stop();
+    return connection.stop()
   };
+
+  useEffect(() => {
+    if(!userConnected) {
+      closeConnection();
+    }
+  }, [userConnected]);
 
   const AppHubData: AppHubDataType = {
     closeConnection,
@@ -126,7 +137,7 @@ export function AppHubWrapper({ children }: { children: any }) {
 export const useAppHubContext = (): AppHubDataType => useContext(AppHubContext);
 
 export type AppHubDataType = {
-  closeConnection: () => (() => Promise<void>) | undefined;
+  closeConnection: () => Promise<void> | undefined;
   userHubs: UserHubs;
   feedHubs: FeedHubs;
   connection: signalR.HubConnection | null;

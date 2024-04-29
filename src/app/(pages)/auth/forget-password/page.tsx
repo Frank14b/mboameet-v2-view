@@ -4,7 +4,7 @@ import ForgetPasswordComponent from "@/app/components/layout/authentication/forg
 
 export default function ForgetPasswordPage() {
     return (
-        <div className="container mh-600 h-svh">
+        <div className="mh-600">
             <ForgetPasswordComponent />
         </div>
     )

@@ -16,7 +16,7 @@ const urls = {
 export const proceedUpdateProfile = async (
   data: UpdateProfileFormData
 ): Promise<ApiResponseDto<ResultUpdateProfileData>> => {
-
+  
     const result: ApiResponseDto<ResultUpdateProfileData> = await apiCall({
       method: "PUT",
       url: `${urls.updateProfile}`,

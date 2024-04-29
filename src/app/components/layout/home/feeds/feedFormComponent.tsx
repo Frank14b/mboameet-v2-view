@@ -1,17 +1,12 @@
 "use client";
 
 import {
-  clickFileUpload,
-  createFileUploadString,
   feedFormEditable,
   feedInputFile,
   feedInputVideoFile,
-  feedVideoPreviewId
-} from "@/app/lib/utils";
-import {
-  FeedHookDto,
-  ObjectKeyDto,
-} from "@/app/types";
+  feedVideoPreviewId,
+} from "@/app/lib/constants/app";
+import { ObjectKeyDto } from "@/app/types";
 import {
   Button,
   Card,
@@ -21,30 +16,46 @@ import {
   DialogHeader,
   Typography,
 } from "@material-tailwind/react";
-import React, { ChangeEvent } from "react";
-import EmojiPickerButton from "../../../commons/emojiPickerButton";
+import React from "react";
+import EmojiPickerButton from "../../../widgets/emojiPickerButton";
 import {
   PhotoIcon,
   TrashIcon,
   VideoCameraIcon,
 } from "@heroicons/react/24/solid";
-import CropProfileImage from "../../profile/cropProfileImage";
+import Image from "next/image";
+import { FeedFormHookDto } from "@/app/hooks/pages/feeds/useFeedForm";
+import FeedFileInputComponent from "./files/feedFileInputComponent";
+import { clickFileUpload } from "@/app/lib/utils";
 
 export default function FeedFormComponent({
   children,
-  feedHook,
+  feedFormHook,
 }: {
   children: React.ReactNode;
-  feedHook: FeedHookDto;
+  feedFormHook: FeedFormHookDto;
 }) {
   //
+  const {
+    openFeedForm,
+    linkedImages,
+    updateFeedItem,
+    feedInputValue,
+    linkedVideos,
+    removeSelectedImage,
+    handleGetCursorPosition,
+    handleOpenFeedForm,
+    addSelectedEmoji,
+    handleSubmitFeed,
+    handleSubmitUpdatedFeed,
+  } = feedFormHook;
 
   return (
     <>
       <Dialog
         placeholder={""}
-        open={feedHook.openFeedForm}
-        handler={feedHook.handleOpenFeedForm}
+        open={openFeedForm}
+        handler={handleOpenFeedForm}
         dismiss={{
           escapeKey: false,
           outsidePress: false,
@@ -69,7 +80,7 @@ export default function FeedFormComponent({
               viewBox="0 0 24 24"
               fill="currentColor"
               className="mr-3 h-5 w-5 cursor-pointer"
-              onClick={() => feedHook.handleOpenFeedForm(false)}
+              onClick={() => handleOpenFeedForm(false)}
             >
               <path
                 fillRule="evenodd"
@@ -89,7 +100,7 @@ export default function FeedFormComponent({
             </Typography>
             <div className="grid gap-6 max-h-96 overflow-y-auto overflow-x-hidden w-full mx-w-full">
               <div className="w-full emoji-container">
-                <EmojiPickerButton selected={feedHook.addSelectedEmoji}>
+                <EmojiPickerButton selected={addSelectedEmoji}>
                   <></>
                 </EmojiPickerButton>
               </div>
@@ -100,25 +111,28 @@ export default function FeedFormComponent({
                 role="textbox"
                 contentEditable={true}
                 suppressContentEditableWarning={true}
-                onClick={() => feedHook.handleGetCursorPosition()}
+                onClick={() => handleGetCursorPosition()}
               >
                 {" "}
-                <>{feedHook.feedInputValue}</>{" "}
+                <>{feedInputValue}</>{" "}
               </div>
             </div>
             {/* // */}
-            {!feedHook.updateFeedItem && feedHook.linkedImages && feedHook.linkedImages?.length > 0 && (
+            {!updateFeedItem && linkedImages && linkedImages?.length > 0 && (
               <div className="w-full overflow-y-hidden overflow-x-auto flex gap-2 pt-5">
-                {feedHook.linkedImages.map((image: ObjectKeyDto, index: number) => (
+                {linkedImages.map((image: ObjectKeyDto, index: number) => (
                   <div key={index} className="relative">
-                    <img
+                    <Image
+                      alt=""
+                      width={110}
+                      height={70}
                       className="rounded shadow object-center"
                       src={image?.base64}
-                      style={{ width: "110px", height: "70px" }}
+                      // style={{ width: "110px", height: "70px" }}
                     />
                     <div className="absolute bg-gray-900 top-0 left-0 w-full bottom-0 rounded-lg bg-opacity-40"></div>
                     <span
-                      onClick={() => feedHook.removeSelectedImage(index)}
+                      onClick={() => removeSelectedImage(index)}
                       className="absolute cursor-pointer right-2 top-2"
                     >
                       <TrashIcon className="h-4 w-4 text-red-400" />
@@ -127,7 +141,7 @@ export default function FeedFormComponent({
                 ))}
               </div>
             )}
-            {!feedHook.updateFeedItem && feedHook.linkedVideos && feedHook.linkedVideos?.length > 0 && (
+            {!updateFeedItem && linkedVideos && linkedVideos?.length > 0 && (
               <div className="pt-6">
                 <video
                   id={feedVideoPreviewId}
@@ -138,9 +152,9 @@ export default function FeedFormComponent({
             )}
           </DialogBody>
           <DialogFooter placeholder={""} className="space-x-2">
-            {!feedHook.updateFeedItem && (
+            {!updateFeedItem && (
               <>
-                {!feedHook.linkedImages && (
+                {!linkedImages && (
                   <Button
                     placeholder={""}
                     variant="text"
@@ -151,7 +165,7 @@ export default function FeedFormComponent({
                   </Button>
                 )}
 
-                {!feedHook.linkedVideos && (
+                {!linkedVideos && (
                   <Button
                     placeholder={""}
                     variant="text"
@@ -166,20 +180,20 @@ export default function FeedFormComponent({
                   placeholder={""}
                   variant="gradient"
                   color="gray"
-                  onClick={() => feedHook.handleSubmitFeed()}
+                  onClick={() => handleSubmitFeed()}
                 >
                   Post Now
                 </Button>
               </>
             )}
 
-            {feedHook.updateFeedItem && (
+            {updateFeedItem && (
               <>
                 <Button
                   placeholder={""}
                   variant="gradient"
                   color="gray"
-                  onClick={() => feedHook.handleSubmitUpdatedFeed()}
+                  onClick={() => handleSubmitUpdatedFeed()}
                 >
                   Update Now
                 </Button>
@@ -189,38 +203,8 @@ export default function FeedFormComponent({
         </Card>
       </Dialog>
 
-      {!feedHook.updateFeedItem && (
-        <>
-          <input
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              feedHook.setImage(createFileUploadString(e))
-            }
-            id={feedInputFile}
-            accept="image/*"
-            type="file"
-            className="hidden"
-          />
-          <input
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              feedHook.handleSelectFeedVideo(e)
-            }
-            id={feedInputVideoFile}
-            accept="video/*"
-            type="file"
-            className="hidden"
-          />
-
-          {feedHook.image.length > 1 && (
-            <>
-              <CropProfileImage
-                image={feedHook.image}
-                croppedImage={feedHook.uploadProfileImage}
-                returnType={"object"}
-                cropSize={{ width: 700, height: 360 }}
-              />
-            </>
-          )}
-        </>
+      {!updateFeedItem && (
+        <FeedFileInputComponent feedFormHook={feedFormHook} />
       )}
 
       {children}

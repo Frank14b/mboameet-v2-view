@@ -4,8 +4,8 @@ import {
   passwordErrorMessage,
   passwordRegex,
   requiredEmailErrorMessage,
-  validPhoneNumber,
-} from "../lib/utils";
+} from "../lib/constants/app";
+import { validPhoneNumber } from "../lib/utils";
 
 export const signInSchema = yup.object({
   userName: yup
@@ -31,13 +31,14 @@ export const signUpSchema = yup.object({
     .string()
     .email(invalidEmailErrorMessage)
     .required(requiredEmailErrorMessage),
+  country: yup.object().required(),
   phone: yup
     .string()
     .min(1, "Phone number is required")
     .required("Phone number is required")
     .test(
       "format",
-      "Phone number should only contain numeric characters and hyphens",
+      "Phone number should only contain numbers",
       (value) => validPhoneNumber(value)
     ),
   countryCode: yup.string().notRequired(),
@@ -65,11 +66,18 @@ export const forgetPasswordSchema = yup.object({
 
 export const verifyOtpCodeSchema = yup.object({
   otp: yup
-    .number()
-    .min(6, "Must be at least 6 characters")
-    .required("OTP code is required"),
+  .string()
+  .min(6, "OTP code should be 6 digits")
+  .max(6, "OTP code should be 6 digits")
+  .required("OTP code is required")
+  .test(
+    "format",
+    "OTP code should only contain numbers",
+    (value) => validPhoneNumber(value)
+  ),
   token: yup.string().default("xxx"),
   type: yup.number().default(0),
+  accessToken: yup.string().required("Access token is required")
 });
 
 export const changePasswordSchema = yup.object({
