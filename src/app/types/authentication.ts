@@ -15,13 +15,12 @@ export type RegistrationFormData = {
         callingCode: string,
         name: string
     }
-    // countryCode?: Maybe<string | undefined>,
     password: string,
     confirmPassword: string
 }
 
 export type ResultLoginDto = {
-    id: string,
+    id: number,
     userName: string,
     firstName: string,
     lastName: string,

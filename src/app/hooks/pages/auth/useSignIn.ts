@@ -7,10 +7,12 @@ import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { UseFormHandleSubmit } from "react-hook-form";
 import useAppForm from "../../useForm";
 import { notification } from "@/app/lib/notifications";
+import { useMainContext } from "@/app/contexts/main";
 
 function useSignIn(): SignInHookDto {
   //
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { getFileUrl } = useMainContext();
 
   const { handleSubmit } = useAppForm({
     schema: signInSchema,
@@ -28,17 +30,20 @@ function useSignIn(): SignInHookDto {
   const initUserStoreSession = useCallback(
     (data: ResultLoginDto | null) => {
       setLoading(true);
-      setUser(data);
+      setUser({
+        ...data,
+        photo: getFileUrl(data?.photo, data?.id),
+      });
       setUserConnected(true);
     },
-    [setUserConnected, setUser, setLoading]
+    [setUserConnected, setUser, setLoading, getFileUrl]
   );
 
   const submitFormData = useCallback(
     async (data: LoginFormData) => {
       setIsLoading(true);
       const result = await proceedLogin(data);
-      
+
       notification.apiNotify<ResultLoginDto>(result);
       setIsLoading(false);
 

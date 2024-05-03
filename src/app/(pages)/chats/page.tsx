@@ -1,26 +1,29 @@
 "use client";
 
-import { useMainContext } from "@/app/contexts/main";
-import { Typography } from "@material-tailwind/react";
+import { ChatsComponent } from "@/app/components/layout/chats/chatsComponent";
+import useChat from "@/app/hooks/pages/chats/useChat";
+import { Card, Typography } from "@material-tailwind/react";
 
 export default function ChatsPage() {
+  const chatHook = useChat();
+  const {openChat} = chatHook;
 
-    const mainContext = useMainContext();
-
-    return <>
-
+  return (
+    <>
+      <Card placeholder={""} className={`w-full ${!openChat ? "h-screen" : ""} pt-3 dark:bg-gray-800`}>
         <div className="w-full flex absolute dark:text-white right-0 px-5">
-            <div className="w-1/2"><Typography placeholder={""} className="font-bold px-1">Discussions</Typography></div>
-            <div className="w-1/2 text-xs flex justify-end pt-1">
-                {/* <span className="mx-2 cursor-pointer font-bold">Network</span> */}
-            </div>
+          <div className="w-1/2 px-5">
+            <Typography placeholder={""} className="font-bold px-1">
+              Discussions
+            </Typography>
+          </div>
         </div>
         {/*  */}
-
-        <div className="w-full mt-12">
-            
+        <div className="mt-12">
+          <ChatsComponent chatHook={chatHook} />
         </div>
-
         {/*  */}
+      </Card>
     </>
+  );
 }

@@ -20,7 +20,6 @@ import { sessionTimeOut } from "../lib/workers";
 import { ObjectKeyDto, ResultLoginDto } from "../types";
 import { defaultProfileImg, loginPathUrl, mainDivComponentId } from "../lib/constants/app";
 import { ToastContainer } from "react-toastify";
-import { bool, boolean } from "yup";
 
 const MainContext = createContext<any>({});
 

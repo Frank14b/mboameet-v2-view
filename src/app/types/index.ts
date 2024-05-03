@@ -1,3 +1,5 @@
+import { ForwardRefExoticComponent, RefAttributes, SVGProps } from "react";
+
 export * from "./authentication";
 export * from "./widget";
 export * from "./user";
@@ -30,3 +32,14 @@ export type ResultPaginate<T> = {
 export type ObjectKeyDto = { [key: string]: any };
 
 export type EmojiSelected = { emoji: string; emojiUrl: string };
+
+export interface DiscussionTypesDto {
+  name: string;
+  key: string;
+  icon: ForwardRefExoticComponent<Omit<SVGProps<SVGSVGElement>, "ref"> & {
+      title?: string | undefined;
+      titleId?: string | undefined;
+  } & RefAttributes<SVGSVGElement>>;
+}
+
+export interface FriendTypesDto extends DiscussionTypesDto {};

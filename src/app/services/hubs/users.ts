@@ -2,14 +2,24 @@ import { hubConstants } from "@/app/lib/constants/hubs";
 import { StoreType } from "@/app/store/userStore";
 
 class UserHubs {
-  
   connection: signalR.HubConnection;
   userStore: StoreType;
+  getFileUrl: (
+    link?: string | undefined,
+    userId?: number | undefined
+  ) => string
 
-  constructor(connection: signalR.HubConnection, userStore: StoreType) {
-
+  constructor(
+    connection: signalR.HubConnection,
+    userStore: StoreType,
+    getFileUrl: (
+      link?: string | undefined,
+      userId?: number | undefined
+    ) => string
+  ) {
     this.connection = connection;
     this.userStore = userStore;
+    this.getFileUrl = getFileUrl;
 
     this.getProfileDetails();
     this.updateProfile();
@@ -17,12 +27,15 @@ class UserHubs {
 
   getProfileDetails(): void {
     this.connection.on(hubConstants.users.profile, (user: any) => {
-      if(user?.id) {
+      if (user?.id) {
         this.userStore.setUserConnected(true);
-        this.userStore.setUser(user);
+        this.userStore.setUser({
+          ...user,
+          photo: this.getFileUrl(user.photo, user.id),
+        });
       }
     });
-  };
+  }
 
   updateProfile = () => {
     if (this.connection) {

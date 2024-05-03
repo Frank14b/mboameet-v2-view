@@ -2,7 +2,7 @@
 
 import { ApiResponseDto, ResultPaginate } from "@/app/types/index";
 import { apiCall } from "../../api";
-import { ResultFriendsDto } from "@/app/types/friends";
+import { FriendsTypes, ResultFriendsDto } from "@/app/types/friends";
 
 const basePath = "/users";
 const basePathMatch = "/matches";
@@ -12,11 +12,17 @@ const urls = {
   followFriend: `${basePathMatch}`,
 };
 
-export const getFriends = async ({ revalidate }: { revalidate: boolean }) => {
+export const getFriends = async ({
+  revalidate,
+  type,
+}: {
+  revalidate: boolean;
+  type: FriendsTypes;
+}) => {
   const result: ApiResponseDto<ResultPaginate<ResultFriendsDto[]>> =
     await apiCall({
       method: "GET",
-      url: `${urls.getFriends}`,
+      url: `${urls.getFriends}?type=${type}`,
     });
 
   return result;

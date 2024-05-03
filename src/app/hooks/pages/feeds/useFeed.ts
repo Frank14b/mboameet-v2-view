@@ -48,6 +48,7 @@ export function useFeed(): FeedHookDto {
         return result.data.data;
       }
 
+      setFeeds([]);
       return [];
     },
     [setIsLoading, setFeeds]

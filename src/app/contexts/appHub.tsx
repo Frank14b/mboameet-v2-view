@@ -29,7 +29,7 @@ export function AppHubWrapper({ children }: { children: any }) {
   const [errorSocket, setErrorSocket] = useState<boolean>(false);
   const userStore = useUserStore();
   const feedStore = useFeedStore();
-  const { userConnected } = useMainContext();
+  const { userConnected, getFileUrl } = useMainContext();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -69,7 +69,7 @@ export function AppHubWrapper({ children }: { children: any }) {
             //
             setErrorSocket(false);
             setUserHubs(
-              new UserHubs(_connection as signalR.HubConnection, userStore)
+              new UserHubs(_connection as signalR.HubConnection, userStore, getFileUrl)
             );
             setFeedHubs(
               new FeedHubs(_connection as signalR.HubConnection, feedStore)
@@ -94,23 +94,23 @@ export function AppHubWrapper({ children }: { children: any }) {
     } catch (error) {
       setConnection(null);
     }
-  }, [userStore, router, connection, feedStore, pathname, setErrorSocket]);
+  }, [userStore, router, connection, feedStore, pathname, getFileUrl, setErrorSocket]);
 
   useEffect(() => {
     // init the app websocket client hub
     initHub();
   }, [initHub]);
 
-  const closeConnection = () => {
+  const closeConnection = useCallback(() => {
     if (!connection) return;
     return connection.stop()
-  };
+  }, [connection]);
 
   useEffect(() => {
     if(!userConnected) {
       closeConnection();
     }
-  }, [userConnected]);
+  }, [userConnected, closeConnection]);
 
   const AppHubData: AppHubDataType = {
     closeConnection,

@@ -128,3 +128,7 @@
   display: flex;
   gap: 7px;
 }
+
+.h-custom-65 {
+  height: calc(65vh - theme('spacing.7'));
+}

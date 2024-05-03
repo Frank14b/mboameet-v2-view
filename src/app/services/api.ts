@@ -3,8 +3,6 @@
 import axios, { CancelTokenSource } from 'axios';
 import { ApiResponseDto, RequestMethod } from '../types';
 import { getToken } from '../lib/server-utils';
-import { redirect } from 'next/navigation'
-import { getLocalStorage, localStorageKey } from '../lib/utils';
 
 //create axios api call instance
 const instance = axios.create({
@@ -18,6 +16,7 @@ instance.interceptors.request.use(async (config: any) => {
 
     // const sessionId: string | undefined = cookies().get('sessionId')?.value;
     const token: string = await getToken();
+    // console.log("🚀 ~ instance.interceptors.request.use ~ token:", token)
 
     if(token.length > 0) {
         config.headers.Authorization = `Bearer ${`${token}`}`;

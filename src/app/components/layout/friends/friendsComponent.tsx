@@ -1,15 +1,14 @@
 import { FriendsHookDto } from "@/app/hooks/pages/friends/useFriends";
-import { TabsCustomAnimation } from "../../widgets/tabsCustomAnimation";
 import {
-  Cog6ToothIcon,
-  Square3Stack3DIcon,
-  UserCircleIcon,
-} from "@heroicons/react/24/solid";
+  TabCustomAnimationProps,
+  TabsCustomAnimation,
+} from "../../widgets/tabsCustomAnimation";
 import { useCallback, useMemo, useState } from "react";
 import { FriendsTypes, ResultFriendsDto } from "@/app/types/friends";
 import { UserProfileCardSkeleton } from "../../widgets/skeletons/userProfileCardSkeleton";
 import { UserProfilePopup } from "../../widgets/userProfilePopup";
 import { FriendsItemComponent } from "./friendsItemComponent";
+import { NoDataFound } from "../../widgets/noDataFound";
 
 export function FriendsComponent({
   friendsHook,
@@ -18,9 +17,9 @@ export function FriendsComponent({
 }) {
   //
   const skeletons: number = 2;
-  const defaultTab: FriendsTypes = "recommended";
-  const { isLoading, setIsLoading, friends, fetchFriends } = friendsHook;
-  const [activeTab, setActiveTab] = useState<FriendsTypes>(defaultTab);
+  const { isLoading, friendTypesList, friends, setIsLoading, fetchFriends } =
+    friendsHook;
+  const defaultTab: FriendsTypes = friendTypesList[0].key as FriendsTypes;
   const [showUserDetails, setShowUserDetails] = useState<{
     status: boolean;
     friend?: ResultFriendsDto;
@@ -31,7 +30,6 @@ export function FriendsComponent({
     fetchFriends({
       type: tab as FriendsTypes,
     });
-    setActiveTab(tab as FriendsTypes);
   };
 
   const onClickUserDetails = useCallback(
@@ -44,31 +42,18 @@ export function FriendsComponent({
     [setShowUserDetails]
   );
 
-  const recommendedFriends = useMemo(() => {
-    if (activeTab != "recommended") return;
+  const friendsList = useMemo(() => {
     if (isLoading)
       return <UserProfileCardSkeleton isLoading={true} count={skeletons} />;
     //
-    return (
-      <div className="grid grid-cols-2 gap-3">
-        {friends?.map((friend: ResultFriendsDto, index: number) => (
-          <FriendsItemComponent
-            index={index}
-            key={index}
-            friend={friend}
-            friendsHook={friendsHook}
-            onClickUserDetails={onClickUserDetails}
-          />
-        ))}
-      </div>
-    );
-  }, [friends, activeTab, isLoading, friendsHook, onClickUserDetails]);
+    if (friends.length == 0)
+      return (
+        <NoDataFound
+          customClass="dark:shadow-none h-screen dark:bg-gray-800"
+          message=""
+        />
+      );
 
-  const matchFriends = useMemo(() => {
-    if (activeTab != "matches") return;
-    if (isLoading)
-      return <UserProfileCardSkeleton isLoading={true} count={skeletons} />;
-    //
     return (
       <div className="grid grid-cols-2 gap-3">
         {friends?.map((friend: ResultFriendsDto, index: number) => (
@@ -82,7 +67,22 @@ export function FriendsComponent({
         ))}
       </div>
     );
-  }, [friends, activeTab, isLoading, friendsHook, onClickUserDetails]);
+  }, [friends, isLoading, friendsHook, onClickUserDetails]);
+
+  const tabMenus = useMemo(() => {
+    let result: TabCustomAnimationProps[] = [];
+
+    friendTypesList.map((tab) => {
+      result.push({
+        label: tab.name.toUpperCase(),
+        value: tab.key,
+        icon: tab.icon,
+        htmlContent: friendsList,
+      });
+    });
+
+    return result;
+  }, [friendsList, friendTypesList]);
 
   return (
     <div className="w-full">
@@ -105,20 +105,7 @@ export function FriendsComponent({
       <TabsCustomAnimation
         defaultTab={defaultTab}
         onTabChange={onTabChange}
-        tabData={[
-          {
-            label: "RECOMMENDED",
-            value: "recommended",
-            icon: Square3Stack3DIcon,
-            htmlContent: recommendedFriends,
-          },
-          {
-            label: "MATCHES",
-            value: "matches",
-            icon: UserCircleIcon,
-            htmlContent: matchFriends,
-          }
-        ]}
+        tabData={tabMenus}
       />
     </div>
   );

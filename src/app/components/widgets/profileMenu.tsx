@@ -1,5 +1,4 @@
 import { useMainContext } from "@/app/contexts/main";
-import { defaultProfileImg } from "@/app/lib/constants/app";
 import {
     Menu,
     MenuHandler,
@@ -23,7 +22,7 @@ export function ProfileMenuComponent() {
                     placeholder={""}
                     variant="circular"
                     alt="tania andrew"
-                    src={mainContext.connectedUser?.photo?.length > 0 ? `${process.env.NEXT_PUBLIC_API_PUBLIC_FILES_LINK}${mainContext.connectedUser?.id}/${mainContext.connectedUser?.photo}` : defaultProfileImg}
+                    src={mainContext.connectedUser?.photo}
                 ></Avatar>
                 <Typography
                     placeholder={""}

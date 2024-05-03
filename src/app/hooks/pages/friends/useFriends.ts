@@ -13,10 +13,12 @@ import {
   proceedFollowFriend,
 } from "@/app/services/server-actions/friends";
 import { useMainContext } from "@/app/contexts/main";
-import { ApiResponseDto } from "@/app/types";
+import { ApiResponseDto, FriendTypesDto } from "@/app/types";
+import { friendTypes } from "@/app/lib/constants/app";
 
 const useFriends = () => {
   //
+  const [friendTypesList] = useState(Object.values(friendTypes));
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [friends, setFriends] = useState<ResultFriendsDto[] | []>([]);
   const { getFileUrl } = useMainContext();
@@ -24,10 +26,9 @@ const useFriends = () => {
   const fetchFriends = useCallback(
     async ({ type }: { type: FriendsTypes }) => {
       //
-      if (type != "recommended") return [];
-
       const result = await getFriends({
         revalidate: true,
+        type,
       });
 
       setIsLoading(false);
@@ -35,17 +36,17 @@ const useFriends = () => {
         setFriends(result.data.data);
         return result.data.data;
       }
+      setFriends([]);
     },
     [setIsLoading, setFriends]
   );
 
   useEffect(() => {
-    fetchFriends({ type: "recommended" });
-  }, [fetchFriends]);
+    fetchFriends({ type: friendTypesList[0].key as FriendsTypes });
+  }, [fetchFriends, friendTypesList]);
 
   const formattedFriends = useMemo(() => {
     return friends.map((friend) => {
-
       const fullName = `${friend.firstName} ${friend.lastName}`;
 
       return {
@@ -67,6 +68,7 @@ const useFriends = () => {
   const data: FriendsHookDto = {
     isLoading,
     friends: formattedFriends,
+    friendTypesList,
     setIsLoading,
     fetchFriends,
     followFriend,
@@ -80,6 +82,7 @@ export default useFriends;
 export type FriendsHookDto = {
   isLoading: boolean;
   friends: ResultFriendsDto[] | [];
+  friendTypesList: FriendTypesDto[];
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   fetchFriends: ({
     type,
