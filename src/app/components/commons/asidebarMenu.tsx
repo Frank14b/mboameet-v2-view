@@ -6,7 +6,7 @@ import Image from "next/image";
 export default function AsideBarMenuComponent({ children }: { children: any }) {
   return (
     <>
-      <div className="w-full pb-6">
+      <div className="w-full pb-6 dark:text-gray-200">
         <Typography placeholder={""} className="font-bold px-1 pb-4">
           Stories
         </Typography>
@@ -51,7 +51,7 @@ export default function AsideBarMenuComponent({ children }: { children: any }) {
         </div>
       </div>
 
-      <div className="w-full pb-6">
+      <div className="w-full pb-6 dark:text-gray-200">
         <Typography placeholder={""} className="font-bold px-1">
           Suggestions
         </Typography>
@@ -73,7 +73,7 @@ export default function AsideBarMenuComponent({ children }: { children: any }) {
         </div>
       </div>
 
-      <div className="w-full pb-6">
+      <div className="w-full pb-6 dark:text-gray-200">
         <Typography placeholder={""} className="font-bold px-1">
           Recommendations
         </Typography>

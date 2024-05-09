@@ -28,7 +28,7 @@ import { notification } from "@/app/lib/notifications";
 
 export function useFeed(): FeedHookDto {
   //
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [feeds, setFeeds] = useState<ResultFeed[] | null>(null);
   const { feed, updatedFeed, deletedFeedId, setFeed } = useFeedStore();
   const { user } = useUserStore();

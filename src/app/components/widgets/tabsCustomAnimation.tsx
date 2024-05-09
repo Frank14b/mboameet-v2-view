@@ -25,7 +25,7 @@ export function TabsCustomAnimation({
   tabData: TabCustomAnimationProps[];
 }) {
   return (
-    <Tabs id="custom-animation" value={defaultTab} onChange={onTabChange}>
+    <Tabs id="custom-animation" value={defaultTab}>
       <TabsHeader placeholder={""} className="mx-4 dark:bg-gray-800">
         {tabData.map(({ icon, label, value }) => (
           <Tab

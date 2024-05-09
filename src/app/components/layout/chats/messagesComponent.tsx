@@ -11,8 +11,16 @@ import {
   Card,
 } from "@material-tailwind/react";
 import { MessageFormComponent } from "./messageFormComponent";
-import { PhoneIcon, VideoCameraIcon } from "@heroicons/react/24/solid";
+import {
+  CheckBadgeIcon,
+  PhoneIcon,
+  VideoCameraIcon,
+} from "@heroicons/react/24/solid";
 import TooltipCustomAnimation from "../../widgets/tooltipCustomAnimation";
+import { useEffect } from "react";
+import { scrollToBottom } from "@/app/lib/utils";
+import { messagesContentId } from "@/app/lib/constants/app";
+import { ConversationHookDto } from "@/app/hooks/pages/chats/useDiscussions";
 
 export type MessageProps = {
   id: number;
@@ -21,6 +29,10 @@ export type MessageProps = {
   date: string;
   sender: number;
   receiver: number;
+  isSameUserAsPrevious: boolean;
+  customClass?: string;
+  messageGroup: { id: number; message: string; isLastMessage: boolean }[];
+  isRead: boolean;
 };
 
 export type UserProps = {
@@ -33,6 +45,7 @@ export function MessagesComponent({
   users,
   messages,
   onActionClick,
+  conversationHook,
 }: {
   users: {
     primaryUser: UserProps;
@@ -40,14 +53,19 @@ export function MessagesComponent({
   };
   messages: MessageProps[];
   onActionClick: Function;
+  conversationHook: ConversationHookDto;
 }) {
+  useEffect(() => {
+    scrollToBottom(`${messagesContentId}`);
+  }, [messages]);
+
   return (
     <div className="w-full p-2">
       <Card
         placeholder={""}
-        className="shadow-none dark:bg-gray-800 p-1 pt-0 rounded-none border-l-2 dark:border-gray-700"
+        className="shadow-none dark:bg-gray-800 p-1 pt-0 rounded-none"
       >
-        <div className="grid grid-cols-2 w-full pt-2 pl-2 pb-2 bg-gray-100 rounded-xl">
+        <div className="grid grid-cols-2 w-full pt-2 px-5 pb-2 bg-gray-100 dark:bg-gray-900 rounded-xl">
           <div className="">
             <Avatar
               placeholder={""}
@@ -57,8 +75,12 @@ export function MessagesComponent({
               withBorder
               className="float-left"
             />
-            <Typography placeholder={""} color="blue-gray" className="w-full pt-1 capitalize font-medium">
-             &nbsp;&nbsp; {users.secondUser.name}
+            <Typography
+              placeholder={""}
+              color="blue-gray"
+              className="w-full pt-1 capitalize font-medium dark:text-gray-300 dark:font-bold"
+            >
+              &nbsp;&nbsp; {users.secondUser.name}
             </Typography>
           </div>
           <div className="relative dark:text-gray-400">
@@ -75,10 +97,17 @@ export function MessagesComponent({
           </div>
         </div>
 
-        <Timeline className="h-custom-65 mb-12 mt-1 pt-5 overflow-y-auto">
+        <Timeline
+          className="h-custom-80 mb-14 mt-1 pt-5 px-3 overflow-y-auto"
+          id={messagesContentId}
+        >
           {messages.map((message: MessageProps, index: number) => (
-            <TimelineItem key={index}>
-              <TimelineHeader>
+            <TimelineItem key={index} className={`${message?.customClass}`}>
+              <TimelineHeader
+                className={` ${
+                  message.messageGroup.length > 0 ? "items-start" : ""
+                }`}
+              >
                 {message.sender === users.primaryUser.id ? (
                   <>
                     <Typography
@@ -86,32 +115,54 @@ export function MessagesComponent({
                       color="blue-gray"
                       className="w-full group"
                     >
-                      <span className="font-normal text-sm bg-gray-200 dark:bg-gray-900 text-gray-600 dark:text-gray-500 rounded-xl p-1 px-4 float-right">
-                        {message.message}
-                      </span>
-                      <span className="absolute invisible group-hover:visible text-gray-600 dark:text-gray-600 text-xs right-14 top-10">
-                        {message.date}
+                      <span
+                        className={`font-normal ${
+                          message.messageGroup.length > 0
+                            ? "rounded-xl"
+                            : "rounded-xl"
+                        } text-right max-w-96 text-sm bg-gray-800 dark:bg-gray-900 text-gray-200 dark:text-gray-400 p-2 px-4 float-right shadow-md`}
+                      >
+                        <span>{message.message}</span>
+
+                        {message.messageGroup.map((subMessage, subIndex) => (
+                          <span key={subIndex} className="pt-6">
+                            <br />
+                            {subMessage.message}
+                          </span>
+                        ))}
+
+                        <span className="absolute invisible group-hover:visible text-gray-600 dark:text-gray-600 text-xs right-14 bottom-5">
+                          {message.date}
+                        </span>
+
+                        {message.isRead && (
+                          <span className="">
+                            <CheckBadgeIcon className="h-5 w-5" />
+                          </span>
+                        )}
                       </span>
                     </Typography>
-                    <TimelineIcon className="p-0">
+                    <TimelineIcon className="p-0 h-9">
+                      <></>
                       <Avatar
                         placeholder={""}
                         size="sm"
                         src={users.primaryUser.avatar}
                         alt={users.primaryUser.name}
-                        withBorder
+                        // withBorder
                       />
                     </TimelineIcon>
                   </>
                 ) : (
                   <>
-                    <TimelineIcon className="p-0 ml-2">
+                    <TimelineIcon className="p-0 ml-2 h-9">
+                      <></>
                       <Avatar
                         placeholder={""}
                         size="sm"
                         src={users.secondUser.avatar}
                         alt={users.secondUser.name}
-                        withBorder
+                        // withBorder
                       />
                     </TimelineIcon>
                     <Typography
@@ -119,10 +170,23 @@ export function MessagesComponent({
                       color="blue-gray"
                       className="w-full group"
                     >
-                      <span className="font-normal text-sm bg-gray-200 text-gray-600 rounded-xl p-1 px-3 float-left">
-                        {message.message}
+                      <span
+                        className={`font-normal ${
+                          message.messageGroup.length > 0
+                            ? "rounded-xl"
+                            : "rounded-xl"
+                        } max-w-96 text-sm bg-gray-200 dark:bg-gray-500 text-gray-600 dark:text-gray-900 p-2 px-3 float-left`}
+                      >
+                        <span>{message.message}</span>
+
+                        {message.messageGroup.map((subMessage, subIndex) => (
+                          <span key={subIndex} className="pt-5">
+                            <br />
+                            {subMessage.message}
+                          </span>
+                        ))}
                       </span>
-                      <span className="absolute invisible group-hover:visible text-gray-600 dark:text-gray-600 text-xs left-16 top-10">
+                      <span className="absolute invisible group-hover:visible text-gray-600 dark:text-gray-600 text-xs left-16 bottom-5">
                         {message.date}
                       </span>
                     </Typography>
@@ -136,7 +200,10 @@ export function MessagesComponent({
           ))}
         </Timeline>
 
-        <MessageFormComponent />
+        <MessageFormComponent
+          userId={users.secondUser.id}
+          conversationHook={conversationHook}
+        />
         {/* // */}
       </Card>
     </div>

@@ -11,15 +11,17 @@ import {
 } from "react";
 import { QueryClient, QueryClientProvider, useQueryClient } from "react-query";
 import { AppHubWrapper } from "./appHub";
-import SideBarMenuComponent from "../components/commons/sidebarMenu";
-import AsideBarMenuComponent from "../components/commons/asidebarMenu";
+import SideBarMenuComponent from "../components/commons/sideBarMenu";
+import AsideBarMenuComponent from "../components/commons/asideBarMenu";
 import useUserStore from "../store/userStore";
 import { deleteToken, isTokenExpired } from "../lib/server-utils";
 import { usePathname, useRouter } from "next/navigation";
 import { sessionTimeOut } from "../lib/workers";
 import { ObjectKeyDto, ResultLoginDto } from "../types";
-import { defaultProfileImg, loginPathUrl, mainDivComponentId } from "../lib/constants/app";
+import { defaultProfileImg, mainDivComponentId } from "../lib/constants/app";
 import { ToastContainer } from "react-toastify";
+import { MobileSideBarMenuComponent } from "../components/commons/mobileSideBarMenu";
+import useChatStore from "../store/chatStore";
 
 const MainContext = createContext<any>({});
 
@@ -36,6 +38,7 @@ export function MainWrapper({ children }: { children: any }) {
   const router = useRouter();
   const pathname = usePathname();
   const [mainScroll, setMainScroll] = useState<any>(null);
+  const { isDiscussionOpen, setOpenDiscussion } = useChatStore();
 
   const queryClient = new QueryClient();
 
@@ -45,9 +48,10 @@ export function MainWrapper({ children }: { children: any }) {
     useUserStore.persist.clearStorage();
 
     setTimeout(() => {
-      router.push(loginPathUrl);
+      setLoading(false);
+      window.location.reload();
     }, 300);
-  }, [router, setUserConnected]);
+  }, [setUserConnected, setLoading]);
 
   const getFileUrl = useCallback(
     (link?: string, userId?: number) => {
@@ -84,15 +88,21 @@ export function MainWrapper({ children }: { children: any }) {
     if (userConnected === true) {
       checkExpiredToken();
     }
-    setLoading(false);
-  }, [checkExpiredToken, setLoading, userConnected]);
+  }, [checkExpiredToken, userConnected]);
 
   useEffect(() => {
-    // initialize the session worker if user is connected
-    if (userConnected === true) {
-      sessionTimeOut({ logout });
+    setTimeout(() => {
+      setLoading(false);
+    }, 300);
+  }, [setLoading]);
+
+  useEffect(() => {
+    if (isDiscussionOpen) {
+      if (pathname === "/chats" || !pathname.startsWith("/chats")) {
+        setOpenDiscussion(false);
+      }
     }
-  }, [userConnected, logout, setLoading]);
+  }, [isDiscussionOpen, pathname, setOpenDiscussion]);
 
   return (
     <MainContext.Provider value={MainData}>
@@ -103,17 +113,23 @@ export function MainWrapper({ children }: { children: any }) {
           <>
             <main className={`${theme}`}>
               <AppHubWrapper>
-                {userConnected === true ? (
+                {userConnected === true && !pathname.startsWith("/auth") ? (
                   <>
                     <div className="mh-600 bg-gray-200 dark:bg-gray-800">
                       <div className="flex xxl:container">
-                        <div className="w-1/4 sm:fixed xs:fixed xs:left-0 xs:w-[300px] xs:z-50 lg:relative bg-gray-100 dark:bg-gray-900 h-screen">
+                        <MobileSideBarMenuComponent></MobileSideBarMenuComponent>
+
+                        <div className="w-1/4 csm:hidden xs:hidden xs:left-0 xs:w-[300px] xs:z-50 lg:relative bg-gray-100 dark:bg-gray-900 h-screen">
                           <SideBarMenuComponent>
                             <></>
                           </SideBarMenuComponent>
                         </div>
 
-                        <div className="w-1/2 sm:w-full xs:w-full lg:w-1/2 bg-gray-100 z-10 dark:bg-gray-900">
+                        <div
+                          className={`${
+                            isDiscussionOpen ? "min-sm:w-full" : ""
+                          } w-1/2 csm:w-full xs:w-full lg:w-1/2 bg-gray-100 dark:bg-gray-900`}
+                        >
                           <div
                             className="flex flex-col h-screen p-6 relative overflow-y-auto"
                             id={mainDivComponentId}
@@ -122,8 +138,12 @@ export function MainWrapper({ children }: { children: any }) {
                           </div>
                         </div>
 
-                        <div className="w-1/4 sm:w-1/3 xs:fixed lg:w-1/4 xs:right-0 xs:z-50 xs:w-[300px] xs:px-6 px-3 bg-gray-100 dark:bg-gray-900">
-                          <div className="flex flex-col h-screen pt-6 overflow-y-auto dark:text-gray-300">
+                        <div
+                          className={`${
+                            isDiscussionOpen ? "min-sm:hidden" : ""
+                          } w-1/4 sm:w-1/3 csm:hidden lg:w-1/4 xs:right-0 xs:z-50 xs:w-[300px] xs:px-6 px-3 bg-gray-100 dark:bg-gray-900`}
+                        >
+                          <div className="flex flex-col h-screen pt-6 overflow-y-auto">
                             <AsideBarMenuComponent>
                               <></>
                             </AsideBarMenuComponent>

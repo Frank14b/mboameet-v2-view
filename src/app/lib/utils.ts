@@ -2,6 +2,7 @@ import { ChangeEvent } from "react";
 import { DateTime } from "luxon";
 import secureLocalStorage from "react-secure-storage";
 
+let debounceTimer: any = null;
 
 export const validPhoneNumber = (number: string): boolean => {
   const regex: RegExp = /^[0-9-]+$/;
@@ -238,4 +239,23 @@ export const removeLocalStorage = (key: string, secure: boolean) => {
   if (!secure) localStorage.removeItem(key);
 
   secureLocalStorage.removeItem(key);
+};
+
+export const scrollToBottom = (id: string) => {
+  const element = document.getElementById(id);
+  if (!element) return;
+  element.scrollTop = element.scrollHeight;
+};
+
+export const debounce = (func: Function, delay: number, ...args: any[]) => {
+  // return (...args: any[]) => {
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
+  }
+
+  debounceTimer = setTimeout(() => {
+    func(...args);
+    clearTimeout(debounceTimer);
+  }, delay);
+  // };
 };

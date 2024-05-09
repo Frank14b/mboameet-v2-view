@@ -29,7 +29,7 @@
   background: #ccc; /* Change thumb color on hover */
 }
 
-/* 404 page not found css */
+/* 404 not found css */
 
 .notfound .notfound-404 {
   position: absolute;
@@ -121,7 +121,7 @@
 
 .cardFriendsImage {
   object-fit: cover; /* Or other desired value like contain, fill, etc. */
-  object-position: top;
+  object-position: center;
 }
 
 .customSelect span {
@@ -130,5 +130,9 @@
 }
 
 .h-custom-65 {
-  height: calc(65vh - theme('spacing.7'));
+  height: calc(65vh - theme("spacing.7"));
+}
+
+.h-custom-80 {
+  height: calc(80vh - theme("spacing.7"));
 }

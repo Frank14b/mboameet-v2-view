@@ -16,7 +16,7 @@ export function UserProfileCardSkeleton({
   count: number;
 }) {
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-2 xs:grid-cols-1 gap-3">
       {range(1, count).map((value: number, index: number) => (
         <div
           className="w-full bg-white dark:bg-black/15 rounded-xl"
@@ -26,7 +26,7 @@ export function UserProfileCardSkeleton({
             placeholder={""}
             className="mt-0 w-full animate-pulse dark:bg-gray-800"
           >
-            <CardHeader placeholder={""} floated={false} className="h-80 relative grid place-items-center bg-gray-300 dark:bg-gray-900">
+            <CardHeader placeholder={""} floated={false} className="h-60 relative grid place-items-center bg-gray-300 dark:bg-gray-900">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

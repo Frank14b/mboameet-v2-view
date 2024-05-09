@@ -19,7 +19,7 @@ import { friendTypes } from "@/app/lib/constants/app";
 const useFriends = () => {
   //
   const [friendTypesList] = useState(Object.values(friendTypes));
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [friends, setFriends] = useState<ResultFriendsDto[] | []>([]);
   const { getFileUrl } = useMainContext();
 

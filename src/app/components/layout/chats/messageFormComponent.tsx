@@ -1,10 +1,20 @@
 "use client";
 
+import { ConversationHookDto } from "@/app/hooks/pages/chats/useDiscussions";
+import { messageFieldId } from "@/app/lib/constants/app";
 import { IconButton } from "@material-tailwind/react";
 
-export function MessageFormComponent() {
+export function MessageFormComponent({
+  userId,
+  conversationHook,
+}: {
+  conversationHook: ConversationHookDto;
+  userId: number;
+}) {
+  const { handleSendMessage } = conversationHook;
+
   return (
-    <div className="absolute left-0 pl-5 right-0 bottom-0">
+    <div className="absolute left-0 pl-3 right-0 bottom-0">
       <div className="flex w-full flex-row items-center gap-2 rounded-[99px] border border-gray-900/10 bg-gray-900/5 dark:bg-gray-900 p-2">
         <div className="flex pl-3">
           <IconButton
@@ -49,8 +59,8 @@ export function MessageFormComponent() {
           </IconButton>
         </div>
         <div
-          id={`${""}`}
-          className="textarea text-sm bg-white overflow-y-auto text-gray-800 h-full p-2 w-full max-w-96 rounded-xl border border-gray-900/30 dark:bg-gray-800 dark:text-gray-300"
+          id={`${messageFieldId}`}
+          className="textarea text-sm bg-white overflow-y-auto text-gray-800 h-full p-2 w-full max-w-100 rounded-xl border border-gray-900/30 dark:bg-gray-800 dark:text-gray-300"
           role="textbox"
           contentEditable={true}
           suppressContentEditableWarning={true}
@@ -66,6 +76,11 @@ export function MessageFormComponent() {
             placeholder={""}
             variant="text"
             className="rounded-full dark:text-gray-500"
+            onClick={() =>
+              handleSendMessage({
+                userId
+              })
+            }
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

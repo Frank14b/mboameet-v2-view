@@ -11,7 +11,7 @@ export const protectedPages = [
 
 const isUserAuthenticated = async (request: NextRequest) => {
 	try {
-		const authToken = getToken();
+		const authToken = await getToken();
 		const tokenIsExpired = await isTokenExpired();
 
 		if (authToken?.length > 0 && !tokenIsExpired) {
@@ -27,7 +27,7 @@ const isUserAuthenticated = async (request: NextRequest) => {
 
 const isUserNotAuthenticated = async (request: NextRequest) => {
 	try {
-		const authToken = getToken();
+		const authToken = await getToken();
 
 		if (authToken.length == 0) {
 			if (request.nextUrl.pathname == '/') {

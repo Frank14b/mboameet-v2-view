@@ -28,6 +28,8 @@ export const feedInputFile: string = `custom-feed-input-file`;
 export const feedInputVideoFile: string = `custom-feed-input-video-file`;
 export const feedVideoPreviewId: string = `feed-video-preview`;
 export const feedVideoReaderId: string = `feed-video-reader`;
+export const messageFieldId: string = `message-input-field`;
+export const messagesContentId: string = `messages-content-block`;
 
 export const loginPathUrl: string = `/auth/signin`;
 

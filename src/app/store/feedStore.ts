@@ -1,4 +1,4 @@
-// user store
+// feed store
 import { create } from 'zustand';
 import { ResultFeed, ResultFeedCommentDto } from '../types';
 

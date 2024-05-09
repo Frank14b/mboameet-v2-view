@@ -4,46 +4,31 @@ import {
   TabCustomAnimationProps,
   TabsCustomAnimation,
 } from "../../widgets/tabsCustomAnimation";
-import { useCallback, useMemo, useState } from "react";
-import { ResultFriendsDto } from "@/app/types/friends";
-import { UserProfileCardSkeleton } from "../../widgets/skeletons/userProfileCardSkeleton";
-import { UserProfilePopup } from "../../widgets/userProfilePopup";
+import { useCallback, useMemo } from "react";
 import { NoDataFound } from "../../widgets/noDataFound";
 import { ChatHookDto } from "@/app/hooks/pages/chats/useChat";
 import { DiscussionTypes, ResultMessageDto } from "@/app/types/chats";
 import ListWithAvatar, {
   ListWithAvatarProps,
 } from "../../widgets/listWithAvatar";
-import { MessagesComponent } from "./messagesComponent";
-import AnimateSlideInLeft from "../../widgets/motions/animateSlideInLeft";
+import DiscussionSkeleton from "../../widgets/skeletons/discussionSkeleton";
+import { useRouter } from "next/navigation";
 
 export function ChatsComponent({ chatHook }: { chatHook: ChatHookDto }) {
   //
-  const skeletons: number = 2;
+  const skeletons: number = 5;
   const {
     isLoading,
     discussions,
     discussionTypesList,
-    openChat,
-    messages,
-    users,
-    setUsers,
-    fetchMessages,
-    setOpenChat,
+    defaultTab,
+    activeTab,
+    setActiveTab,
     setIsLoading,
     fetchDiscussions,
   } = chatHook;
   //
-  const defaultTab: DiscussionTypes = discussionTypesList[0]
-    .key as DiscussionTypes;
-  const [activeTab, setActiveTab] = useState<DiscussionTypes>(defaultTab);
-  const [showUserDetails, setShowUserDetails] = useState<{
-    status: boolean;
-    friend?: ResultFriendsDto;
-  }>({ status: false });
-  const [activeChat, setActiveChat] = useState<ListWithAvatarProps | null>(
-    null
-  );
+  const router = useRouter();
 
   const onTabChange = (tab: string) => {
     setIsLoading(true);
@@ -53,32 +38,9 @@ export function ChatsComponent({ chatHook }: { chatHook: ChatHookDto }) {
     });
   };
 
-  const onActionClick = useCallback(
-    (data: ListWithAvatarProps) => {
-      setOpenChat(!openChat);
-
-      if (!openChat) {
-        fetchMessages({
-          type: activeTab as DiscussionTypes,
-          userId: data.id,
-        });
-
-        setUsers((prevValues) => {
-          return {
-            ...prevValues,
-            secondUser: {
-              id: data.id,
-              name: data.title,
-              avatar: data.image,
-            },
-          };
-        });
-      }
-
-      setActiveChat(!openChat ? data : null);
-    },
-    [openChat, activeTab, setUsers, setOpenChat, setActiveChat, fetchMessages]
-  );
+  const onActionClick = useCallback((data: ListWithAvatarProps) => {
+    router.push(`/chats/${data.reference}`);
+  }, [router]);
 
   const onMessageActionClick = useCallback(
     (data: ResultMessageDto, action: string) => {},
@@ -87,7 +49,7 @@ export function ChatsComponent({ chatHook }: { chatHook: ChatHookDto }) {
 
   const discussionsList = useMemo(() => {
     if (isLoading)
-      return <UserProfileCardSkeleton isLoading={true} count={skeletons} />;
+      return <DiscussionSkeleton isLoading={true} count={skeletons} />;
     //
     if (discussions.length == 0)
       return (
@@ -95,37 +57,20 @@ export function ChatsComponent({ chatHook }: { chatHook: ChatHookDto }) {
       );
 
     return (
-      <div className={`${openChat ? "grid grid-cols-10" : ""}`}>
-        <div className="">
+      <div className={``}>
+        <div className="overflow-y-auto h-custom-65 overflow-x-hidden">
           <ListWithAvatar
-            activeItem={activeChat?.id}
+            activeItem={0}
             onActionClick={onActionClick}
             data={discussions}
           />
         </div>
-
-        {openChat && (
-          <div className="col-span-9">
-            <AnimateSlideInLeft speed={0.3}>
-              <MessagesComponent
-                users={users}
-                messages={messages}
-                onActionClick={onMessageActionClick}
-              />
-            </AnimateSlideInLeft>
-          </div>
-        )}
       </div>
     );
   }, [
     discussions,
-    messages,
-    users,
     isLoading,
-    openChat,
-    activeChat,
-    onActionClick,
-    onMessageActionClick,
+    onActionClick
   ]);
 
   const tabMenus = useMemo(() => {
@@ -146,21 +91,6 @@ export function ChatsComponent({ chatHook }: { chatHook: ChatHookDto }) {
   return (
     <div className="w-full">
       {/* // */}
-      {showUserDetails.friend && (
-        <UserProfilePopup
-          show={showUserDetails.status}
-          onClose={() =>
-            setShowUserDetails((prevData) => {
-              return {
-                ...prevData,
-                status: false,
-              };
-            })
-          }
-          user={showUserDetails.friend as ResultFriendsDto}
-        />
-      )}
-
       <TabsCustomAnimation
         defaultTab={defaultTab}
         onTabChange={onTabChange}

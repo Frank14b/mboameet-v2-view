@@ -50,7 +50,10 @@ function useSignIn(): SignInHookDto {
       if (result.status === true) {
         initUserStoreSession(result?.data ?? null);
         router.push("/");
-        setLoading(false);
+       
+        setTimeout(() => {
+          setLoading(false);
+        }, 150);
       }
     },
     [initUserStoreSession, router, setLoading]

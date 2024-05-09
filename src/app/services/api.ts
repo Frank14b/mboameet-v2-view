@@ -72,7 +72,7 @@ export const apiCall = async ({
             data,
             params,
             headers,
-            cancelToken: requestSource.token,
+            // cancelToken: requestSource.token,
             // cache: method === 'GET' ? 'force-cache' : 'no-cache',
         });
 
@@ -86,7 +86,7 @@ export const apiCall = async ({
 
     } catch (error: any) {
         if (axios.isCancel(error)) {
-            console.log('Request canceled');
+            console.log('Request cancelled');
         }
 
         if(error.response?.status == 401) {

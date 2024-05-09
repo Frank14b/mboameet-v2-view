@@ -25,7 +25,7 @@ export default function UserProfileCard({
   return (
     <>
       <Card placeholder={""} className="w-full dark:bg-gray-800">
-        <CardHeader placeholder={""} floated={false} className="h-80">
+        <CardHeader placeholder={""} floated={false} className="h-60">
           <Image
             src={image}
             alt={name}

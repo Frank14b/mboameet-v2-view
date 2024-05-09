@@ -1,4 +1,4 @@
-// user store
+// form store
 import { create } from 'zustand';
 import { FieldValues, UseFormReturn } from 'react-hook-form';
 

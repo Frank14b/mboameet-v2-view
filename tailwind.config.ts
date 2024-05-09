@@ -10,6 +10,8 @@ const config: Config | any = withMT({
   theme: {
     screens: {
       'xs': { max: '640px' },
+      'csm': { max: '992px' },
+      'min-sm': { min: '992px' },
     },
     extend: {
       backgroundImage: {

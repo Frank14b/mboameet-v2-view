@@ -14,6 +14,7 @@ export type ListWithAvatarProps = {
   subTitle: string;
   image: string;
   chip?: number;
+  reference: string;
 };
 
 export default function ListWithAvatar({
@@ -26,25 +27,27 @@ export default function ListWithAvatar({
   onActionClick?: (data: ListWithAvatarProps) => void;
 }) {
   return (
-    <>
+    <List placeholder={""}>
       {data.map((item, index: number) => {
         return (
-          <List placeholder={""} key={index}>
-            <ListItem
-              placeholder={""}
-              onClick={() => onActionClick?.(item)}
-              className={`dark:bg-gray-900 ${
-                activeItem == item.id ? "bg-gray-300" : ""
-              }`}
-            >
-              <ListItemPrefix placeholder={""}>
-                <Avatar
-                  placeholder={""}
-                  variant="circular"
-                  alt={item.title}
-                  src={item.image}
-                />
-              </ListItemPrefix>
+          <ListItem
+            placeholder={""}
+            onClick={() => onActionClick?.(item)}
+            className={`dark:bg-gray-900 ${
+              activeItem == item.id ? "bg-gray-300" : ""
+            }`}
+            key={index}
+          >
+            <ListItemPrefix placeholder={""}>
+              <Avatar
+                placeholder={""}
+                variant="circular"
+                alt={item.title}
+                src={item.image}
+              />
+            </ListItemPrefix>
+            
+            {activeItem != item.id && (
               <div>
                 <Typography
                   placeholder={""}
@@ -63,20 +66,23 @@ export default function ListWithAvatar({
                   {item.subTitle}
                 </Typography>
               </div>
-              <ListItemSuffix placeholder={""}>
-                {item.chip && activeItem != item.id ? (
-                  <Chip
-                    value={item.chip}
-                    variant="ghost"
-                    size="sm"
-                    className="rounded-full px-2 py-1 text-xs group-hover:bg-white/20 group-hover:text-white dark:bg-gray-500"
-                  />
-                ) : <></>}
-              </ListItemSuffix>
-            </ListItem>
-          </List>
+            )}
+
+            <ListItemSuffix placeholder={""}>
+              {item.chip && activeItem != item.id ? (
+                <Chip
+                  value={item.chip}
+                  variant="ghost"
+                  size="sm"
+                  className="rounded-full px-2 py-1 text-xs group-hover:bg-white/20 group-hover:text-white dark:bg-gray-500"
+                />
+              ) : (
+                <></>
+              )}
+            </ListItemSuffix>
+          </ListItem>
         );
       })}
-    </>
+    </List>
   );
 }

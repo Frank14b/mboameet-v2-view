@@ -17,6 +17,8 @@ import FeedHubs from "../services/hubs/feeds";
 import { useMainContext } from "./main";
 import ConfirmationComponent from "../components/commons/alerts/confirmation";
 import { loginPathUrl } from "../lib/constants/app";
+import ChatHubs from "../services/hubs/chats";
+import useChatStore from "../store/chatStore";
 
 const AppHubContext = createContext<any>({});
 
@@ -26,9 +28,11 @@ export function AppHubWrapper({ children }: { children: any }) {
   );
   const [userHubs, setUserHubs] = useState<UserHubs | null>(null);
   const [feedHubs, setFeedHubs] = useState<FeedHubs | null>(null);
+  const [chatHubs, setChatHubs] = useState<ChatHubs | null>(null);
   const [errorSocket, setErrorSocket] = useState<boolean>(false);
   const userStore = useUserStore();
   const feedStore = useFeedStore();
+  const chatStore = useChatStore();
   const { userConnected, getFileUrl } = useMainContext();
   const pathname = usePathname();
   const router = useRouter();
@@ -38,7 +42,7 @@ export function AppHubWrapper({ children }: { children: any }) {
     if (connection) return;
     if (userStore.userConnected !== true || (await isTokenExpired()) == true) {
       if (!pathname.startsWith("/auth")) {
-        router.push(loginPathUrl)
+        router.push(loginPathUrl);
       }
       return;
     }
@@ -68,11 +72,19 @@ export function AppHubWrapper({ children }: { children: any }) {
             setConnection(_connection);
             //
             setErrorSocket(false);
+            // set all hubs class in react state
             setUserHubs(
-              new UserHubs(_connection as signalR.HubConnection, userStore, getFileUrl)
+              new UserHubs(
+                _connection as signalR.HubConnection,
+                userStore,
+                getFileUrl
+              )
             );
             setFeedHubs(
               new FeedHubs(_connection as signalR.HubConnection, feedStore)
+            );
+            setChatHubs(
+              new ChatHubs(_connection as signalR.HubConnection, chatStore)
             );
           })
           .catch(async (error: any) => {
@@ -80,7 +92,7 @@ export function AppHubWrapper({ children }: { children: any }) {
               error.response?.status == 401 ||
               (await isTokenExpired()) == true
             ) {
-              router.push(loginPathUrl)
+              router.push(loginPathUrl);
             }
             setErrorSocket(true);
             setConnection(null);
@@ -94,7 +106,16 @@ export function AppHubWrapper({ children }: { children: any }) {
     } catch (error) {
       setConnection(null);
     }
-  }, [userStore, router, connection, feedStore, pathname, getFileUrl, setErrorSocket]);
+  }, [
+    userStore,
+    router,
+    connection,
+    feedStore,
+    pathname,
+    chatStore,
+    getFileUrl,
+    setErrorSocket,
+  ]);
 
   useEffect(() => {
     // init the app websocket client hub
@@ -103,11 +124,11 @@ export function AppHubWrapper({ children }: { children: any }) {
 
   const closeConnection = useCallback(() => {
     if (!connection) return;
-    return connection.stop()
+    return connection.stop();
   }, [connection]);
 
   useEffect(() => {
-    if(!userConnected) {
+    if (!userConnected) {
       closeConnection();
     }
   }, [userConnected, closeConnection]);
@@ -116,6 +137,7 @@ export function AppHubWrapper({ children }: { children: any }) {
     closeConnection,
     userHubs: userHubs as UserHubs,
     feedHubs: feedHubs as FeedHubs,
+    chatHubs: chatHubs as ChatHubs,
     connection,
   };
 
@@ -123,7 +145,7 @@ export function AppHubWrapper({ children }: { children: any }) {
     <AppHubContext.Provider value={AppHubData}>
       {children}
 
-      {errorSocket && (
+      {errorSocket && userConnected && (
         <ConfirmationComponent
           defaultStatus={errorSocket}
           message="Unable to start the app hub. Click Ok to refresh!"
@@ -140,5 +162,6 @@ export type AppHubDataType = {
   closeConnection: () => Promise<void> | undefined;
   userHubs: UserHubs;
   feedHubs: FeedHubs;
+  chatHubs: ChatHubs;
   connection: signalR.HubConnection | null;
 };
