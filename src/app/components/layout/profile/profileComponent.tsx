@@ -1,16 +1,18 @@
 "use client";
 
-import useUserProfile from "@/app/hooks/pages/profile/useUserProfile";
+import { ProfileHookDto } from "@/app/hooks/pages/profile/useUserProfile";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { Typography } from "@material-tailwind/react";
 import ProfileImageComponent from "./profileImageComponent";
-import { defaultProfileImg } from "@/app/lib/constants/app";
 import ProfileDetailsComponent from "./profileDetailsComponent";
 import { UpdateProfileFormComponent } from "./updateProfileFormComponent";
 
-export default function ProfileAccountComponent() {
+export default function ProfileAccountComponent({
+  userProfileHook,
+}: {
+  userProfileHook: ProfileHookDto;
+}) {
   //
-  const userProfileHook = useUserProfile();
   const {
     changeProfilePicture,
     imageToUpload,
@@ -43,13 +45,7 @@ export default function ProfileAccountComponent() {
       <div className="w-full mt-12">
         <ProfileImageComponent
           username={connectedUser?.userName}
-          photo={
-            connectedUser?.photo?.length > 0
-              ? `${process.env.NEXT_PUBLIC_API_PUBLIC_FILES_LINK}${
-                  connectedUser?.id
-                }/${connectedUser?.photo ?? ""}`
-              : defaultProfileImg
-          }
+          photo={connectedUser?.photo}
           changeProfilePicture={changeProfilePicture}
           imageToUpload={imageToUpload}
           uploadProfileImage={uploadProfileImage}

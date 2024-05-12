@@ -5,12 +5,12 @@ import useChat from "@/app/hooks/pages/chats/useChat";
 import { Card, Typography } from "@material-tailwind/react";
 
 export default function ChatsPage() {
+  //
   const chatHook = useChat();
-  const {openChat} = chatHook;
 
   return (
     <>
-      <Card placeholder={""} className={`w-full ${!openChat ? "h-screen" : ""} pt-3 dark:bg-gray-800`}>
+      <Card placeholder={""} className={`w-full pt-3 h-screen dark:bg-gray-800`}>
         <div className="w-full flex absolute dark:text-white right-0 px-5">
           <div className="w-1/2 px-5">
             <Typography placeholder={""} className="font-bold px-1">

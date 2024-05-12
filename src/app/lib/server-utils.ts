@@ -4,6 +4,7 @@ import nodeCache from "node-cache";
 import crypto from "crypto";
 import { cookies } from "next/headers";
 import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
+import { configs } from "../../../app.config";
 
 const myCache = new nodeCache({ stdTTL: 3600 }); // Set default TTL to 60 minutes
 const tokenCookieskey: string[] = [
@@ -17,7 +18,7 @@ let cookieOptions:
   | undefined
   | [options: ResponseCookie] = {
   httpOnly: true,
-  secure: process.env.APP_ENV == "live" ? true : false, // Only send over HTTPS
+  secure: configs.server.APP_ENV_MODE == "live" ? true : false, // Only send over HTTPS
   sameSite: "strict", // Prevent cross-site request forgery (CSRF)
   maxAge: 3600, // 1 hour in seconds
 };
@@ -43,9 +44,9 @@ export const checkCache = (key: string): boolean => {
 
 export const hashingData = (value: string): string => {
   try {
-    if (process.env.NEXT_PUBLIC_APP_ENV == "dev") return value;
+    if (configs.APP_ENV_MODE == "dev") return value;
 
-    const password: string = process.env.ENCRYPT_PASSWORD ?? "";
+    const password: string = configs.ENCRYPTION_PASSWORD ?? "";
     // SHA-256 (recommended for password hashing)
     const hash: string = crypto
       .createHash("sha256")
@@ -62,8 +63,8 @@ const getJwExpiredTimeInSeconds = (tokenPayload: string) => {
     Buffer.from(tokenPayload, "base64").toString()
   );
 
-  if(decodedPayload?.exp) {
-	return decodedPayload?.exp - decodedPayload?.iat;
+  if (decodedPayload?.exp) {
+    return decodedPayload?.exp - decodedPayload?.iat;
   }
 
   return 0;

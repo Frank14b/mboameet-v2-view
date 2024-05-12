@@ -13,6 +13,7 @@ import ListWithAvatar, {
 } from "../../widgets/listWithAvatar";
 import DiscussionSkeleton from "../../widgets/skeletons/discussionSkeleton";
 import { useRouter } from "next/navigation";
+import { chatsPathUrl } from "@/app/lib/constants/app";
 
 export function ChatsComponent({ chatHook }: { chatHook: ChatHookDto }) {
   //
@@ -39,7 +40,7 @@ export function ChatsComponent({ chatHook }: { chatHook: ChatHookDto }) {
   };
 
   const onActionClick = useCallback((data: ListWithAvatarProps) => {
-    router.push(`/chats/${data.reference}`);
+    router.push(`${chatsPathUrl}/${data.reference}`);
   }, [router]);
 
   const onMessageActionClick = useCallback(

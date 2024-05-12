@@ -1,16 +1,19 @@
 "use client";
 
 import LoadingSpinnerComponent from "../../widgets/loadingSpinner";
-import useSignUp from "@/app/hooks/pages/auth/useSignUp";
 import Link from "next/link";
 import SignUpFormComponent from "./registerFormComponent";
 import AnimateFadeOut from "../../widgets/motions/animateFadeOut";
 import Image from "next/image";
+import { SignUpHookDto } from "@/app/hooks/pages/auth/useSignUp";
 
-export default function SignInComponent() {
+export default function SignInComponent({
+  signUpHook,
+}: {
+  signUpHook: SignUpHookDto;
+}) {
   //
-  const signInHook = useSignUp();
-  const { handleSubmit, submitFormData, isLoading } = signInHook;
+  const { handleSubmit, submitFormData, isLoading } = signUpHook;
 
   return (
     <>
@@ -46,7 +49,7 @@ export default function SignInComponent() {
                 <div className="p-5">
                   <LoadingSpinnerComponent isLoading={isLoading}>
                     <form method="post" onSubmit={handleSubmit(submitFormData)}>
-                      <SignUpFormComponent signUpFormProps={signInHook} />
+                      <SignUpFormComponent signUpFormProps={signUpHook} />
 
                       <p className="flex justify-center mt-6 font-sans text-sm antialiased font-light leading-normal text-inherit">
                         Already have an account?

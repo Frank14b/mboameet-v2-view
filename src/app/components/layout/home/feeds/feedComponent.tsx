@@ -16,7 +16,7 @@ export default function FeedComponent() {
     <>
       <div className="feed-form-container">
         <div className="w-full flex absolute dark:text-white right-0 px-5">
-          <div className="w-1/2 px-5">
+          <div className="w-full px-5">
             <Typography placeholder={""} className="font-bold px-1">
               Feeds
               <Button

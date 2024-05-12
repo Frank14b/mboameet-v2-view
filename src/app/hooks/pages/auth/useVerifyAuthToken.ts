@@ -19,7 +19,7 @@ import {
 import { UseFormHandleSubmit } from "react-hook-form";
 import useAppForm from "../../useForm";
 import { getLocalStorage } from "@/app/lib/utils";
-import { localStorageKey } from "@/app/lib/constants/app";
+import { changePasswordPathUrl, localStorageKey } from "@/app/lib/constants/app";
 import { notification } from "@/app/lib/notifications";
 
 function useVerifyAuthToken(): VerifyAuthTokenHookDto {
@@ -61,7 +61,7 @@ function useVerifyAuthToken(): VerifyAuthTokenHookDto {
       setIsLoading(false);
 
       if (result.status == true) {
-        router.push(`/auth/change-password/${result?.data?.data}`);
+        router.push(`${changePasswordPathUrl}/${result?.data?.data}`);
       }
     },
     [setIsLoading, router, token]

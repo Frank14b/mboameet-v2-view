@@ -12,7 +12,7 @@ import {
 } from "react-hook-form";
 import useAppForm from "../../useForm";
 import { getLocalStorage } from "@/app/lib/utils";
-import { localStorageKey } from "@/app/lib/constants/app";
+import { localStorageKey, loginPathUrl } from "@/app/lib/constants/app";
 import { notification } from "@/app/lib/notifications";
 
 function useChangePassword(): ChangePasswordHookDto {
@@ -48,7 +48,7 @@ function useChangePassword(): ChangePasswordHookDto {
     notification.apiNotify<BooleanResultDto<string>>(result);
 
     if(result.status) {
-      return router.push("/auth/signin");
+      return router.push(loginPathUrl);
     }
   };
   //

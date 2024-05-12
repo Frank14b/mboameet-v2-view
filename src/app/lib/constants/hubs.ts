@@ -16,5 +16,7 @@ export const hubConstants = {
     chats: {
         messageAdded: 'NewMessageAdded',
         updateUserMessagesAsRead: 'UpdateUserMessagesAsRead',
+        messageUpdated: 'MessageUpdated',
+        messageDeleted: 'MessageDeleted',
     }
 }

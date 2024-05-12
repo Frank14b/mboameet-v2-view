@@ -1,13 +1,19 @@
 import {
+  CakeIcon,
+  FaceFrownIcon,
+  FaceSmileIcon,
+  HeartIcon,
+  PencilIcon,
   Square3Stack3DIcon,
+  TrashIcon,
   UserCircleIcon,
   UserGroupIcon,
   UsersIcon,
 } from "@heroicons/react/24/solid";
+import { configs } from "../../../../app.config";
+import { MessageActionsDto, MessageReactionsDto } from "@/app/types";
 
-export const OTP_TIMER: number = parseInt(
-  process.env.NEXT_PUBLIC_API_PUBLIC_RESEND_OTP_TIMER ?? "30"
-);
+export const OTP_TIMER: number = parseInt(configs.RESEND_OTP_TIME ?? "30");
 
 export const passwordRegex: string =
   "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
@@ -30,8 +36,22 @@ export const feedVideoPreviewId: string = `feed-video-preview`;
 export const feedVideoReaderId: string = `feed-video-reader`;
 export const messageFieldId: string = `message-input-field`;
 export const messagesContentId: string = `messages-content-block`;
+export const messageImageInputFieldId: string = `message-image-input-field`;
 
+// app urls & path
 export const loginPathUrl: string = `/auth/signin`;
+export const signUpPathUrl: string = `/auth/signup`;
+export const authStartPath: string = `/auth`;
+export const chatStartPath: string = `/chats`;
+export const chatsPathUrl: string = `/chats`;
+export const verifyTokenPathUrl: string = `/auth/verify-token`;
+export const changePasswordPathUrl: string = `/auth/change-password`;
+export const profilePathUrl: string = `/profile`;
+
+export const chatBgImageClassName = {
+  darkMode: "dark:bg-[url('/pxFuelTwo.jpg')]",
+  lightMode: "bg-[url('/pxFuelLight.jpg')]",
+}
 
 export const localStorageKey = {
   authToken: "authToken",
@@ -62,3 +82,45 @@ export const friendTypes = {
     icon: UserCircleIcon,
   },
 };
+
+export const messageReactionsList: MessageReactionsDto[] = [
+  {
+    key: "heart",
+    icon: HeartIcon,
+    color: "text-red-600",
+    sort: 0,
+  },
+  {
+    key: "cake",
+    icon: CakeIcon,
+    color: "text-pink-300",
+    sort: 1,
+  },
+  {
+    key: "faceSmile",
+    icon: FaceSmileIcon,
+    color: "text-yellow-400",
+    sort: 2,
+  },
+  {
+    key: "faceFrown",
+    icon: FaceFrownIcon,
+    color: "text-yellow-400",
+    sort: 3,
+  },
+];
+
+export const messageActionsList: MessageActionsDto[] = [
+  {
+    key: "edit",
+    icon: PencilIcon,
+    color: "",
+    sort: 2,
+  },
+  {
+    key: "delete",
+    icon: TrashIcon,
+    color: "",
+    sort: 3,
+  },
+];

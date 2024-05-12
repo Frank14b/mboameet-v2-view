@@ -1,34 +1,40 @@
 "use server";
 
-import axios, { CancelTokenSource } from 'axios';
-import { ApiResponseDto, RequestMethod } from '../types';
-import { getToken } from '../lib/server-utils';
+import axios, { CancelTokenSource } from "axios";
+import { ApiResponseDto, RequestMethod } from "../types";
+import { getToken } from "../lib/server-utils";
+import { configs } from "../../../app.config";
 
 //create axios api call instance
 const instance = axios.create({
-    baseURL: `${process.env.APP_ENV == 'live' ? process.env.LIVE_API : process.env.DEV_API}/${process.env.API_VERSION}`, // Set your base URL here
+  baseURL: `${
+    process.env.APP_ENV == "live"
+      ? configs.server.LIVE_API
+      : configs.server.DEV_API
+  }/${configs.server.API_VERSION}`, // Set your base URL here
 });
 
 // setup an interceptor for all requests
-instance.interceptors.request.use(async (config: any) => {
+instance.interceptors.request.use(
+  async (config: any) => {
     // Modify request config here
     // Add an authorization header
 
     // const sessionId: string | undefined = cookies().get('sessionId')?.value;
     const token: string = await getToken();
-    // console.log("🚀 ~ instance.interceptors.request.use ~ token:", token)
 
-    if(token.length > 0) {
-        config.headers.Authorization = `Bearer ${`${token}`}`;
+    if (token.length > 0) {
+      config.headers.Authorization = `Bearer ${`${token}`}`;
     }
 
     return config;
   },
   (error: any) => {
     // Handle request errors here
-    console.error('Request error:', error);
+    console.error("Request error:", error);
     return Promise.reject(error); // Or custom error handling
-})
+  }
+);
 
 // instance.interceptors.response.use()
 
@@ -37,72 +43,69 @@ const cache: { [key: string]: any } = {}; // In-memory cache
 
 // create api call function for all methods with caching strategy
 export const apiCall = async ({
-    method = "GET",
-    url,
-    data = null,
-    params = null,
-    headers = {},
-    revalidate = false,
+  method = "GET",
+  url,
+  data = null,
+  params = null,
+  headers = {},
+  revalidate = false,
 }: {
-    method?: RequestMethod,
-    url: string,
-    data?: any,
-    params?: any,
-    headers?: any,
-    revalidate?: boolean,
+  method?: RequestMethod;
+  url: string;
+  data?: any;
+  params?: any;
+  headers?: any;
+  revalidate?: boolean;
 }): Promise<ApiResponseDto<any>> => {
-    try {
+  try {
+    const cacheKey: string = `${method}-${url}-${JSON.stringify(params)}`;
 
-        const cacheKey: string = `${method}-${url}-${JSON.stringify(params)}`;
+    // Check cache first
+    // if (!revalidate && cache[cacheKey]) {
+    //     return {
+    //         status: true,
+    //         message: 'Cached result',
+    //         data: cache[cacheKey]
+    //     };
+    // }
 
-        // Check cache first
-        // if (!revalidate && cache[cacheKey]) {
-        //     return {
-        //         status: true,
-        //         message: 'Cached result',
-        //         data: cache[cacheKey]
-        //     };
-        // }
+    requestSource = axios.CancelToken.source();
 
-        requestSource = axios.CancelToken.source();
+    const response = await instance({
+      method,
+      url,
+      data,
+      params,
+      headers,
+      // cancelToken: requestSource.token,
+      // cache: method === 'GET' ? 'force-cache' : 'no-cache',
+    });
 
-        const response = await instance({
-            method,
-            url,
-            data,
-            params,
-            headers,
-            // cancelToken: requestSource.token,
-            // cache: method === 'GET' ? 'force-cache' : 'no-cache',
-        });
-
-        // Store response in cache (only for successful GET requests)
-        if (method === 'GET' && response.status === 200) {
-            cache[cacheKey] = response.data;
-        }
-
-        return ApiSuccessMessage(response.data);
-        // return response.data;
-
-    } catch (error: any) {
-        if (axios.isCancel(error)) {
-            console.log('Request cancelled');
-        }
-
-        if(error.response?.status == 401) {
-            console.log('Unauthorized User');
-            // redirect('/auth/signin');
-        }
-
-        return ApiErrorMessage(error);
-    } finally {
-        if (requestSource) {
-            requestSource.cancel(); // Clean up cancellation token
-            requestSource = null;
-        }
+    // Store response in cache (only for successful GET requests)
+    if (method === "GET" && response.status === 200) {
+      cache[cacheKey] = response.data;
     }
-};
 
+    return ApiSuccessMessage(response.data);
+  } catch (error: any) {
+    if (axios.isCancel(error)) {
+      console.log("Request cancelled");
+    }
+
+    if (error.response?.status == 401) {
+      console.log("Unauthorized User");
+    }
+
+    console.log("Request error", error.response.data);
+
+    return ApiErrorMessage(error);
+  } finally {
+    if (requestSource) {
+      requestSource.cancel(); // Clean up cancellation token
+      requestSource = null;
+    }
+  }
+};
 
 // Update cache for a specific URL (optional):
 // export const updateCache = async (url: string, params: any) => {
@@ -112,17 +115,20 @@ export const apiCall = async ({
 // };
 
 export const ApiErrorMessage = (error: any): ApiResponseDto<any> => {
-    return {
-        status: false,
-        message: error?.response?.data?.title ?? error?.response?.data,
-        data: error?.response?.data?.errors
-    }
-}
+  return {
+    status: false,
+    message: error?.response?.data?.title ?? error?.response?.data,
+    data: error?.response?.data?.errors,
+  };
+};
 
-export const ApiSuccessMessage = (data: any, message: string = "Success"): ApiResponseDto<any> => {
-    return {
-        status: true,
-        message: message,
-        data: data
-    }
-}
+export const ApiSuccessMessage = (
+  data: any,
+  message: string = "Success"
+): ApiResponseDto<any> => {
+  return {
+    status: true,
+    message: message,
+    data: data,
+  };
+};

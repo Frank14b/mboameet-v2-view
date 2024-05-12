@@ -36,10 +36,38 @@ export type EmojiSelected = { emoji: string; emojiUrl: string };
 export interface DiscussionTypesDto {
   name: string;
   key: string;
-  icon: ForwardRefExoticComponent<Omit<SVGProps<SVGSVGElement>, "ref"> & {
+  icon: ForwardRefExoticComponent<
+    Omit<SVGProps<SVGSVGElement>, "ref"> & {
       title?: string | undefined;
       titleId?: string | undefined;
-  } & RefAttributes<SVGSVGElement>>;
+    } & RefAttributes<SVGSVGElement>
+  >;
 }
 
-export interface FriendTypesDto extends DiscussionTypesDto {};
+export interface FriendTypesDto extends DiscussionTypesDto {}
+
+export interface MessageReactionsDto {
+  key: string;
+  icon: ForwardRefExoticComponent<
+    Omit<SVGProps<SVGSVGElement>, "ref"> & {
+      title?: string | undefined;
+      titleId?: string | undefined;
+    } & RefAttributes<SVGSVGElement>
+  >;
+  color: string;
+  sort: number;
+};
+
+export interface MessageActionsDto {
+  key: MessageActionType;
+  icon: ForwardRefExoticComponent<
+    Omit<SVGProps<SVGSVGElement>, "ref"> & {
+      title?: string | undefined;
+      titleId?: string | undefined;
+    } & RefAttributes<SVGSVGElement>
+  >;
+  color: string;
+  sort: number;
+};
+
+export type MessageActionType = "edit" | "delete";

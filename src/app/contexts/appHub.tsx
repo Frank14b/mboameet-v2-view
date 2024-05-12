@@ -16,9 +16,10 @@ import { usePathname, useRouter } from "next/navigation";
 import FeedHubs from "../services/hubs/feeds";
 import { useMainContext } from "./main";
 import ConfirmationComponent from "../components/commons/alerts/confirmation";
-import { loginPathUrl } from "../lib/constants/app";
+import { authStartPath, loginPathUrl } from "../lib/constants/app";
 import ChatHubs from "../services/hubs/chats";
 import useChatStore from "../store/chatStore";
+import { configs } from "../../../app.config";
 
 const AppHubContext = createContext<any>({});
 
@@ -41,7 +42,7 @@ export function AppHubWrapper({ children }: { children: any }) {
     //
     if (connection) return;
     if (userStore.userConnected !== true || (await isTokenExpired()) == true) {
-      if (!pathname.startsWith("/auth")) {
+      if (!pathname.startsWith(authStartPath)) {
         router.push(loginPathUrl);
       }
       return;
@@ -61,7 +62,7 @@ export function AppHubWrapper({ children }: { children: any }) {
       };
 
       _connection = new signalR.HubConnectionBuilder()
-        .withUrl("http://localhost:5000/apphub", options) // hub api link
+        .withUrl(`${configs.WEBSOCKET_HOST}`, options) // hub api link
         .withHubProtocol(protocol)
         .build();
 

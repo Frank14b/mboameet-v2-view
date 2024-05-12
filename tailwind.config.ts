@@ -16,13 +16,8 @@ const config: Config | any = withMT({
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
-      // animation: {
-      //   'spin-slow': 'spin 3s linear',
-      //   'wiggle': 'wiggle 1s ease-in-out infinite'
-      // }
+        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      }
     },
     container: {
       center: true,

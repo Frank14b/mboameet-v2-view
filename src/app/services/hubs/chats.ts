@@ -21,6 +21,20 @@ class ChatHubs {
         this._chatStore.setCreatedMessage(message);
       }
     );
+
+    this._connection.on(
+      hubConstants.chats.messageUpdated,
+      (message: ResultMessageDto) => {
+        this._chatStore.setUpdatedMessage(message);
+      }
+    );
+
+    this._connection.on(
+      hubConstants.chats.messageDeleted,
+      (message: ResultMessageDto) => {
+        this._chatStore.setDeletedMessage(message);
+      }
+    );
   }
 
   updateUserMessagesAsRead = (senderId: number) => {

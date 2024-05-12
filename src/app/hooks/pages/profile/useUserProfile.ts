@@ -3,6 +3,7 @@ import { createFileUploadString } from "@/app/lib/utils";
 import {
   proceedUpdateProfile,
   updateProfileImage,
+  validateToken,
 } from "@/app/services/server-actions";
 import useUserStore from "@/app/store/userStore";
 import {
@@ -20,9 +21,7 @@ import {
   useCallback,
   useState,
 } from "react";
-import {
-  UseFormHandleSubmit,
-} from "react-hook-form";
+import { UseFormHandleSubmit } from "react-hook-form";
 import useAppForm from "../../useForm";
 import { useMainContext } from "@/app/contexts/main";
 import { notification } from "@/app/lib/notifications";
@@ -57,7 +56,6 @@ const useUserProfile = () => {
     async (data: UpdateProfileFormData) => {
       setIsLoading(true);
       const result = await proceedUpdateProfile(data);
-      console.log("🚀 ~ result:", result)
       setResponseData(result);
       setIsLoading(false);
       userHubs.updateProfile();
@@ -90,6 +88,13 @@ const useUserProfile = () => {
     [setImageToUpload, setUser]
   );
 
+  const validateUserSession = useCallback(async () => {
+    const result = await validateToken();
+    if (result.status) {
+      setUser(result.data as ResultUpdateProfileData);
+    }
+  }, [setUser]);
+
   const data: ProfileHookDto = {
     isLoading,
     responseData,
@@ -102,6 +107,7 @@ const useUserProfile = () => {
     handleSubmit,
     handleOpenEditProfile,
     uploadProfileImage,
+    validateUserSession,
   };
 
   return { ...data };
@@ -121,4 +127,5 @@ export type ProfileHookDto = {
   handleSubmit: UseFormHandleSubmit<any>;
   handleOpenEditProfile: () => void;
   uploadProfileImage: (image: string | Blob | ObjectKeyDto) => Promise<void>;
+  validateUserSession: () => void;
 };

@@ -1,8 +1,17 @@
 "use client";
 
 import { ConversationHookDto } from "@/app/hooks/pages/chats/useDiscussions";
-import { messageFieldId } from "@/app/lib/constants/app";
-import { IconButton } from "@material-tailwind/react";
+import {
+  messageFieldId,
+  messageImageInputFieldId,
+} from "@/app/lib/constants/app";
+import { createFileUploadString } from "@/app/lib/utils";
+import { PlusIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { Badge, IconButton } from "@material-tailwind/react";
+import { ChangeEvent } from "react";
+import CropImage from "../../widgets/cropImage";
+import { ObjectKeyDto } from "@/app/types";
+import Image from "next/image";
 
 export function MessageFormComponent({
   userId,
@@ -11,32 +20,79 @@ export function MessageFormComponent({
   conversationHook: ConversationHookDto;
   userId: number;
 }) {
-  const { handleSendMessage } = conversationHook;
+  //
+  const {
+    image,
+    editedMessage,
+    linkedImages,
+    setImage,
+    handleInputKeyPress,
+    cancelEditMessageAction,
+    handleSendMessage,
+    handleUploadImage,
+    removeSelectedImage
+  } = conversationHook;
 
   return (
-    <div className="absolute left-0 pl-3 right-0 bottom-0">
+    <div className="absolute left-0 right-0 bottom-0 z-20">
+      <div className="w-full overflow-y-hidden overflow-x-auto flex gap-2 px-5 mb-2">
+        {linkedImages?.map((file: ObjectKeyDto, index: number) => (
+          <div key={index} className="relative">
+            <Image
+              alt=""
+              width={60}
+              height={40}
+              className="rounded shadow object-center"
+              src={file?.base64}
+              // style={{ width: "110px", height: "70px" }}
+            />
+            <div className="absolute bg-gray-900 top-0 left-0 w-full bottom-0 rounded-lg bg-opacity-40"></div>
+            <span
+              onClick={() => removeSelectedImage(index)}
+              className="absolute cursor-pointer right-2 top-2"
+            >
+              <TrashIcon className="h-4 w-4 text-red-400" />
+            </span>
+          </div>
+        ))}
+      </div>
+
       <div className="flex w-full flex-row items-center gap-2 rounded-[99px] border border-gray-900/10 bg-gray-900/5 dark:bg-gray-900 p-2">
         <div className="flex pl-3">
-          <IconButton
-            placeholder={""}
-            variant="text"
-            className="rounded-full dark:text-gray-500"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="h-5 w-5"
+          <label htmlFor={messageImageInputFieldId}>
+            <IconButton
+              placeholder={""}
+              variant="text"
+              className="rounded-full dark:text-gray-500"
+              onClick={() =>
+                document.getElementById(messageImageInputFieldId)?.click()
+              }
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-              />
-            </svg>
-          </IconButton>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="h-5 w-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+                />
+              </svg>
+            </IconButton>
+            <input
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setImage(createFileUploadString(e))
+              }
+              id={messageImageInputFieldId}
+              accept="image/*"
+              type="file"
+              className="hidden"
+            />
+          </label>
           <IconButton
             placeholder={""}
             variant="text"
@@ -58,17 +114,33 @@ export function MessageFormComponent({
             </svg>
           </IconButton>
         </div>
-        <div
-          id={`${messageFieldId}`}
-          className="textarea text-sm bg-white overflow-y-auto text-gray-800 h-full p-2 w-full max-w-100 rounded-xl border border-gray-900/30 dark:bg-gray-800 dark:text-gray-300"
-          role="textbox"
-          contentEditable={true}
-          suppressContentEditableWarning={true}
-          style={{ maxHeight: "55px" }}
-          // onClick={() => handleGetCursorPosition()}
-        >
-          {" "}
-          <>{"@message"}</>{" "}
+        {editedMessage && (
+          <span
+            onClick={cancelEditMessageAction}
+            className="absolute right-14 cursor-pointer top-0 text-pink-400"
+          >
+            <Badge
+              className="p-1 bg-pink-400 text-xs"
+              content={<PlusIcon className="rotate-45" />}
+            >
+              <></>
+            </Badge>
+          </span>
+        )}
+
+        <div className="w-full">
+          <div
+            id={`${messageFieldId}`}
+            className="textarea text-sm bg-white overflow-y-auto text-gray-800 h-full p-2 w-full max-w-100 rounded-xl border border-gray-900/30 dark:bg-gray-800 dark:text-gray-300"
+            role="textbox"
+            contentEditable={true}
+            suppressContentEditableWarning={true}
+            style={{ maxHeight: "55px" }}
+            onKeyDown={handleInputKeyPress}
+          >
+            {" "}
+            <>{"@hello"}</>{" "}
+          </div>
         </div>
 
         <div>
@@ -78,7 +150,7 @@ export function MessageFormComponent({
             className="rounded-full dark:text-gray-500"
             onClick={() =>
               handleSendMessage({
-                userId
+                userId,
               })
             }
           >
@@ -99,6 +171,17 @@ export function MessageFormComponent({
           </IconButton>
         </div>
       </div>
+
+      {image.length > 1 && (
+        <>
+          <CropImage
+            image={image}
+            croppedImage={handleUploadImage}
+            returnType={"object"}
+            cropSize={{ width: 500, height: 500 }}
+          />
+        </>
+      )}
     </div>
   );
 }

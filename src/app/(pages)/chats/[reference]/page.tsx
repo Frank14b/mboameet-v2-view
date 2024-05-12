@@ -2,6 +2,7 @@
 
 import { ConversationsComponent } from "@/app/components/layout/chats/conversationsComponent";
 import useDiscussions from "@/app/hooks/pages/chats/useDiscussions";
+import { chatBgImageClassName } from "@/app/lib/constants/app";
 import { Card, Typography } from "@material-tailwind/react";
 
 export default function ConversationPage({
@@ -16,7 +17,7 @@ export default function ConversationPage({
     <>
       <Card
         placeholder={""}
-        className={`w-full pt-1 dark:bg-gray-800`}
+        className={`w-full p-0 dark:bg-gray-800 ${chatBgImageClassName.lightMode} ${chatBgImageClassName.darkMode}`}
       >
         {/*  */}
         <div className="mt-0">

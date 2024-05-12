@@ -10,7 +10,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { UseFormHandleSubmit } from "react-hook-form";
 import useAppForm from "../../useForm";
 import { setLocalStorage } from "@/app/lib/utils";
-import { localStorageKey } from "@/app/lib/constants/app";
+import { localStorageKey, verifyTokenPathUrl } from "@/app/lib/constants/app";
 import { notification } from "@/app/lib/notifications";
 
 function useForgetPassword(): ForgetPasswordHookDto {
@@ -41,7 +41,7 @@ function useForgetPassword(): ForgetPasswordHookDto {
     if (result.status && result.data) {
       //
       setLocalStorage(localStorageKey.authToken, result.data.accessToken, true);
-      return router.push(`/auth/verify-token/${result.data.otpToken}`);
+      return router.push(`${verifyTokenPathUrl}/${result.data.otpToken}`);
     }
 
     notification.notifyError(`${result.message}`);

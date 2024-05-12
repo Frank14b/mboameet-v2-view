@@ -1,9 +1,6 @@
 "use server";
 
-import {
-  ApiResponseDto,
-  ResultPaginate,
-} from "@/app/types/index";
+import { ApiResponseDto, ResultPaginate } from "@/app/types/index";
 import { apiCall } from "../../api";
 import {
   DiscussionTypes,
@@ -54,21 +51,80 @@ export const getMessages = async ({
 export const sendMessage = async ({
   revalidate,
   type,
-  userId,
+  formData
+}: {
+  revalidate: boolean;
+  type: DiscussionTypes;
+  formData: FormData;
+}) => {
+  const result: ApiResponseDto<ResultMessageDto> =
+    await apiCall({
+      method: "POST",
+      url: `${urls.getDiscussions}/${type}`,
+      data: formData,
+    });
+
+  return result;
+};
+
+export const sendMessageReaction = async ({
+  revalidate,
+  type,
+  id,
+  reaction,
+}: {
+  revalidate: boolean;
+  type: DiscussionTypes;
+  id: number;
+  reaction: string;
+}) => {
+  const result: ApiResponseDto<ResultMessageDto> =
+    await apiCall({
+      method: "PATCH",
+      url: `${urls.getDiscussions}/${id}/${type}/reaction`,
+      data: {
+        reaction,
+      },
+    });
+
+  return result;
+};
+
+export const proceedDeleteMessage = async ({
+  revalidate,
+  type,
+  id,
+}: {
+  revalidate: boolean;
+  type: DiscussionTypes;
+  id: number;
+}) => {
+  const result: ApiResponseDto<ResultMessageDto> =
+    await apiCall({
+      method: "DELETE",
+      url: `${urls.getDiscussions}/${id}/${type}`,
+    });
+
+  return result;
+};
+
+export const updateMessage = async ({
+  revalidate,
+  type,
+  id,
   message,
 }: {
   revalidate: boolean;
   type: DiscussionTypes;
-  userId: number;
+  id: number;
   message: string;
 }) => {
-  const result: ApiResponseDto<ResultPaginate<ResultMessageDto[]>> =
+  const result: ApiResponseDto<ResultMessageDto> =
     await apiCall({
-      method: "POST",
-      url: `${urls.getDiscussions}/${type}`,
+      method: "PUT",
+      url: `${urls.getDiscussions}/${id}/${type}`,
       data: {
-        receiver: userId,
-        messageType: 0,
+        id,
         message,
       },
     });

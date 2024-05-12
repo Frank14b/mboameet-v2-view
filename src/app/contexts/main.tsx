@@ -17,25 +17,36 @@ import useUserStore from "../store/userStore";
 import { deleteToken, isTokenExpired } from "../lib/server-utils";
 import { usePathname, useRouter } from "next/navigation";
 import { sessionTimeOut } from "../lib/workers";
-import { ObjectKeyDto, ResultLoginDto } from "../types";
-import { defaultProfileImg, mainDivComponentId } from "../lib/constants/app";
+import {
+  ObjectKeyDto,
+  ResultLoginDto,
+  ResultUpdateProfileData,
+} from "../types";
+import {
+  authStartPath,
+  chatStartPath,
+  defaultProfileImg,
+  mainDivComponentId,
+} from "../lib/constants/app";
 import { ToastContainer } from "react-toastify";
 import { MobileSideBarMenuComponent } from "../components/commons/mobileSideBarMenu";
 import useChatStore from "../store/chatStore";
+import { configs } from "../../../app.config";
+import { validateToken } from "../services/server-actions";
 
 const MainContext = createContext<any>({});
 
 export function MainWrapper({ children }: { children: any }) {
   const {
     userConnected,
-    setUserConnected,
     user,
     loading,
-    setLoading,
     theme,
+    setLoading,
+    setUserConnected,
+    setUser,
     setTheme,
   } = useUserStore();
-  const router = useRouter();
   const pathname = usePathname();
   const [mainScroll, setMainScroll] = useState<any>(null);
   const { isDiscussionOpen, setOpenDiscussion } = useChatStore();
@@ -59,12 +70,20 @@ export function MainWrapper({ children }: { children: any }) {
       if (!link || link.length == 0) {
         return defaultProfileImg;
       }
-      return `${process.env.NEXT_PUBLIC_API_PUBLIC_FILES_LINK}${
-        userId ?? user?.id
-      }/${link}`;
+      return `${configs.PUBLIC_FILES_LINK}${userId ?? user?.id}/${link}`;
     },
     [user]
   );
+
+  const validateUserSession = useCallback(async () => {
+    const result = await validateToken();
+    if (result.status) {
+      setUser(result.data as ResultUpdateProfileData);
+      setUserConnected(true);
+    } else {
+      logout();
+    }
+  }, [logout, setUser, setUserConnected]);
 
   const MainData: MainContextDto = {
     userConnected,
@@ -87,8 +106,12 @@ export function MainWrapper({ children }: { children: any }) {
   useEffect(() => {
     if (userConnected === true) {
       checkExpiredToken();
+    } else {
+      if (!pathname.startsWith(authStartPath)) {
+        validateUserSession();
+      }
     }
-  }, [checkExpiredToken, userConnected]);
+  }, [checkExpiredToken, logout, validateUserSession, pathname, userConnected]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -98,7 +121,7 @@ export function MainWrapper({ children }: { children: any }) {
 
   useEffect(() => {
     if (isDiscussionOpen) {
-      if (pathname === "/chats" || !pathname.startsWith("/chats")) {
+      if (pathname === chatStartPath || !pathname.startsWith(chatStartPath)) {
         setOpenDiscussion(false);
       }
     }
@@ -113,7 +136,8 @@ export function MainWrapper({ children }: { children: any }) {
           <>
             <main className={`${theme}`}>
               <AppHubWrapper>
-                {userConnected === true && !pathname.startsWith("/auth") ? (
+                {userConnected === true &&
+                !pathname.startsWith(authStartPath) ? (
                   <>
                     <div className="mh-600 bg-gray-200 dark:bg-gray-800">
                       <div className="flex xxl:container">
@@ -153,7 +177,7 @@ export function MainWrapper({ children }: { children: any }) {
                     </div>
                   </>
                 ) : (
-                  <>{pathname.startsWith("/auth") ? children : <></>}</>
+                  <>{pathname.startsWith(authStartPath) ? children : <></>}</>
                 )}
               </AppHubWrapper>
 

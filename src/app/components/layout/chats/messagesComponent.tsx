@@ -17,29 +17,11 @@ import {
   VideoCameraIcon,
 } from "@heroicons/react/24/solid";
 import TooltipCustomAnimation from "../../widgets/tooltipCustomAnimation";
-import { useEffect } from "react";
-import { scrollToBottom } from "@/app/lib/utils";
 import { messagesContentId } from "@/app/lib/constants/app";
 import { ConversationHookDto } from "@/app/hooks/pages/chats/useDiscussions";
-
-export type MessageProps = {
-  id: number;
-  message: string;
-  type: number;
-  date: string;
-  sender: number;
-  receiver: number;
-  isSameUserAsPrevious: boolean;
-  customClass?: string;
-  messageGroup: { id: number; message: string; isLastMessage: boolean }[];
-  isRead: boolean;
-};
-
-export type UserProps = {
-  id: number;
-  name: string;
-  avatar: string;
-};
+import ConversationReactionComponent from "./conversationReactionComponent";
+import MessageActionsComponent from "./messageActionsComponent";
+import Image from "next/image";
 
 export function MessagesComponent({
   users,
@@ -55,18 +37,19 @@ export function MessagesComponent({
   onActionClick: Function;
   conversationHook: ConversationHookDto;
 }) {
-  useEffect(() => {
-    scrollToBottom(`${messagesContentId}`);
-  }, [messages]);
+  //
+
+  const { editedMessage, handleMessageReaction, handleMessageAction } =
+    conversationHook;
 
   return (
-    <div className="w-full p-2">
+    <div className="w-full p-2 dark:backdrop-blur-sm backdrop-grayscale rounded-xl">
       <Card
         placeholder={""}
-        className="shadow-none dark:bg-gray-800 p-1 pt-0 rounded-none"
+        className="shadow-none bg-transparent rounded-lg p-1 pt-0"
       >
         <div className="grid grid-cols-2 w-full pt-2 px-5 pb-2 bg-gray-100 dark:bg-gray-900 rounded-xl">
-          <div className="">
+          <div className="relative">
             <Avatar
               placeholder={""}
               size="sm"
@@ -75,6 +58,9 @@ export function MessagesComponent({
               withBorder
               className="float-left"
             />
+
+            <div className="h-2 w-2 left-5 bottom-0 rounded-full bg-green-700 absolute"></div>
+
             <Typography
               placeholder={""}
               color="blue-gray"
@@ -104,8 +90,10 @@ export function MessagesComponent({
           {messages.map((message: MessageProps, index: number) => (
             <TimelineItem key={index} className={`${message?.customClass}`}>
               <TimelineHeader
-                className={` ${
-                  message.messageGroup.length > 0 ? "items-start" : ""
+                className={` group ${
+                  message.messageGroup.length > 0 || message.files.length > 0
+                    ? "items-start"
+                    : ""
                 }`}
               >
                 {message.sender === users.primaryUser.id ? (
@@ -113,14 +101,18 @@ export function MessagesComponent({
                     <Typography
                       placeholder={""}
                       color="blue-gray"
-                      className="w-full group"
+                      className="w-full relative"
                     >
                       <span
                         className={`font-normal ${
+                          editedMessage?.id === message.id
+                            ? "border-2 border-pink-300"
+                            : ""
+                        } ${
                           message.messageGroup.length > 0
                             ? "rounded-xl"
                             : "rounded-xl"
-                        } text-right max-w-96 text-sm bg-gray-800 dark:bg-gray-900 text-gray-200 dark:text-gray-400 p-2 px-4 float-right shadow-md`}
+                        } max-w-96 text-sm bg-gray-800 dark:bg-gray-800 text-gray-200 dark:text-gray-100 p-2 px-4 float-right shadow-md`}
                       >
                         <span>{message.message}</span>
 
@@ -131,13 +123,24 @@ export function MessagesComponent({
                           </span>
                         ))}
 
-                        <span className="absolute invisible group-hover:visible text-gray-600 dark:text-gray-600 text-xs right-14 bottom-5">
-                          {message.date}
-                        </span>
+                        {message.files.length > 0 && (
+                          <span className="mt-2 flex gap-2 overflow-x-auto">
+                            {message.files.map((file, index) => (
+                              <Image
+                                key={index}
+                                src={file.url}
+                                alt={""}
+                                height={150}
+                                width={170}
+                                className="rounded-xl blur-sm hover:blur-0 border cursor-pointer border-gray-600 shadow-lg p-1"
+                              />
+                            ))}
+                          </span>
+                        )}
 
                         {message.isRead && (
                           <span className="">
-                            <CheckBadgeIcon className="h-5 w-5" />
+                            <CheckBadgeIcon className="h-3 w-3 text-pink-200 absolute right-0" />
                           </span>
                         )}
                       </span>
@@ -152,6 +155,13 @@ export function MessagesComponent({
                         // withBorder
                       />
                     </TimelineIcon>
+                    {/* // */}
+                    <div className="hidden absolute right-0 group-hover:block z-20">
+                      <MessageActionsComponent
+                        item={message}
+                        onActionClick={handleMessageAction}
+                      />
+                    </div>
                   </>
                 ) : (
                   <>
@@ -168,14 +178,14 @@ export function MessagesComponent({
                     <Typography
                       placeholder={""}
                       color="blue-gray"
-                      className="w-full group"
+                      className="w-full relative"
                     >
                       <span
                         className={`font-normal ${
                           message.messageGroup.length > 0
                             ? "rounded-xl"
                             : "rounded-xl"
-                        } max-w-96 text-sm bg-gray-200 dark:bg-gray-500 text-gray-600 dark:text-gray-900 p-2 px-3 float-left`}
+                        } max-w-96 text-sm bg-white dark:bg-gray-400 text-gray-600 dark:text-gray-900 p-2 px-3 float-left shadow-md`}
                       >
                         <span>{message.message}</span>
 
@@ -185,13 +195,35 @@ export function MessagesComponent({
                             {subMessage.message}
                           </span>
                         ))}
-                      </span>
-                      <span className="absolute invisible group-hover:visible text-gray-600 dark:text-gray-600 text-xs left-16 bottom-5">
-                        {message.date}
+
+                        {message.files.length > 0 && (
+                          <span className="mt-2 flex gap-2 overflow-x-auto">
+                            {message.files.map((file, index) => (
+                              <Image
+                                key={index}
+                                src={file.url}
+                                alt={""}
+                                height={150}
+                                width={170}
+                                className="rounded-xl blur-sm hover:blur-0 border cursor-pointer border-gray-300 shadow-lg p-1"
+                              />
+                            ))}
+                          </span>
+                        )}
                       </span>
                     </Typography>
+
+                    <ConversationReactionComponent
+                      onReactionClick={handleMessageReaction}
+                      itemId={message.id}
+                      active={message.reaction}
+                    />
                   </>
                 )}
+
+                <span className="absolute left-0 right-0 bottom-5 grid place-items-center invisible group-hover:visible text-gray-600 dark:text-gray-600 text-xs">
+                  {message.date}
+                </span>
               </TimelineHeader>
               <TimelineBody className="pb-8">
                 <></>
@@ -209,3 +241,29 @@ export function MessagesComponent({
     </div>
   );
 }
+
+export type MessageProps = {
+  id: number;
+  message: string;
+  type: number;
+  date: string;
+  sender: number;
+  receiver: number;
+  isSameUserAsPrevious: boolean;
+  customClass?: string;
+  messageGroup: { id: number; message: string; isLastMessage: boolean }[];
+  isRead: boolean;
+  reaction: string;
+  files: {
+    id: number;
+    type: string;
+    previewUrl: string;
+    url: string;
+  }[];
+};
+
+export type UserProps = {
+  id: number;
+  name: string;
+  avatar: string;
+};

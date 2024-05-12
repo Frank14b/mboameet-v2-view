@@ -248,7 +248,6 @@ export const scrollToBottom = (id: string) => {
 };
 
 export const debounce = (func: Function, delay: number, ...args: any[]) => {
-  // return (...args: any[]) => {
   if (debounceTimer) {
     clearTimeout(debounceTimer);
   }
@@ -257,5 +256,4 @@ export const debounce = (func: Function, delay: number, ...args: any[]) => {
     func(...args);
     clearTimeout(debounceTimer);
   }, delay);
-  // };
 };

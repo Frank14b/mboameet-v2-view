@@ -112,7 +112,7 @@ export const proceedChangePassword = async (
   return result;
 };
 
-export const validatToken = async () => {
+export const validateToken = async () => {
   const result: ApiResponseDto<ResultProfileData> = await apiCall({
     method: "GET",
     url: urls.validateToken,

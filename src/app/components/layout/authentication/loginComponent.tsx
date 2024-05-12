@@ -1,15 +1,18 @@
 "use client";
 
 import LoadingSpinner from "../../widgets/loadingSpinner";
-import useSignIn from "@/app/hooks/pages/auth/useSignIn";
+import { SignInHookDto } from "@/app/hooks/pages/auth/useSignIn";
 import LoginFormComponent from "./loginFormComponent";
 import AnimateFadeOut from "../../widgets/motions/animateFadeOut";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function LoginComponent() {
+export default function LoginComponent({
+  signInHook,
+}: {
+  signInHook: SignInHookDto;
+}) {
   //
-  const signInHook = useSignIn();
   const { handleSubmit, isLoading, submitFormData } = signInHook;
 
   return (

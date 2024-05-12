@@ -14,6 +14,8 @@ export interface ResultMessageDto {
   isReceived: boolean;
   isRead: boolean;
   reference: string;
+  reaction: string;
+  chatFiles: ChatFilesData[];
 }
 
 export interface ResultChatUsersDto {
@@ -30,3 +32,10 @@ export interface ResultMessageByReferenceDto {
   photo: string;
   messages: ResultPaginate<ResultMessageDto[]>;
 }
+
+export type ChatFilesData = {
+  id: number;
+  type: string;
+  previewUrl: string;
+  url: string;
+};
