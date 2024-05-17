@@ -1,10 +1,12 @@
 "use client";
 
-import AccountSettingsComponent from "@/app/components/layout/settings/accountSettingsComponent";
-import ThemeToggleComponent from "@/app/components/layout/settings/themeToggleComponent";
+import SettingsComponent from "@/app/components/layout/settings/settingsComponent";
+import useAccountSettings from "@/app/hooks/pages/profile/useAccountSettings";
 import { Typography } from "@material-tailwind/react";
 
 export default function SettingPage() {
+  const settingsHook = useAccountSettings();
+
   return (
     <>
       <div className="w-full flex absolute dark:text-white right-0 px-5">
@@ -19,11 +21,7 @@ export default function SettingPage() {
       </div>
       {/*  */}
 
-      <ThemeToggleComponent />
-
-      <AccountSettingsComponent />
-
-      <AccountSettingsComponent />
+      <SettingsComponent settingsHook={settingsHook} />
 
       {/*  */}
     </>

@@ -37,7 +37,7 @@ export default function SelectField({
   const { errors } = formState ?? {};
   const [error, setError] = useState<any>(null);
   const fieldKey = data?.name ?? data.title.toLowerCase();
-  const { name } = register(`${fieldKey}`);
+  const { name } = register?.(`${fieldKey}`) ?? {};
 
   const watchField = watch?.(`${fieldKey}`);
 

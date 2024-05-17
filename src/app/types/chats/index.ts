@@ -16,6 +16,7 @@ export interface ResultMessageDto {
   reference: string;
   reaction: string;
   chatFiles: ChatFilesData[];
+  isEncrypted: boolean;
 }
 
 export interface ResultChatUsersDto {

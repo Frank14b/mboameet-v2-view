@@ -96,7 +96,7 @@ export const apiCall = async ({
       console.log("Unauthorized User");
     }
 
-    console.log("Request error", error.response.data);
+    console.log("Request error", error);
 
     return ApiErrorMessage(error);
   } finally {

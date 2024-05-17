@@ -12,6 +12,7 @@ import { ResultMessageDto } from "@/app/types/chats";
 import {
   getMessages,
   proceedDeleteMessage,
+  proceedDeleteMessages,
   sendMessage,
   sendMessageReaction,
   updateMessage,
@@ -27,6 +28,7 @@ import {
 } from "@/app/components/layout/chats/messagesComponent";
 import useUserStore from "@/app/store/userStore";
 import {
+  checkFileExtensionUsingLink,
   debounce,
   fileExtFromBase64,
   getContentEditable,
@@ -36,12 +38,13 @@ import useChatStore from "@/app/store/chatStore";
 import { useRouter } from "next/navigation";
 import { useAppHubContext } from "@/app/contexts/appHub";
 import { MessageActionType, ObjectKeyDto } from "@/app/types";
+import { MessageImagePreviewProps } from "@/app/components/layout/chats/messageImagePreviewComponent";
 
 const useDiscussions = ({ reference }: { reference: string }) => {
   //
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [messages, setMessages] = useState<ResultMessageDto[] | []>([]);
-  const { getFileUrl } = useMainContext();
+  const { appEncryption, getFileUrl } = useMainContext();
   const { user } = useUserStore();
   const [users, setUsers] = useState({
     primaryUser: {
@@ -60,9 +63,11 @@ const useDiscussions = ({ reference }: { reference: string }) => {
     createdMessage,
     updatedMessage,
     deletedMessage,
+    deletedMessages,
     setCreatedMessage,
     setUpdatedMessage,
     setDeletedMessage,
+    setDeletedMessages,
   } = useChatStore();
   //
   const router = useRouter();
@@ -71,6 +76,10 @@ const useDiscussions = ({ reference }: { reference: string }) => {
   const [editedMessage, setEditedMessage] = useState<MessageProps | null>(null);
   const [image, setImage] = useState<string>("");
   const [linkedImages, setLinkedImages] = useState<ObjectKeyDto[] | null>(null);
+  const {
+    encodeAndEncryptMessageAsync,
+    decryptAndDecodeMessageAsync,
+  } = appEncryption;
 
   const fetchMessages = useCallback(
     async (cursor = 0) => {
@@ -81,49 +90,56 @@ const useDiscussions = ({ reference }: { reference: string }) => {
         cursor: cursor,
       });
 
-      if (!result.status) {
+      if (!result.status || !result?.data?.messages) {
         if (cursor > 0) return;
         return router.push(chatsPathUrl);
       }
 
-      setIsLoading(false);
-      if (result.status && result?.data?.messages) {
-        //
-        const userId = result.data.userId;
-        const userName = result.data.userName;
-        const photo = result.data.photo;
-        const resultMessages = result.data.messages.data;
+      //
+      const userId = result.data.userId;
+      const userName = result.data.userName;
+      const photo = result.data.photo;
+      const resultMessages = result.data.messages.data;
 
-        const lastMessage = resultMessages[resultMessages.length - 1];
-        if (lastMessage) {
-          setLastMessageId(lastMessage.id);
+      if (resultMessages.findIndex((x) => x.isEncrypted) !== -1) {
+        for (let message of resultMessages) {
+          if (message.isEncrypted) {
+            message.message = await decryptAndDecodeMessageAsync(
+              message.message
+            );
+          }
         }
-
-        setUsers((prevValues) => {
-          return {
-            ...prevValues,
-            secondUser: {
-              id: userId,
-              name: userName,
-              avatar: getFileUrl(photo, userId),
-            },
-          };
-        });
-
-        chatHubs?.updateUserMessagesAsRead(userId);
-
-        if (cursor > 0) {
-          setMessages((prevValues) => {
-            return [...prevValues, ...resultMessages];
-          });
-        } else {
-          setMessages(resultMessages);
-        }
-
-        return resultMessages;
       }
 
-      setMessages([]);
+      setIsLoading(false);
+
+      const lastMessage = resultMessages[resultMessages.length - 1];
+      if (lastMessage) {
+        setLastMessageId(lastMessage.id);
+      }
+
+      setUsers((prevValues) => {
+        return {
+          ...prevValues,
+          secondUser: {
+            id: userId,
+            name: userName,
+            avatar: getFileUrl(photo, userId),
+          },
+        };
+      });
+
+      chatHubs?.updateUserMessagesAsRead(userId);
+
+      if (cursor > 0) {
+        setMessages((prevValues) => {
+          return [...prevValues, ...resultMessages];
+        });
+      } else {
+        setMessages(resultMessages);
+      }
+
+      return resultMessages;
     },
     [
       reference,
@@ -133,6 +149,7 @@ const useDiscussions = ({ reference }: { reference: string }) => {
       setIsLoading,
       getFileUrl,
       setMessages,
+      decryptAndDecodeMessageAsync,
     ]
   );
 
@@ -153,21 +170,29 @@ const useDiscussions = ({ reference }: { reference: string }) => {
     }
   }, [createdMessage, lastMessageId, setCreatedMessage, fetchMessages]);
 
-  useEffect(() => {
-    if (updatedMessage) {
+  const captureUpdatedMessage = useCallback(
+    async (updatedMess: ResultMessageDto) => {
       const index = messages.findIndex(
-        (message) => message.id === updatedMessage.id
+        (message) => message.id === updatedMess.id
       );
       if (index !== -1) {
-        setUpdatedMessage(null);
         messages[index] = {
-          ...updatedMessage,
-          chatFiles: messages[index].chatFiles
+          ...updatedMess,
+          chatFiles: messages[index].chatFiles,
+          message: await decryptAndDecodeMessageAsync(updatedMess.message),
         };
         setMessages([...messages]);
       }
+    },
+    [messages, decryptAndDecodeMessageAsync]
+  );
+
+  useEffect(() => {
+    if (updatedMessage) {
+      setUpdatedMessage(null);
+      captureUpdatedMessage(updatedMessage);
     }
-  }, [messages, updatedMessage, setUpdatedMessage]);
+  }, [updatedMessage, setUpdatedMessage, captureUpdatedMessage]);
 
   useEffect(() => {
     if (deletedMessage) {
@@ -181,6 +206,19 @@ const useDiscussions = ({ reference }: { reference: string }) => {
       }
     }
   }, [messages, deletedMessage, setDeletedMessage]);
+
+  useEffect(() => {
+    if (deletedMessages) {
+      const index = messages.findIndex(
+        (message) => message.id === deletedMessages[0].id
+      );
+      if (index !== -1) {
+        setDeletedMessages(null);
+        messages.splice(index, deletedMessages.length);
+        setMessages([...messages]);
+      }
+    }
+  }, [messages, deletedMessages, setDeletedMessages]);
 
   const isMessageTimeMoreThanSixtySeconds = (
     newMessageTime: string,
@@ -205,7 +243,7 @@ const useDiscussions = ({ reference }: { reference: string }) => {
     let previousMessageTime: string | null = null;
     const result: MessageProps[] = [];
 
-    messages.map((message, index) => {
+    messages.map(async (message, index) => {
       const isSameUserAsPrevious = previousMessageUserId === message.sender;
 
       const isTimeMoreThanSixtySeconds = isMessageTimeMoreThanSixtySeconds(
@@ -251,6 +289,7 @@ const useDiscussions = ({ reference }: { reference: string }) => {
           isRead: message.isRead,
           reaction: message.reaction,
           files: files,
+          isEncrypted: message.isEncrypted,
         });
       }
     });
@@ -262,58 +301,95 @@ const useDiscussions = ({ reference }: { reference: string }) => {
     return result;
   }, [messages, getFileUrl]);
 
+  const discussionImages = useMemo(() => {
+    const images: MessageImagePreviewProps[] = [];
+
+    formattedMessages.map((message) =>
+      message.files.map((file) => {
+        const extension = checkFileExtensionUsingLink(file.url);
+
+        if (extension === "image") {
+          images.push({
+            title: "",
+            description: "",
+            url: file.url,
+          });
+        }
+      })
+    );
+
+    return images;
+  }, [formattedMessages]);
+
   const handleSendMessage = useCallback(
     async ({ userId }: { userId: number }) => {
       const inputText = getContentEditable(`${messageFieldId}`);
-      const message = inputText.innerText;
+      let message = inputText.innerText;
+      let messagePair = message;
+      //
       inputText.innerText = "";
 
-      if (message.length > 0) {
-        let result;
+      let result = { status: false, message: "" };
 
-        if (editedMessage) {
-          // edited message
-          result = await updateMessage({
-            revalidate: true,
-            type: "users",
-            id: editedMessage.id,
-            message,
-          });
-        } else {
-          // new message
-          const formData = new FormData();
-          if (linkedImages && linkedImages.length > 0) {
-            for (let i = 0; i < linkedImages.length; i++) {
-              formData.append(
-                "images",
-                linkedImages[i].blob,
-                `chat-${i}-${userId}.${fileExtFromBase64(
-                  linkedImages[i].base64
-                )}`
-              );
-            }
+      if (editedMessage) {
+        if (message.length == 0) return;
+        // edited message
+
+        if (editedMessage.isEncrypted) {
+          message = await encodeAndEncryptMessageAsync(message);
+          messagePair = await encodeAndEncryptMessageAsync(messagePair);
+        }
+
+        result = await updateMessage({
+          revalidate: true,
+          type: "users",
+          id: editedMessage.id,
+          message,
+          messagePair,
+        });
+      } else {
+        // new message
+        const formData = new FormData();
+        if (linkedImages && linkedImages.length > 0) {
+          for (let i = 0; i < linkedImages.length; i++) {
+            formData.append(
+              "images",
+              linkedImages[i].blob,
+              `chat-${i}-${userId}.${fileExtFromBase64(linkedImages[i].base64)}`
+            );
           }
-          formData.append("message", message);
-          formData.append("messageType", `${0}`);
-          formData.append("receiver", `${userId}`);
-
-          result = await sendMessage({
-            revalidate: true,
-            type: "users",
-            formData,
-          });
         }
 
-        if (!result.status) {
-          inputText.innerText = message;
-          return notification.apiNotify(result);
-        }
+        const base64String = await encodeAndEncryptMessageAsync(message);
 
-        setLinkedImages(null);
-        setEditedMessage(null);
+        formData.append("message", base64String);
+        formData.append("messagePair", base64String);
+        formData.append("isEncrypted", `${true}`);
+        formData.append("messageType", `${0}`);
+        formData.append("receiver", `${userId}`);
+
+        result = await sendMessage({
+          revalidate: true,
+          type: "users",
+          formData,
+        });
       }
+
+      if (!result?.status) {
+        inputText.innerText = message;
+        return notification.apiNotify(result);
+      }
+
+      setLinkedImages(null);
+      setEditedMessage(null);
     },
-    [editedMessage, linkedImages, setEditedMessage, setLinkedImages]
+    [
+      editedMessage,
+      linkedImages,
+      setEditedMessage,
+      setLinkedImages,
+      encodeAndEncryptMessageAsync,
+    ]
   );
 
   const handleMessageReaction = useCallback(
@@ -354,10 +430,38 @@ const useDiscussions = ({ reference }: { reference: string }) => {
     [messages, setMessages]
   );
 
+  const handleDeleteMessages = useCallback(
+    async (ids: number[]) => {
+      const result = await proceedDeleteMessages({
+        revalidate: true,
+        type: "users",
+        ids,
+      });
+
+      if (!result.status) {
+        return notification.apiNotify(result);
+      }
+
+      const index = messages.findIndex((message) => message.id === ids[0]);
+      if (index !== -1) {
+        messages.splice(index, ids.length);
+        setMessages([...messages]);
+      }
+    },
+    [messages, setMessages]
+  );
+
   const handleMessageAction = useCallback(
     async (item: MessageProps, action: MessageActionType) => {
       //
       if (action === "delete") {
+        if (item.messageGroup.length > 0) {
+          await handleDeleteMessages([
+            item.id,
+            ...item.messageGroup.map((message) => message.id),
+          ]);
+          return;
+        }
         await handleDeleteMessage(item.id);
         return;
       }
@@ -368,7 +472,7 @@ const useDiscussions = ({ reference }: { reference: string }) => {
         setEditedMessage(item);
       }
     },
-    [handleDeleteMessage]
+    [handleDeleteMessage, handleDeleteMessages]
   );
 
   const cancelEditMessageAction = useCallback(() => {
@@ -435,6 +539,7 @@ const useDiscussions = ({ reference }: { reference: string }) => {
     editedMessage,
     image,
     linkedImages,
+    chatImages: discussionImages,
     setImage,
     setUsers,
     setIsLoading,
@@ -463,6 +568,7 @@ export type ConversationHookDto = {
   };
   editedMessage: MessageProps | null;
   linkedImages: ObjectKeyDto[] | null;
+  chatImages: MessageImagePreviewProps[];
   setUsers: Dispatch<
     SetStateAction<{
       primaryUser: UserProps;

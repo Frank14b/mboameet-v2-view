@@ -20,11 +20,9 @@ import { sessionTimeOut } from "../lib/workers";
 import {
   ObjectKeyDto,
   ResultLoginDto,
-  ResultUpdateProfileData,
 } from "../types";
 import {
   authStartPath,
-  chatStartPath,
   defaultProfileImg,
   mainDivComponentId,
 } from "../lib/constants/app";
@@ -33,6 +31,7 @@ import { MobileSideBarMenuComponent } from "../components/commons/mobileSideBarM
 import useChatStore from "../store/chatStore";
 import { configs } from "../../../app.config";
 import { validateToken } from "../services/server-actions";
+import useAppEncryption, { UseEncryptionProps } from "../hooks/useEncryption";
 
 const MainContext = createContext<any>({});
 
@@ -49,7 +48,9 @@ export function MainWrapper({ children }: { children: any }) {
   } = useUserStore();
   const pathname = usePathname();
   const [mainScroll, setMainScroll] = useState<any>(null);
-  const { isDiscussionOpen, setOpenDiscussion } = useChatStore();
+  const { isDiscussionOpen } = useChatStore();
+  const appEncryption = useAppEncryption();
+  const { importKeys } = appEncryption;
 
   const queryClient = new QueryClient();
 
@@ -64,32 +65,37 @@ export function MainWrapper({ children }: { children: any }) {
     }, 300);
   }, [setUserConnected, setLoading]);
 
-  const getFileUrl = useCallback(
-    (link?: string, userId?: number) => {
-      //
-      if (!link || link.length == 0) {
-        return defaultProfileImg;
-      }
-      return `${configs.PUBLIC_FILES_LINK}${userId ?? user?.id}/${link}`;
-    },
-    [user]
-  );
+  const getFileUrl = useCallback((link?: string, userId?: number) => {
+    //
+    if (!link || link.length == 0) {
+      return defaultProfileImg;
+    }
+    return `${configs.PUBLIC_FILES_LINK}${userId}/${link}`;
+  }, []);
 
   const validateUserSession = useCallback(async () => {
     const result = await validateToken();
     if (result.status) {
-      setUser(result.data as ResultUpdateProfileData);
+      setUser({
+        ...result.data,
+        photo: getFileUrl(result.data?.photo, result.data?.id),
+      });
       setUserConnected(true);
     } else {
       logout();
     }
-  }, [logout, setUser, setUserConnected]);
+  }, [logout, setUser, getFileUrl, setUserConnected]);
+
+  useEffect(() => {
+    importKeys();
+  }, [importKeys]);
 
   const MainData: MainContextDto = {
     userConnected,
     connectedUser: user,
     theme: theme,
     mainScroll,
+    appEncryption: appEncryption,
     setTheme,
     logout,
     getFileUrl,
@@ -119,73 +125,64 @@ export function MainWrapper({ children }: { children: any }) {
     }, 300);
   }, [setLoading]);
 
-  useEffect(() => {
-    if (isDiscussionOpen) {
-      if (pathname === chatStartPath || !pathname.startsWith(chatStartPath)) {
-        setOpenDiscussion(false);
-      }
-    }
-  }, [isDiscussionOpen, pathname, setOpenDiscussion]);
-
   return (
     <MainContext.Provider value={MainData}>
-      <QueryClientProvider client={queryClient}>
-        {loading ? (
-          <></>
-        ) : (
-          <>
-            <main className={`${theme}`}>
-              <AppHubWrapper>
-                {userConnected === true &&
-                !pathname.startsWith(authStartPath) ? (
-                  <>
-                    <div className="mh-600 bg-gray-200 dark:bg-gray-800">
-                      <div className="flex xxl:container">
-                        <MobileSideBarMenuComponent></MobileSideBarMenuComponent>
+      {/* <QueryClientProvider client={queryClient}> */}
+      {loading ? (
+        <></>
+      ) : (
+        <>
+          <main className={`${theme}`}>
+            <AppHubWrapper>
+              {userConnected === true && !pathname.startsWith(authStartPath) ? (
+                <>
+                  <div className="mh-600 bg-gray-200 dark:bg-gray-800">
+                    <div className="flex xxl:container">
+                      <MobileSideBarMenuComponent></MobileSideBarMenuComponent>
 
-                        <div className="w-1/4 csm:hidden xs:hidden xs:left-0 xs:w-[300px] xs:z-50 lg:relative bg-gray-100 dark:bg-gray-900 h-screen">
-                          <SideBarMenuComponent>
+                      <div className="w-1/4 csm:hidden xs:hidden xs:left-0 xs:w-[300px] xs:z-50 lg:relative bg-gray-100 dark:bg-gray-900 h-screen">
+                        <SideBarMenuComponent>
+                          <></>
+                        </SideBarMenuComponent>
+                      </div>
+
+                      <div
+                        className={`${
+                          isDiscussionOpen ? "min-sm:w-full" : ""
+                        } w-1/2 csm:w-full xs:w-full lg:w-1/2 bg-gray-100 dark:bg-gray-900`}
+                      >
+                        <div
+                          className="flex flex-col h-screen p-6 relative overflow-y-auto"
+                          id={mainDivComponentId}
+                        >
+                          {children}
+                        </div>
+                      </div>
+
+                      <div
+                        className={`${
+                          isDiscussionOpen ? "min-sm:hidden" : ""
+                        } w-1/4 sm:w-1/3 csm:hidden lg:w-1/4 xs:right-0 xs:z-50 xs:w-[300px] xs:px-6 px-3 bg-gray-100 dark:bg-gray-900`}
+                      >
+                        <div className="flex flex-col h-screen pt-6 overflow-y-auto">
+                          <AsideBarMenuComponent>
                             <></>
-                          </SideBarMenuComponent>
-                        </div>
-
-                        <div
-                          className={`${
-                            isDiscussionOpen ? "min-sm:w-full" : ""
-                          } w-1/2 csm:w-full xs:w-full lg:w-1/2 bg-gray-100 dark:bg-gray-900`}
-                        >
-                          <div
-                            className="flex flex-col h-screen p-6 relative overflow-y-auto"
-                            id={mainDivComponentId}
-                          >
-                            {children}
-                          </div>
-                        </div>
-
-                        <div
-                          className={`${
-                            isDiscussionOpen ? "min-sm:hidden" : ""
-                          } w-1/4 sm:w-1/3 csm:hidden lg:w-1/4 xs:right-0 xs:z-50 xs:w-[300px] xs:px-6 px-3 bg-gray-100 dark:bg-gray-900`}
-                        >
-                          <div className="flex flex-col h-screen pt-6 overflow-y-auto">
-                            <AsideBarMenuComponent>
-                              <></>
-                            </AsideBarMenuComponent>
-                          </div>
+                          </AsideBarMenuComponent>
                         </div>
                       </div>
                     </div>
-                  </>
-                ) : (
-                  <>{pathname.startsWith(authStartPath) ? children : <></>}</>
-                )}
-              </AppHubWrapper>
+                  </div>
+                </>
+              ) : (
+                <>{pathname.startsWith(authStartPath) ? children : <></>}</>
+              )}
+            </AppHubWrapper>
 
-              <ToastContainer />
-            </main>
-          </>
-        )}
-      </QueryClientProvider>
+            <ToastContainer />
+          </main>
+        </>
+      )}
+      {/* </QueryClientProvider> */}
     </MainContext.Provider>
   );
 }
@@ -197,6 +194,7 @@ export type MainContextDto = {
   connectedUser: ResultLoginDto | ObjectKeyDto | null;
   theme: string;
   mainScroll: any;
+  appEncryption: UseEncryptionProps;
   setTheme: (userTheme: string) => void;
   logout: () => Promise<void>;
   getFileUrl: (link?: string, userId?: number) => string;

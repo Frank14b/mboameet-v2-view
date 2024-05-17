@@ -257,3 +257,14 @@ export const debounce = (func: Function, delay: number, ...args: any[]) => {
     clearTimeout(debounceTimer);
   }, delay);
 };
+
+export const checkFileExtensionUsingLink = (link: string) => {
+  const extension = link.split(".").pop();
+  if (extension === "mp4") {
+    return "video";
+  } else if (extension === "jpg" || extension === "jpeg" || extension === "png") {
+    return "image";
+  } else {
+    return null;
+  }
+}

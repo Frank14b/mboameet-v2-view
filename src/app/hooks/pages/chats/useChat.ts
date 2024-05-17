@@ -22,8 +22,9 @@ const useChat = () => {
   const [activeTab, setActiveTab] = useState<DiscussionTypes>(
     discussionTypesList[0].key as DiscussionTypes
   );
-  const { getFileUrl } = useMainContext();
+  const { appEncryption, getFileUrl } = useMainContext();
   const { user } = useUserStore();
+  const { decryptAndDecodeMessageAsync } = appEncryption;
 
   const fetchDiscussions = useCallback(
     async ({ type }: { type: DiscussionTypes }) => {
@@ -33,15 +34,32 @@ const useChat = () => {
         type,
       });
 
-      setIsLoading(false);
-      if (result.status && result?.data?.data) {
-        setDiscussions(result.data.data);
-        return result.data.data;
+      if (!result.status || !result?.data?.data) {
+        setIsLoading(false);
+        setDiscussions([]);
+        return;
       }
 
-      setDiscussions([]);
+      if (
+        result.data.data.findIndex(
+          (discussion) => discussion.lastMessage.isEncrypted
+        ) !== -1
+      ) {
+        for (let discussion of result.data.data) {
+          const message = discussion.lastMessage;
+          if (message.isEncrypted) {
+            discussion.lastMessage.message = await decryptAndDecodeMessageAsync(
+              message.message
+            );
+          }
+        }
+      }
+
+      setDiscussions(result.data.data);
+      setIsLoading(false);
+      return result.data.data;
     },
-    [setIsLoading, setDiscussions]
+    [setIsLoading, setDiscussions, decryptAndDecodeMessageAsync]
   );
 
   useEffect(() => {

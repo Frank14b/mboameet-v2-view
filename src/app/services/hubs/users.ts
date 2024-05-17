@@ -21,11 +21,10 @@ class UserHubs {
     this.userStore = userStore;
     this.getFileUrl = getFileUrl;
 
-    this.getProfileDetails();
-    this.updateProfile();
+    this.init();
   }
 
-  getProfileDetails(): void {
+  init(): void {
     this.connection.on(hubConstants.users.profile, (user: any) => {
       if (user?.id) {
         this.userStore.setUserConnected(true);

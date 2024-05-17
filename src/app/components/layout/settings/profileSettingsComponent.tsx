@@ -1,8 +1,10 @@
+import { AccountSettingHookDto } from "@/app/hooks/pages/profile/useAccountSettings";
 import { profilePathUrl } from "@/app/lib/constants/app";
 import {
   EyeIcon,
   PencilIcon,
   CheckCircleIcon,
+  FlagIcon,
 } from "@heroicons/react/24/solid";
 import {
   Card,
@@ -13,10 +15,33 @@ import {
   Switch,
 } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
+import SelectField from "../../widgets/selectField";
+import { useCountries } from "use-react-countries";
+import { useMemo } from "react";
 
-export default function AccountSettingsComponent() {
+export default function ProfileSettingsComponent({
+  settingsHook,
+}: {
+  settingsHook: AccountSettingHookDto;
+}) {
   //
   const router = useRouter();
+  const { settings, updateAccountSettings } = settingsHook;
+  const { countries } = useCountries();
+
+  const formattedCountries = useMemo(() => {
+    return countries.map((country) => {
+      return {
+        label: country.name,
+        value: country.name,
+        image: country.flags.svg,
+        customValue: {
+          name: country.name,
+          callingCode: country.countryCallingCode,
+        },
+      };
+    });
+  }, [countries]);
 
   return (
     <>
@@ -26,7 +51,7 @@ export default function AccountSettingsComponent() {
             <div className="relative items-center gap-4 py-3 px-5 bg-white dark:bg-black/35 dark:border-0 border shadow-lg rounded-xl border-blue-gray-50 shadow-blue-gray-900/5">
               <div className="w-full">
                 <h6 className="font-sans mb-3 text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900 dark:text-gray-200">
-                  Account Settings
+                  Profile Settings
                 </h6>
                 <div className="w-full">
                   <Card
@@ -66,8 +91,13 @@ export default function AccountSettingsComponent() {
                             crossOrigin={""}
                             color="green"
                             label=""
-                            defaultChecked={true}
+                            defaultChecked={settings.isVisible}
                             ripple={true}
+                            onChange={(event) =>
+                              updateAccountSettings({
+                                isVisible: event.target.checked,
+                              })
+                            }
                           />
                         </ListItemSuffix>
                       </ListItem>
@@ -89,30 +119,52 @@ export default function AccountSettingsComponent() {
                             crossOrigin={""}
                             color="green"
                             label=""
-                            defaultChecked={false}
+                            defaultChecked={settings.autoApproveMatch}
                             ripple={true}
+                            onChange={(event) =>
+                              updateAccountSettings({
+                                autoApproveMatch: event.target.checked,
+                              })
+                            }
                           />
                         </ListItemSuffix>
                       </ListItem>
+
+                      <ListItem placeholder={""}>
+                        <ListItemPrefix placeholder={""}>
+                          <FlagIcon className="h-5 w-5" />
+                        </ListItemPrefix>
+                        <div>
+                          <span className="dark:text-gray-100">
+                            Default Language
+                          </span>
+                        </div>
+                        <ListItemSuffix
+                          placeholder={""}
+                          className="uppercase font-bold"
+                        >
+                          {settings.preferredLanguage}
+                        </ListItemSuffix>
+                      </ListItem>
+                      {/* // */}
                     </List>
                     <div className="p-3 px-5">
                       <h6 className="text-sm mb-2 text-gray-900 dark:text-gray-100">
-                        Countries Lock
+                        Countries Locked
                       </h6>
                       <p className="text-xs dark:text-gray-500">
-                        Only users from the selected countries can see your
+                        Only users from the selected countries can{`'`}t see your
                         profile
                       </p>
                     </div>
-
-                    <div className="p-3 px-5">
-                      <h6 className="text-sm mb-2 text-gray-900 dark:text-gray-100">
-                        Countries Lock
-                      </h6>
-                      <p className="text-xs dark:text-gray-500">
-                        Only users from the selected countries can see your
-                        profile
-                      </p>
+                    <div className="">
+                      <SelectField
+                        data={{
+                          title: "Select Country",
+                          name: "country",
+                          options: formattedCountries,
+                        }}
+                      />
                     </div>
                   </Card>
                 </div>

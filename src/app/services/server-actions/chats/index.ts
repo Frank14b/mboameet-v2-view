@@ -51,18 +51,17 @@ export const getMessages = async ({
 export const sendMessage = async ({
   revalidate,
   type,
-  formData
+  formData,
 }: {
   revalidate: boolean;
   type: DiscussionTypes;
   formData: FormData;
 }) => {
-  const result: ApiResponseDto<ResultMessageDto> =
-    await apiCall({
-      method: "POST",
-      url: `${urls.getDiscussions}/${type}`,
-      data: formData,
-    });
+  const result: ApiResponseDto<ResultMessageDto> = await apiCall({
+    method: "POST",
+    url: `${urls.getDiscussions}/${type}`,
+    data: formData,
+  });
 
   return result;
 };
@@ -78,14 +77,13 @@ export const sendMessageReaction = async ({
   id: number;
   reaction: string;
 }) => {
-  const result: ApiResponseDto<ResultMessageDto> =
-    await apiCall({
-      method: "PATCH",
-      url: `${urls.getDiscussions}/${id}/${type}/reaction`,
-      data: {
-        reaction,
-      },
-    });
+  const result: ApiResponseDto<ResultMessageDto> = await apiCall({
+    method: "PATCH",
+    url: `${urls.getDiscussions}/${id}/${type}/reaction`,
+    data: {
+      reaction,
+    },
+  });
 
   return result;
 };
@@ -99,11 +97,10 @@ export const proceedDeleteMessage = async ({
   type: DiscussionTypes;
   id: number;
 }) => {
-  const result: ApiResponseDto<ResultMessageDto> =
-    await apiCall({
-      method: "DELETE",
-      url: `${urls.getDiscussions}/${id}/${type}`,
-    });
+  const result: ApiResponseDto<ResultMessageDto> = await apiCall({
+    method: "DELETE",
+    url: `${urls.getDiscussions}/${id}/${type}`,
+  });
 
   return result;
 };
@@ -113,21 +110,40 @@ export const updateMessage = async ({
   type,
   id,
   message,
+  messagePair,
 }: {
   revalidate: boolean;
   type: DiscussionTypes;
   id: number;
   message: string;
+  messagePair: string;
 }) => {
-  const result: ApiResponseDto<ResultMessageDto> =
-    await apiCall({
-      method: "PUT",
-      url: `${urls.getDiscussions}/${id}/${type}`,
-      data: {
-        id,
-        message,
-      },
-    });
+  const result: ApiResponseDto<ResultMessageDto> = await apiCall({
+    method: "PUT",
+    url: `${urls.getDiscussions}/${id}/${type}`,
+    data: {
+      id,
+      message,
+      messagePair,
+    },
+  });
+
+  return result;
+};
+
+export const proceedDeleteMessages = async ({
+  revalidate,
+  type,
+  ids,
+}: {
+  revalidate: boolean;
+  type: DiscussionTypes;
+  ids: number[];
+}) => {
+  const result: ApiResponseDto<ResultMessageDto> = await apiCall({
+    method: "DELETE",
+    url: `${urls.getDiscussions}/${type}?ids=${ids.toString()}`,
+  });
 
   return result;
 };

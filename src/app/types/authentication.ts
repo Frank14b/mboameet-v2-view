@@ -26,7 +26,7 @@ export type ResultLoginDto = {
     lastName: string,
     email: string,
     phone: number,
-    countryCode: string,
+    callingCode?: string,
     token: string,
     status: number,
     createdAt: Date,
@@ -34,6 +34,7 @@ export type ResultLoginDto = {
     age: number,
     lastLogin: Date,
     photo?: string,
+    country?: Maybe<string | undefined>
 }
 
 export type ForgetPasswordDto = {

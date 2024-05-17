@@ -22,8 +22,7 @@ function useSignIn(): SignInHookDto {
     },
   });
 
-  const [responseData, setResponseData] =
-    useState<ApiResponseDto<ResultLoginDto> | null>(null);
+  const [responseData] = useState<ApiResponseDto<ResultLoginDto> | null>(null);
   const { setUserConnected, setUser, setLoading } = useUserStore();
   const router = useRouter();
 
@@ -49,14 +48,11 @@ function useSignIn(): SignInHookDto {
 
       if (result.status === true) {
         initUserStoreSession(result?.data ?? null);
-        router.push("/");
-       
-        setTimeout(() => {
-          setLoading(false);
-        }, 150);
+        // router.push("/");
+        window.location.reload();
       }
     },
-    [initUserStoreSession, router, setLoading]
+    [initUserStoreSession]
   );
   //
 

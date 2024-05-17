@@ -41,15 +41,14 @@ function useSignUp() {
     },
   });
   //
-  const [responseData, setResponseData] =
-    useState<ApiResponseDto<ResultLoginDto> | null>(null);
+  const [responseData] = useState<ApiResponseDto<ResultLoginDto> | null>(null);
 
   const submitFormData = useCallback(
     async (data: RegistrationFormData) => {
       if (stepper < 3) return;
       setIsLoading(true);
       const result = await proceedRegister(data);
-      
+
       setIsLoading(false);
       notification.apiNotify<ResultLoginDto>(result);
 
@@ -95,7 +94,7 @@ function useSignUp() {
   }, [switchStepper]);
 
   const switchbackStepper = () => {
-    setStepper(stepper - 1);
+    setStepper(stepper - 2);
   };
 
   const data: SignUpHookDto = {

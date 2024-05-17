@@ -22,6 +22,8 @@ import { ConversationHookDto } from "@/app/hooks/pages/chats/useDiscussions";
 import ConversationReactionComponent from "./conversationReactionComponent";
 import MessageActionsComponent from "./messageActionsComponent";
 import Image from "next/image";
+import { MessageImagePreviewComponent } from "./messageImagePreviewComponent";
+import { useState } from "react";
 
 export function MessagesComponent({
   users,
@@ -39,8 +41,13 @@ export function MessagesComponent({
 }) {
   //
 
-  const { editedMessage, handleMessageReaction, handleMessageAction } =
-    conversationHook;
+  const [openImage, setOpenImage] = useState<boolean>(false);
+  const {
+    editedMessage,
+    chatImages,
+    handleMessageReaction,
+    handleMessageAction,
+  } = conversationHook;
 
   return (
     <div className="w-full p-2 dark:backdrop-blur-sm backdrop-grayscale rounded-xl">
@@ -116,17 +123,29 @@ export function MessagesComponent({
                       >
                         <span>{message.message}</span>
 
-                        {message.messageGroup.map((subMessage, subIndex) => (
-                          <span key={subIndex} className="pt-6">
-                            <br />
-                            {subMessage.message}
-                          </span>
-                        ))}
+                        {message.messageGroup.map(
+                          (subMessage, subIndex) =>
+                            subMessage.message?.length > 0 && (
+                              <span key={subIndex} className="pt-5">
+                                <br />
+                                {subMessage.message}
+                              </span>
+                            )
+                        )}
 
                         {message.files.length > 0 && (
-                          <span className="mt-2 flex gap-2 overflow-x-auto">
+                          <span
+                            className={`mt-2 grid ${
+                              message.files.length > 2
+                                ? "grid-cols-3"
+                                : message.files.length == 1
+                                ? "grid-cols-1"
+                                : "grid-cols-2"
+                            } gap-2`}
+                          >
                             {message.files.map((file, index) => (
                               <Image
+                                onClick={() => setOpenImage(true)}
                                 key={index}
                                 src={file.url}
                                 alt={""}
@@ -189,17 +208,21 @@ export function MessagesComponent({
                       >
                         <span>{message.message}</span>
 
-                        {message.messageGroup.map((subMessage, subIndex) => (
-                          <span key={subIndex} className="pt-5">
-                            <br />
-                            {subMessage.message}
-                          </span>
-                        ))}
+                        {message.messageGroup.map(
+                          (subMessage, subIndex) =>
+                            subMessage.message?.length > 0 && (
+                              <span key={subIndex} className="pt-5">
+                                <br />
+                                {subMessage.message}
+                              </span>
+                            )
+                        )}
 
                         {message.files.length > 0 && (
                           <span className="mt-2 flex gap-2 overflow-x-auto">
                             {message.files.map((file, index) => (
                               <Image
+                                onClick={() => setOpenImage(true)}
                                 key={index}
                                 src={file.url}
                                 alt={""}
@@ -232,6 +255,13 @@ export function MessagesComponent({
           ))}
         </Timeline>
 
+        <MessageImagePreviewComponent
+          active={chatImages?.[0]}
+          images={chatImages}
+          open={openImage}
+          onOpen={setOpenImage}
+        />
+
         <MessageFormComponent
           userId={users.secondUser.id}
           conversationHook={conversationHook}
@@ -260,6 +290,7 @@ export type MessageProps = {
     previewUrl: string;
     url: string;
   }[];
+  isEncrypted: boolean;
 };
 
 export type UserProps = {

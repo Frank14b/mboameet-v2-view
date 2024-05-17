@@ -18,7 +18,7 @@ export default function LoginComponent({
   return (
     <>
       <div className="flex">
-        <div className="w-1/2 bg-gray-200 dark:bg-gray-800">
+        <div className="w-1/2 xs:w-full sm:w-full lg:w-1/2 bg-gray-200 dark:bg-gray-800">
           <AnimateFadeOut>
             <div className="flex flex-col items-center justify-center h-screen">
               <div className="relative flex flex-col text-gray-700 bg-white dark:bg-gray-900 shadow-md w-96 rounded-xl bg-clip-border">
@@ -55,7 +55,7 @@ export default function LoginComponent({
           </AnimateFadeOut>
         </div>
 
-        <div className="w-1/2 bg-pink-300">
+        <div className="w-1/2 xs:hidden bg-pink-300">
           <div className="flex flex-col items-center justify-end">
             <div className="w-full">
               <div className="flex flex-col items-center">

@@ -41,7 +41,7 @@ export function AppHubWrapper({ children }: { children: any }) {
   const initHub = useCallback(async () => {
     //
     if (connection) return;
-    if (userStore.userConnected !== true || (await isTokenExpired()) == true) {
+    if (userConnected !== true || (await isTokenExpired()) == true) {
       if (!pathname.startsWith(authStartPath)) {
         router.push(loginPathUrl);
       }
@@ -73,20 +73,6 @@ export function AppHubWrapper({ children }: { children: any }) {
             setConnection(_connection);
             //
             setErrorSocket(false);
-            // set all hubs class in react state
-            setUserHubs(
-              new UserHubs(
-                _connection as signalR.HubConnection,
-                userStore,
-                getFileUrl
-              )
-            );
-            setFeedHubs(
-              new FeedHubs(_connection as signalR.HubConnection, feedStore)
-            );
-            setChatHubs(
-              new ChatHubs(_connection as signalR.HubConnection, chatStore)
-            );
           })
           .catch(async (error: any) => {
             if (
@@ -107,21 +93,23 @@ export function AppHubWrapper({ children }: { children: any }) {
     } catch (error) {
       setConnection(null);
     }
-  }, [
-    userStore,
-    router,
-    connection,
-    feedStore,
-    pathname,
-    chatStore,
-    getFileUrl,
-    setErrorSocket,
-  ]);
+  }, [router, userConnected, connection, pathname, setErrorSocket]);
 
   useEffect(() => {
     // init the app websocket client hub
     initHub();
   }, [initHub]);
+
+  useEffect(() => {
+    if (connection) {
+      // set all hubs class in react state
+      setUserHubs(
+        new UserHubs(connection as signalR.HubConnection, userStore, getFileUrl)
+      );
+      setFeedHubs(new FeedHubs(connection as signalR.HubConnection, feedStore));
+      setChatHubs(new ChatHubs(connection as signalR.HubConnection, chatStore));
+    }
+  }, [connection, chatStore, feedStore, userStore, getFileUrl]);
 
   const closeConnection = useCallback(() => {
     if (!connection) return;
