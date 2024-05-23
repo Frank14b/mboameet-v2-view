@@ -24,8 +24,12 @@ export type VideoPlayerOptions = {
 
 export default function FeedVideoReaderComponent({
   feed,
+  isExpanded,
+  handleExpand,
 }: {
   feed: ResultFeed;
+  isExpanded: boolean;
+  handleExpand?: () => void;
 }) {
   const mainContext = useMainContext();
   const { set, get } = useLocalStorage();
@@ -61,7 +65,17 @@ export default function FeedVideoReaderComponent({
       videPlayer.volume = settings.volume;
     }
     videPlayer.muted = true;
-  }, [feed, get, setVideoPlayerData, getVideoPlayerElement]);
+
+    if (isExpanded) {
+      setVideoPlayerData((prevData) => {
+        return {
+          ...prevData,
+          paused: false,
+        };
+      });
+      videPlayer.play();
+    }
+  }, [isExpanded, feed, get, setVideoPlayerData, getVideoPlayerElement]);
 
   useEffect(() => {
     set(
@@ -81,38 +95,54 @@ export default function FeedVideoReaderComponent({
     videPlayer.controls = false;
   }, [getVideoPlayerElement]);
 
-  const handlePlayerEvents = useCallback(() => {
-    const videPlayer = getVideoPlayerElement();
+  const handlePlayerEvents = useCallback(
+    (isFromScroll: boolean = false) => {
+      const videPlayer = getVideoPlayerElement();
 
-    if (videPlayer && feedMainDivElement.current) {
-      const feedVideoDiv = feedMainDivElement.current as HTMLDivElement;
+      if (videPlayer && feedMainDivElement.current) {
+        const feedVideoDiv = feedMainDivElement.current as HTMLDivElement;
 
-      videPlayer.disablePictureInPicture = true;
-      videPlayer.disableRemotePlayback = true;
-      videPlayer.playsInline = true;
-      videPlayer.controls = false;
-      let videoPaused = true;
+        videPlayer.disablePictureInPicture = true;
+        videPlayer.disableRemotePlayback = true;
+        videPlayer.playsInline = true;
+        videPlayer.controls = false;
+        let videoPaused = true;
 
-      const divOffset = offsetElementPosition(feedVideoDiv);
-      if (divOffset.top >= 80 && divOffset.top <= 400) {
-        videPlayer.play();
-        videoPaused = false;
-      } else {
-        videPlayer.pause();
+        const divOffset = offsetElementPosition(feedVideoDiv);
+        if (divOffset.top >= 80 && divOffset.top <= 400) {
+          videPlayer.play();
+          videoPaused = false;
+        } else {
+          if (!isExpanded && isFromScroll) {
+            videPlayer.pause();
+          } else {
+            videoPaused = false;
+          }
+        }
+
+        setVideoPlayerData((prevData) => {
+          return {
+            ...prevData,
+            currentTime: videPlayer.currentTime,
+            duration: videPlayer.duration,
+            paused: videoPaused,
+            muted: videPlayer.muted,
+            ended: videPlayer.ended,
+          };
+        });
       }
+    },
+    [isExpanded, setVideoPlayerData, getVideoPlayerElement]
+  );
 
-      setVideoPlayerData((prevData) => {
-        return {
-          ...prevData,
-          currentTime: videPlayer.currentTime,
-          duration: videPlayer.duration,
-          paused: videoPaused,
-          muted: videPlayer.muted,
-          ended: videPlayer.ended,
-        };
-      });
-    }
-  }, [setVideoPlayerData, getVideoPlayerElement]);
+  // useEffect(() => {
+  //   const videPlayer = getVideoPlayerElement();
+  //   if (!videPlayer) return;
+
+  //   videPlayer.addEventListener("timeupdate", () => {
+  //     handlePlayerEvents();
+  //   });
+  // }, [handlePlayerEvents]);
 
   useEffect(() => {
     const mainDiv = document.getElementById(
@@ -120,7 +150,7 @@ export default function FeedVideoReaderComponent({
     ) as HTMLDivElement;
     //
     mainDiv.addEventListener("scroll", () => {
-      handlePlayerEvents();
+      handlePlayerEvents(true);
     });
 
     const videoPlayer = getVideoPlayerElement();
@@ -164,78 +194,87 @@ export default function FeedVideoReaderComponent({
     });
   }, [setVideoPlayerData, getVideoPlayerElement]);
 
-  const handleExpand = useCallback(() => {
-
-  }, [])
+  const handleExpandAction = useCallback(() => {
+    if (handleExpand) {
+      handlePlayerEvents(false);
+      setTimeout(() => {
+        handleExpand();
+      }, 200);
+    }
+  }, [handleExpand, handlePlayerEvents]);
 
   if (!feed.feedFiles) return <>No video file was found</>;
 
   return (
     <>
-      <div className={`p-3 my-3 h-100 relative`} ref={feedMainDivElement}>
-        <video
-          ref={videoPlayerTagElement}
-          className={`h-full w-full rounded-lg object-cover cursor-pointer`}
-          style={{ height: "350px" }}
-          preload="auto"
-          controls={false}
-          onMouseEnter={handlePlayerMouseEnter}
-        >
-          <source src={src} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+      <div className={`relative p-3 my-3 h-100`} ref={feedMainDivElement}>
+        <div className={`relative`}>
+          <video
+            ref={videoPlayerTagElement}
+            className={`h-full w-full rounded-lg ${
+              isExpanded ? "object-fill" : "object-cover"
+            } cursor-pointer`}
+            style={{ height: !isExpanded ? "350px" : "40vh" }}
+            preload="auto"
+            controls={false}
+            onMouseEnter={handlePlayerMouseEnter}
+          >
+            <source src={src} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
 
-        <div className="video-controls absolute bottom-5 left-5 right-5 bg-transparent rounded-lg px-3">
-          <div className="flex justify-between">
-            {videoPlayerData.paused ? (
-              <>
-                <IconButton
-                  style={{ width: "25px", height: "25px" }}
-                  size="sm"
-                  placeholder={""}
-                  className="cursor-pointer rounded-full"
-                  onClick={handlePlayPause}
-                >
-                  <PlayIcon className="h-3 w-3" />
-                </IconButton>
-              </>
-            ) : (
-              <>
-                <IconButton
-                  style={{ width: "25px", height: "25px" }}
-                  size="sm"
-                  placeholder={""}
-                  className="cursor-pointer rounded-full"
-                  onClick={handlePlayPause}
-                >
-                  <PauseIcon className="h-3 w-3" />
-                </IconButton>
+          <div className="video-controls absolute bottom-5 left-5 right-5 bg-transparent rounded-lg">
+            <div className="flex justify-between">
+              {videoPlayerData.paused ? (
+                <>
+                  <IconButton
+                    style={{ width: "25px", height: "25px" }}
+                    size="sm"
+                    placeholder={""}
+                    className="cursor-pointer rounded-full"
+                    onClick={handlePlayPause}
+                  >
+                    <PlayIcon className="h-3 w-3" />
+                  </IconButton>
+                </>
+              ) : (
+                <>
+                  <IconButton
+                    style={{ width: "25px", height: "25px" }}
+                    size="sm"
+                    placeholder={""}
+                    className="cursor-pointer rounded-full"
+                    onClick={handlePlayPause}
+                  >
+                    <PauseIcon className="h-3 w-3" />
+                  </IconButton>
 
-                <div className="space-x-2">
-                  <IconButton
-                    size="sm"
-                    style={{ width: "25px", height: "25px" }}
-                    placeholder={""}
-                    className={`cursor-pointer rounded-full right ${
-                      videoPlayerData.muted ? "bg-red-700" : ""
-                    }`}
-                    onClick={handleSound}
-                  >
-                    <MusicalNoteIcon className="h-3 w-3" />
-                  </IconButton>
-                  {/* // */}
-                  <IconButton
-                    size="sm"
-                    style={{ width: "25px", height: "25px" }}
-                    placeholder={""}
-                    className={`cursor-pointer rounded-full right`}
-                    onClick={handleExpand}
-                  >
-                    <ArrowsPointingOutIcon className="h-3 w-3" />
-                  </IconButton>
-                </div>
-              </>
-            )}
+                  <div className="space-x-2">
+                    <IconButton
+                      size="sm"
+                      style={{ width: "25px", height: "25px" }}
+                      placeholder={""}
+                      className={`cursor-pointer rounded-full right ${
+                        videoPlayerData.muted ? "bg-red-700" : ""
+                      }`}
+                      onClick={handleSound}
+                    >
+                      <MusicalNoteIcon className="h-3 w-3" />
+                    </IconButton>
+                    {/* // */}
+                    <IconButton
+                      size="sm"
+                      style={{ width: "25px", height: "25px" }}
+                      placeholder={""}
+                      className={`cursor-pointer rounded-full right`}
+                      onClick={handleExpandAction}
+                    >
+                      <ArrowsPointingOutIcon className="h-3 w-3" />
+                    </IconButton>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>

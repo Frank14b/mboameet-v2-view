@@ -19,6 +19,8 @@ export default function FeedItemComponent({
   fileType,
   feedHook,
   feedFormHook,
+  isExpanded,
+  handleExpand
 }: FeedItem<FeedHookDto, FeedFormHookDto>) {
   //
   const referenceId: string = `${referenceKeyword}-${feed.id}`;
@@ -59,7 +61,7 @@ export default function FeedItemComponent({
     <div id={referenceId}>
       <Card
         placeholder={""}
-        className="pb-3 pl-0 pr-0 w-full border border-gray-200 dark:border-gray-800 dark:bg-gray-900"
+        className={`${isExpanded ? "backdrop-blur-sm bg-white bg-opacity-70" : ""} ${"pb-3 pl-0 pr-0 w-full border border-gray-200 dark:border-gray-800 dark:bg-gray-900"}`}
       >
         <FeedHeaderComponent
           feedData={feedData}
@@ -106,7 +108,11 @@ export default function FeedItemComponent({
 
             {fileType == "video" && (
               <>
-                <FeedVideoReaderComponent feed={feedData} />
+                <FeedVideoReaderComponent
+                  feed={feedData}
+                  isExpanded={isExpanded}
+                  handleExpand={handleExpand}
+                />
               </>
             )}
           </>

@@ -46,6 +46,8 @@ export type FeedItem<T, TT> = {
   fileType?: "carousel" | "images" | "video" | "image";
   feedHook: T;
   feedFormHook: TT;
+  isExpanded: boolean;
+  handleExpand?: () => void;
 };
 
 export type FeedItemMenuAction = {
