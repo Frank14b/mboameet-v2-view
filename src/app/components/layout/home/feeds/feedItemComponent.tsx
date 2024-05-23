@@ -20,7 +20,7 @@ export default function FeedItemComponent({
   feedHook,
   feedFormHook,
   isExpanded,
-  handleExpand
+  handleExpand,
 }: FeedItem<FeedHookDto, FeedFormHookDto>) {
   //
   const referenceId: string = `${referenceKeyword}-${feed.id}`;
@@ -61,7 +61,11 @@ export default function FeedItemComponent({
     <div id={referenceId}>
       <Card
         placeholder={""}
-        className={`${isExpanded ? "backdrop-blur-sm bg-white bg-opacity-70" : ""} ${"pb-3 pl-0 pr-0 w-full border border-gray-200 dark:border-gray-800 dark:bg-gray-900"}`}
+        className={`${
+          isExpanded
+            ? "backdrop-blur-sm bg-white bg-opacity-70 dark:backdrop-blur-sm dark:bg-white dark:bg-opacity-70"
+            : ""
+        } ${"pb-3 pl-0 pr-0 w-full border border-gray-200 dark:border-gray-800 dark:bg-gray-900"}`}
       >
         <FeedHeaderComponent
           feedData={feedData}

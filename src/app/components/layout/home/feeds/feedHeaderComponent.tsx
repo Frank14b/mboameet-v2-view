@@ -4,6 +4,8 @@ import { Avatar, Typography } from "@material-tailwind/react";
 import FeedItemActionMenuComponent from "./feedMenuActions";
 import { Dispatch, SetStateAction } from "react";
 import { referenceKeyword } from "@/app/lib/constants/app";
+import ProfileTooltipDetailsComponent from "../../profile/profileTooltipDetails";
+import PopoverCustom from "@/app/components/widgets/PopoverCustom";
 
 export default function FeedHeaderComponent({
   feedData,
@@ -49,13 +51,26 @@ export default function FeedHeaderComponent({
     <>
       <div className="grid justify-items-between w-full p-3">
         <div className="flex gap-3 w-full">
-          <Avatar
-            placeholder={""}
-            variant="circular"
-            alt="candice"
-            src={userPhoto}
-            className="cursor-pointer"
-          />
+          <PopoverCustom
+            content={
+              <ProfileTooltipDetailsComponent
+                user={{
+                  ...feedData.user,
+                  photo: userPhoto,
+                }}
+              />
+            }
+            placement="right-end"
+          >
+            <Avatar
+              placeholder={""}
+              variant="circular"
+              alt="candice"
+              src={userPhoto}
+              className="cursor-pointer"
+            />
+          </PopoverCustom>
+
           <div>
             <Typography
               placeholder={""}

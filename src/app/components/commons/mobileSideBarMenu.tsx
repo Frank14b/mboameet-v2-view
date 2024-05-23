@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
   Drawer,
   Typography,
@@ -14,16 +14,32 @@ import {
   HomeIcon,
   ListBulletIcon,
   PlusIcon,
+  ShoppingCartIcon,
 } from "@heroicons/react/24/solid";
 import AsideBarMenuComponent from "./asideBarMenu";
 import { useMainContext } from "@/app/contexts/main";
+import useCustomRouter from "@/app/hooks/useCustomRouter";
+import { marketplacePathUrl } from "@/app/lib/constants/app";
 
-export function MobileSideBarMenuComponent() {
+export function MobileSideBarMenuComponent({
+  enable,
+  isMarketPlace,
+}: {
+  enable?: boolean;
+  isMarketPlace?: boolean;
+}) {
   //
   const [activeMenu, setActiveMenu] = React.useState<"left" | "right" | "">("");
   const { navigationChange } = useMainContext();
-
+  const { push } = useCustomRouter();
   const closeMenu = () => setActiveMenu("");
+
+  const openLink = useCallback(
+    (link: string) => {
+      push(link);
+    },
+    [push]
+  );
 
   useEffect(() => {
     if (navigationChange == "start") {
@@ -33,7 +49,11 @@ export function MobileSideBarMenuComponent() {
 
   return (
     <React.Fragment>
-      <div className="min-sm:hidden fixed bottom-28 right-12 z-20">
+      <div
+        className={`z-20 fixed bottom-28 right-12 ${
+          enable ? "" : "min-sm:hidden"
+        }`}
+      >
         <div className="absolute bottom-0 right-0">
           <SpeedDial>
             <SpeedDialHandler>
@@ -46,7 +66,11 @@ export function MobileSideBarMenuComponent() {
               </IconButton>
             </SpeedDialHandler>
             <SpeedDialContent placeholder={""}>
-              <SpeedDialAction placeholder={""} className="relative">
+              <SpeedDialAction
+                placeholder={""}
+                className="relative"
+                onClick={() => openLink("/")}
+              >
                 <HomeIcon className="h-5 w-5" />
               </SpeedDialAction>
               <SpeedDialAction
@@ -63,6 +87,17 @@ export function MobileSideBarMenuComponent() {
               >
                 <ListBulletIcon className="h-5 w-5" />
               </SpeedDialAction>
+              {isMarketPlace && (
+                <>
+                  <SpeedDialAction
+                    placeholder={""}
+                    className="relative"
+                    onClick={() => openLink(`${marketplacePathUrl}/cart`)}
+                  >
+                    <ShoppingCartIcon className="h-5 w-5" />
+                  </SpeedDialAction>
+                </>
+              )}
             </SpeedDialContent>
           </SpeedDial>
         </div>

@@ -4,7 +4,6 @@ import { feedVideoReaderId, mainDivComponentId } from "@/app/lib/constants/app";
 import { offsetElementPosition } from "@/app/lib/utils";
 import { ResultFeed } from "@/app/types";
 import {
-  ArrowUpOnSquareStackIcon,
   ArrowsPointingOutIcon,
   MusicalNoteIcon,
   PauseIcon,
@@ -212,9 +211,9 @@ export default function FeedVideoReaderComponent({
           <video
             ref={videoPlayerTagElement}
             className={`h-full w-full rounded-lg ${
-              isExpanded ? "object-fill" : "object-cover"
+              isExpanded ? "" : "object-cover"
             } cursor-pointer`}
-            style={{ height: !isExpanded ? "350px" : "40vh" }}
+            style={{ height: !isExpanded ? "350px" : "60vh" }}
             preload="auto"
             controls={false}
             onMouseEnter={handlePlayerMouseEnter}

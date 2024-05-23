@@ -9,27 +9,27 @@ import {
   useEffect,
   useState,
 } from "react";
-import { QueryClient, QueryClientProvider, useQueryClient } from "react-query";
+// import { QueryClient, QueryClientProvider, useQueryClient } from "react-query";
 import { AppHubWrapper } from "./appHub";
 import SideBarMenuComponent from "../components/commons/sideBarMenu";
 import AsideBarMenuComponent from "../components/commons/asideBarMenu";
 import useUserStore from "../store/userStore";
-import useChatStore from "../store/chatStore";
 import { deleteToken, isTokenExpired } from "../lib/server-utils";
 import { usePathname } from "next/navigation";
-import { sessionTimeOut } from "../lib/workers";
+// import { sessionTimeOut } from "../lib/workers";
 import { ObjectKeyDto, ResultLoginDto } from "../types";
 import {
+  administrationPathUrl,
   authStartPath,
   defaultProfileImg,
   mainDivComponentId,
+  marketplacePathUrl,
   userEncryptionStorageKey,
 } from "../lib/constants/app";
 import { ToastContainer } from "react-toastify";
 import { MobileSideBarMenuComponent } from "../components/commons/mobileSideBarMenu";
 import { configs } from "../../../app.config";
 import { validateToken } from "../services/server-actions";
-import useAppEncryption, { UseEncryptionProps } from "../hooks/useEncryption";
 import NavigationLoadingComponent from "../components/commons/navigationLoading";
 import useLocalStorage from "../hooks/useLocalStorage";
 
@@ -48,11 +48,12 @@ export function MainWrapper({ children }: { children: any }) {
   } = useUserStore();
   const pathname = usePathname();
   const [mainScroll, setMainScroll] = useState<any>(null);
-  const { isDiscussionOpen } = useChatStore();
   const [navigationChange, setNavigationChange] =
     useState<NavigationChangeType>("stop");
   const [currentLink, setCurrentLink] = useState<string>("/");
   const { get, clear } = useLocalStorage();
+  const [canRemoveAsideBar, setCanRemoveAsideBar] = useState<boolean>(false);
+  const [canRemoveNavBar, setCanRemoveNavBar] = useState<boolean>(false);
 
   useEffect(() => {
     setCurrentLink(pathname);
@@ -60,6 +61,18 @@ export function MainWrapper({ children }: { children: any }) {
 
   useEffect(() => {
     if (currentLink == pathname) return;
+
+    if (
+      pathname.startsWith(`${marketplacePathUrl}`) ||
+      pathname.startsWith(administrationPathUrl.stores)
+    ) {
+      setCanRemoveAsideBar(true);
+      setCanRemoveNavBar(true);
+    } else {
+      setCanRemoveAsideBar(false);
+      setCanRemoveNavBar(false);
+    }
+
     return () => {
       setNavigationChange("stop");
     };
@@ -159,9 +172,18 @@ export function MainWrapper({ children }: { children: any }) {
                 <>
                   <div className="mh-600 bg-gray-200 dark:bg-gray-800">
                     <div className="flex xxl:container">
-                      <MobileSideBarMenuComponent></MobileSideBarMenuComponent>
+                      <MobileSideBarMenuComponent
+                        enable={canRemoveNavBar}
+                        isMarketPlace={canRemoveNavBar}
+                      ></MobileSideBarMenuComponent>
 
-                      <div className="w-1/4 csm:hidden xs:hidden xs:left-0 xs:w-[300px] xs:z-50 lg:relative bg-gray-100 dark:bg-gray-900 h-screen">
+                      <div
+                        className={`${
+                          canRemoveNavBar
+                            ? "hidden"
+                            : "w-1/4 csm:hidden xs:hidden xs:left-0 xs:w-[300px] xs:z-50 lg:relative bg-gray-100 dark:bg-gray-900 h-screen"
+                        }`}
+                      >
                         <SideBarMenuComponent>
                           <></>
                         </SideBarMenuComponent>
@@ -169,7 +191,7 @@ export function MainWrapper({ children }: { children: any }) {
 
                       <div
                         className={`${
-                          isDiscussionOpen ? "min-sm:w-full" : ""
+                          canRemoveAsideBar ? "min-sm:w-full" : ""
                         } w-1/2 csm:w-full xs:w-full lg:w-1/2 bg-gray-100 dark:bg-gray-900`}
                       >
                         <div
@@ -182,7 +204,7 @@ export function MainWrapper({ children }: { children: any }) {
 
                       <div
                         className={`${
-                          isDiscussionOpen ? "min-sm:hidden" : ""
+                          canRemoveAsideBar ? "min-sm:hidden" : ""
                         } w-1/4 sm:w-1/3 csm:hidden lg:w-1/4 xs:right-0 xs:z-50 xs:w-[300px] xs:px-6 px-3 bg-gray-100 dark:bg-gray-900`}
                       >
                         <div className="flex flex-col h-screen pt-6 overflow-y-auto">

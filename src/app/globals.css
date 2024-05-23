@@ -136,3 +136,7 @@
 .h-custom-80 {
   height: calc(80vh - theme("spacing.7"));
 }
+
+body, html {
+  /* overflow-x: hidden; */
+}
