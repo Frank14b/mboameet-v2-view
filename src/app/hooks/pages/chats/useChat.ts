@@ -10,9 +10,14 @@ import { useMainContext } from "@/app/contexts/main";
 import { DiscussionTypesDto } from "@/app/types";
 import { DiscussionTypes, ResultChatUsersDto } from "@/app/types/chats";
 import { getDiscussions } from "@/app/services/server-actions/chats";
-import { discussionTypes } from "@/app/lib/constants/app";
+import {
+  discussionTypes,
+  userEncryptionStorageKey,
+} from "@/app/lib/constants/app";
 import { ListWithAvatarProps } from "@/app/components/widgets/listWithAvatar";
 import useUserStore from "@/app/store/userStore";
+import useAppEncryption from "../../useEncryption";
+import useLocalStorage from "../../useLocalStorage";
 
 const useChat = () => {
   //
@@ -22,9 +27,27 @@ const useChat = () => {
   const [activeTab, setActiveTab] = useState<DiscussionTypes>(
     discussionTypesList[0].key as DiscussionTypes
   );
-  const { appEncryption, getFileUrl } = useMainContext();
+  const { getFileUrl } = useMainContext();
   const { user } = useUserStore();
-  const { decryptAndDecodeMessageAsync } = appEncryption;
+  const { importPrivateKey, decryptAndDecodeMessageAsync } = useAppEncryption();
+  //
+  const { get } = useLocalStorage();
+  //
+
+  const importUserPrivateKeys = useCallback(async () => {
+    //
+    const userKeys = get(userEncryptionStorageKey);
+    if (userKeys) {
+      //
+      const jwkKeyPair = JSON.parse(userKeys as string);
+
+      const senderImportedPrivateKey = await importPrivateKey(
+        JSON.parse(jwkKeyPair.privateKey) as JsonWebKey
+      );
+
+      return senderImportedPrivateKey;
+    }
+  }, [get, importPrivateKey]);
 
   const fetchDiscussions = useCallback(
     async ({ type }: { type: DiscussionTypes }) => {
@@ -45,11 +68,16 @@ const useChat = () => {
           (discussion) => discussion.lastMessage.isEncrypted
         ) !== -1
       ) {
+        const privaterKey = await importUserPrivateKeys();
+
         for (let discussion of result.data.data) {
           const message = discussion.lastMessage;
           if (message.isEncrypted) {
             discussion.lastMessage.message = await decryptAndDecodeMessageAsync(
-              message.message
+              message.sender !== user?.id
+                ? message.messagePair
+                : message.message,
+              privaterKey as CryptoKey
             );
           }
         }
@@ -59,7 +87,13 @@ const useChat = () => {
       setIsLoading(false);
       return result.data.data;
     },
-    [setIsLoading, setDiscussions, decryptAndDecodeMessageAsync]
+    [
+      user,
+      setIsLoading,
+      setDiscussions,
+      decryptAndDecodeMessageAsync,
+      importUserPrivateKeys,
+    ]
   );
 
   useEffect(() => {

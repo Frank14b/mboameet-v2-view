@@ -15,7 +15,6 @@ export function FriendsItemComponent({
   friendsHook: FriendsHookDto;
   onClickUserDetails: (friend: ResultFriendsDto) => void;
 }) {
-  console.log("friend", friend);
   const { followFriend } = friendsHook;
   const [isFollowing, setIsFollowing] = useState<boolean>(
     friend.match.length == 1 ? true : false

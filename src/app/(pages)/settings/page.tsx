@@ -15,9 +15,6 @@ export default function SettingPage() {
             Settings
           </Typography>
         </div>
-        <div className="w-1/2 text-xs flex justify-end pt-1">
-          {/* <span className="mx-2 cursor-pointer font-bold">Network</span> */}
-        </div>
       </div>
       {/*  */}
 

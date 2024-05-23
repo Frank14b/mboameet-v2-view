@@ -38,11 +38,13 @@ class ChatHubs {
   }
 
   updateUserMessagesAsRead = (senderId: number) => {
-    if (this._connection) {
-      this._connection.invoke(
-        hubConstants.chats.updateUserMessagesAsRead,
-        senderId
-      );
+    if (this._connection && this._connection.state == "Connected") {
+      try {
+        this._connection.invoke(
+          hubConstants.chats.updateUserMessagesAsRead,
+          senderId
+        );
+      } catch (error) { }
     }
   };
 }

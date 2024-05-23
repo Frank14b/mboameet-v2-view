@@ -3,7 +3,6 @@
 import { FeedTypes, ResultFeed } from "@/app/types";
 import FeedItemComponent from "./feedItemComponent";
 import FeedSkeleton from "../../../widgets/skeletons/feedSkeleton";
-import { motion } from "framer-motion";
 import { FeedHookDto } from "@/app/hooks/pages/feeds/useFeed";
 import { FeedFormHookDto } from "@/app/hooks/pages/feeds/useFeedForm";
 import { TabsCustomAnimation } from "@/app/components/widgets/tabsCustomAnimation";
@@ -13,6 +12,7 @@ import {
   UserCircleIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
+import AnimateHoverScale from "@/app/components/widgets/motions/animateHoverScale";
 
 //
 export default function FeedCardComponent({
@@ -125,14 +125,7 @@ function ItemCustomAnimation({
 
   return (
     <>
-      <motion.div
-        initial={{ opacity: 0, scale: 1 }}
-        transition={{ duration: 0.2 + index / 10 }}
-        whileHover={{ scale: 1.02 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        key={index}
-      >
+      <AnimateHoverScale index={index}>
         <div className="w-full mt-3 bg-white dark:bg-black/15 rounded-xl">
           {feed.feedFiles != null && (
             <FeedItemComponent
@@ -143,7 +136,7 @@ function ItemCustomAnimation({
             />
           )}
         </div>
-      </motion.div>
+      </AnimateHoverScale>
     </>
   );
 }

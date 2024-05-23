@@ -27,6 +27,7 @@ export default function FeedImageViewComponent({
                     feed.user.id
                   )}
                   alt="-"
+                  priority={true}
                 />
               </div>
             </div>
@@ -46,6 +47,7 @@ export default function FeedImageViewComponent({
                     className="object-cover object-center h-90 max-w-full md:h-90 bg-white"
                     src={mainContext.getFileUrl(image.url, feed.user.id)}
                     alt="-"
+                    priority={true}
                   />
                 </div>
               ))}

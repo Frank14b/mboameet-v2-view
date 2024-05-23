@@ -14,24 +14,24 @@ import { AppHubWrapper } from "./appHub";
 import SideBarMenuComponent from "../components/commons/sideBarMenu";
 import AsideBarMenuComponent from "../components/commons/asideBarMenu";
 import useUserStore from "../store/userStore";
+import useChatStore from "../store/chatStore";
 import { deleteToken, isTokenExpired } from "../lib/server-utils";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { sessionTimeOut } from "../lib/workers";
-import {
-  ObjectKeyDto,
-  ResultLoginDto,
-} from "../types";
+import { ObjectKeyDto, ResultLoginDto } from "../types";
 import {
   authStartPath,
   defaultProfileImg,
   mainDivComponentId,
+  userEncryptionStorageKey,
 } from "../lib/constants/app";
 import { ToastContainer } from "react-toastify";
 import { MobileSideBarMenuComponent } from "../components/commons/mobileSideBarMenu";
-import useChatStore from "../store/chatStore";
 import { configs } from "../../../app.config";
 import { validateToken } from "../services/server-actions";
 import useAppEncryption, { UseEncryptionProps } from "../hooks/useEncryption";
+import NavigationLoadingComponent from "../components/commons/navigationLoading";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 const MainContext = createContext<any>({});
 
@@ -49,21 +49,37 @@ export function MainWrapper({ children }: { children: any }) {
   const pathname = usePathname();
   const [mainScroll, setMainScroll] = useState<any>(null);
   const { isDiscussionOpen } = useChatStore();
-  const appEncryption = useAppEncryption();
-  const { importKeys } = appEncryption;
+  const [navigationChange, setNavigationChange] =
+    useState<NavigationChangeType>("stop");
+  const [currentLink, setCurrentLink] = useState<string>("/");
+  const { get, clear } = useLocalStorage();
 
-  const queryClient = new QueryClient();
+  useEffect(() => {
+    setCurrentLink(pathname);
+  }, [pathname, setCurrentLink]);
+
+  useEffect(() => {
+    if (currentLink == pathname) return;
+    return () => {
+      setNavigationChange("stop");
+    };
+  }, [pathname, currentLink, setNavigationChange]);
+
+  // const queryClient = new QueryClient();
 
   const logout = useCallback(async () => {
     deleteToken();
     setUserConnected(false);
     useUserStore.persist.clearStorage();
+    clear();
 
     setTimeout(() => {
       setLoading(false);
       window.location.reload();
     }, 300);
-  }, [setUserConnected, setLoading]);
+  }, [setUserConnected, clear, setLoading]);
+
+  const deleteAccount = useCallback(async () => {}, []);
 
   const getFileUrl = useCallback((link?: string, userId?: number) => {
     //
@@ -86,20 +102,18 @@ export function MainWrapper({ children }: { children: any }) {
     }
   }, [logout, setUser, getFileUrl, setUserConnected]);
 
-  useEffect(() => {
-    importKeys();
-  }, [importKeys]);
-
   const MainData: MainContextDto = {
     userConnected,
     connectedUser: user,
     theme: theme,
     mainScroll,
-    appEncryption: appEncryption,
+    navigationChange,
+    setNavigationChange,
     setTheme,
     logout,
     getFileUrl,
     setMainScroll,
+    deleteAccount,
   };
 
   const checkExpiredToken = useCallback(async () => {
@@ -124,6 +138,13 @@ export function MainWrapper({ children }: { children: any }) {
       setLoading(false);
     }, 300);
   }, [setLoading]);
+
+  useEffect(() => {
+    const userKey = get(userEncryptionStorageKey);
+    if (!userKey && userConnected) {
+      logout();
+    }
+  }, [userConnected, get, logout]);
 
   return (
     <MainContext.Provider value={MainData}>
@@ -179,6 +200,8 @@ export function MainWrapper({ children }: { children: any }) {
             </AppHubWrapper>
 
             <ToastContainer />
+            <NavigationLoadingComponent />
+            {/*  */}
           </main>
         </>
       )}
@@ -189,14 +212,18 @@ export function MainWrapper({ children }: { children: any }) {
 
 export const useMainContext = (): MainContextDto => useContext(MainContext);
 
+export type NavigationChangeType = "start" | "stop";
+
 export type MainContextDto = {
   userConnected: boolean;
   connectedUser: ResultLoginDto | ObjectKeyDto | null;
   theme: string;
   mainScroll: any;
-  appEncryption: UseEncryptionProps;
+  navigationChange: NavigationChangeType;
+  setNavigationChange: Dispatch<SetStateAction<NavigationChangeType>>;
   setTheme: (userTheme: string) => void;
   logout: () => Promise<void>;
   getFileUrl: (link?: string, userId?: number) => string;
   setMainScroll: Dispatch<SetStateAction<any>>;
+  deleteAccount: () => Promise<void>;
 };

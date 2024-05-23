@@ -12,7 +12,7 @@ import * as signalR from "@microsoft/signalr";
 import UserHubs from "../services/hubs/users";
 import useUserStore from "../store/userStore";
 import useFeedStore from "../store/feedStore";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import FeedHubs from "../services/hubs/feeds";
 import { useMainContext } from "./main";
 import ConfirmationComponent from "../components/commons/alerts/confirmation";
@@ -20,6 +20,7 @@ import { authStartPath, loginPathUrl } from "../lib/constants/app";
 import ChatHubs from "../services/hubs/chats";
 import useChatStore from "../store/chatStore";
 import { configs } from "../../../app.config";
+import useCustomRouter from "../hooks/useCustomRouter";
 
 const AppHubContext = createContext<any>({});
 
@@ -36,14 +37,14 @@ export function AppHubWrapper({ children }: { children: any }) {
   const chatStore = useChatStore();
   const { userConnected, getFileUrl } = useMainContext();
   const pathname = usePathname();
-  const router = useRouter();
+  const { push } = useCustomRouter();
 
   const initHub = useCallback(async () => {
     //
     if (connection) return;
     if (userConnected !== true || (await isTokenExpired()) == true) {
       if (!pathname.startsWith(authStartPath)) {
-        router.push(loginPathUrl);
+        push(loginPathUrl);
       }
       return;
     }
@@ -79,7 +80,7 @@ export function AppHubWrapper({ children }: { children: any }) {
               error.response?.status == 401 ||
               (await isTokenExpired()) == true
             ) {
-              router.push(loginPathUrl);
+              push(loginPathUrl);
             }
             setErrorSocket(true);
             setConnection(null);
@@ -93,7 +94,7 @@ export function AppHubWrapper({ children }: { children: any }) {
     } catch (error) {
       setConnection(null);
     }
-  }, [router, userConnected, connection, pathname, setErrorSocket]);
+  }, [push, userConnected, connection, pathname, setErrorSocket]);
 
   useEffect(() => {
     // init the app websocket client hub
@@ -101,7 +102,7 @@ export function AppHubWrapper({ children }: { children: any }) {
   }, [initHub]);
 
   useEffect(() => {
-    if (connection) {
+    if (connection && !userHubs) {
       // set all hubs class in react state
       setUserHubs(
         new UserHubs(connection as signalR.HubConnection, userStore, getFileUrl)
@@ -109,7 +110,7 @@ export function AppHubWrapper({ children }: { children: any }) {
       setFeedHubs(new FeedHubs(connection as signalR.HubConnection, feedStore));
       setChatHubs(new ChatHubs(connection as signalR.HubConnection, chatStore));
     }
-  }, [connection, chatStore, feedStore, userStore, getFileUrl]);
+  }, [connection, userHubs, chatStore, feedStore, userStore, getFileUrl]);
 
   const closeConnection = useCallback(() => {
     if (!connection) return;

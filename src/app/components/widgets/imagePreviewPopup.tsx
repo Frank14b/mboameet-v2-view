@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import {
   Dialog,
   DialogHeader,
@@ -7,37 +7,38 @@ import {
 } from "@material-tailwind/react";
 import Image from "next/image";
 
-export type MessageImagePreviewProps = {
+export type ImagePreviewProps = {
   url: string;
   title: string;
   description: string;
+  type: string;
 };
 
-export function MessageImagePreviewComponent({
+export function ImagePreviewPopup({
   active,
   images,
   open,
-  onOpen,
+  onClose,
 }: {
-  active: MessageImagePreviewProps;
-  images: MessageImagePreviewProps[];
+  active: ImagePreviewProps;
+  images: ImagePreviewProps[];
   open: boolean;
-  onOpen: Dispatch<SetStateAction<boolean>>;
+  onClose: () => void;
 }) {
   //
-  const handleOpen = () => onOpen(!open);
-
   return (
     <>
-      <Dialog placeholder={""} size="md" open={open} handler={handleOpen}>
+      <Dialog placeholder={""} size="lg" open={open} handler={onClose}>
         <DialogHeader placeholder={""} className="justify-between">
           <></>
         </DialogHeader>
         <DialogBody placeholder={""} className="max-h-[45em] overflow-y-auto">
           <Carousel
             loop={true}
+            autoplay={true}
+            autoplayDelay={10000}
             transition={{
-              type: "spring",
+              type: "spring"
             }}
             placeholder={""}
             className="rounded-xl"
@@ -63,16 +64,17 @@ export function MessageImagePreviewComponent({
               height={500}
               width={500}
             />
-            {images.map(
+            {images?.map(
               (image, index) =>
-                image.url !== active?.url && (
+                image.url !== active?.url &&
+                image.type == "image" && (
                   <Image
                     key={index + 1}
                     alt=""
                     className="h-full w-full max-h-[40em] rounded-lg object-cover object-center"
                     src={image.url}
+                    width={1200}
                     height={500}
-                    width={500}
                   />
                 )
             )}

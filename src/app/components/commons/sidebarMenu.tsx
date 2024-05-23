@@ -1,6 +1,6 @@
 import { List } from "@material-tailwind/react";
 import SideBarMenuListComponent from "../widgets/sidebar/menuList";
-import { ChatBubbleBottomCenterIcon, Cog6ToothIcon, EnvelopeIcon, UsersIcon, VideoCameraIcon } from "@heroicons/react/24/solid";
+import { BookmarkIcon, ChatBubbleBottomCenterIcon, Cog6ToothIcon, UsersIcon, VideoCameraIcon } from "@heroicons/react/24/solid";
 import { usePathname } from "next/navigation";
 import { ProfileMenuComponent } from "../widgets/profileMenu";
 
@@ -21,13 +21,13 @@ export default function SideBarMenuComponent({ children }: { children: any }) {
         <div className="px-6">
             <List placeholder={""} className="my-2 p-0">
 
-                <SideBarMenuListComponent title="News Feed" icon={<EnvelopeIcon />} active={pathname == "/" ? true : false} badge="+99" link={"/"} />
+                <SideBarMenuListComponent title="News Feed" icon={<BookmarkIcon />} active={pathname == "/" ? true : false} badge="+99" link={"/"} />
 
                 <SideBarMenuListComponent title="Discussions" icon={<ChatBubbleBottomCenterIcon />} active={pathname.startsWith("/chats") ? true : false} badge={"1"} link={"/chats"} />
 
                 <SideBarMenuListComponent title="Friends" icon={<UsersIcon />} active={pathname.startsWith("/friends") ? true : false} badge="+30" link={"/friends"} />
 
-                <SideBarMenuListComponent title="Media" icon={<VideoCameraIcon />} active={pathname.startsWith("/galleries") ? true : false} />
+                <SideBarMenuListComponent title="Media" icon={<VideoCameraIcon />} active={pathname.startsWith("/galleries") ? true : false} link={"/galleries"} />
 
                 <SideBarMenuListComponent title="Settings" icon={<Cog6ToothIcon />} active={pathname.startsWith("/settings") ? true : false} link={"/settings"} />
 

@@ -2,17 +2,32 @@ import { proceedLogin } from "@/app/services/server-actions";
 import useUserStore from "@/app/store/userStore";
 import { ApiResponseDto, LoginFormData, ResultLoginDto } from "@/app/types";
 import { signInSchema } from "@/app/validators";
-import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { UseFormHandleSubmit } from "react-hook-form";
 import useAppForm from "../../useForm";
 import { notification } from "@/app/lib/notifications";
 import { useMainContext } from "@/app/contexts/main";
+import useLocalStorage from "../../useLocalStorage";
+import { userEncryptionStorageKey } from "@/app/lib/constants/app";
+import useAppEncryption from "../../useEncryption";
 
 function useSignIn(): SignInHookDto {
   //
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { getFileUrl } = useMainContext();
+  const { set, clear } = useLocalStorage();
+  const {
+    importPrivateKey,
+    generateUserKeys,
+    decryptAndDecodeMessageAsync,
+    savedKeys,
+  } = useAppEncryption();
 
   const { handleSubmit } = useAppForm({
     schema: signInSchema,
@@ -24,37 +39,96 @@ function useSignIn(): SignInHookDto {
 
   const [responseData] = useState<ApiResponseDto<ResultLoginDto> | null>(null);
   const { setUserConnected, setUser, setLoading } = useUserStore();
-  const router = useRouter();
+
+  useEffect(() => {
+    generateUserKeys();
+  }, [generateUserKeys]);
+
+  const proceedSavePrivateKey = useCallback(
+    async (encryptedDataKey: string) => {
+      if (encryptedDataKey.length > 0) {
+        const cryptoPrivateKey = await importPrivateKey(
+          savedKeys.privateKey as JsonWebKey
+        );
+
+        if (!cryptoPrivateKey) return;
+
+        const keyParts = encryptedDataKey.split(":public:");
+        const privateKeyParts = keyParts?.[0].split("@@");
+        const publicKeyParts = keyParts?.[1].split("@@");
+
+        let decryptedJwkPrivateKey = "";
+        for (let encryptedString of privateKeyParts) {
+          if (encryptedString.length > 0) {
+            const data = await decryptAndDecodeMessageAsync(
+              encryptedString as string,
+              cryptoPrivateKey as CryptoKey
+            );
+
+            decryptedJwkPrivateKey += data;
+          }
+        }
+
+        let decryptedJwkPublicKey = "";
+        for (let encryptedString of publicKeyParts) {
+          if (encryptedString.length > 0) {
+            const data = await decryptAndDecodeMessageAsync(
+              encryptedString as string,
+              cryptoPrivateKey as CryptoKey
+            );
+
+            decryptedJwkPublicKey += data;
+          }
+        }
+
+        clear();
+
+        set(
+          userEncryptionStorageKey,
+          JSON.stringify({
+            privateKey: decryptedJwkPrivateKey,
+            publicKey: decryptedJwkPublicKey,
+          })
+        );
+      }
+      return;
+    },
+    [savedKeys, set, clear, importPrivateKey, decryptAndDecodeMessageAsync]
+  );
 
   const initUserStoreSession = useCallback(
-    (data: ResultLoginDto | null) => {
+    async (data: ResultLoginDto | null) => {
       setLoading(true);
       setUser({
         ...data,
         photo: getFileUrl(data?.photo, data?.id),
       });
+      await proceedSavePrivateKey(`${data?.encryptionKey}`); // import local key to decrypt private key and save in secure local storage
       setUserConnected(true);
     },
-    [setUserConnected, setUser, setLoading, getFileUrl]
+    [setUserConnected, setUser, setLoading, getFileUrl, proceedSavePrivateKey]
   );
 
   const submitFormData = useCallback(
     async (data: LoginFormData) => {
       setIsLoading(true);
-      const result = await proceedLogin(data);
+      const result = await proceedLogin({
+        ...data,
+        encryptionKey: btoa(JSON.stringify(savedKeys.publicKey)),
+      });
 
       notification.apiNotify<ResultLoginDto>(result);
       setIsLoading(false);
 
       if (result.status === true) {
-        initUserStoreSession(result?.data ?? null);
-        // router.push("/");
-        window.location.reload();
+        await initUserStoreSession(result?.data ?? null);
+        setTimeout(() => {
+          window.location.reload();
+        }, 200);
       }
     },
-    [initUserStoreSession]
+    [savedKeys, initUserStoreSession]
   );
-  //
 
   const data: SignInHookDto = {
     isLoading,

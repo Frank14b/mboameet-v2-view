@@ -2,8 +2,6 @@
 
 import {
   feedFormEditable,
-  feedInputFile,
-  feedInputVideoFile,
   feedVideoPreviewId,
 } from "@/app/lib/constants/app";
 import { ObjectKeyDto } from "@/app/types";
@@ -26,7 +24,7 @@ import {
 import Image from "next/image";
 import { FeedFormHookDto } from "@/app/hooks/pages/feeds/useFeedForm";
 import FeedFileInputComponent from "./files/feedFileInputComponent";
-import { clickFileUpload } from "@/app/lib/utils";
+import { clickFileUpload, clickFileUploadWithRef } from "@/app/lib/utils";
 
 export default function FeedFormComponent({
   children,
@@ -42,6 +40,9 @@ export default function FeedFormComponent({
     updateFeedItem,
     feedInputValue,
     linkedVideos,
+    inputFileImageRef,
+    inputFileVideoRef,
+    feedFormEditableRef,
     removeSelectedImage,
     handleGetCursorPosition,
     handleOpenFeedForm,
@@ -61,10 +62,7 @@ export default function FeedFormComponent({
           outsidePress: false,
         }}
       >
-        <Card
-          placeholder={""}
-          className="mx-auto w-full max-w-[54rem] dark:bg-gray-600"
-        >
+        <Card placeholder={""} className="mx-auto w-full max-w-[54rem]">
           <div className="flex items-center justify-between">
             <DialogHeader
               placeholder={""}
@@ -107,6 +105,7 @@ export default function FeedFormComponent({
 
               <div
                 id={`${feedFormEditable}`}
+                ref={feedFormEditableRef}
                 className="textarea text-gray-800 p-3 min-h-40 rounded-xl border border-gray-900/30"
                 role="textbox"
                 contentEditable={true}
@@ -151,30 +150,32 @@ export default function FeedFormComponent({
               </div>
             )}
           </DialogBody>
-          <DialogFooter placeholder={""} className="space-x-2">
+          <DialogFooter placeholder={""} className="space-x-2 justify-between">
             {!updateFeedItem && (
               <>
-                {!linkedImages && (
-                  <Button
-                    placeholder={""}
-                    variant="text"
-                    color="gray"
-                    onClick={() => clickFileUpload(feedInputVideoFile)}
-                  >
-                    <VideoCameraIcon width={20} height={20} />
-                  </Button>
-                )}
+                <div>
+                  {!linkedImages && (
+                    <Button
+                      placeholder={""}
+                      variant="text"
+                      color="gray"
+                      onClick={() => clickFileUploadWithRef(inputFileImageRef)}
+                    >
+                      <VideoCameraIcon width={20} height={20} />
+                    </Button>
+                  )}
 
-                {!linkedVideos && (
-                  <Button
-                    placeholder={""}
-                    variant="text"
-                    color="gray"
-                    onClick={() => clickFileUpload(feedInputFile)}
-                  >
-                    <PhotoIcon width={20} height={20} />
-                  </Button>
-                )}
+                  {!linkedVideos && (
+                    <Button
+                      placeholder={""}
+                      variant="text"
+                      color="gray"
+                      onClick={() => clickFileUploadWithRef(inputFileVideoRef)}
+                    >
+                      <PhotoIcon width={20} height={20} />
+                    </Button>
+                  )}
+                </div>
 
                 <Button
                   placeholder={""}

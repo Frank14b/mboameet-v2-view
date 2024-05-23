@@ -56,9 +56,9 @@ export const decryptDataAsync = async (
   }
 };
 
-export const exportGeneratedKey = async (privateKey: CryptoKey) => {
+export const exportGeneratedKey = async (key: CryptoKey) => {
   try {
-    const exportedKey = await crypto.subtle.exportKey("jwk", privateKey);
+    const exportedKey = await crypto.subtle.exportKey("jwk", key);
     return exportedKey;
   } catch (error) {
     return null;
@@ -69,6 +69,24 @@ export const importGeneratedKey = async (keyData: JsonWebKey, type: "encrypt" | 
   try {
     const importedKey = await crypto.subtle.importKey(
       "jwk",
+      keyData,
+      {
+        name: "RSA-OAEP",
+        hash: { name: "SHA-256" }, // can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
+      },
+      false, // whether the key is extractable (i.e. can be used in exportKey)
+      [type]
+    );
+    return importedKey;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const importGeneratedKeyFromPem = async (keyData: BufferSource, type: "encrypt" | "decrypt") => {
+  try {
+    const importedKey = await crypto.subtle.importKey(
+      "pkcs8",
       keyData,
       {
         name: "RSA-OAEP",

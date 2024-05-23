@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, MutableRefObject } from "react";
 import { DateTime } from "luxon";
 import secureLocalStorage from "react-secure-storage";
 
@@ -89,7 +89,7 @@ export const focusPosition = (contentEditableElement: HTMLElement | null) => {
     const range = selection.getRangeAt(0);
     // Get the cursor position relative to the start of the contenteditable div
     const cursorPos = range.startOffset;
-    console.log("Cursor position:", cursorPos);
+    // console.log("Cursor position:", cursorPos);
     // You can use cursorPos to perform actions based on cursor location
   }
 };
@@ -151,7 +151,13 @@ export const range = (start: number, end: number) => {
 
 export const getContentEditable = (id: string) => {
   const contentEditableDiv = document.getElementById(`${id}`) as HTMLDivElement;
+  return contentEditableDiv;
+};
 
+export const getContentEditableWithRef = (ref: MutableRefObject<null>) => {
+  if (!ref.current) return;
+
+  const contentEditableDiv = ref.current as HTMLDivElement;
   return contentEditableDiv;
 };
 
@@ -163,6 +169,13 @@ export const removeItem = (itemRef: React.RefObject<any>) => {
 
 export const clickFileUpload = (id: string) => {
   const contentInputFile = document.getElementById(`${id}`) as HTMLInputElement;
+  contentInputFile?.click();
+};
+
+export const clickFileUploadWithRef = (ref: MutableRefObject<null>) => {
+  if (!ref.current) return;
+
+  const contentInputFile = ref.current as HTMLInputElement;
   contentInputFile?.click();
 };
 
@@ -197,26 +210,6 @@ export const formatDate = (date: Date, format: DateFormatType): string => {
       return "";
   }
 };
-
-export const handleScrollEvent = ({
-  elementId,
-  callback,
-}: {
-  elementId?: string;
-  callback: (event: any) => void;
-}) => {
-  let element: Document | HTMLElement = document;
-
-  if (elementId) {
-    element = getContentEditable(elementId);
-  }
-
-  element.addEventListener("scroll", (event: any) => {
-    return callback(event);
-  });
-};
-
-export const getWidgetScreenPosition = (content: HTMLElement) => {};
 
 // local storage utils
 export const setLocalStorage = (
@@ -262,9 +255,20 @@ export const checkFileExtensionUsingLink = (link: string) => {
   const extension = link.split(".").pop();
   if (extension === "mp4") {
     return "video";
-  } else if (extension === "jpg" || extension === "jpeg" || extension === "png") {
+  } else if (
+    extension === "jpg" ||
+    extension === "jpeg" ||
+    extension === "png"
+  ) {
     return "image";
   } else {
     return null;
   }
-}
+};
+
+export const offsetElementPosition = (el: HTMLElement) => {
+  var rect = el.getBoundingClientRect(),
+    scrollLeft = document.documentElement.scrollLeft,
+    scrollTop = document.documentElement.scrollTop;
+  return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
+};

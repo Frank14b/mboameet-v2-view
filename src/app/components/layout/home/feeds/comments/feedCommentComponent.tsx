@@ -8,9 +8,9 @@ import {
 import { Timeline } from "@material-tailwind/react";
 import FeedCommentFormComponent from "./feedCommentFormComponent";
 import FeedCommentItemComponent from "./feedCommentItemComponent";
-import { motion } from "framer-motion";
 import useFeedComment from "@/app/hooks/pages/feeds/comments/useFeedComment";
 import { useCallback } from "react";
+import AnimateHoverScale from "@/app/components/widgets/motions/animateHoverScale";
 
 export default function FeedCommentComponent({
   feedData,
@@ -82,19 +82,13 @@ export default function FeedCommentComponent({
               comments.length > 0 && (
                 <Timeline className="mt-5">
                   {comments.map((comment: FeedCommentData, index: number) => (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 1 }}
-                      transition={{ duration: 0.2 + index / 2 }}
-                      whileInView={{ opacity: 1 }}
-                      viewport={{ once: false }}
-                      key={index}
-                    >
+                    <AnimateHoverScale index={index} key={index}>
                       <FeedCommentItemComponent
                         feedId={feedData.id}
                         comment={comment}
                         commentHook={commentHook}
                       />
-                    </motion.div>
+                    </AnimateHoverScale>
                   ))}
                 </Timeline>
               )

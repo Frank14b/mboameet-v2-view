@@ -63,9 +63,10 @@ export default function FeedItemComponent({
       >
         <FeedHeaderComponent
           feedData={feedData}
-          userPhoto={
-            mainContext.getFileUrl(feedData.user.photo, feedData.user.id)
-          }
+          userPhoto={mainContext.getFileUrl(
+            feedData.user.photo,
+            feedData.user.id
+          )}
           setDeleting={setIsDeleting}
           setUpdateFeedItem={setUpdateFeedItem}
           handleOpenFeedForm={handleOpenFeedForm}

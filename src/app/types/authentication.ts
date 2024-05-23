@@ -2,7 +2,8 @@ import { Maybe } from "yup"
 
 export type LoginFormData = {
     userName: string,
-    password: string
+    password: string,
+    encryptionKey: string
 }
 
 export type RegistrationFormData = {
@@ -35,6 +36,7 @@ export type ResultLoginDto = {
     lastLogin: Date,
     photo?: string,
     country?: Maybe<string | undefined>
+    encryptionKey?: string;
 }
 
 export type ForgetPasswordDto = {

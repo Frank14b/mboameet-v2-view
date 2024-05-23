@@ -5,6 +5,8 @@ import {
   PencilIcon,
   CheckCircleIcon,
   FlagIcon,
+  PowerIcon,
+  TrashIcon,
 } from "@heroicons/react/24/solid";
 import {
   Card,
@@ -14,10 +16,11 @@ import {
   ListItemSuffix,
   Switch,
 } from "@material-tailwind/react";
-import { useRouter } from "next/navigation";
 import SelectField from "../../widgets/selectField";
 import { useCountries } from "use-react-countries";
 import { useMemo } from "react";
+import useCustomRouter from "@/app/hooks/useCustomRouter";
+import { useMainContext } from "@/app/contexts/main";
 
 export default function ProfileSettingsComponent({
   settingsHook,
@@ -25,9 +28,10 @@ export default function ProfileSettingsComponent({
   settingsHook: AccountSettingHookDto;
 }) {
   //
-  const router = useRouter();
+  const router = useCustomRouter();
   const { settings, updateAccountSettings } = settingsHook;
   const { countries } = useCountries();
+  const { logout, deleteAccount } = useMainContext();
 
   const formattedCountries = useMemo(() => {
     return countries.map((country) => {
@@ -148,16 +152,16 @@ export default function ProfileSettingsComponent({
                       </ListItem>
                       {/* // */}
                     </List>
-                    <div className="p-3 px-5">
+                    {/* <div className="p-3 px-5">
                       <h6 className="text-sm mb-2 text-gray-900 dark:text-gray-100">
                         Countries Locked
                       </h6>
                       <p className="text-xs dark:text-gray-500">
-                        Only users from the selected countries can{`'`}t see your
-                        profile
+                        Only users from the selected countries can{`'`}t see
+                        your profile
                       </p>
-                    </div>
-                    <div className="">
+                    </div> */}
+                    {/* <div className="">
                       <SelectField
                         data={{
                           title: "Select Country",
@@ -165,7 +169,30 @@ export default function ProfileSettingsComponent({
                           options: formattedCountries,
                         }}
                       />
-                    </div>
+                    </div> */}
+
+                    <List
+                      placeholder={""}
+                      className="dark:text-gray-400 text-gray-900 text-sm"
+                    >
+                      <ListItem
+                        placeholder={""}
+                        onClick={() => deleteAccount()}
+                      >
+                        <ListItemPrefix placeholder={""}>
+                          <TrashIcon className="h-5 w-5 text-red-700" />
+                        </ListItemPrefix>
+                        <span className="text-red-700">
+                          Delete my account
+                        </span>
+                      </ListItem>
+                      <ListItem placeholder={""} onClick={() => logout()}>
+                        <ListItemPrefix placeholder={""}>
+                          <PowerIcon className="h-5 w-5 text-red-700" />
+                        </ListItemPrefix>
+                        <span className="text-red-700">Sign Out</span>
+                      </ListItem>
+                    </List>
                   </Card>
                 </div>
               </div>

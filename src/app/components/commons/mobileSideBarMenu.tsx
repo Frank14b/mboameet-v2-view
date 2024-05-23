@@ -15,19 +15,21 @@ import {
   ListBulletIcon,
   PlusIcon,
 } from "@heroicons/react/24/solid";
-import { usePathname } from "next/navigation";
 import AsideBarMenuComponent from "./asideBarMenu";
+import { useMainContext } from "@/app/contexts/main";
 
 export function MobileSideBarMenuComponent() {
   //
   const [activeMenu, setActiveMenu] = React.useState<"left" | "right" | "">("");
+  const { navigationChange } = useMainContext();
 
   const closeMenu = () => setActiveMenu("");
 
-  const pathname = usePathname();
   useEffect(() => {
-    setActiveMenu("");
-  }, [pathname]);
+    if (navigationChange == "start") {
+      setActiveMenu("");
+    }
+  }, [navigationChange]);
 
   return (
     <React.Fragment>

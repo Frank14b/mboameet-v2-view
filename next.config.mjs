@@ -20,6 +20,18 @@ const nextConfig = {
         hostname: "docs.material-tailwind.com",
         port: "",
         pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "demos.creative-tim.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "material-taillwind-pro-ct-tailwind-team.vercel.app",
+        pathname: "/**",
+        port: ""
       }
     ],
   },

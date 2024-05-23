@@ -5,13 +5,13 @@ import {
   ResultForgetPasswordDto,
 } from "@/app/types";
 import { forgetPasswordSchema } from "@/app/validators";
-import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 import { UseFormHandleSubmit } from "react-hook-form";
 import useAppForm from "../../useForm";
 import { setLocalStorage } from "@/app/lib/utils";
 import { localStorageKey, verifyTokenPathUrl } from "@/app/lib/constants/app";
 import { notification } from "@/app/lib/notifications";
+import useCustomRouter from "../../useCustomRouter";
 
 function useForgetPassword(): ForgetPasswordHookDto {
   //
@@ -27,7 +27,7 @@ function useForgetPassword(): ForgetPasswordHookDto {
 
   const [responseData, setResponseData] =
     useState<ApiResponseDto<ResultForgetPasswordDto> | null>(null);
-  const router = useRouter();
+  const router = useCustomRouter();
 
   const submitFormData = async (data: ForgetPasswordDto) => {
     setIsLoading(true);

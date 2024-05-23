@@ -5,6 +5,7 @@ export type DiscussionTypes = "users" | "groups";
 export interface ResultMessageDto {
   id: number;
   message: string;
+  messagePair: string;
   messageType: number;
   createdAt: Date;
   updatedAt: Date;
@@ -31,6 +32,7 @@ export interface ResultMessageByReferenceDto {
   userId: number;
   userName: string;
   photo: string;
+  publicKey: string;
   messages: ResultPaginate<ResultMessageDto[]>;
 }
 

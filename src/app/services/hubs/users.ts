@@ -38,7 +38,7 @@ class UserHubs {
 
   updateProfile = () => {
     if (this.connection) {
-      this.connection.invoke(hubConstants.users.getProfile);
+      this.connection?.invoke(hubConstants.users.getProfile);
     }
   };
 }

@@ -48,6 +48,8 @@ export const verifyTokenPathUrl: string = `/auth/verify-token`;
 export const changePasswordPathUrl: string = `/auth/change-password`;
 export const profilePathUrl: string = `/profile`;
 
+export const userEncryptionStorageKey: string = "userKey";
+
 export const chatBgImageClassName = {
   darkMode: "dark:bg-[url('/pxFuelTwo.jpg')]",
   lightMode: "bg-[url('/pxFuelLight.jpg')]",

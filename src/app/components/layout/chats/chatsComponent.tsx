@@ -12,8 +12,8 @@ import ListWithAvatar, {
   ListWithAvatarProps,
 } from "../../widgets/listWithAvatar";
 import DiscussionSkeleton from "../../widgets/skeletons/discussionSkeleton";
-import { useRouter } from "next/navigation";
 import { chatsPathUrl } from "@/app/lib/constants/app";
+import useCustomRouter from "@/app/hooks/useCustomRouter";
 
 export function ChatsComponent({ chatHook }: { chatHook: ChatHookDto }) {
   //
@@ -29,7 +29,7 @@ export function ChatsComponent({ chatHook }: { chatHook: ChatHookDto }) {
     fetchDiscussions,
   } = chatHook;
   //
-  const router = useRouter();
+  const router = useCustomRouter();
 
   const onTabChange = (tab: string) => {
     setIsLoading(true);

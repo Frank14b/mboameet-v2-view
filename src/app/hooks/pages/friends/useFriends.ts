@@ -43,7 +43,7 @@ const useFriends = () => {
 
   useEffect(() => {
     fetchFriends({ type: friendTypesList[0].key as FriendsTypes });
-  }, [fetchFriends, friendTypesList]);
+  }, [friendTypesList, fetchFriends]);
 
   const formattedFriends = useMemo(() => {
     return friends.map((friend) => {

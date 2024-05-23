@@ -1,15 +1,25 @@
-import { Typography } from "@material-tailwind/react";
+import { Button, IconButton, Typography } from "@material-tailwind/react";
 import UserStoriesCard from "../widgets/userStoriesCard";
 import SideBarMenuListUserComponent from "../widgets/sidebar/menuListUser";
 import Image from "next/image";
+import { PlusIcon } from "@heroicons/react/24/solid";
 
 export default function AsideBarMenuComponent({ children }: { children: any }) {
   return (
     <>
       <div className="w-full pb-6 dark:text-gray-200">
-        <Typography placeholder={""} className="font-bold px-1 pb-4">
-          Stories
-        </Typography>
+        <div className="relative">
+          <Typography placeholder={""} className="font-bold px-1 pb-1 gap-3">
+            Stories{" "}
+            <Button
+                placeholder={""}
+                size="sm"
+                className="bg-pink-600 mx-3 p-1"
+              >
+               <PlusIcon className="w-4 h-4 cursor-pointer" />
+              </Button>
+          </Typography>
+        </div>
 
         <div className="flex">
           <div className="w-1/2">

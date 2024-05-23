@@ -4,6 +4,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { notification } from "@/app/lib/notifications";
@@ -21,6 +22,7 @@ import {
   chatsPathUrl,
   messageFieldId,
   messagesContentId,
+  userEncryptionStorageKey,
 } from "@/app/lib/constants/app";
 import {
   MessageProps,
@@ -35,16 +37,18 @@ import {
   scrollToBottom,
 } from "@/app/lib/utils";
 import useChatStore from "@/app/store/chatStore";
-import { useRouter } from "next/navigation";
 import { useAppHubContext } from "@/app/contexts/appHub";
 import { MessageActionType, ObjectKeyDto } from "@/app/types";
 import { MessageImagePreviewProps } from "@/app/components/layout/chats/messageImagePreviewComponent";
+import useCustomRouter from "../../useCustomRouter";
+import useLocalStorage from "../../useLocalStorage";
+import useAppEncryption, { SecurityKeysTypes } from "../../useEncryption";
 
 const useDiscussions = ({ reference }: { reference: string }) => {
   //
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [messages, setMessages] = useState<ResultMessageDto[] | []>([]);
-  const { appEncryption, getFileUrl } = useMainContext();
+  const { getFileUrl } = useMainContext();
   const { user } = useUserStore();
   const [users, setUsers] = useState({
     primaryUser: {
@@ -70,16 +74,67 @@ const useDiscussions = ({ reference }: { reference: string }) => {
     setDeletedMessages,
   } = useChatStore();
   //
-  const router = useRouter();
+  const { push } = useCustomRouter();
   const { chatHubs } = useAppHubContext();
+  const { updateUserMessagesAsRead } = chatHubs ?? {};
   const [lastMessageId, setLastMessageId] = useState<number>(0);
   const [editedMessage, setEditedMessage] = useState<MessageProps | null>(null);
   const [image, setImage] = useState<string>("");
   const [linkedImages, setLinkedImages] = useState<ObjectKeyDto[] | null>(null);
   const {
+    importPrivateKey,
+    importPublicKey,
     encodeAndEncryptMessageAsync,
     decryptAndDecodeMessageAsync,
-  } = appEncryption;
+  } = useAppEncryption();
+  //
+  const { get } = useLocalStorage();
+  //
+  const [senderKeys, setSenderKeys] = useState<SecurityKeysTypes>({
+    publicKey: null,
+    privateKey: null,
+  });
+  const [receiverKeys, setReceiverKeys] = useState<SecurityKeysTypes>({
+    publicKey: null,
+    privateKey: null,
+  });
+
+  const importPrivateAndPublicKeys = useCallback(
+    async (publicKey: string) => {
+      //
+      const userKeys = get(userEncryptionStorageKey);
+      if (userKeys && publicKey.length > 0) {
+        //
+        const jwkKeyPair = JSON.parse(userKeys as string);
+
+        const senderImportedPrivateKey = await importPrivateKey(
+          JSON.parse(jwkKeyPair.privateKey) as JsonWebKey
+        );
+        const senderImportedPublicKey = await importPublicKey(
+          JSON.parse(jwkKeyPair.publicKey) as JsonWebKey
+        );
+        const receiverImportedPublicKey = await importPublicKey(
+          JSON.parse(publicKey) as JsonWebKey
+        );
+
+        const sKeys = {
+          publicKey: senderImportedPublicKey,
+          privateKey: senderImportedPrivateKey,
+        };
+
+        const rKeys = {
+          publicKey: receiverImportedPublicKey,
+          privateKey: null,
+        };
+
+        setSenderKeys(sKeys);
+        setReceiverKeys(rKeys);
+
+        return sKeys;
+      }
+    },
+    [get, importPrivateKey, importPublicKey, setSenderKeys]
+  );
 
   const fetchMessages = useCallback(
     async (cursor = 0) => {
@@ -92,7 +147,7 @@ const useDiscussions = ({ reference }: { reference: string }) => {
 
       if (!result.status || !result?.data?.messages) {
         if (cursor > 0) return;
-        return router.push(chatsPathUrl);
+        return push(chatsPathUrl);
       }
 
       //
@@ -100,12 +155,26 @@ const useDiscussions = ({ reference }: { reference: string }) => {
       const userName = result.data.userName;
       const photo = result.data.photo;
       const resultMessages = result.data.messages.data;
+      const userPublicKey = result.data.publicKey;
+
+      let keys = senderKeys;
+
+      if (!keys.privateKey) {
+        keys = (await importPrivateAndPublicKeys(
+          userPublicKey
+        )) as SecurityKeysTypes;
+      }
+
+      if (!keys?.privateKey) {
+        return push(chatsPathUrl);
+      }
 
       if (resultMessages.findIndex((x) => x.isEncrypted) !== -1) {
         for (let message of resultMessages) {
           if (message.isEncrypted) {
             message.message = await decryptAndDecodeMessageAsync(
-              message.message
+              message.sender == userId ? message.messagePair : message.message,
+              keys?.privateKey as CryptoKey
             );
           }
         }
@@ -129,7 +198,7 @@ const useDiscussions = ({ reference }: { reference: string }) => {
         };
       });
 
-      chatHubs?.updateUserMessagesAsRead(userId);
+      updateUserMessagesAsRead?.(userId);
 
       if (cursor > 0) {
         setMessages((prevValues) => {
@@ -142,14 +211,16 @@ const useDiscussions = ({ reference }: { reference: string }) => {
       return resultMessages;
     },
     [
+      senderKeys,
       reference,
-      chatHubs,
-      router,
+      updateUserMessagesAsRead,
+      push,
       setLastMessageId,
       setIsLoading,
       getFileUrl,
       setMessages,
       decryptAndDecodeMessageAsync,
+      importPrivateAndPublicKeys,
     ]
   );
 
@@ -179,12 +250,15 @@ const useDiscussions = ({ reference }: { reference: string }) => {
         messages[index] = {
           ...updatedMess,
           chatFiles: messages[index].chatFiles,
-          message: await decryptAndDecodeMessageAsync(updatedMess.message),
+          message: await decryptAndDecodeMessageAsync(
+            updatedMess.message,
+            senderKeys.privateKey as CryptoKey
+          ),
         };
         setMessages([...messages]);
       }
     },
-    [messages, decryptAndDecodeMessageAsync]
+    [messages, senderKeys.privateKey, decryptAndDecodeMessageAsync]
   );
 
   useEffect(() => {
@@ -334,10 +408,15 @@ const useDiscussions = ({ reference }: { reference: string }) => {
       if (editedMessage) {
         if (message.length == 0) return;
         // edited message
-
         if (editedMessage.isEncrypted) {
-          message = await encodeAndEncryptMessageAsync(message);
-          messagePair = await encodeAndEncryptMessageAsync(messagePair);
+          message = await encodeAndEncryptMessageAsync(
+            message,
+            senderKeys.publicKey as CryptoKey
+          );
+          messagePair = await encodeAndEncryptMessageAsync(
+            messagePair,
+            receiverKeys.publicKey as CryptoKey
+          );
         }
 
         result = await updateMessage({
@@ -360,11 +439,24 @@ const useDiscussions = ({ reference }: { reference: string }) => {
           }
         }
 
-        const base64String = await encodeAndEncryptMessageAsync(message);
+        const isEmptyMessage = message.length === 0;
 
-        formData.append("message", base64String);
+        const senderBase64String = isEmptyMessage
+          ? ""
+          : await encodeAndEncryptMessageAsync(
+              message,
+              senderKeys.publicKey as CryptoKey
+            );
+        const base64String = isEmptyMessage
+          ? ""
+          : await encodeAndEncryptMessageAsync(
+              message,
+              receiverKeys.publicKey as CryptoKey
+            );
+
+        formData.append("message", senderBase64String);
         formData.append("messagePair", base64String);
-        formData.append("isEncrypted", `${true}`);
+        formData.append("isEncrypted", `${isEmptyMessage ? false : true}`);
         formData.append("messageType", `${0}`);
         formData.append("receiver", `${userId}`);
 
@@ -386,6 +478,8 @@ const useDiscussions = ({ reference }: { reference: string }) => {
     [
       editedMessage,
       linkedImages,
+      senderKeys,
+      receiverKeys,
       setEditedMessage,
       setLinkedImages,
       encodeAndEncryptMessageAsync,

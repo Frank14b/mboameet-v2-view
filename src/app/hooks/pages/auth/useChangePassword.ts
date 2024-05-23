@@ -5,7 +5,6 @@ import {
   ChangePasswordDto,
 } from "@/app/types";
 import { changePasswordSchema } from "@/app/validators";
-import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
   UseFormHandleSubmit,
@@ -14,6 +13,7 @@ import useAppForm from "../../useForm";
 import { getLocalStorage } from "@/app/lib/utils";
 import { localStorageKey, loginPathUrl } from "@/app/lib/constants/app";
 import { notification } from "@/app/lib/notifications";
+import useCustomRouter from "../../useCustomRouter";
 
 function useChangePassword(): ChangePasswordHookDto {
   //
@@ -35,7 +35,7 @@ function useChangePassword(): ChangePasswordHookDto {
   const [responseData, setResponseData] = useState<ApiResponseDto<
     BooleanResultDto<string>
   > | null>(null);
-  const router = useRouter();
+  const router = useCustomRouter();
 
   const submitFormData = async (data: ChangePasswordDto) => {
     setIsLoading(true);

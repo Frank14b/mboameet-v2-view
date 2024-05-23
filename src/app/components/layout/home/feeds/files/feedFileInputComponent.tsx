@@ -1,9 +1,6 @@
 import CropImage from "@/app/components/widgets/cropImage";
 import { FeedFormHookDto } from "@/app/hooks/pages/feeds/useFeedForm";
-import {
-  feedInputFile,
-  feedInputVideoFile,
-} from "@/app/lib/constants/app";
+import { feedInputFile, feedInputVideoFile } from "@/app/lib/constants/app";
 import { createFileUploadString } from "@/app/lib/utils";
 import { ChangeEvent } from "react";
 
@@ -12,8 +9,14 @@ export default function FeedFileInputComponent({
 }: {
   feedFormHook: FeedFormHookDto;
 }) {
-  const { image, setImage, handleSelectFeedVideo, uploadFeedImage } =
-    feedFormHook;
+  const {
+    image,
+    inputFileImageRef,
+    inputFileVideoRef,
+    setImage,
+    handleSelectFeedVideo,
+    uploadFeedImage,
+  } = feedFormHook;
 
   return (
     <>
@@ -22,6 +25,7 @@ export default function FeedFileInputComponent({
           setImage(createFileUploadString(e))
         }
         id={feedInputFile}
+        ref={inputFileImageRef}
         accept="image/*"
         type="file"
         className="hidden"
@@ -31,6 +35,7 @@ export default function FeedFileInputComponent({
           handleSelectFeedVideo(e)
         }
         id={feedInputVideoFile}
+        ref={inputFileVideoRef}
         accept="video/*"
         type="file"
         className="hidden"
