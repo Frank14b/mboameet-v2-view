@@ -23,6 +23,10 @@ const useCustomRouter = () => {
     (link: string, options?: NavigateOptions | undefined) => {
       if (pathname != link) {
         setNavigationChange("start");
+
+        setTimeout(() => {
+          setNavigationChange("stop");
+        }, 3000);
       }
       router.replace(link, options);
     },

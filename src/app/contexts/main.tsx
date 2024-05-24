@@ -32,6 +32,7 @@ import { configs } from "../../../app.config";
 import { validateToken } from "../services/server-actions";
 import NavigationLoadingComponent from "../components/commons/navigationLoading";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { nonProtectedPages } from "../middlewares/AuthMiddleware";
 
 const MainContext = createContext<any>({});
 
@@ -55,6 +56,15 @@ export function MainWrapper({ children }: { children: any }) {
   const [canRemoveAsideBar, setCanRemoveAsideBar] = useState<boolean>(false);
   const [canRemoveNavBar, setCanRemoveNavBar] = useState<boolean>(false);
 
+  const isAccessingNonProtectedPage = useCallback(() => {
+    for (let i = 0; i < nonProtectedPages.length; i++) {
+      if (pathname.startsWith(nonProtectedPages[i])) {
+        return true;
+      }
+    }
+    return false;
+  }, [pathname]);
+
   useEffect(() => {
     setCurrentLink(pathname);
   }, [pathname, setCurrentLink]);
@@ -64,7 +74,7 @@ export function MainWrapper({ children }: { children: any }) {
 
     if (
       pathname.startsWith(`${marketplacePathUrl}`) ||
-      pathname.startsWith(administrationPathUrl.stores)
+      pathname.startsWith(administrationPathUrl.baseUrl)
     ) {
       setCanRemoveAsideBar(true);
       setCanRemoveNavBar(true);
@@ -86,11 +96,13 @@ export function MainWrapper({ children }: { children: any }) {
     useUserStore.persist.clearStorage();
     clear();
 
+    if (isAccessingNonProtectedPage()) return;
+
     setTimeout(() => {
       setLoading(false);
       window.location.reload();
     }, 300);
-  }, [setUserConnected, clear, setLoading]);
+  }, [setUserConnected, clear, setLoading, isAccessingNonProtectedPage]);
 
   const deleteAccount = useCallback(async () => {}, []);
 
@@ -195,7 +207,7 @@ export function MainWrapper({ children }: { children: any }) {
                         } w-1/2 csm:w-full xs:w-full lg:w-1/2 bg-gray-100 dark:bg-gray-900`}
                       >
                         <div
-                          className="flex flex-col h-screen p-6 relative overflow-y-auto"
+                          className="flex flex-col h-screen pt-6 pb-6 relative overflow-y-auto"
                           id={mainDivComponentId}
                         >
                           {children}
@@ -217,7 +229,46 @@ export function MainWrapper({ children }: { children: any }) {
                   </div>
                 </>
               ) : (
-                <>{pathname.startsWith(authStartPath) ? children : <></>}</>
+                <>
+                  {isAccessingNonProtectedPage() && (
+                    <>
+                      {!pathname.startsWith(authStartPath) ? (
+                        <>
+                          <div className="mh-600 bg-gray-200 dark:bg-gray-800">
+                            <div className="flex xxl:container">
+                              <MobileSideBarMenuComponent
+                                enable={canRemoveNavBar}
+                                isMarketPlace={canRemoveNavBar}
+                              ></MobileSideBarMenuComponent>
+
+                              <div
+                                className={`${
+                                  canRemoveAsideBar ? "min-sm:w-full" : ""
+                                } w-1/2 csm:w-full xs:w-full lg:w-1/2 bg-gray-100 dark:bg-gray-900`}
+                              >
+                                <div
+                                  className="flex flex-col h-screen p-6 relative overflow-y-auto"
+                                  id={mainDivComponentId}
+                                >
+                                  {children}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          {" "}
+                          {children}
+                          <MobileSideBarMenuComponent
+                            enable={true}
+                            isMarketPlace={canRemoveNavBar}
+                          ></MobileSideBarMenuComponent>{" "}
+                        </>
+                      )}
+                    </>
+                  )}
+                </>
               )}
             </AppHubWrapper>
 

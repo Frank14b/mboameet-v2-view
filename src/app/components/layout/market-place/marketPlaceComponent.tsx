@@ -12,7 +12,7 @@ export function MarketPlaceComponent() {
   //
 
   return (
-    <Card placeholder={""} className="dark:bg-gray-900 w-full dark:shadow-none pb-12">
+    <Card placeholder={""} className="dark:bg-gray-900 w-full rounded-none shadow-none pb-12">
       <CardHeader placeholder={""} style={{ height: "200px" }} className="mt-5">
         <Image
           alt=""
@@ -23,13 +23,13 @@ export function MarketPlaceComponent() {
       </CardHeader>
       <CardBody placeholder={""} className="p-4 dark:text-gray-100">
         {/* // */}
-        <Typography placeholder={""} variant="h6" className="py-3 flex gap-2">
+        <Typography placeholder={""} variant="h6" className="py-3 flex gap-2 px-5">
           <ShoppingCartIcon className="w-4 h-4 mt-1" /> Latest
         </Typography>
         <CarouselProductsComponent />
 
         {/* // */}
-        <Typography placeholder={""} variant="h6" className="py-3 flex gap-2">
+        <Typography placeholder={""} variant="h6" className="py-3 flex gap-2 px-5">
           <ShoppingCartIcon className="w-4 h-4 mt-1" /> Recommended
         </Typography>
         <CarouselProductsComponent />

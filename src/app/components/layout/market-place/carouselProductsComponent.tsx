@@ -36,9 +36,8 @@ export function CarouselProductsComponent() {
   return (
     <Carousel responsive={responsive}>
       {range(1, 10).map((value: number, index: number) => (
-        <div className="p-2">
+        <div className="p-2" key={index}>
           <Card
-            key={index}
             placeholder={""}
             className="dark:bg-gray-800 w-full shadow-none border-2 border-gray-100 dark:border-none"
           >

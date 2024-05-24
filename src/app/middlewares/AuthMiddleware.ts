@@ -6,7 +6,13 @@ export const protectedPages = [
 	'/settings',
 	'/chats',
 	'/friends',
-	'/galleries'
+	'/galleries',
+	'/administration'
+];
+ 
+export const nonProtectedPages = [
+	'/marketplace',
+	'/auth'
 ];
 
 const isUserAuthenticated = async (request: NextRequest) => {

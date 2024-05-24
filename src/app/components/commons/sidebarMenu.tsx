@@ -16,9 +16,12 @@ import {
   marketplacePathUrl,
   settingPathUrl,
 } from "@/app/lib/constants/app";
+import useUserStore from "@/app/store/userStore";
 
 export default function SideBarMenuComponent({ children }: { children: any }) {
   const pathname = usePathname();
+
+  const { userConnected } = useUserStore();
 
   return (
     <>

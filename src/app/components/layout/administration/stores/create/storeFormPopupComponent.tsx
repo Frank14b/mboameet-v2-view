@@ -7,31 +7,31 @@ import {
   Dialog,
   Typography,
 } from "@material-tailwind/react";
-import InputField from "../../widgets/inputField";
-import { ProfileHookDto } from "@/app/hooks/pages/profile/useUserProfile";
-import LoadingSpinner from "../../widgets/loadingSpinner";
+import InputField from "@/app/components/widgets/inputField";
+import LoadingSpinner from "@/app/components/widgets/loadingSpinner";
+import { AdminStoreHookDto } from "@/app/hooks/pages/administration/stores/useAdminStore";
 
-export function UpdateProfileFormComponent({
-  userProfileHook,
+export function CreateStoreFormPopupComponent({
+  adminStoreHook,
 }: {
-  userProfileHook: ProfileHookDto;
+  adminStoreHook: AdminStoreHookDto;
 }) {
   const {
     isLoading,
-    openEditProfile,
+    isOpenStoreForm,
     responseData,
     handleSubmit,
-    handleOpenEditProfile,
+    handleIsOpenStoreForm,
     submitFormData,
-  } = userProfileHook;
+  } = adminStoreHook;
 
   return (
     <>
       <Dialog
         placeholder={""}
         size="md"
-        open={openEditProfile}
-        handler={handleOpenEditProfile}
+        open={isOpenStoreForm}
+        handler={handleIsOpenStoreForm}
         className="bg-transparent shadow-none"
       >
         <Card
@@ -42,7 +42,7 @@ export function UpdateProfileFormComponent({
             <form method="post" onSubmit={handleSubmit(submitFormData)}>
               <CardBody placeholder={""} className="flex flex-col gap-4">
                 <Typography placeholder={""} variant="h4" color="blue-gray">
-                  Edit Profile
+                  Store
                 </Typography>
                 <Typography
                   placeholder={""}
@@ -50,10 +50,8 @@ export function UpdateProfileFormComponent({
                   variant="paragraph"
                   color="gray"
                 >
-                  Enter your email and password to Sign In.
+                  Fill the form to create a new store
                 </Typography>
-
-                {/* <InputField data={{ title: "Username", name: "userName" }} /> */}
 
                 <InputField
                   data={{

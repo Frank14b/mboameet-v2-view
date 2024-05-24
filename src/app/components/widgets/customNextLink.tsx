@@ -5,9 +5,11 @@ import React from "react";
 
 export default function CustomNextLink({
   children,
+  className,
   ...props
 }: LinkProps & {
   children?: React.ReactNode;
+  className?: string;
 }) {
   //
   const { setNavigationChange } = useMainContext();
@@ -16,11 +18,15 @@ export default function CustomNextLink({
   const handleOnClick = () => {
     if (pathname != props.href) {
       setNavigationChange("start");
+
+      setTimeout(() => {
+        setNavigationChange("stop");
+      }, 3000);
     }
   };
 
   return (
-    <Link onClick={handleOnClick} {...props}>
+    <Link onClick={handleOnClick} {...props} className={className}>
       {children}
     </Link>
   );

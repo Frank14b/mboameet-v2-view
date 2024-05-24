@@ -16,7 +16,7 @@ import { usePathname } from "next/navigation";
 import FeedHubs from "../services/hubs/feeds";
 import { useMainContext } from "./main";
 import ConfirmationComponent from "../components/commons/alerts/confirmation";
-import { authStartPath, loginPathUrl } from "../lib/constants/app";
+import { loginPathUrl } from "../lib/constants/app";
 import ChatHubs from "../services/hubs/chats";
 import useChatStore from "../store/chatStore";
 import { configs } from "../../../app.config";
@@ -41,13 +41,11 @@ export function AppHubWrapper({ children }: { children: any }) {
 
   const initHub = useCallback(async () => {
     //
-    if (connection) return;
     if (userConnected !== true || (await isTokenExpired()) == true) {
-      if (!pathname.startsWith(authStartPath)) {
-        push(loginPathUrl);
-      }
       return;
     }
+
+    if (connection) return;
 
     let _connection: signalR.HubConnection | null = null;
 
@@ -94,7 +92,7 @@ export function AppHubWrapper({ children }: { children: any }) {
     } catch (error) {
       setConnection(null);
     }
-  }, [push, userConnected, connection, pathname, setErrorSocket]);
+  }, [push, userConnected, connection, setErrorSocket]);
 
   useEffect(() => {
     // init the app websocket client hub
