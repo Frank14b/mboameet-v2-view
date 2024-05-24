@@ -1,5 +1,6 @@
 "use client";
 
+import { MarketPlaceCartComponent } from "@/app/components/layout/market-place/cart/cartComponent";
 import CustomNextLink from "@/app/components/widgets/customNextLink";
 import { marketplacePathUrl } from "@/app/lib/constants/app";
 import { HomeIcon } from "@heroicons/react/24/solid";
@@ -29,7 +30,9 @@ export default function ShoppingCartPage() {
         </div>
       </div>
       {/*  */}
-      <div className="mt-12"></div>
+      <div className="mt-12">
+        <MarketPlaceCartComponent />
+      </div>
       {/*  */}
     </>
   );
