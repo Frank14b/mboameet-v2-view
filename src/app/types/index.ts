@@ -4,6 +4,7 @@ export * from "./authentication";
 export * from "./widget";
 export * from "./user";
 export * from "./feeds";
+export * from './stores/storeTypes';
 
 export type RequestMethod = "POST" | "GET" | "DELETE" | "PUT" | "PATCH";
 

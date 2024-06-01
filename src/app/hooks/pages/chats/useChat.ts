@@ -109,6 +109,7 @@ const useChat = () => {
         image: getFileUrl(discussion.photo, discussion.id),
         chip: discussion.unReadCount > 0 ? discussion.unReadCount : undefined,
         reference: discussion.lastMessage.reference,
+        date: discussion.lastMessage.createdAt,
       };
     });
   }, [discussions, getFileUrl]);

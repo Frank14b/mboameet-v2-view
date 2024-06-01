@@ -1,9 +1,7 @@
+import CountrySelectField from "@/app/components/widgets/countrySelectField";
 import InputField from "@/app/components/widgets/inputField";
 import AnimateFadeOut from "@/app/components/widgets/motions/animateFadeOut";
-import SelectField from "@/app/components/widgets/selectField";
 import { SignUpHookDto } from "@/app/hooks/pages/auth/useSignUp";
-import { useMemo } from "react";
-import { useCountries } from 'use-react-countries'
 
 export default function SignUpStepTwoComponent({
   stepProps,
@@ -12,21 +10,6 @@ export default function SignUpStepTwoComponent({
 }) {
   //
   const { stepper, switchbackStepper } = stepProps;
-  const { countries } = useCountries();
-
-  const formattedCountries = useMemo(() => {
-    return countries.map((country) => {
-      return {
-        label: country.name,
-        value: country.name,
-        image: country.flags.svg,
-        customValue: {
-          name: country.name,
-          callingCode: country.countryCallingCode,
-        }
-      };
-    });
-  }, [countries])
 
   return (
     <>
@@ -42,7 +25,12 @@ export default function SignUpStepTwoComponent({
             </h3>
             <div className="grid gap-4 mb-4 grid-cols-1">
               <AnimateFadeOut speed={0.8}>
-                <SelectField data={{ title: "Select Country", name: "country", options: formattedCountries }} />
+                <CountrySelectField
+                  data={{
+                    title: "Select Country",
+                    name: "country",
+                  }}
+                />
               </AnimateFadeOut>
               <AnimateFadeOut speed={0.8}>
                 <InputField data={{ title: "Phone Number", name: "phone" }} />

@@ -2,12 +2,13 @@ import {
   List,
   ListItem,
   ListItemPrefix,
-  Avatar,
   Typography,
   ListItemSuffix,
   Chip,
 } from "@material-tailwind/react";
 import AnimateHoverScale from "./motions/animateHoverScale";
+import CustomNextImage from "./CustomNextImage";
+import { formatDate } from "@/app/lib/utils";
 
 export type ListWithAvatarProps = {
   id: number;
@@ -16,6 +17,7 @@ export type ListWithAvatarProps = {
   image: string;
   chip?: number;
   reference: string;
+  date?: Date;
 };
 
 export default function ListWithAvatar({
@@ -41,9 +43,10 @@ export default function ListWithAvatar({
               key={index}
             >
               <ListItemPrefix placeholder={""}>
-                <Avatar
-                  placeholder={""}
-                  variant="circular"
+                <CustomNextImage
+                  className="rounded-full"
+                  height={45}
+                  width={45}
                   alt={item.title}
                   src={item.image}
                 />
@@ -55,7 +58,7 @@ export default function ListWithAvatar({
                     placeholder={""}
                     variant="h6"
                     color="blue-gray"
-                    className="dark:text-gray-400"
+                    className="dark:text-gray-400 capitalize"
                   >
                     {item.title}
                   </Typography>
@@ -73,16 +76,21 @@ export default function ListWithAvatar({
               )}
 
               <ListItemSuffix placeholder={""}>
-                {item.chip && activeItem != item.id ? (
-                  <Chip
-                    value={item.chip}
-                    variant="ghost"
-                    size="sm"
-                    className="rounded-full px-2 py-1 text-xs group-hover:bg-white/20 group-hover:text-white dark:bg-gray-500"
-                  />
-                ) : (
-                  <></>
-                )}
+                <div className="flex gap-3">
+                  <div className="text-xs">
+                    {item.date && formatDate(item.date, "ago")}
+                  </div>
+                  {item.chip && activeItem != item.id ? (
+                    <Chip
+                      value={item.chip}
+                      variant="ghost"
+                      size="sm"
+                      className="rounded-full px-2 py-1 text-xs group-hover:bg-white/20 group-hover:text-white dark:bg-gray-500"
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </ListItemSuffix>
             </ListItem>
           </AnimateHoverScale>

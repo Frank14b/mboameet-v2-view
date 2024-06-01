@@ -15,14 +15,19 @@ const urls = {
 export const getFriends = async ({
   revalidate,
   type,
+  paginate,
 }: {
   revalidate: boolean;
   type: FriendsTypes;
+  paginate: {
+    page: number;
+    limit: number;
+  };
 }) => {
   const result: ApiResponseDto<ResultPaginate<ResultFriendsDto[]>> =
     await apiCall({
       method: "GET",
-      url: `${urls.getFriends}?type=${type}`,
+      url: `${urls.getFriends}?type=${type}&page=${paginate.page}&limit=${paginate.limit}`,
     });
 
   return result;

@@ -13,6 +13,7 @@ import {
   Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
 import AnimateHoverScale from "@/app/components/widgets/motions/animateHoverScale";
+import { NoDataFound } from "@/app/components/widgets/noDataFound";
 
 //
 export default function FeedCardComponent({
@@ -38,6 +39,13 @@ export default function FeedCardComponent({
   const recentFeedItems = useMemo(() => {
     if (activeTab != "recent") return;
     if (isLoading) return <FeedSkeleton isLoading={true} count={5} />;
+    if (!feeds || feeds.length === 0)
+      return (
+        <NoDataFound
+          customClass="dark:shadow-none dark:bg-gray-800"
+          message="Stores not found"
+        />
+      );
     //
     return feeds?.map((feed: ResultFeed, index: number) => (
       <ItemCustomAnimation
@@ -53,6 +61,13 @@ export default function FeedCardComponent({
   const friendsFeedItems = useMemo(() => {
     if (activeTab != "friends") return;
     if (isLoading) return <FeedSkeleton isLoading={true} count={5} />;
+    if (!feeds || feeds.length === 0)
+      return (
+        <NoDataFound
+          customClass="dark:shadow-none dark:bg-gray-800"
+          message="Stores not found"
+        />
+      );
     //
     return feeds?.map((feed: ResultFeed, index: number) => (
       <ItemCustomAnimation

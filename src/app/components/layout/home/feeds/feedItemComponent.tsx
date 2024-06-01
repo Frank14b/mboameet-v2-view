@@ -9,10 +9,10 @@ import FeedCommentComponent from "./comments/feedCommentComponent";
 import FeedVideoReaderComponent from "./files/videoReaderComponent";
 import FeedHeaderComponent from "./feedHeaderComponent";
 import FeedImageViewComponent from "./files/feedImageComponent";
-import Image from "next/image";
 import { FeedHookDto } from "@/app/hooks/pages/feeds/useFeed";
 import { FeedFormHookDto } from "@/app/hooks/pages/feeds/useFeedForm";
 import { referenceKeyword } from "@/app/lib/constants/app";
+import CustomNextImage from "@/app/components/widgets/CustomNextImage";
 
 export default function FeedItemComponent({
   feed,
@@ -92,7 +92,7 @@ export default function FeedItemComponent({
                 >
                   {feedData.feedFiles.map(
                     (image: FeedFilesData, index: number) => (
-                      <Image
+                      <CustomNextImage
                         fill={true}
                         key={index}
                         src={mainContext.getFileUrl(

@@ -23,7 +23,6 @@ export function ChatsComponent({ chatHook }: { chatHook: ChatHookDto }) {
     discussions,
     discussionTypesList,
     defaultTab,
-    activeTab,
     setActiveTab,
     setIsLoading,
     fetchDiscussions,
@@ -39,9 +38,12 @@ export function ChatsComponent({ chatHook }: { chatHook: ChatHookDto }) {
     });
   };
 
-  const onActionClick = useCallback((data: ListWithAvatarProps) => {
-    router.push(`${chatsPathUrl}/${data.reference}`);
-  }, [router]);
+  const onActionClick = useCallback(
+    (data: ListWithAvatarProps) => {
+      router.push(`${chatsPathUrl}/${data.reference}`);
+    },
+    [router]
+  );
 
   const onMessageActionClick = useCallback(
     (data: ResultMessageDto, action: string) => {},
@@ -54,12 +56,16 @@ export function ChatsComponent({ chatHook }: { chatHook: ChatHookDto }) {
     //
     if (discussions.length == 0)
       return (
-        <NoDataFound customClass="shadow-none dark:bg-gray-800" message="" />
+        <NoDataFound
+          customClass="shadow-none dark:bg-gray-800"
+          message=""
+          showMessage={false}
+        />
       );
 
     return (
       <div className={``}>
-        <div className="overflow-y-auto h-custom-65 overflow-x-hidden">
+        <div className="overflow-y-auto h-custom-80 overflow-x-hidden">
           <ListWithAvatar
             activeItem={0}
             onActionClick={onActionClick}
@@ -68,11 +74,7 @@ export function ChatsComponent({ chatHook }: { chatHook: ChatHookDto }) {
         </div>
       </div>
     );
-  }, [
-    discussions,
-    isLoading,
-    onActionClick
-  ]);
+  }, [discussions, isLoading, onActionClick]);
 
   const tabMenus = useMemo(() => {
     let result: TabCustomAnimationProps[] = [];

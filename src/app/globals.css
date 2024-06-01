@@ -137,6 +137,6 @@
   height: calc(80vh - theme("spacing.7"));
 }
 
-body, html {
-  /* overflow-x: hidden; */
+.customSelectFilter ul {
+  margin-top: 47px;
 }

@@ -1,11 +1,11 @@
 import { GalleriesHookDto } from "@/app/hooks/pages/galleries/useGalleries";
-import Image from "next/image";
 import AnimateHoverScale from "../../widgets/motions/animateHoverScale";
 import { useCallback, useMemo, useState } from "react";
 import {
   ImagePreviewPopup,
   ImagePreviewProps,
 } from "../../widgets/imagePreviewPopup";
+import CustomNextImage from "../../widgets/CustomNextImage";
 
 export function ChatMediaComponent({
   galleryHook,
@@ -45,7 +45,7 @@ export function ChatMediaComponent({
           type === "image" && (
             <div key={index}>
               <AnimateHoverScale index={index}>
-                <Image
+                <CustomNextImage
                   className="w-full blur-sm hover:blur-0 cursor-pointer max-w-full shadow-md rounded-lg object-cover object-center"
                   src={url}
                   alt="gallery-photo"

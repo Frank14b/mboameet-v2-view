@@ -1,6 +1,7 @@
 import { ChangeEvent, MutableRefObject } from "react";
 import { DateTime } from "luxon";
 import secureLocalStorage from "react-secure-storage";
+import { ObjectKeyDto } from "../types";
 
 let debounceTimer: any = null;
 
@@ -271,4 +272,20 @@ export const offsetElementPosition = (el: HTMLElement) => {
     scrollLeft = document.documentElement.scrollLeft,
     scrollTop = document.documentElement.scrollTop;
   return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
+};
+
+export const dynamicSort = (property: string) => {
+  var sortOrder = 1;
+  if (property[0] === "-") {
+    sortOrder = -1;
+    property = property.substr(1);
+  }
+  return function (a: ObjectKeyDto, b: ObjectKeyDto) {
+    /* next line works with strings and numbers,
+     * and you may want to customize it to your needs
+     */
+    var result =
+      a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+    return result * sortOrder;
+  };
 };

@@ -24,6 +24,7 @@ import MessageActionsComponent from "./messageActionsComponent";
 import Image from "next/image";
 import { MessageImagePreviewComponent } from "./messageImagePreviewComponent";
 import { useState } from "react";
+import CustomNextImage from "../../widgets/CustomNextImage";
 
 export function MessagesComponent({
   users,
@@ -57,13 +58,12 @@ export function MessagesComponent({
       >
         <div className="grid grid-cols-2 w-full pt-2 px-5 pb-2 bg-gray-100 dark:bg-gray-900 rounded-xl">
           <div className="relative">
-            <Avatar
-              placeholder={""}
-              size="sm"
+            <CustomNextImage
               src={users.secondUser.avatar}
               alt={users.secondUser.name}
-              withBorder
-              className="float-left"
+              className="float-left rounded-full"
+              height={35}
+              width={35}
             />
 
             <div className="h-2 w-2 left-5 bottom-0 rounded-full bg-green-700 absolute"></div>
@@ -144,7 +144,7 @@ export function MessagesComponent({
                             } gap-2`}
                           >
                             {message.files.map((file, index) => (
-                              <Image
+                              <CustomNextImage
                                 onClick={() => setOpenImage(true)}
                                 key={index}
                                 src={file.url}
@@ -166,12 +166,12 @@ export function MessagesComponent({
                     </Typography>
                     <TimelineIcon className="p-0 h-9">
                       <></>
-                      <Avatar
-                        placeholder={""}
-                        size="sm"
+                      <CustomNextImage
                         src={users.primaryUser.avatar}
                         alt={users.primaryUser.name}
-                        // withBorder
+                        height={35}
+                        width={35}
+                        className="rounded-full"
                       />
                     </TimelineIcon>
                     {/* // */}
@@ -186,12 +186,12 @@ export function MessagesComponent({
                   <>
                     <TimelineIcon className="p-0 ml-2 h-9">
                       <></>
-                      <Avatar
-                        placeholder={""}
-                        size="sm"
+                      <CustomNextImage
                         src={users.secondUser.avatar}
                         alt={users.secondUser.name}
-                        // withBorder
+                        height={35}
+                        width={35}
+                        className="rounded-full"
                       />
                     </TimelineIcon>
                     <Typography
@@ -221,7 +221,7 @@ export function MessagesComponent({
                         {message.files.length > 0 && (
                           <span className="mt-2 flex gap-2 overflow-x-auto">
                             {message.files.map((file, index) => (
-                              <Image
+                              <CustomNextImage
                                 onClick={() => setOpenImage(true)}
                                 key={index}
                                 src={file.url}

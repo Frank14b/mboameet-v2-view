@@ -9,9 +9,10 @@ import {
 } from "react";
 import { notification } from "@/app/lib/notifications";
 import { useMainContext } from "@/app/contexts/main";
-import { ResultMessageDto } from "@/app/types/chats";
+import { ResultChatReferenceDto, ResultMessageDto } from "@/app/types/chats";
 import {
   getMessages,
+  getReference,
   proceedDeleteMessage,
   proceedDeleteMessages,
   sendMessage,
@@ -44,7 +45,7 @@ import useCustomRouter from "../../useCustomRouter";
 import useLocalStorage from "../../useLocalStorage";
 import useAppEncryption, { SecurityKeysTypes } from "../../useEncryption";
 
-const useDiscussions = ({ reference }: { reference: string }) => {
+const useDiscussions = ({ reference }: { reference?: string }) => {
   //
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [messages, setMessages] = useState<ResultMessageDto[] | []>([]);
@@ -81,6 +82,8 @@ const useDiscussions = ({ reference }: { reference: string }) => {
   const [editedMessage, setEditedMessage] = useState<MessageProps | null>(null);
   const [image, setImage] = useState<string>("");
   const [linkedImages, setLinkedImages] = useState<ObjectKeyDto[] | null>(null);
+  const [canEncryptNewMessage, setCanEncryptNewMessage] =
+    useState<boolean>(true);
   const {
     importPrivateKey,
     importPublicKey,
@@ -102,9 +105,24 @@ const useDiscussions = ({ reference }: { reference: string }) => {
   const importPrivateAndPublicKeys = useCallback(
     async (publicKey: string) => {
       //
-      const userKeys = get(userEncryptionStorageKey);
-      if (userKeys && publicKey.length > 0) {
+      if (publicKey.length > 0) {
         //
+        const receiverImportedPublicKey = await importPublicKey(
+          JSON.parse(publicKey) as JsonWebKey
+        );
+
+        const rKeys = {
+          publicKey: receiverImportedPublicKey,
+          privateKey: null,
+        };
+
+        setReceiverKeys(rKeys);
+      } else {
+        setCanEncryptNewMessage(false);
+      }
+
+      const userKeys = get(userEncryptionStorageKey);
+      if (userKeys) {
         const jwkKeyPair = JSON.parse(userKeys as string);
 
         const senderImportedPrivateKey = await importPrivateKey(
@@ -113,32 +131,32 @@ const useDiscussions = ({ reference }: { reference: string }) => {
         const senderImportedPublicKey = await importPublicKey(
           JSON.parse(jwkKeyPair.publicKey) as JsonWebKey
         );
-        const receiverImportedPublicKey = await importPublicKey(
-          JSON.parse(publicKey) as JsonWebKey
-        );
 
         const sKeys = {
           publicKey: senderImportedPublicKey,
           privateKey: senderImportedPrivateKey,
         };
 
-        const rKeys = {
-          publicKey: receiverImportedPublicKey,
-          privateKey: null,
-        };
-
         setSenderKeys(sKeys);
-        setReceiverKeys(rKeys);
-
         return sKeys;
+      } else {
+        setCanEncryptNewMessage(false);
       }
     },
-    [get, importPrivateKey, importPublicKey, setSenderKeys]
+    [
+      get,
+      importPrivateKey,
+      importPublicKey,
+      setSenderKeys,
+      setCanEncryptNewMessage,
+    ]
   );
 
   const fetchMessages = useCallback(
     async (cursor = 0) => {
       //
+      if (!reference) return;
+
       const result = await getMessages({
         revalidate: true,
         reference,
@@ -409,6 +427,8 @@ const useDiscussions = ({ reference }: { reference: string }) => {
         if (message.length == 0) return;
         // edited message
         if (editedMessage.isEncrypted) {
+          if (!canEncryptNewMessage) return;
+
           message = await encodeAndEncryptMessageAsync(
             message,
             senderKeys.publicKey as CryptoKey
@@ -443,20 +463,28 @@ const useDiscussions = ({ reference }: { reference: string }) => {
 
         const senderBase64String = isEmptyMessage
           ? ""
-          : await encodeAndEncryptMessageAsync(
+          : canEncryptNewMessage
+          ? await encodeAndEncryptMessageAsync(
               message,
               senderKeys.publicKey as CryptoKey
-            );
+            )
+          : message;
+        //
         const base64String = isEmptyMessage
           ? ""
-          : await encodeAndEncryptMessageAsync(
+          : canEncryptNewMessage
+          ? await encodeAndEncryptMessageAsync(
               message,
               receiverKeys.publicKey as CryptoKey
-            );
+            )
+          : message;
 
         formData.append("message", senderBase64String);
         formData.append("messagePair", base64String);
-        formData.append("isEncrypted", `${isEmptyMessage ? false : true}`);
+        formData.append(
+          "isEncrypted",
+          `${!isEmptyMessage && canEncryptNewMessage ? true : false}`
+        );
         formData.append("messageType", `${0}`);
         formData.append("receiver", `${userId}`);
 
@@ -480,6 +508,7 @@ const useDiscussions = ({ reference }: { reference: string }) => {
       linkedImages,
       senderKeys,
       receiverKeys,
+      canEncryptNewMessage,
       setEditedMessage,
       setLinkedImages,
       encodeAndEncryptMessageAsync,
@@ -626,6 +655,38 @@ const useDiscussions = ({ reference }: { reference: string }) => {
     [linkedImages, setLinkedImages]
   );
 
+  const checkExistingDiscussion = useCallback(
+    async (userId: number) => {
+      const result = await getReference({
+        revalidate: true,
+        senderId: users.primaryUser.id,
+        receiverId: userId,
+      });
+
+      return result.data ?? null;
+    },
+    [users.primaryUser.id]
+  );
+
+  const handleSendHiMessage = useCallback(async (userId: number) => {
+    const formData = new FormData();
+    formData.append("message", "Hi!");
+    formData.append("messagePair", "Hi!");
+    formData.append("isEncrypted", `${false}`);
+    formData.append("messageType", `${0}`);
+    formData.append("receiver", `${userId}`);
+
+    const result = await sendMessage({
+      revalidate: true,
+      type: "users",
+      formData,
+    });
+
+    notification.apiNotify(result);
+
+    return result.data ?? null;
+  }, []);
+
   const data: ConversationHookDto = {
     isLoading,
     messages: formattedMessages,
@@ -639,12 +700,14 @@ const useDiscussions = ({ reference }: { reference: string }) => {
     setIsLoading,
     fetchMessages,
     handleSendMessage,
+    handleSendHiMessage,
     handleMessageReaction,
     handleMessageAction,
     cancelEditMessageAction,
     handleInputKeyPress,
     handleUploadImage,
     removeSelectedImage,
+    checkExistingDiscussion,
   };
 
   return { ...data };
@@ -673,6 +736,7 @@ export type ConversationHookDto = {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   fetchMessages: () => Promise<ResultMessageDto[] | void | undefined>;
   handleSendMessage: ({ userId }: { userId: number }) => Promise<void>;
+  handleSendHiMessage: (userId: number) => Promise<ResultMessageDto | null>;
   handleMessageReaction: (id: number, reaction: string) => Promise<void>;
   handleMessageAction: (
     item: MessageProps,
@@ -682,4 +746,7 @@ export type ConversationHookDto = {
   handleInputKeyPress: (e: any) => void;
   handleUploadImage: (data: string | Blob | ObjectKeyDto) => void;
   removeSelectedImage: (index: number) => void;
+  checkExistingDiscussion: (
+    userId: number
+  ) => Promise<ResultChatReferenceDto | null>;
 };

@@ -1,23 +1,50 @@
-import { Button, IconButton, Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import UserStoriesCard from "../widgets/userStoriesCard";
 import SideBarMenuListUserComponent from "../widgets/sidebar/menuListUser";
-import Image from "next/image";
 import { PlusIcon } from "@heroicons/react/24/solid";
+import useFriends from "@/app/hooks/pages/friends/useFriends";
+import { useMemo } from "react";
+import CustomNextLink from "../widgets/customNextLink";
+import { friendPathUrl } from "@/app/lib/constants/app";
 
 export default function AsideBarMenuComponent({ children }: { children: any }) {
+  //
+  const { friends, isLoading } = useFriends();
+
+  const friendSuggestions = useMemo(() => {
+    if (isLoading) return <>Loading...</>;
+    if (friends.length == 0) return <>No friends found</>;
+
+    return (
+      <>
+        <div className="max-h-[300px] overflow-y-auto">
+          <SideBarMenuListUserComponent
+            users={friends.map((friend: any, index: number) => {
+              return {
+                id: friend._id,
+                title: `${friend.firstName} ${friend.lastName}`,
+                image: friend.photo,
+              };
+            })}
+          />
+        </div>
+        <p className="text-xs underline px-1 pt-5">
+          <CustomNextLink href={friendPathUrl}> See All </CustomNextLink>
+        </p>
+      </>
+    );
+  }, [friends]);
+
   return (
     <>
+      {children}
       <div className="w-full pb-6 dark:text-gray-200">
         <div className="relative">
           <Typography placeholder={""} className="font-bold px-1 pb-1 gap-3">
             Stories{" "}
-            <Button
-                placeholder={""}
-                size="sm"
-                className="bg-pink-600 mx-3 p-1"
-              >
-               <PlusIcon className="w-4 h-4 cursor-pointer" />
-              </Button>
+            <Button placeholder={""} size="sm" className="bg-pink-600 mx-3 p-1">
+              <PlusIcon className="w-4 h-4 cursor-pointer" />
+            </Button>
           </Typography>
         </div>
 
@@ -66,92 +93,7 @@ export default function AsideBarMenuComponent({ children }: { children: any }) {
           Suggestions
         </Typography>
 
-        <div className="w-full">
-          <SideBarMenuListUserComponent
-            users={[
-              {
-                title: "Tania Andrew",
-                image: "https://docs.material-tailwind.com/img/face-1.jpg",
-              },
-              {
-                title: "Emma Willever",
-                image: "https://docs.material-tailwind.com/img/face-3.jpg",
-              },
-            ]}
-          />
-          <p className="text-xs text-undelined px-1">See All</p>
-        </div>
-      </div>
-
-      <div className="w-full pb-6 dark:text-gray-200">
-        <Typography placeholder={""} className="font-bold px-1">
-          Recommendations
-        </Typography>
-
-        <div className="mt-6">
-          <div className="flex items-center -space-x-4 hidden">
-            <Image
-              fill={true}
-              alt="user 1"
-              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1480&amp;q=80"
-              className="relative inline-block h-12 w-12 !rounded-full  border-2 border-white object-cover object-center hover:z-10 focus:z-10"
-            />
-            <Image
-              fill={true}
-              alt="user 2"
-              src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1061&amp;q=80"
-              className="relative inline-block h-12 w-12 !rounded-full border-2 border-white object-cover object-center hover:z-10 focus:z-10"
-            />
-            <Image
-              fill={true}
-              alt="user 3"
-              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1288&amp;q=80"
-              className="relative inline-block h-12 w-12 !rounded-full border-2 border-white object-cover object-center hover:z-10 focus:z-10"
-            />
-            <Image
-              fill={true}
-              alt="user 4"
-              src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1287&amp;q=80"
-              className="relative inline-block h-12 w-12 !rounded-full border-2 border-white object-cover object-center hover:z-10 focus:z-10"
-            />
-            <Image
-              fill={true}
-              alt="user 5"
-              src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1760&amp;q=80"
-              className="relative inline-block h-12 w-12 !rounded-full border-2 border-white object-cover object-center hover:z-10 focus:z-10"
-            />
-            <Image
-              fill={true}
-              alt="user 1"
-              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1480&amp;q=80"
-              className="relative inline-block h-12 w-12 !rounded-full  border-2 border-white object-cover object-center hover:z-10 focus:z-10"
-            />
-            <Image
-              fill={true}
-              alt="user 2"
-              src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1061&amp;q=80"
-              className="relative inline-block h-12 w-12 !rounded-full border-2 border-white object-cover object-center hover:z-10 focus:z-10"
-            />
-            <Image
-              fill={true}
-              alt="user 3"
-              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1288&amp;q=80"
-              className="relative inline-block h-12 w-12 !rounded-full border-2 border-white object-cover object-center hover:z-10 focus:z-10"
-            />
-            <Image
-              fill={true}
-              alt="user 4"
-              src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1287&amp;q=80"
-              className="relative inline-block h-12 w-12 !rounded-full border-2 border-white object-cover object-center hover:z-10 focus:z-10"
-            />
-            <Image
-              fill={true}
-              alt="user 5"
-              src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1760&amp;q=80"
-              className="relative inline-block h-12 w-12 !rounded-full border-2 border-white object-cover object-center hover:z-10 focus:z-10"
-            />
-          </div>
-        </div>
+        <div className="w-full">{friendSuggestions}</div>
       </div>
     </>
   );

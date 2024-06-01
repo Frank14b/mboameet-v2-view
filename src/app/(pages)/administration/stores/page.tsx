@@ -13,9 +13,8 @@ export default function ManageStorePage() {
   const { handleIsOpenStoreForm } = adminStoreHook;
 
   return (
-    <>
-      <div className="w-full flex absolute dark:text-white right-0 px-5">
-        <div className="w-full px-5 flex">
+      <div className="container">
+        <div className="flex dark:text-white right-0 px-5">
           <Breadcrumbs placeholder={""} className="dark:bg-gray-800">
             <CustomNextLink href="/">
               <span className="opacity-60 dark:opacity-80 dark:text-gray-100">
@@ -41,12 +40,12 @@ export default function ManageStorePage() {
             New Store
           </Button>
         </div>
+
+        {/*  */}
+        <div className="mt-12">
+          <AdminStoresComponent adminStoreHook={adminStoreHook} />
+        </div>
+        {/*  */}
       </div>
-      {/*  */}
-      <div className="mt-12">
-        <AdminStoresComponent adminStoreHook={adminStoreHook} />
-      </div>
-      {/*  */}
-    </>
   );
 }

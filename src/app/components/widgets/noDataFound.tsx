@@ -5,13 +5,17 @@ import {
   CardFooter,
   Typography,
 } from "@material-tailwind/react";
-import Image from "next/image";
+import CustomNextImage from "./CustomNextImage";
 
 export function NoDataFound({
   message,
+  image,
+  showMessage = true,
   customClass,
 }: {
   message: string;
+  image?: string;
+  showMessage?: boolean;
   customClass?: string;
 }) {
   return (
@@ -23,42 +27,36 @@ export function NoDataFound({
         placeholder={""}
         shadow={false}
         floated={false}
-        className="h-96 items-center grid justify-center dark:bg-gray-800"
+        className="items-center grid justify-center dark:bg-gray-800"
       >
-        <Image
-          height={250}
-          width={250}
-          src={"/noData.gif"}
+        <CustomNextImage
+          height={200}
+          width={200}
+          src={image ?? "/no-results-bg.2d2c6ee3.png"}
           alt="card-image"
           className="object-cover rounded-full"
         />
       </CardHeader>
       <CardBody placeholder={""}>
-        <div className="mb-2 flex items-center justify-center">
-          <Typography
-            placeholder={""}
-            color="blue-gray"
-            className="font-bold dark:text-gray-300"
-            variant="h6"
-          >
-            NO DATA FOUND
-          </Typography>
-          <Typography
-            placeholder={""}
-            color="blue-gray"
-            className="font-medium"
-          >
-            <></>
-          </Typography>
-        </div>
-        <Typography
-          placeholder={""}
-          variant="small"
-          color="gray"
-          className="font-normal opacity-75 dark:text-gray-300"
-        >
-          {message}
-        </Typography>
+        {showMessage && (
+          <div className="mb-2 flex items-center justify-center">
+            <Typography
+              placeholder={""}
+              color="blue-gray"
+              className="font-bold dark:text-gray-300"
+              variant="h6"
+            >
+              {message.length > 0 ? message : "NO DATA FOUND"}
+            </Typography>
+            <Typography
+              placeholder={""}
+              color="blue-gray"
+              className="font-medium"
+            >
+              <></>
+            </Typography>
+          </div>
+        )}
       </CardBody>
       <CardFooter placeholder={""} className="pt-0">
         <></>

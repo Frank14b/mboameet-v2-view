@@ -2,11 +2,13 @@
 
 import {
   Dispatch,
+  RefObject,
   SetStateAction,
   createContext,
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 // import { QueryClient, QueryClientProvider, useQueryClient } from "react-query";
@@ -55,6 +57,7 @@ export function MainWrapper({ children }: { children: any }) {
   const { get, clear } = useLocalStorage();
   const [canRemoveAsideBar, setCanRemoveAsideBar] = useState<boolean>(false);
   const [canRemoveNavBar, setCanRemoveNavBar] = useState<boolean>(false);
+  const mainDivComponentRef = useRef<HTMLDivElement>(null);
 
   const isAccessingNonProtectedPage = useCallback(() => {
     for (let i = 0; i < nonProtectedPages.length; i++) {
@@ -111,6 +114,8 @@ export function MainWrapper({ children }: { children: any }) {
     if (!link || link.length == 0) {
       return defaultProfileImg;
     }
+    if(link.includes("http")) return link;
+    
     return `${configs.PUBLIC_FILES_LINK}${userId}/${link}`;
   }, []);
 
@@ -133,6 +138,7 @@ export function MainWrapper({ children }: { children: any }) {
     theme: theme,
     mainScroll,
     navigationChange,
+    mainDivComponentRef,
     setNavigationChange,
     setTheme,
     logout,
@@ -209,6 +215,7 @@ export function MainWrapper({ children }: { children: any }) {
                         <div
                           className="flex flex-col h-screen pt-6 pb-6 relative overflow-y-auto"
                           id={mainDivComponentId}
+                          ref={mainDivComponentRef}
                         >
                           {children}
                         </div>
@@ -249,6 +256,7 @@ export function MainWrapper({ children }: { children: any }) {
                                 <div
                                   className="flex flex-col h-screen p-6 relative overflow-y-auto"
                                   id={mainDivComponentId}
+                                  ref={mainDivComponentRef}
                                 >
                                   {children}
                                 </div>
@@ -293,6 +301,7 @@ export type MainContextDto = {
   theme: string;
   mainScroll: any;
   navigationChange: NavigationChangeType;
+  mainDivComponentRef: RefObject<HTMLDivElement>;
   setNavigationChange: Dispatch<SetStateAction<NavigationChangeType>>;
   setTheme: (userTheme: string) => void;
   logout: () => Promise<void>;

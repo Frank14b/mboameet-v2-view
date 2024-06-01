@@ -6,6 +6,7 @@ import {
   ImagePreviewProps,
 } from "../../widgets/imagePreviewPopup";
 import { useCallback, useMemo, useState } from "react";
+import CustomNextImage from "../../widgets/CustomNextImage";
 
 export function FeedMediaComponent({
   galleryHook,
@@ -45,7 +46,7 @@ export function FeedMediaComponent({
           type === "image" && (
             <div key={index}>
               <AnimateHoverScale index={index}>
-                <Image
+                <CustomNextImage
                   className="w-full blur-xs hover:blur-0 cursor-pointer max-w-full shadow-md rounded-lg object-cover object-center"
                   src={url}
                   alt="gallery-photo"

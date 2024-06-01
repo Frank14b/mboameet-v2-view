@@ -15,13 +15,13 @@ export function FriendsItemComponent({
   friendsHook: FriendsHookDto;
   onClickUserDetails: (friend: ResultFriendsDto) => void;
 }) {
-  const { followFriend } = friendsHook;
+  const { activeTab, followFriend } = friendsHook;
   const [isFollowing, setIsFollowing] = useState<boolean>(
-    friend.match.length == 1 ? true : false
+    friend.match.length == 1 || activeTab == "matches" ? true : false
   );
 
   const onClickFollow = useCallback(async () => {
-    if(isFollowing) return;
+    if (isFollowing) return;
     setIsFollowing(!isFollowing);
 
     const result = await followFriend({
@@ -40,13 +40,14 @@ export function FriendsItemComponent({
     <>
       <motion.div
         initial={{ opacity: 0, scale: 1 }}
-        transition={{ duration: 0.2 + index / 3 }}
+        transition={{ duration: 0.2 + 1 }}
         whileHover={{ scale: 1.02 }}
         whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
+        viewport={{ once: false }}
         key={index}
       >
         <UserProfileCard
+          id={friend.id}
           image={friend.photo ?? ""}
           following={isFollowing}
           name={friend.fullName ?? friend.userName}

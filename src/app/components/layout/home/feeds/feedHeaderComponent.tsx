@@ -5,7 +5,7 @@ import FeedItemActionMenuComponent from "./feedMenuActions";
 import { Dispatch, SetStateAction } from "react";
 import { referenceKeyword } from "@/app/lib/constants/app";
 import ProfileTooltipDetailsComponent from "../../profile/profileTooltipDetails";
-import PopoverCustom from "@/app/components/widgets/PopoverCustom";
+import PopoverCustom from "@/app/components/widgets/popoverCustom";
 
 export default function FeedHeaderComponent({
   feedData,

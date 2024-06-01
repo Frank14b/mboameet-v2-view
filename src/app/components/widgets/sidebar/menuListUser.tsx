@@ -24,7 +24,7 @@ export default function SideBarMenuListUserComponent({ users }: { users: SideBar
                                 {user.title}
                             </Typography>
                             <Typography placeholder={""} variant="small" color="gray" className="font-normal dark:text-gray-500">
-                                Software Engineer @ Material
+                                <></>{/* Software Engineer @ Material */}
                             </Typography>
                         </div>
                     </ListItem>

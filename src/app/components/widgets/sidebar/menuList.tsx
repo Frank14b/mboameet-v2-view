@@ -13,9 +13,10 @@ export default function SideBarMenuListComponent({
   active = false,
   badge,
   link,
+  scroll = true
 }: SideBarMenuList) {
   return (
-    <CustomNextLink href={link ? link : "#"} scroll={false}>
+    <CustomNextLink href={link ? link : "#"} scroll={scroll}>
       <ListItem
         placeholder={""}
         className={`group rounded-xl py-1.5 px-3 my-1 dark:text-gray-400 text-sm font-normal ${

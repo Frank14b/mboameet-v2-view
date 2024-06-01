@@ -5,7 +5,7 @@ import {
   DialogBody,
   Carousel,
 } from "@material-tailwind/react";
-import Image from "next/image";
+import CustomNextImage from "../../widgets/CustomNextImage";
 
 export type MessageImagePreviewProps = {
   url: string;
@@ -55,7 +55,7 @@ export function MessageImagePreviewComponent({
               </div>
             )}
           >
-            <Image
+            <CustomNextImage
               key={0}
               alt=""
               className="h-full w-full max-h-[40em] rounded-lg object-cover object-center"
@@ -66,7 +66,7 @@ export function MessageImagePreviewComponent({
             {images.map(
               (image, index) =>
                 image.url !== active?.url && (
-                  <Image
+                  <CustomNextImage
                     key={index + 1}
                     alt=""
                     className="h-full w-full max-h-[40em] rounded-lg object-cover object-center"

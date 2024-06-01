@@ -5,7 +5,7 @@ import { NoDataFound } from "../../widgets/noDataFound";
 import { ConversationHookDto } from "@/app/hooks/pages/chats/useDiscussions";
 import { ResultMessageDto } from "@/app/types/chats";
 import { MessagesComponent } from "./messagesComponent";
-import DiscussionSkeleton from "../../widgets/skeletons/discussionSkeleton";
+import ConversationSkeleton from "../../widgets/skeletons/conversationSkeleton";
 
 export function ConversationsComponent({
   conversationHook,
@@ -24,11 +24,11 @@ export function ConversationsComponent({
 
   const messagesList = useMemo(() => {
     if (isLoading)
-      return <DiscussionSkeleton isLoading={true} count={skeletons} />;
+      return <ConversationSkeleton isLoading={true} count={skeletons} />;
     //
     if (messages.length == 0)
       return (
-        <NoDataFound customClass="shadow-none dark:bg-gray-800" message="" />
+        <NoDataFound customClass="shadow-none dark:bg-gray-800" message="" showMessage={false} />
       );
 
     return (

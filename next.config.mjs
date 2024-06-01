@@ -32,6 +32,18 @@ const nextConfig = {
         hostname: "material-taillwind-pro-ct-tailwind-team.vercel.app",
         pathname: "/**",
         port: ""
+      },
+      {
+        protocol: "https",
+        hostname: "source.unsplash.com",
+        pathname: "/**",
+        port: ""
+      },
+      {
+        protocol: "https",
+        hostname: "material-tailwind.com",
+        pathname: "/**",
+        port: ""
       }
     ],
   },

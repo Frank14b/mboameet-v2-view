@@ -32,6 +32,7 @@ export interface SideBarMenuList {
   active?: boolean;
   badge?: string;
   link?: string;
+  scroll?: boolean;
 }
 
 export interface SideBarMenuListUser {

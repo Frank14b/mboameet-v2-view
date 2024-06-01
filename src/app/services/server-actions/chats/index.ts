@@ -4,6 +4,7 @@ import { ApiResponseDto, ResultPaginate } from "@/app/types/index";
 import { apiCall } from "../../api";
 import {
   DiscussionTypes,
+  ResultChatReferenceDto,
   ResultChatUsersDto,
   ResultMessageByReferenceDto,
   ResultMessageDto,
@@ -143,6 +144,23 @@ export const proceedDeleteMessages = async ({
   const result: ApiResponseDto<ResultMessageDto> = await apiCall({
     method: "DELETE",
     url: `${urls.getDiscussions}/${type}?ids=${ids.toString()}`,
+  });
+
+  return result;
+};
+
+export const getReference = async ({
+  revalidate,
+  senderId,
+  receiverId,
+}: {
+  revalidate: boolean;
+  senderId: number;
+  receiverId: number;
+}) => {
+  const result: ApiResponseDto<ResultChatReferenceDto> = await apiCall({
+    method: "GET",
+    url: `${urls.getDiscussions}/users/${receiverId}/reference`,
   });
 
   return result;

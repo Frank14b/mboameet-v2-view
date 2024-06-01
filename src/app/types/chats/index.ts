@@ -36,6 +36,8 @@ export interface ResultMessageByReferenceDto {
   messages: ResultPaginate<ResultMessageDto[]>;
 }
 
+export type ResultChatReferenceDto = string;
+
 export type ChatFilesData = {
   id: number;
   type: string;

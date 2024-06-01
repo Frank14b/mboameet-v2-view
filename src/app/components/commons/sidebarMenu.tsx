@@ -12,6 +12,7 @@ import { usePathname } from "next/navigation";
 import { ProfileMenuComponent } from "../widgets/profileMenu";
 import {
   chatsPathUrl,
+  friendPathUrl,
   galleriesPathUrl,
   marketplacePathUrl,
   settingPathUrl,
@@ -54,13 +55,13 @@ export default function SideBarMenuComponent({ children }: { children: any }) {
           <SideBarMenuListComponent
             title="Friends"
             icon={<UsersIcon />}
-            active={pathname.startsWith("/friends") ? true : false}
+            active={pathname.startsWith(friendPathUrl) ? true : false}
             badge="+30"
-            link={"/friends"}
+            link={friendPathUrl}
           />
 
           <SideBarMenuListComponent
-            title="Market Place"
+            title="MarketPlace"
             icon={<ShoppingBagIcon />}
             active={pathname.startsWith(marketplacePathUrl) ? true : false}
             link={marketplacePathUrl}

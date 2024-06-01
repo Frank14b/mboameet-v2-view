@@ -78,7 +78,7 @@ export default function InputField({
               id={data?.id ?? data.title.toLowerCase()}
               autoComplete={data.title}
               label={data.title}
-              className={`block border-0 w-full bg-transparent py-1.5 pl-2 ${
+              className={`block w-full bg-transparent py-1.5 pl-2 ${
                 data?.type == "password" ? "pr-8" : ""
               } text-gray-900 placeholder:text-gray-400 dark:text-gray-100 ring-0 sm:text-sm sm:leading-6`}
               placeholder={data?.placeholder ?? data.title}

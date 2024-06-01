@@ -4,7 +4,7 @@ import { ChatsComponent } from "@/app/components/layout/chats/chatsComponent";
 import useChat from "@/app/hooks/pages/chats/useChat";
 import { Card, Typography } from "@material-tailwind/react";
 
-export default function ChatsPage() {
+export default function ChatPage() {
   //
   const chatHook = useChat();
 

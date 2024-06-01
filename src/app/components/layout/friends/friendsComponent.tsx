@@ -9,6 +9,7 @@ import { UserProfileCardSkeleton } from "../../widgets/skeletons/userProfileCard
 import { UserProfilePopup } from "../../widgets/userProfilePopup";
 import { FriendsItemComponent } from "./friendsItemComponent";
 import { NoDataFound } from "../../widgets/noDataFound";
+import { Spinner } from "@material-tailwind/react";
 
 export function FriendsComponent({
   friendsHook,
@@ -16,10 +17,17 @@ export function FriendsComponent({
   friendsHook: FriendsHookDto;
 }) {
   //
-  const skeletons: number = 2;
-  const { isLoading, friendTypesList, friends, setIsLoading, fetchFriends } =
-    friendsHook;
-  const defaultTab: FriendsTypes = friendTypesList[0].key as FriendsTypes;
+  const skeletons: number = 9;
+  const {
+    isLoading,
+    showLoadingMore,
+    defaultTab,
+    friendTypesList,
+    friends,
+    setIsLoading,
+    fetchFriends,
+  } = friendsHook;
+
   const [showUserDetails, setShowUserDetails] = useState<{
     status: boolean;
     friend?: ResultFriendsDto;
@@ -51,23 +59,32 @@ export function FriendsComponent({
         <NoDataFound
           customClass="dark:shadow-none h-screen dark:bg-gray-800"
           message=""
+          showMessage={false}
         />
       );
 
     return (
-      <div className="grid grid-cols-2 xs:grid-cols-1 gap-3">
-        {friends?.map((friend: ResultFriendsDto, index: number) => (
-          <FriendsItemComponent
-            index={index}
-            key={index}
-            friend={friend}
-            friendsHook={friendsHook}
-            onClickUserDetails={onClickUserDetails}
-          />
-        ))}
-      </div>
+      <>
+        <div className="grid md:grid-cols-3 xs:grid-cols-1 sm:grid-cols-2 gap-3">
+          {friends?.map((friend: ResultFriendsDto, index: number) => (
+            <FriendsItemComponent
+              index={index}
+              key={index}
+              friend={friend}
+              friendsHook={friendsHook}
+              onClickUserDetails={onClickUserDetails}
+            />
+          ))}
+        </div>
+
+        <>
+          <div className="w-full grid justify-center items-center h-10 pt-2">
+            {showLoadingMore && <Spinner className="h-12 w-12" />}
+          </div>
+        </>
+      </>
     );
-  }, [friends, isLoading, friendsHook, onClickUserDetails]);
+  }, [friends, isLoading, showLoadingMore, friendsHook, onClickUserDetails]);
 
   const tabMenus = useMemo(() => {
     let result: TabCustomAnimationProps[] = [];

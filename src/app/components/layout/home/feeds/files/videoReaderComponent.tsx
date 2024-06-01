@@ -30,7 +30,7 @@ export default function FeedVideoReaderComponent({
   isExpanded: boolean;
   handleExpand?: () => void;
 }) {
-  const mainContext = useMainContext();
+  const { mainDivComponentRef, getFileUrl } = useMainContext();
   const { set, get } = useLocalStorage();
   const videoPlayerTagElement = useRef(null);
   const feedMainDivElement = useRef(null);
@@ -83,10 +83,7 @@ export default function FeedVideoReaderComponent({
     );
   }, [feed, videoPlayerData, set]);
 
-  const src: string = mainContext.getFileUrl(
-    feed.feedFiles?.[0].url ?? "",
-    feed.user.id
-  );
+  const src: string = getFileUrl(feed.feedFiles?.[0].url ?? "", feed.user.id);
 
   const handlePlayerMouseEnter = useCallback(() => {
     const videPlayer = getVideoPlayerElement();
@@ -144,9 +141,8 @@ export default function FeedVideoReaderComponent({
   // }, [handlePlayerEvents]);
 
   useEffect(() => {
-    const mainDiv = document.getElementById(
-      `${mainDivComponentId}`
-    ) as HTMLDivElement;
+    const mainDiv = mainDivComponentRef.current;
+    if (!mainDiv) return;
     //
     mainDiv.addEventListener("scroll", () => {
       handlePlayerEvents(true);
@@ -158,7 +154,7 @@ export default function FeedVideoReaderComponent({
         e.preventDefault();
       });
     }
-  }, [handlePlayerEvents, getVideoPlayerElement]);
+  }, [mainDivComponentRef, handlePlayerEvents, getVideoPlayerElement]);
 
   const handlePlayPause = useCallback(() => {
     const videPlayer = getVideoPlayerElement();

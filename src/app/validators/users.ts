@@ -41,7 +41,6 @@ export const signUpSchema = yup.object({
       "Phone number should only contain numbers",
       (value) => validPhoneNumber(value)
     ),
-  countryCode: yup.string().notRequired(),
   password: yup
     .string()
     .matches(new RegExp(passwordRegex), {

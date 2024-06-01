@@ -36,7 +36,7 @@ export async function getCroppedImg({
     pixelCrop: Area,
     rotation?: number,
     flip?: { horizontal: boolean, vertical: boolean },
-    fileType?: string,
+    fileType?: "object" | "blob" | "base64",
 }
 ): Promise<Blob | string | null | ObjectKeyDto> {
     const image: any = await createImage(imageSrc);

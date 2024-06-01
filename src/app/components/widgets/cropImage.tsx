@@ -17,7 +17,7 @@ export default function CropImage({ image, croppedImage, returnType, cropSize }:
     {
         image: string, 
         croppedImage: (image: string | Blob| ObjectKeyDto) => any, 
-        returnType: string, 
+        returnType: "object" | "blob" | "base64", 
         cropSize?: Size 
     }) {
 

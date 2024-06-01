@@ -5,7 +5,7 @@ import {
   DialogBody,
   Carousel,
 } from "@material-tailwind/react";
-import Image from "next/image";
+import CustomNextImage from "./CustomNextImage";
 
 export type ImagePreviewProps = {
   url: string;
@@ -56,7 +56,7 @@ export function ImagePreviewPopup({
               </div>
             )}
           >
-            <Image
+            <CustomNextImage
               key={0}
               alt=""
               className="h-full w-full max-h-[40em] rounded-lg object-cover object-center"
@@ -68,7 +68,7 @@ export function ImagePreviewPopup({
               (image, index) =>
                 image.url !== active?.url &&
                 image.type == "image" && (
-                  <Image
+                  <CustomNextImage
                     key={index + 1}
                     alt=""
                     className="h-full w-full max-h-[40em] rounded-lg object-cover object-center"

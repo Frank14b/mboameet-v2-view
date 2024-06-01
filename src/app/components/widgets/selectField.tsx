@@ -7,8 +7,8 @@ import {
 import { Option, Select } from "@material-tailwind/react";
 import useFormStore from "@/app/store/formStore";
 import { UseFormReturn } from "react-hook-form";
-import Image from "next/image";
 import { ObjectKeyDto } from "@/app/types";
+import CustomNextImage from "./CustomNextImage";
 
 export interface SelectFieldProps {
   title: string;
@@ -78,12 +78,16 @@ export default function SelectField({
               error={error ? true : false}
               id={data?.id ?? data.title.toLowerCase()}
               label={data.title}
-              className={`block customSelect border-0 w-full bg-transparent py-1.5 pl-2 ${
+              className={`block customSelect w-full bg-transparent py-1.5 pl-2 ${
                 data?.type == "password" ? "pr-8" : ""
               } text-gray-900 placeholder:text-gray-400 dark:text-gray-100 ring-0 sm:text-sm sm:leading-6`}
               placeholder={data?.placeholder ?? data.title}
               onChange={handleOnChange}
               name={name}
+              animate={{
+                mount: { y: 0 },
+                unmount: { y: 25 },
+              }}
             >
               {data?.options?.map(({ label, value, image }) => (
                 <Option
@@ -92,7 +96,7 @@ export default function SelectField({
                   className="flex items-center gap-2"
                 >
                   {image && (
-                    <Image
+                    <CustomNextImage
                       src={image}
                       alt={label}
                       height={50}
