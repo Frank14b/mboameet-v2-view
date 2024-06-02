@@ -44,6 +44,12 @@ const nextConfig = {
         hostname: "material-tailwind.com",
         pathname: "/**",
         port: ""
+      },
+      {
+        protocol: "https",
+        hostname: "mboameet.azurewebsites.net",
+        pathname: "/**",
+        port: ""
       }
     ],
   },
