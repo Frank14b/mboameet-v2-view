@@ -33,8 +33,8 @@ import { validateToken } from "../services/server-actions";
 import NavigationLoadingComponent from "@/app/components/commons/navigationLoading";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { nonProtectedPages } from "../middlewares/AuthMiddleware";
-import AsideBarMenuComponent from "@/app/components/commons/asideBarMenu";
-import SideBarMenuComponent from "@/app/components/commons/sideBarMenu";
+import AsideBarMenuComponent from "@/app/components/commons/aside-bar-menu";
+import SideBarMenuComponent from "@/app/components/commons/side-bar-menu";
 
 const MainContext = createContext<any>({});
 

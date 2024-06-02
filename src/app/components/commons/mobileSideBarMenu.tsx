@@ -20,8 +20,8 @@ import {
 import { useMainContext } from "@/app/contexts/main";
 import useCustomRouter from "@/app/hooks/useCustomRouter";
 import { marketplacePathUrl } from "@/app/lib/constants/app";
-import SideBarMenuComponent from "@/app/components/commons/sideBarMenu";
-import AsideBarMenuComponent from "@/app/components/commons/asideBarMenu";
+import SideBarMenuComponent from "@/app/components/commons/side-bar-menu";
+import AsideBarMenuComponent from "@/app/components/commons/aside-bar-menu";
 
 export function MobileSideBarMenuComponent({
   enable,
