@@ -300,8 +300,8 @@ export const generateInitialsImage = (userName: string) => {
   const initials = userName.charAt(0).toUpperCase();
 
   // Set canvas size (adjust as needed)
-  canvas.width = 100;
-  canvas.height = 100;
+  canvas.width = 250;
+  canvas.height = 250;
 
   // Fill background
   ctx.fillStyle = "#f0f0f0";
