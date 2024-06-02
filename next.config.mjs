@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  viewport: 'none', // or 'none' to completely disable
   images: {
     remotePatterns: [
       {
