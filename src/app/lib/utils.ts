@@ -290,7 +290,13 @@ export const dynamicSort = (property: string) => {
   };
 };
 
+const imageFromInitial: {
+  [key: string]: string;
+} = {};
+
 export const generateInitialsImage = (userName: string) => {
+  if (imageFromInitial?.[userName]) return imageFromInitial[userName];
+  //
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
@@ -319,5 +325,6 @@ export const generateInitialsImage = (userName: string) => {
   // Get base64 data URL
   const dataURL = canvas.toDataURL("image/png");
 
+  imageFromInitial[userName] = dataURL;
   return dataURL;
 };
