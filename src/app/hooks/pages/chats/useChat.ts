@@ -84,7 +84,9 @@ const useChat = () => {
       }
 
       setDiscussions(result.data.data);
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 100);
       return result.data.data;
     },
     [
