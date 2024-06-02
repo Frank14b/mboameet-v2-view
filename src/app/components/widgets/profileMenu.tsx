@@ -26,13 +26,13 @@ export function ProfileMenuComponent() {
               <Image
                 alt={`${mainContext.connectedUser?.userName}`}
                 src={`${mainContext.connectedUser?.photo}`}
-                width={30}
-                height={30}
+                width={45}
+                height={45}
                 className="rounded-full"
               />
               <Typography
                 placeholder={""}
-                className="text-sm font-bold text-gray-900 dark:text-gray-100"
+                className="text-md font-bold text-gray-900 dark:text-gray-100"
               >
                 {mainContext.connectedUser?.userName}{" "}
               </Typography>
@@ -42,13 +42,13 @@ export function ProfileMenuComponent() {
               <Image
                 alt="tania andrew"
                 src={`/03.png`}
-                width={30}
-                height={30}
+                width={45}
+                height={45}
                 className="rounded-full"
               />
               <Typography
                 placeholder={""}
-                className="text-sm font-bold text-gray-900 dark:text-gray-100"
+                className="text-md font-bold text-gray-900 dark:text-gray-100"
                 onClick={() => router.push(loginPathUrl)}
               >
                 my account{" "}

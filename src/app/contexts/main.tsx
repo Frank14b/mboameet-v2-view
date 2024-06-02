@@ -35,6 +35,7 @@ import useLocalStorage from "../hooks/useLocalStorage";
 import { nonProtectedPages } from "../middlewares/AuthMiddleware";
 import AsideBarMenuComponent from "@/app/components/commons/aside-bar-menu";
 import SideBarMenuComponent from "@/app/components/commons/side-bar-menu";
+import { generateInitialsImage } from "../lib/utils";
 
 const MainContext = createContext<any>({});
 
@@ -112,9 +113,12 @@ export function MainWrapper({ children }: { children: any }) {
   const getFileUrl = useCallback((link?: string, userId?: number) => {
     //
     if (!link || link.length == 0) {
+      const imageFromInitial = generateInitialsImage(`${btoa(`${userId}`).slice(-1)}`)
+      if(imageFromInitial.length > 1) return imageFromInitial;
+
       return defaultProfileImg;
     }
-    if(link.includes("http")) return link;
+    if(link.startsWith("http")) return link;
     
     return `${configs.PUBLIC_FILES_LINK}${userId}/${link}`;
   }, []);

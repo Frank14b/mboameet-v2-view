@@ -289,3 +289,35 @@ export const dynamicSort = (property: string) => {
     return result * sortOrder;
   };
 };
+
+export const generateInitialsImage = (userName: string) => {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  if (!ctx) return "";
+
+  // Extract first letter and set to uppercase
+  const initials = userName.charAt(0).toUpperCase();
+
+  // Set canvas size (adjust as needed)
+  canvas.width = 100;
+  canvas.height = 100;
+
+  // Fill background
+  ctx.fillStyle = "#f0f0f0";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Set text styles
+  ctx.font = "60px Arial";
+  ctx.fillStyle = "#333";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  // Draw initials text
+  ctx.fillText(initials, canvas.width / 2, canvas.height / 2);
+
+  // Get base64 data URL
+  const dataURL = canvas.toDataURL("image/png");
+
+  return dataURL;
+};
