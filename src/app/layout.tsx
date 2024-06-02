@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { MainWrapper } from "./contexts/main";
@@ -10,6 +10,14 @@ export const metadata: Metadata = {
   description: "Find your perfect matches",
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  // interactiveWidget: 'resizes-visual',
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -17,12 +25,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="">
-      <head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-        />
-      </head>
       <body className={inter.className}>
         <MainWrapper>{children}</MainWrapper>
       </body>
