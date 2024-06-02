@@ -8,7 +8,6 @@ import {
   SpeedDialContent,
   SpeedDialAction,
 } from "@material-tailwind/react";
-import SideBarMenuComponent from "./sideBarMenu";
 import {
   CogIcon,
   HomeIcon,
@@ -16,10 +15,11 @@ import {
   PlusIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/24/solid";
-import AsideBarMenuComponent from "./asideBarMenu";
 import { useMainContext } from "@/app/contexts/main";
 import useCustomRouter from "@/app/hooks/useCustomRouter";
 import { marketplacePathUrl } from "@/app/lib/constants/app";
+import SideBarMenuComponent from "./sideBarMenu";
+import AsideBarMenuComponent from "./asideBarMenu";
 
 export function MobileSideBarMenuComponent({
   enable,

@@ -13,8 +13,6 @@ import {
 } from "react";
 // import { QueryClient, QueryClientProvider, useQueryClient } from "react-query";
 import { AppHubWrapper } from "./appHub";
-import SideBarMenuComponent from "../components/commons/sideBarMenu";
-import AsideBarMenuComponent from "../components/commons/asideBarMenu";
 import useUserStore from "../store/userStore";
 import { deleteToken, isTokenExpired } from "../lib/server-utils";
 import { usePathname } from "next/navigation";
@@ -35,6 +33,8 @@ import { validateToken } from "../services/server-actions";
 import NavigationLoadingComponent from "../components/commons/navigationLoading";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { nonProtectedPages } from "../middlewares/AuthMiddleware";
+import AsideBarMenuComponent from "../components/commons/asideBarMenu";
+import SideBarMenuComponent from "../components/commons/sideBarMenu";
 
 const MainContext = createContext<any>({});
 
