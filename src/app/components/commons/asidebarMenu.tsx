@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, Typography } from "@material-tailwind/react";
 import UserStoriesCard from "../widgets/userStoriesCard";
 import SideBarMenuListUserComponent from "../widgets/sidebar/menuListUser";

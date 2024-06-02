@@ -1,3 +1,5 @@
+"use client";
+
 import { List } from "@material-tailwind/react";
 import SideBarMenuListComponent from "../widgets/sidebar/menuList";
 import {
