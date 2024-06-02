@@ -48,7 +48,11 @@ export const proceedRegister = async (
   const result: ApiResponseDto<ResultLoginDto> = await apiCall({
     method: "POST",
     url: urls.register,
-    data,
+    data: {
+      ...data,
+      country: data.country.name,
+      callingCode: data.country.callingCode
+    },
   });
 
   return result;
