@@ -33,7 +33,7 @@ export default function AsideBarMenuComponent({ children }: { children: any }) {
         </p>
       </>
     );
-  }, [friends]);
+  }, [friends, isLoading]);
 
   return (
     <>

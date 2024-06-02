@@ -3,7 +3,7 @@ import {
   ApiResponseDto,
   ObjectKeyDto,
   ResultLoginDto,
-  ResultStoreTypeDto,
+  // ResultStoreTypeDto,
 } from "@/app/types";
 import {
   ChangeEvent,
@@ -22,10 +22,10 @@ import { CreateStoreSchema } from "@/app/validators/administration/stores";
 import { CreateStoreFormDto } from "@/app/types/administration/stores";
 import { proceedGetAdminStoreTypes } from "@/app/services/server-actions/stores/storeTypes";
 import { TypeOptionsProps } from "@/app/components/widgets/selectFilterField";
-import { proceedGetAdminCurrencies } from "@/app/services/server-actions/currencies";
+// import { proceedGetAdminCurrencies } from "@/app/services/server-actions/currencies";
 import { ResultCurrencyDto } from "@/app/types/currencies";
 import {
-  proceedGetAdminStores,
+  // proceedGetAdminStores,
   proceedSubmitStore,
 } from "@/app/services/server-actions/stores";
 import { ResultStoreDto } from "@/app/types/stores";
@@ -38,19 +38,22 @@ const useAdminStoreProduct = (storeRef: string) => {
   const [isFetchingProduct, setIsFetchingProduct] = useState<boolean>(true);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isOpenStoreForm, setIsOpenStoreForm] = useState<boolean>(false);
-  const handleIsOpenStoreForm = () => setIsOpenStoreForm((cur) => !cur);
+  const handleIsOpenStoreForm = useCallback(
+    () => setIsOpenStoreForm((cur) => !cur),
+    [setIsOpenStoreForm]
+  );
   const [responseData, setResponseData] =
     useState<ApiResponseDto<ResultStoreDto> | null>(null);
   const { connectedUser, getFileUrl } = useMainContext();
   const [storeCroppedLogo, setStoreCroppedLogo] = useState<ObjectKeyDto | null>(
     null
   );
-  const [categories, setCategories] = useState<ResultProductCategoriesDto[] | null>(
-    null
-  );
-  const [currencies, setCurrencies] = useState<ResultCurrencyDto[] | null>(
-    null
-  );
+  const [categories, setCategories] = useState<
+    ResultProductCategoriesDto[] | null
+  >(null);
+  // const [currencies, setCurrencies] = useState<ResultCurrencyDto[] | null>(
+  //   null
+  // );
   const [stores, setStores] = useState<ResultStoreDto[] | null>(null);
 
   const { formState, handleSubmit, setValue, reset } = useAppForm({
@@ -124,7 +127,14 @@ const useAdminStoreProduct = (storeRef: string) => {
         setStoreCroppedLogo(null);
       }
     },
-    [setIsLoading]
+    [
+      storeCroppedLogo,
+      reset,
+      setStoreCroppedLogo,
+      handleIsOpenStoreForm,
+      setResponseData,
+      setIsLoading,
+    ]
   );
 
   const handleGetProductCategories = useCallback(
@@ -148,7 +158,6 @@ const useAdminStoreProduct = (storeRef: string) => {
     });
   }, [categories]);
 
-
   const getStores = useCallback(async () => {
     const result = await proceedGetAdminStoreProducts();
     setStores(result?.data?.data ?? null);
@@ -164,11 +173,11 @@ const useAdminStoreProduct = (storeRef: string) => {
     return stores.map((store) => {
       return {
         ...store,
-        logo: getFileUrl(store.logo, store.userId),
+        logo: getFileUrl(store.logo, store.user.id),
         reference: store.reference.toLowerCase(),
       };
     });
-  }, [stores]);
+  }, [stores, getFileUrl]);
 
   const data: AdminStoreProductHookDto = {
     isLoading,

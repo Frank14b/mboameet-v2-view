@@ -36,7 +36,10 @@ const useAdminStore = () => {
   const [isFetchingStore, setIsFetchingStore] = useState<boolean>(true);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isOpenStoreForm, setIsOpenStoreForm] = useState<boolean>(false);
-  const handleIsOpenStoreForm = () => setIsOpenStoreForm((cur) => !cur);
+  const handleIsOpenStoreForm = useCallback(
+    () => setIsOpenStoreForm((cur) => !cur),
+    [setIsOpenStoreForm]
+  );
   const [responseData, setResponseData] =
     useState<ApiResponseDto<ResultStoreDto> | null>(null);
   const { connectedUser, getFileUrl } = useMainContext();
@@ -122,7 +125,14 @@ const useAdminStore = () => {
         setStoreCroppedLogo(null);
       }
     },
-    [setIsLoading]
+    [
+      storeCroppedLogo,
+      reset,
+      setStoreCroppedLogo,
+      handleIsOpenStoreForm,
+      setResponseData,
+      setIsLoading,
+    ]
   );
 
   const handleGetstoreTypes = useCallback(
@@ -180,10 +190,10 @@ const useAdminStore = () => {
       return {
         ...store,
         logo: getFileUrl(store.logo, store.user.id),
-        reference: store.reference.toLowerCase()
+        reference: store.reference.toLowerCase(),
       };
     });
-  }, [stores]);
+  }, [stores, getFileUrl]);
 
   const data: AdminStoreHookDto = {
     isLoading,

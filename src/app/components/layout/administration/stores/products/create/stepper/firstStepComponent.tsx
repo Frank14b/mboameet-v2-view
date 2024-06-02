@@ -9,7 +9,6 @@ export function CreateStoreFirstStepComponent({
 }: {
   adminProductHook: AdminStoreProductHookDto;
 }) {
-  const { storeTypes, currencies, handleGetstoreTypes } = adminProductHook;
 
   return (
     <>
@@ -38,8 +37,8 @@ export function CreateStoreFirstStepComponent({
               name: "storeTypeId",
               placeholder: "City, State, and Area",
               apiSearch: true,
-              options: storeTypes,
-              searchCallback: handleGetstoreTypes,
+              // options: storeTypes,
+              // searchCallback: handleGetstoreTypes,
             }}
           />
         </div>
@@ -50,7 +49,7 @@ export function CreateStoreFirstStepComponent({
               name: "currencyId",
               placeholder: "Choose your currency",
               apiSearch: false,
-              options: currencies
+              // options: currencies
             }}
           />
         </div>

@@ -1,7 +1,7 @@
 "use server";
 
 import nodeCache from "node-cache";
-import crypto from "crypto";
+// import crypto from "crypto";
 import { cookies } from "next/headers";
 import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { configs } from "../../../app.config";
@@ -44,15 +44,17 @@ export const checkCache = (key: string): boolean => {
 
 export const hashingData = (value: string): string => {
   try {
+    return value;
+
     if (configs.APP_ENV_MODE == "dev") return value;
 
-    const password: string = configs.ENCRYPTION_PASSWORD ?? "";
-    // SHA-256 (recommended for password hashing)
-    const hash: string = crypto
-      .createHash("sha256")
-      .update(value + password)
-      .digest("hex");
-    return hash;
+    // const password: string = configs.ENCRYPTION_PASSWORD ?? "";
+    // // SHA-256 (recommended for password hashing)
+    // const hash: string = crypto
+    //   .createHash("sha256")
+    //   .update(value + password)
+    //   .digest("hex");
+    // return hash;
   } catch (error) {
     return value;
   }

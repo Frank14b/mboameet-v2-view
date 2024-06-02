@@ -61,7 +61,7 @@ export function MarketPlaceComponent() {
               </Typography>
               <p className="px-5">
                 Easily preview furniture, decor, and more in your space,
-                ensuring everything fits perfectly and looks just right. It's
+                ensuring everything fits perfectly and looks just right. It{"'"}s
                 the ultimate tool for hassle-free home customization and design!
               </p>
             </div>

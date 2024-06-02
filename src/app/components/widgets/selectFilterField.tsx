@@ -122,7 +122,7 @@ export default function SelectFilterField({
         debounce(proceedApiSearch, 1000, keyword as string);
       }
     },
-    [debounce]
+    [proceedApiSearch]
   );
 
   useEffect(() => {

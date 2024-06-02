@@ -35,12 +35,10 @@ export function CreateProductFormPopupComponent({
     responseData,
     formErrors,
     croppedImage,
-    currencies,
     handleSubmit,
     handleIsOpenStoreForm,
     submitFormData,
     handleUpdatePhotoField,
-    getCurrencies,
   } = adminProductHook;
 
   const [activeStep, setActiveStep] = React.useState(0);
@@ -58,16 +56,11 @@ export function CreateProductFormPopupComponent({
       }, 1000);
     }
 
-    if (currencies.length <= 0 && isOpenStoreForm) {
-      getCurrencies();
-    }
   }, [
     nextFormBtnRef,
     isFirstLoad,
     isFirstStep,
-    isOpenStoreForm,
-    currencies,
-    getCurrencies,
+    isOpenStoreForm
   ]);
 
   const handlePrev = () => {
