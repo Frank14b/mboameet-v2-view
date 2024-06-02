@@ -27,14 +27,14 @@ import {
   userEncryptionStorageKey,
 } from "../lib/constants/app";
 import { ToastContainer } from "react-toastify";
-import { MobileSideBarMenuComponent } from "../components/commons/mobileSideBarMenu";
+import { MobileSideBarMenuComponent } from "@/app/components/commons/mobileSideBarMenu";
 import { configs } from "../../../app.config";
 import { validateToken } from "../services/server-actions";
-import NavigationLoadingComponent from "../components/commons/navigationLoading";
+import NavigationLoadingComponent from "@/app/components/commons/navigationLoading";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { nonProtectedPages } from "../middlewares/AuthMiddleware";
-import AsideBarMenuComponent from "../components/commons/asideBarMenu";
-import SideBarMenuComponent from "../components/commons/sideBarMenu";
+import AsideBarMenuComponent from "@/app/components/commons/asideBarMenu";
+import SideBarMenuComponent from "@/app/components/commons/sideBarMenu";
 
 const MainContext = createContext<any>({});
 
