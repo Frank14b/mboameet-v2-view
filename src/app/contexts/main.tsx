@@ -22,6 +22,7 @@ import {
   administrationPathUrl,
   authStartPath,
   defaultProfileImg,
+  loginPathUrl,
   mainDivComponentId,
   marketplacePathUrl,
   userEncryptionStorageKey,
@@ -36,6 +37,7 @@ import { nonProtectedPages } from "../middlewares/AuthMiddleware";
 import AsideBarMenuComponent from "@/app/components/commons/aside-bar-menu";
 import SideBarMenuComponent from "@/app/components/commons/side-bar-menu";
 import { generateInitialsImage } from "../lib/utils";
+import useCustomRouter from "../hooks/useCustomRouter";
 
 const MainContext = createContext<any>({});
 
@@ -59,6 +61,7 @@ export function MainWrapper({ children }: { children: any }) {
   const [canRemoveAsideBar, setCanRemoveAsideBar] = useState<boolean>(false);
   const [canRemoveNavBar, setCanRemoveNavBar] = useState<boolean>(false);
   const mainDivComponentRef = useRef<HTMLDivElement>(null);
+  const { push } = useCustomRouter();
 
   const isAccessingNonProtectedPage = useCallback(() => {
     for (let i = 0; i < nonProtectedPages.length; i++) {
@@ -104,22 +107,25 @@ export function MainWrapper({ children }: { children: any }) {
 
     setTimeout(() => {
       setLoading(false);
-      window.location.reload();
+      // window.location.reload();
+      push(`${loginPathUrl}`);
     }, 300);
-  }, [setUserConnected, clear, setLoading, isAccessingNonProtectedPage]);
+  }, [setUserConnected, push, clear, setLoading, isAccessingNonProtectedPage]);
 
   const deleteAccount = useCallback(async () => {}, []);
 
   const getFileUrl = useCallback((link?: string, userId?: number) => {
     //
     if (!link || link.length == 0) {
-      const imageFromInitial = generateInitialsImage(`${btoa(`${userId}`).slice(-1)}`)
-      if(imageFromInitial.length > 1) return imageFromInitial;
+      const imageFromInitial = generateInitialsImage(
+        `${btoa(`${userId}`).slice(-1)}`
+      );
+      if (imageFromInitial.length > 1) return imageFromInitial;
 
       return defaultProfileImg;
     }
-    if(link.startsWith("http")) return link;
-    
+    if (link.startsWith("http")) return link;
+
     return `${configs.PUBLIC_FILES_LINK}${userId}/${link}`;
   }, []);
 
