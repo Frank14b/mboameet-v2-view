@@ -12,7 +12,7 @@ const useCustomRouter = () => {
   const push = useCallback(
     (link: string, options?: NavigateOptions | undefined) => {
       if (pathname != link) {
-        setNavigationChange("start");
+        setNavigationChange?.("start");
       }
       router.push(link, options);
     },
@@ -22,10 +22,10 @@ const useCustomRouter = () => {
   const replace = useCallback(
     (link: string, options?: NavigateOptions | undefined) => {
       if (pathname != link) {
-        setNavigationChange("start");
+        ;
 
         setTimeout(() => {
-          setNavigationChange("stop");
+          setNavigationChange?.("stop");
         }, 3000);
       }
       router.replace(link, options);

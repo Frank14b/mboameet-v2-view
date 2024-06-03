@@ -17,10 +17,10 @@ export default function CustomNextLink({
 
   const handleOnClick = () => {
     if (pathname != props.href) {
-      setNavigationChange("start");
+      setNavigationChange?.("start");
 
       setTimeout(() => {
-        setNavigationChange("stop");
+        setNavigationChange?.("stop");
       }, 3000);
     }
   };

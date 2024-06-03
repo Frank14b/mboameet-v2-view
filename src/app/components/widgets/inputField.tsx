@@ -65,10 +65,10 @@ export default function InputField({
   return (
     <>
       <div className="w-full">
-        <div className="mt-2">
+        <div className="mt-2 relative">
           <label
             htmlFor={data?.id ?? data.title.toLowerCase()}
-            className={`rounded-md relative shadow-sm ring-0 ring-inset ring-gray-700 w-full`}
+            className={`rounded-md shadow-sm ring-0 ring-inset ring-gray-700 w-50`}
           >
             <Input
               //   variant={"static"}
@@ -84,16 +84,17 @@ export default function InputField({
               placeholder={data?.placeholder ?? data.title}
               {...register(`${fieldKey}`, { onChange: handleOnChange })}
             />
-            {data?.type == "password" && (
-              <span className="password-eye" onClick={switchInputType}>
-                {type == "text" ? (
-                  <EyeIcon className="w-4 h-4" aria-hidden="true" />
-                ) : (
-                  <EyeSlashIcon className="w-4 h-4" aria-hidden="true" />
-                )}
-              </span>
-            )}
           </label>
+
+          {data?.type == "password" && (
+            <span className="password-eye" onClick={switchInputType}>
+              {type == "text" ? (
+                <EyeIcon className="w-4 h-4" aria-hidden="true" />
+              ) : (
+                <EyeSlashIcon className="w-4 h-4" aria-hidden="true" />
+              )}
+            </span>
+          )}
         </div>
       </div>
       {error && (
