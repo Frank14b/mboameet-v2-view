@@ -176,7 +176,7 @@ export function MainWrapper({ children }: { children: any }) {
               {userConnected === true && !pathname.startsWith(authStartPath) ? (
                 <>
                   <div className="mh-600 bg-gray-200 dark:bg-gray-800">
-                    <div className="flex xl:container">
+                    <div className="flex large:container">
                       <MobileSideBarMenuComponent
                         enable={canRemoveNavBar}
                         isMarketPlace={canRemoveNavBar}
@@ -229,7 +229,7 @@ export function MainWrapper({ children }: { children: any }) {
                       {!pathname.startsWith(authStartPath) ? (
                         <>
                           <div className="mh-600 bg-gray-200 dark:bg-gray-800">
-                            <div className="flex xl:container">
+                            <div className="flex large:container">
                               <MobileSideBarMenuComponent
                                 enable={canRemoveNavBar}
                                 isMarketPlace={canRemoveNavBar}
@@ -253,12 +253,14 @@ export function MainWrapper({ children }: { children: any }) {
                         </>
                       ) : (
                         <>
+                        <div className="flex large:container">
                           {" "}
                           {children}
                           <MobileSideBarMenuComponent
                             enable={true}
                             isMarketPlace={canRemoveNavBar}
                           ></MobileSideBarMenuComponent>{" "}
+                          </div>
                         </>
                       )}
                     </>

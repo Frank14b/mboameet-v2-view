@@ -12,6 +12,7 @@ const config: Config | any = withMT({
       'xs': { max: '640px' },
       'csm': { max: '992px' },
       'min-sm': { min: '992px' },
+      'large': { min: '1700px' },
     },
     extend: {
       backgroundImage: {
