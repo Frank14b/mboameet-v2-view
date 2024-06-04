@@ -106,8 +106,6 @@ export function MainWrapper({ children }: { children: any }) {
     if (isAccessingNonProtectedPage()) return;
 
     setTimeout(() => {
-      // window.location.reload();
-      console.log("Access ", loginPathUrl);
       push(`${loginPathUrl}`);
     }, 300);
   }, [setUserConnected, push, clear, setLoading, isAccessingNonProtectedPage]);
@@ -162,32 +160,9 @@ export function MainWrapper({ children }: { children: any }) {
     deleteAccount,
   };
 
-  const checkExpiredToken = useCallback(async () => {
-    const expired = await isTokenExpired();
-    if (expired) {
-      logout();
-    }
-  }, [logout]);
-
   useEffect(() => {
     validateUserSession();
-    // if (userConnected === true) {
-    //   checkExpiredToken();
-    // } else {
-    //   if (!pathname.startsWith(authStartPath)) {
-    //     validateUserSession();
-    //   }
-    // }
   }, [validateUserSession]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      const userKey = get(userEncryptionStorageKey);
-      if (!userKey && userConnected) {
-        logout();
-      }
-    }, 1000);
-  }, [userConnected, get, logout]);
 
   return (
     <MainContext.Provider value={MainData}>
