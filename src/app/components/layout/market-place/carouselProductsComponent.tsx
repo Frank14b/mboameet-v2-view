@@ -39,7 +39,7 @@ export function CarouselProductsComponent() {
         <div className="p-2" key={index}>
           <Card
             placeholder={""}
-            className="dark:bg-gray-700 w-full shadow-none border-2 border-gray-100 dark:border-none"
+            className="dark:bg-gray-700 bg-gray-100 w-full shadow-none border-2 border-gray-100 dark:border-none"
           >
             <CardHeader
               placeholder={""}
@@ -55,11 +55,12 @@ export function CarouselProductsComponent() {
             </CardHeader>
             <CardBody placeholder={""} className="dark:text-gray-100">
               <div className="w-full">
-                <Typography placeholder={""}>Iphone 15 Pro Max</Typography>
-                <small>adasds asds</small>
+                <div className="line-clamp-1">
+                  <Typography placeholder={""}>Iphone 15 Pro Max</Typography>
+                </div>
               </div>
               <div className="w-full mt-4">
-                <Button size="sm" fullWidth placeholder={""} className="">
+                <Button size="sm" variant="outlined" fullWidth placeholder={""} className="">
                   Buy Now
                 </Button>
               </div>
