@@ -106,7 +106,6 @@ export function MainWrapper({ children }: { children: any }) {
     if (isAccessingNonProtectedPage()) return;
 
     setTimeout(() => {
-      setLoading(false);
       // window.location.reload();
       console.log("Access ", loginPathUrl);
       push(`${loginPathUrl}`);
@@ -131,17 +130,21 @@ export function MainWrapper({ children }: { children: any }) {
   }, []);
 
   const validateUserSession = useCallback(async () => {
-    const result = await validateToken();
-    if (result.status) {
-      setUser({
-        ...result.data,
-        photo: getFileUrl(result.data?.photo, result.data?.id),
-      });
+    setTimeout(async () => {
+      const result = await validateToken();
+
       setLoading(false);
-      setUserConnected(true);
-    } else {
-      logout();
-    }
+
+      if (result.status) {
+        setUser({
+          ...result.data,
+          photo: getFileUrl(result.data?.photo, result.data?.id),
+        });
+        setUserConnected(true);
+      } else {
+        logout();
+      }
+    }, 1000);
   }, [logout, setUser, getFileUrl, setUserConnected, setLoading]);
 
   const MainData: MainContextDto = {
@@ -183,10 +186,12 @@ export function MainWrapper({ children }: { children: any }) {
   }, [setLoading]);
 
   useEffect(() => {
-    const userKey = get(userEncryptionStorageKey);
-    if (!userKey && userConnected) {
-      logout();
-    }
+    setTimeout(() => {
+      const userKey = get(userEncryptionStorageKey);
+      if (!userKey && userConnected) {
+        logout();
+      }
+    }, 1000);
   }, [userConnected, get, logout]);
 
   return (
