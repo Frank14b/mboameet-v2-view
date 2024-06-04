@@ -21,10 +21,14 @@ export default function AsideBarMenuComponent({ children }: { children: any }) {
       <>
         <div className="max-h-[300px] overflow-y-auto">
           <SideBarMenuListUserComponent
-            users={friends.map((friend: any, index: number) => {
+            users={friends.map((friend, index: number) => {
+              let name = `${friend.firstName} ${friend.lastName}`;
+              if (name.trim().length < 2) {
+                name = `${friend.userName}`;
+              }
               return {
-                id: friend._id,
-                title: `${friend.firstName} ${friend.lastName}`,
+                id: friend.id,
+                title: `${name}`,
                 image: friend.photo,
               };
             })}
