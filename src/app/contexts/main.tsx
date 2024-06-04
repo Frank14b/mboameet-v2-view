@@ -181,12 +181,6 @@ export function MainWrapper({ children }: { children: any }) {
 
   useEffect(() => {
     setTimeout(() => {
-      setLoading(false);
-    }, 300);
-  }, [setLoading]);
-
-  useEffect(() => {
-    setTimeout(() => {
       const userKey = get(userEncryptionStorageKey);
       if (!userKey && userConnected) {
         logout();
