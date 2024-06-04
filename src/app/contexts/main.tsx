@@ -170,14 +170,15 @@ export function MainWrapper({ children }: { children: any }) {
   }, [logout]);
 
   useEffect(() => {
-    if (userConnected === true) {
-      checkExpiredToken();
-    } else {
-      if (!pathname.startsWith(authStartPath)) {
-        validateUserSession();
-      }
-    }
-  }, [checkExpiredToken, logout, validateUserSession, pathname, userConnected]);
+    validateUserSession();
+    // if (userConnected === true) {
+    //   checkExpiredToken();
+    // } else {
+    //   if (!pathname.startsWith(authStartPath)) {
+    //     validateUserSession();
+    //   }
+    // }
+  }, [validateUserSession]);
 
   useEffect(() => {
     setTimeout(() => {
