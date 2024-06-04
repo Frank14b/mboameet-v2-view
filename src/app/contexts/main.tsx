@@ -229,7 +229,7 @@ export function MainWrapper({ children }: { children: any }) {
                       {!pathname.startsWith(authStartPath) ? (
                         <>
                           <div className="mh-600 bg-gray-200 dark:bg-gray-800">
-                            <div className="flex xxl:container">
+                            <div className="flex xl:container">
                               <MobileSideBarMenuComponent
                                 enable={canRemoveNavBar}
                                 isMarketPlace={canRemoveNavBar}
