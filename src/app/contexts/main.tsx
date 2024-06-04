@@ -253,7 +253,7 @@ export function MainWrapper({ children }: { children: any }) {
                         </>
                       ) : (
                         <>
-                        <div className="flex large:container">
+                        <div className="flex xs:grid large:container">
                           {" "}
                           {children}
                           <MobileSideBarMenuComponent
