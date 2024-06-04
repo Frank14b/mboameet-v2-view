@@ -108,6 +108,7 @@ export function MainWrapper({ children }: { children: any }) {
     setTimeout(() => {
       setLoading(false);
       // window.location.reload();
+      console.log("Access ", loginPathUrl);
       push(`${loginPathUrl}`);
     }, 300);
   }, [setUserConnected, push, clear, setLoading, isAccessingNonProtectedPage]);
@@ -136,11 +137,12 @@ export function MainWrapper({ children }: { children: any }) {
         ...result.data,
         photo: getFileUrl(result.data?.photo, result.data?.id),
       });
+      setLoading(false);
       setUserConnected(true);
     } else {
       logout();
     }
-  }, [logout, setUser, getFileUrl, setUserConnected]);
+  }, [logout, setUser, getFileUrl, setUserConnected, setLoading]);
 
   const MainData: MainContextDto = {
     userConnected,
