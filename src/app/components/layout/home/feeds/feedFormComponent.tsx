@@ -24,7 +24,7 @@ import {
 import Image from "next/image";
 import { FeedFormHookDto } from "@/app/hooks/pages/feeds/useFeedForm";
 import FeedFileInputComponent from "./files/feedFileInputComponent";
-import { clickFileUpload, clickFileUploadWithRef } from "@/app/lib/utils";
+import { clickFileUploadWithRef } from "@/app/lib/utils";
 
 export default function FeedFormComponent({
   children,
@@ -159,7 +159,7 @@ export default function FeedFormComponent({
                       placeholder={""}
                       variant="text"
                       color="gray"
-                      onClick={() => clickFileUploadWithRef(inputFileImageRef)}
+                      onClick={() => clickFileUploadWithRef(inputFileVideoRef)}
                     >
                       <VideoCameraIcon width={20} height={20} />
                     </Button>
@@ -170,7 +170,7 @@ export default function FeedFormComponent({
                       placeholder={""}
                       variant="text"
                       color="gray"
-                      onClick={() => clickFileUploadWithRef(inputFileVideoRef)}
+                      onClick={() => clickFileUploadWithRef(inputFileImageRef)}
                     >
                       <PhotoIcon width={20} height={20} />
                     </Button>

@@ -59,10 +59,10 @@ export function ImagePreviewPopup({
             <CustomNextImage
               key={0}
               alt=""
-              className="h-full w-full max-h-[40em] rounded-lg object-cover object-center"
+              className="h-full w-full max-h-[40em] rounded-lg object-fill object-center"
               src={active?.url}
-              height={500}
-              width={500}
+              height={1000}
+              width={1000}
             />
             {images?.map(
               (image, index) =>
@@ -71,10 +71,10 @@ export function ImagePreviewPopup({
                   <CustomNextImage
                     key={index + 1}
                     alt=""
-                    className="h-full w-full max-h-[40em] rounded-lg object-cover object-center"
+                    className="h-full w-full max-h-[40em] rounded-lg object-fill object-center"
                     src={image.url}
-                    width={1200}
-                    height={500}
+                    width={1000}
+                    height={1000}
                   />
                 )
             )}

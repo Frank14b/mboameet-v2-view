@@ -48,7 +48,7 @@ export default function CropImage({ image, croppedImage, returnType, cropSize }:
     return <>
         <Dialog dismiss={dismiss} placeholder={""} open={open} handler={handleOpen}>
             <DialogHeader placeholder={""} className='dark:bg-gray-800 text-md'>Crop your image</DialogHeader>
-            <DialogBody placeholder={""} style={{height: "600px"}}>
+            <DialogBody placeholder={""} className='xs:h-[50vh] h-[50vh]'>
                 {/*  */}
                 <Cropper
                     image={image}
