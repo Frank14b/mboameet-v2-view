@@ -21,7 +21,7 @@ export default function FeedImageViewComponent({
                 <Image
                   width={2000}
                   height={800}
-                  className="object-cover object-center h-90 max-w-full md:h-90"
+                  className="object-cover object-center h-90 max-w-full md:h-90 max-h-[25rem]"
                   src={mainContext.getFileUrl(
                     feed.feedFiles[0].url,
                     feed.user.id

@@ -35,7 +35,7 @@ export default function UserProfileCard({
   return (
     <>
       <Card placeholder={""} className="w-full dark:bg-gray-800">
-        <CardHeader placeholder={""} floated={false} className="h-40">
+        <CardHeader placeholder={""} floated={false} className="h-40 xs:h-[140px]">
           <CustomNextImage
             src={image}
             alt={name}

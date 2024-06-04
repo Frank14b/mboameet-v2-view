@@ -65,7 +65,7 @@ export function FriendsComponent({
 
     return (
       <>
-        <div className="grid md:grid-cols-3 xs:grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid md:grid-cols-3 xs:grid-cols-2 sm:grid-cols-2 gap-3">
           {friends?.map((friend: ResultFriendsDto, index: number) => (
             <FriendsItemComponent
               index={index}
