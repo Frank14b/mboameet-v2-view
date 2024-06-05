@@ -23,7 +23,7 @@ export default function SideBarMenuListUserComponent({
               src={user.image}
             />
           </ListItemPrefix>
-          <div>
+          <div className="line-clamp-1">
             <Typography
               placeholder={""}
               variant="h6"
@@ -31,14 +31,6 @@ export default function SideBarMenuListUserComponent({
               className="dark:text-pink-200 capitalize"
             >
               {user.title}
-            </Typography>
-            <Typography
-              placeholder={""}
-              variant="small"
-              color="gray"
-              className="font-normal dark:text-gray-500"
-            >
-              <></>
             </Typography>
           </div>
         </ListItem>
