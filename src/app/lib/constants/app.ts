@@ -94,6 +94,19 @@ export const friendTypes = {
   },
 };
 
+export const feedTypes = {
+  recent: {
+    name: "recent",
+    key: "recent",
+    icon: Square3Stack3DIcon,
+  },
+  popular: {
+    name: "popular",
+    key: "popular",
+    icon: UserCircleIcon,
+  },
+};
+
 export const messageReactionsList: MessageReactionsDto[] = [
   {
     key: "heart",

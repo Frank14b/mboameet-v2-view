@@ -47,6 +47,8 @@ export interface DiscussionTypesDto {
 
 export interface FriendTypesDto extends DiscussionTypesDto {}
 
+export interface FeedTypesListDto extends DiscussionTypesDto {}
+
 export interface MessageReactionsDto {
   key: string;
   icon: ForwardRefExoticComponent<

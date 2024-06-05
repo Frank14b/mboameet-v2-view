@@ -58,4 +58,4 @@ export type ResultFeed = {
   feedLikes: ResultFeedLikeDto[] | null;
 };
 
-export type FeedTypes = "recent" | "friends" | "popular";
+export type FeedTypesDto = "recent" | "friends" | "popular";

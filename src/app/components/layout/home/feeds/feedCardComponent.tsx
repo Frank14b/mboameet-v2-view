@@ -1,19 +1,18 @@
 "use client";
 
-import { FeedTypes, ResultFeed } from "@/app/types";
+import { FeedTypesDto, ResultFeed } from "@/app/types";
 import FeedItemComponent from "./feedItemComponent";
 import FeedSkeleton from "../../../widgets/skeletons/feedSkeleton";
 import { FeedHookDto } from "@/app/hooks/pages/feeds/useFeed";
 import { FeedFormHookDto } from "@/app/hooks/pages/feeds/useFeedForm";
-import { TabsCustomAnimation } from "@/app/components/widgets/tabsCustomAnimation";
-import { useCallback, useMemo, useState } from "react";
 import {
-  Square3Stack3DIcon,
-  UserCircleIcon,
-  Cog6ToothIcon,
-} from "@heroicons/react/24/solid";
+  TabCustomAnimationProps,
+  TabsCustomAnimation,
+} from "@/app/components/widgets/tabsCustomAnimation";
+import { useCallback, useMemo, useState } from "react";
 import AnimateHoverScale from "@/app/components/widgets/motions/animateHoverScale";
 import { NoDataFound } from "@/app/components/widgets/noDataFound";
+import { feedTypes } from "@/app/lib/constants/app";
 
 //
 export default function FeedCardComponent({
@@ -24,26 +23,27 @@ export default function FeedCardComponent({
   feedFormHook: FeedFormHookDto;
 }) {
   //
-  const defaultTab: FeedTypes = "recent";
-  const { isLoading, setIsLoading, feeds, fetchFeeds } = feedHook;
-  const [activeTab, setActiveTab] = useState<FeedTypes>(defaultTab);
+  const { isLoading, feedTypesList, feeds, setIsLoading, fetchFeeds } =
+    feedHook;
+  const [activeTab, setActiveTab] = useState<FeedTypesDto>(
+    feedTypes.recent.key as FeedTypesDto
+  );
 
   const onTabChange = (tab: string) => {
     setIsLoading(true);
     fetchFeeds({
-      type: tab as FeedTypes,
+      type: tab as FeedTypesDto,
     });
-    setActiveTab(tab as FeedTypes);
+    setActiveTab(tab as FeedTypesDto);
   };
 
-  const recentFeedItems = useMemo(() => {
-    if (activeTab != "recent") return;
+  const formattedFeeds = useMemo(() => {
     if (isLoading) return <FeedSkeleton isLoading={true} count={5} />;
     if (!feeds || feeds.length === 0)
       return (
         <NoDataFound
           customClass="dark:shadow-none dark:bg-gray-800"
-          message="Stores not found"
+          message="Feed not found"
         />
       );
     //
@@ -58,68 +58,27 @@ export default function FeedCardComponent({
     ));
   }, [feeds, activeTab, isLoading, feedHook, feedFormHook]);
 
-  const friendsFeedItems = useMemo(() => {
-    if (activeTab != "friends") return;
-    if (isLoading) return <FeedSkeleton isLoading={true} count={5} />;
-    if (!feeds || feeds.length === 0)
-      return (
-        <NoDataFound
-          customClass="dark:shadow-none dark:bg-gray-800"
-          message="Stores not found"
-        />
-      );
-    //
-    return feeds?.map((feed: ResultFeed, index: number) => (
-      <ItemCustomAnimation
-        index={index}
-        key={index}
-        feed={feed}
-        feedFormHook={feedFormHook}
-        feedHook={feedHook}
-      />
-    ));
-  }, [feeds, activeTab, isLoading, feedHook, feedFormHook]);
+  const tabMenus = useMemo(() => {
+    let result: TabCustomAnimationProps[] = [];
 
-  const popularFeedItems = useMemo(() => {
-    if (activeTab != "popular") return;
-    if (isLoading) return <FeedSkeleton isLoading={true} count={5} />;
-    //
-    return feeds?.map((feed: ResultFeed, index: number) => (
-      <ItemCustomAnimation
-        index={index}
-        key={index}
-        feed={feed}
-        feedFormHook={feedFormHook}
-        feedHook={feedHook}
-      />
-    ));
-  }, [feeds, activeTab, isLoading, feedHook, feedFormHook]);
+    feedTypesList.map((tab) => {
+      result.push({
+        label: tab.name.toUpperCase(),
+        value: tab.key,
+        icon: tab.icon,
+        htmlContent: formattedFeeds,
+      });
+    });
+
+    return result;
+  }, [feedTypesList, formattedFeeds]);
 
   return (
     <div className="mt-4">
       <TabsCustomAnimation
-        defaultTab={defaultTab}
+        defaultTab={activeTab}
         onTabChange={onTabChange}
-        tabData={[
-          {
-            label: "RECENT",
-            value: "recent",
-            icon: Square3Stack3DIcon,
-            htmlContent: recentFeedItems,
-          },
-          {
-            label: "FRIENDS",
-            value: "friends",
-            icon: UserCircleIcon,
-            htmlContent: friendsFeedItems,
-          },
-          {
-            label: "POPULAR",
-            value: "popular",
-            icon: Cog6ToothIcon,
-            htmlContent: popularFeedItems,
-          },
-        ]}
+        tabData={tabMenus}
       />
     </div>
   );

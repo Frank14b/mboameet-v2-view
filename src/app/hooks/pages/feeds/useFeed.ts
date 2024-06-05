@@ -10,7 +10,8 @@ import {
   ApiResponseDto,
   BooleanResultDto,
   FeedFilesData,
-  FeedTypes,
+  FeedTypesDto,
+  FeedTypesListDto,
   ResultFeed,
   ResultPaginate,
 } from "../../../types";
@@ -23,19 +24,28 @@ import {
 import useFeedStore from "@/app/store/feedStore";
 import { getContentEditable } from "@/app/lib/utils";
 import useUserStore from "@/app/store/userStore";
-import { referenceKeyword } from "@/app/lib/constants/app";
+import { feedTypes, referenceKeyword } from "@/app/lib/constants/app";
 import { notification } from "@/app/lib/notifications";
 
 export function useFeed(): FeedHookDto {
   //
+  const [feedTypesList] = useState(Object.values(feedTypes));
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [feeds, setFeeds] = useState<ResultFeed[] | null>(null);
   const { feed, updatedFeed, deletedFeedId, setFeed } = useFeedStore();
   const { user } = useUserStore();
+  const [defaultTab] = useState<FeedTypesDto>(
+    feedTypes.recent.key as FeedTypesDto
+  );
   //
   const fetchFeeds = useCallback(
-    async ({ type }: { type: FeedTypes }) => {
-      if(type != 'recent') return [];
+    async ({ type }: { type: FeedTypesDto }) => {
+      
+      if(type !== "recent") {
+        setFeeds([])
+        setIsLoading(false);
+        return [];
+      };
 
       const result: ApiResponseDto<ResultPaginate<ResultFeed[]>> =
         await getFeeds({
@@ -55,14 +65,15 @@ export function useFeed(): FeedHookDto {
   );
 
   useEffect(() => {
-    fetchFeeds({ type: "recent" });
+    fetchFeeds({ type: defaultTab });
   }, [fetchFeeds]);
 
   const formattedFeeds = useMemo(() => {
     const data = feeds as ResultFeed[];
 
     if (
-      feed != null && data &&
+      feed != null &&
+      data &&
       data?.findIndex((f: ResultFeed) => f.id === feed.id) == -1
     ) {
       data.unshift(feed);
@@ -124,6 +135,7 @@ export function useFeed(): FeedHookDto {
     isLoading,
     feeds: formattedFeeds,
     updatedFeed: updatedFeed,
+    feedTypesList,
     setIsLoading,
     deleteItemAsync,
     fetchFeeds,
@@ -143,6 +155,7 @@ export interface FeedHookDto {
   isLoading: boolean;
   feeds: ResultFeed[] | null;
   updatedFeed: ResultFeed | null;
+  feedTypesList: FeedTypesListDto[];
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   deleteItemAsync: ({
     itemId,
@@ -151,7 +164,7 @@ export interface FeedHookDto {
     itemId: number;
     itemRef: string;
   }) => Promise<void>;
-  fetchFeeds: ({ type }: { type: FeedTypes }) => Promise<ResultFeed[] | []>;
+  fetchFeeds: ({ type }: { type: FeedTypesDto }) => Promise<ResultFeed[] | []>;
   setFeeds: Dispatch<SetStateAction<ResultFeed[] | null>>;
   getFileType: (
     files: FeedFilesData[]
