@@ -14,12 +14,12 @@ export default function AsideBarMenuComponent({ children }: { children: any }) {
   const { friends, isLoading } = useFriends();
 
   const friendSuggestions = useMemo(() => {
-    if (isLoading) return <>Loading...</>;
+    if (isLoading) return <div className="mt-10">Loading...</div>;
     if (friends.length == 0) return <>No friends found</>;
 
     return (
       <>
-        <div className="max-h-[300px] overflow-y-auto">
+        <div className="max-h-[300px] overflow-y-auto overflow-x-hidden">
           <SideBarMenuListUserComponent
             users={friends.map((friend: any, index: number) => {
               return {
