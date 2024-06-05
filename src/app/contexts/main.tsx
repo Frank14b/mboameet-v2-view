@@ -116,7 +116,7 @@ export function MainWrapper({ children }: { children: any }) {
     //
     if (!link || link.length == 0) {
       const imageFromInitial = generateInitialsImage(
-        `${btoa(`${userId}`).slice(-1)}`
+        `${btoa(`${userId}`).replaceAll("=", "").slice(-1)}`
       );
       if (imageFromInitial.length > 1) return imageFromInitial;
 

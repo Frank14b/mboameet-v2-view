@@ -306,16 +306,16 @@ export const generateInitialsImage = (userName: string) => {
   const initials = userName.charAt(0).toUpperCase();
 
   // Set canvas size (adjust as needed)
-  canvas.width = 250;
-  canvas.height = 250;
+  canvas.width = 300;
+  canvas.height = 300;
 
   // Fill background
   ctx.fillStyle = "#f0f0f0";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Set text styles
-  ctx.font = "60px Arial";
-  ctx.fillStyle = "#333";
+  ctx.font = "90px Arial";
+  ctx.fillStyle = `${generateRandomHexColor()}`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
@@ -328,3 +328,13 @@ export const generateInitialsImage = (userName: string) => {
   imageFromInitial[userName] = dataURL;
   return dataURL;
 };
+
+export const  generateRandomHexColor = () => {
+  // Generate a random integer between 0 and 16777215 (inclusive)
+  const randomNum = Math.floor(Math.random() * 16777215);
+
+  // Convert the number to a hexadecimal string and pad it with zeros
+  const hexColor = "#" + randomNum.toString(16).padStart(6, '0');
+
+  return hexColor;
+}
