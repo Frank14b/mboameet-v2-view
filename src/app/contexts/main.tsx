@@ -115,9 +115,7 @@ export function MainWrapper({ children }: { children: any }) {
   const getFileUrl = useCallback((link?: string, userId?: number) => {
     //
     if (!link || link.length == 0) {
-      const imageFromInitial = generateInitialsImage(
-        `${btoa(`${userId}`).replaceAll("=", "").slice(-1)}`
-      );
+      const imageFromInitial = generateInitialsImage("");
       if (imageFromInitial.length > 1) return imageFromInitial;
 
       return defaultProfileImg;

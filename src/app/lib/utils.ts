@@ -295,6 +295,10 @@ const imageFromInitial: {
 } = {};
 
 export const generateInitialsImage = (userName: string) => {
+  if(userName.length == 0) {
+    userName = generateRandomHexColor();
+  }
+  
   if (imageFromInitial?.[userName]) return imageFromInitial[userName];
   //
   const canvas = document.createElement("canvas");
@@ -332,7 +336,6 @@ export const generateInitialsImage = (userName: string) => {
 export const  generateRandomHexColor = () => {
   // Generate a random integer between 0 and 16777215 (inclusive)
   const randomNum = Math.floor(Math.random() * 16777215);
-
   // Convert the number to a hexadecimal string and pad it with zeros
   const hexColor = "#" + randomNum.toString(16).padStart(6, '0');
 
