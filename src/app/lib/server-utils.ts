@@ -113,7 +113,7 @@ export const setJwtCookie = ({
     }
 
     return false;
-  } catch (error) {
+  } catch {
     return false;
   }
 };
@@ -134,7 +134,7 @@ export const isTokenExpired = async (): Promise<boolean> => {
     deleteToken();
 
     return true;
-  } catch (error) {
+  } catch {
     return true;
   }
 };

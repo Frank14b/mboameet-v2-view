@@ -89,7 +89,7 @@ export function AppHubWrapper({ children }: { children: any }) {
           setConnection(null);
         });
       }
-    } catch (error) {
+    } catch {
       setConnection(null);
     }
   }, [push, userConnected, connection, setErrorSocket]);

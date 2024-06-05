@@ -161,23 +161,27 @@ export default function FeedVideoReaderComponent({
   }, [mainDivComponentRef, handlePlayerEvents, getVideoPlayerElement]);
 
   const handlePlayPause = useCallback(() => {
-    const videPlayer = getVideoPlayerElement();
-    if (!videPlayer) return;
+    try {
+      const videPlayer = getVideoPlayerElement();
+      if (!videPlayer) return;
 
-    let videoPaused = true;
-    if (videPlayer.paused) {
-      videPlayer.play();
-      videoPaused = false;
-    } else {
-      videPlayer.pause();
+      let videoPaused = true;
+      if (videPlayer.paused) {
+        videPlayer.play();
+        videoPaused = false;
+      } else {
+        videPlayer.pause();
+      }
+
+      setVideoPlayerData((prevData) => {
+        return {
+          ...prevData,
+          paused: videoPaused,
+        };
+      });
+    } catch {
+      console.log("error");
     }
-
-    setVideoPlayerData((prevData) => {
-      return {
-        ...prevData,
-        paused: videoPaused,
-      };
-    });
   }, [setVideoPlayerData, getVideoPlayerElement]);
 
   const handleSound = useCallback(() => {
