@@ -33,7 +33,7 @@ export default function UserProfileCard({
   onClickShare?: () => void;
 }) {
   return (
-    <>
+    <>  
       <Card placeholder={""} className="w-full dark:bg-gray-800">
         <CardHeader placeholder={""} floated={false} className="h-40 xs:h-[140px]">
           <CustomNextImage
@@ -85,7 +85,7 @@ export default function UserProfileCard({
               placeholder={""}
               variant="h4"
               color="blue-gray"
-              className="text-sm dark:text-gray-300"
+              className="text-sm dark:text-gray-300 capitalize"
             >
               {name}
             </Typography>
