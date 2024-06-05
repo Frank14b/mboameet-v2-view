@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  formatDate,
-  formatHashTags,
-} from "@/app/lib/utils";
+import { formatDate, formatHashTags } from "@/app/lib/utils";
 import { FeedCommentData } from "@/app/types";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import {
@@ -24,7 +21,10 @@ import useUserStore from "@/app/store/userStore";
 import { useEffect, useRef } from "react";
 import SpeedDialButton from "../../../../widgets/speedDialButton";
 import { FeedCommentHookDto } from "@/app/hooks/pages/feeds/comments/useFeedComment";
-import { defaultProfileImg, referenceCommentKeyword } from "@/app/lib/constants/app";
+import {
+  defaultProfileImg,
+  referenceCommentKeyword,
+} from "@/app/lib/constants/app";
 
 export interface FeedCommentItemProps {
   feedId: number;
@@ -71,7 +71,11 @@ export default function FeedCommentItemComponent({
             size="sm"
             src={
               comment.user.photo != null
-                ? mainContext.getFileUrl(comment.user.photo, comment.user.id)
+                ? mainContext.getFileUrl(
+                    comment.user.photo,
+                    comment.user.id,
+                    comment.user.userName
+                  )
                 : defaultProfileImg
             }
             alt={comment.user.userName}
@@ -148,7 +152,7 @@ export default function FeedCommentItemComponent({
             />
           </div>
         )}
-        
+
         {editCommentId == comment.id && (
           <>
             {updateSpinner.error.length > 0 && (

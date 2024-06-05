@@ -108,7 +108,7 @@ const useChat = () => {
         id: discussion.id,
         title: discussion.userName,
         subTitle: discussion.lastMessage.message,
-        image: getFileUrl(discussion.photo, discussion.id),
+        image: getFileUrl(discussion.photo, discussion.id, discussion.userName),
         chip: discussion.unReadCount > 0 ? discussion.unReadCount : undefined,
         reference: discussion.lastMessage.reference,
         date: discussion.lastMessage.createdAt,

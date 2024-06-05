@@ -101,7 +101,7 @@ function useSignIn(): SignInHookDto {
       setLoading(true);
       setUser({
         ...data,
-        photo: getFileUrl(data?.photo, data?.id),
+        photo: getFileUrl(data?.photo, data?.id, data?.userName),
       });
       await proceedSavePrivateKey(`${data?.encryptionKey}`); // import local key to decrypt private key and save in secure local storage
       setUserConnected(true);

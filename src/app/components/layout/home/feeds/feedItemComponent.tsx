@@ -71,7 +71,8 @@ export default function FeedItemComponent({
           feedData={feedData}
           userPhoto={mainContext.getFileUrl(
             feedData.user.photo,
-            feedData.user.id
+            feedData.user.id,
+            feedData.user.userName
           )}
           setDeleting={setIsDeleting}
           setUpdateFeedItem={setUpdateFeedItem}
@@ -97,7 +98,8 @@ export default function FeedItemComponent({
                         key={index}
                         src={mainContext.getFileUrl(
                           image.url,
-                          feedData.user.id
+                          feedData.user.id,
+                          feedData.user.userName
                         )}
                         alt="image 1"
                         className="h-full w-full object-cover object-center"

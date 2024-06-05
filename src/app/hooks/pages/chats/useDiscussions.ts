@@ -211,7 +211,7 @@ const useDiscussions = ({ reference }: { reference?: string }) => {
           secondUser: {
             id: userId,
             name: userName,
-            avatar: getFileUrl(photo, userId),
+            avatar: getFileUrl(photo, userId, userName),
           },
         };
       });
@@ -351,8 +351,8 @@ const useDiscussions = ({ reference }: { reference?: string }) => {
       const files = message.chatFiles.map((file) => {
         return {
           ...file,
-          url: getFileUrl(file.url, message.sender),
-          previewUrl: getFileUrl(file.previewUrl, message.sender),
+          url: getFileUrl(file.url, message.sender, "c"),
+          previewUrl: getFileUrl(file.previewUrl, message.sender, "c"),
         };
       });
 

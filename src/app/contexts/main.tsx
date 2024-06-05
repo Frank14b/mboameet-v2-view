@@ -112,18 +112,21 @@ export function MainWrapper({ children }: { children: any }) {
 
   const deleteAccount = useCallback(async () => {}, []);
 
-  const getFileUrl = useCallback((link?: string, userId?: number) => {
-    //
-    if (!link || link.length == 0) {
-      const imageFromInitial = generateInitialsImage("");
-      if (imageFromInitial.length > 1) return imageFromInitial;
+  const getFileUrl = useCallback(
+    (link?: string, userId?: number, name?: string) => {
+      //
+      if (!link || link.length == 0) {
+        const imageFromInitial = generateInitialsImage(`${name}`);
+        if (imageFromInitial.length > 1) return imageFromInitial;
 
-      return defaultProfileImg;
-    }
-    if (link.startsWith("http")) return link;
+        return defaultProfileImg;
+      }
+      if (link.startsWith("http")) return link;
 
-    return `${configs.PUBLIC_FILES_LINK}${userId}/${link}`;
-  }, []);
+      return `${configs.PUBLIC_FILES_LINK}${userId}/${link}`;
+    },
+    []
+  );
 
   const validateUserSession = useCallback(async () => {
     setTimeout(async () => {
@@ -134,7 +137,11 @@ export function MainWrapper({ children }: { children: any }) {
       if (result.status) {
         setUser({
           ...result.data,
-          photo: getFileUrl(result.data?.photo, result.data?.id),
+          photo: getFileUrl(
+            result.data?.photo,
+            result.data?.id,
+            result.data?.userName
+          ),
         });
         setUserConnected(true);
       } else {
@@ -251,13 +258,13 @@ export function MainWrapper({ children }: { children: any }) {
                         </>
                       ) : (
                         <>
-                        <div className="flex xs:grid large:container">
-                          {" "}
-                          {children}
-                          <MobileSideBarMenuComponent
-                            enable={true}
-                            isMarketPlace={canRemoveNavBar}
-                          ></MobileSideBarMenuComponent>{" "}
+                          <div className="flex xs:grid large:container">
+                            {" "}
+                            {children}
+                            <MobileSideBarMenuComponent
+                              enable={true}
+                              isMarketPlace={canRemoveNavBar}
+                            ></MobileSideBarMenuComponent>{" "}
                           </div>
                         </>
                       )}
@@ -292,7 +299,7 @@ export type MainContextDto = {
   setNavigationChange: Dispatch<SetStateAction<NavigationChangeType>>;
   setTheme: (userTheme: string) => void;
   logout: () => Promise<void>;
-  getFileUrl: (link?: string, userId?: number) => string;
+  getFileUrl: (link?: string, userId?: number, name?: string) => string;
   setMainScroll: Dispatch<SetStateAction<any>>;
   deleteAccount: () => Promise<void>;
 };

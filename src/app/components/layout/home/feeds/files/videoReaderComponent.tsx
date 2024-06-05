@@ -83,7 +83,11 @@ export default function FeedVideoReaderComponent({
     );
   }, [feed, videoPlayerData, set]);
 
-  const src: string = getFileUrl(feed.feedFiles?.[0].url ?? "", feed.user.id);
+  const src: string = getFileUrl(
+    feed.feedFiles?.[0].url ?? "",
+    feed.user.id,
+    feed.user.userName
+  );
 
   const handlePlayerMouseEnter = useCallback(() => {
     const videPlayer = getVideoPlayerElement();

@@ -24,7 +24,8 @@ export default function FeedImageViewComponent({
                   className="object-cover object-center h-90 max-w-full md:h-90 max-h-[25rem]"
                   src={mainContext.getFileUrl(
                     feed.feedFiles[0].url,
-                    feed.user.id
+                    feed.user.id,
+                    feed.user.userName
                   )}
                   alt="-"
                   priority={true}
@@ -45,7 +46,11 @@ export default function FeedImageViewComponent({
                     width={1200}
                     height={600}
                     className="object-cover object-center h-90 max-w-full md:h-90 bg-white"
-                    src={mainContext.getFileUrl(image.url, feed.user.id)}
+                    src={mainContext.getFileUrl(
+                      image.url,
+                      feed.user.id,
+                      feed.user.userName
+                    )}
                     alt="-"
                     priority={true}
                   />

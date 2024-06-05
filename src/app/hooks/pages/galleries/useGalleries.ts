@@ -26,7 +26,7 @@ const useGalleries = () => {
 
   const proceedGetMedias = useCallback(async () => {
     const result = await getGalleries();
-    
+
     if (!result.status) {
       return notification.apiNotify(result);
     }
@@ -38,7 +38,6 @@ const useGalleries = () => {
 
     setFeedMedias(result.data.feedFiles.data);
     setChatMedias(result.data.chatFiles.data);
-
   }, [setIsLoading]);
 
   const formattedFeedMedias = useMemo(() => {
@@ -47,7 +46,7 @@ const useGalleries = () => {
         id: file.id,
         type: checkFileExtensionUsingLink(file.url) ?? file.type,
         previewUrl: file.previewUrl,
-        url: getFileUrl(file.url, connectedUser?.id),
+        url: getFileUrl(file.url, connectedUser?.id, connectedUser?.userName),
       };
     });
   }, [connectedUser, feedMedias, getFileUrl]);
@@ -58,7 +57,7 @@ const useGalleries = () => {
         id: file.id,
         type: checkFileExtensionUsingLink(file.url) ?? file.type,
         previewUrl: file.previewUrl,
-        url: getFileUrl(file.url, connectedUser?.id),
+        url: getFileUrl(file.url, connectedUser?.id, connectedUser?.userName),
       };
     });
   }, [chatMedias, connectedUser, getFileUrl]);

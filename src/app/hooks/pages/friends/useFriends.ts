@@ -77,7 +77,7 @@ const useFriends = () => {
       return {
         ...friend,
         fullName: fullName.trim().length > 0 ? fullName : friend.userName,
-        photo: getFileUrl(friend.photo, friend.id),
+        photo: getFileUrl(friend.photo, friend.id, friend.userName),
       };
     });
   }, [friends, getFileUrl]);

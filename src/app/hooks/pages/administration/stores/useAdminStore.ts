@@ -189,7 +189,7 @@ const useAdminStore = () => {
     return stores.map((store) => {
       return {
         ...store,
-        logo: getFileUrl(store.logo, store.user.id),
+        logo: getFileUrl(store.logo, store.user.id, store.user.name),
         reference: store.reference.toLowerCase(),
       };
     });

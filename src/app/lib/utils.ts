@@ -295,9 +295,6 @@ const imageFromInitial: {
 } = {};
 
 export const generateInitialsImage = (userName: string) => {
-  if(userName.length == 0) {
-    userName = generateRandomHexColor();
-  }
   
   if (imageFromInitial?.[userName]) return imageFromInitial[userName];
   //
@@ -307,7 +304,7 @@ export const generateInitialsImage = (userName: string) => {
   if (!ctx) return "";
 
   // Extract first letter and set to uppercase
-  const initials = userName.charAt(0).toUpperCase();
+  const initials = `${userName.charAt(0)}${userName.charAt(1)}`.toUpperCase();
 
   // Set canvas size (adjust as needed)
   canvas.width = 300;
@@ -318,7 +315,7 @@ export const generateInitialsImage = (userName: string) => {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Set text styles
-  ctx.font = "90px Arial";
+  ctx.font = "70px Arial";
   ctx.fillStyle = `${generateRandomHexColor()}`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";

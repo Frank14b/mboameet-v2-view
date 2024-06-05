@@ -6,7 +6,8 @@ class UserHubs {
   userStore: StoreType;
   getFileUrl: (
     link?: string | undefined,
-    userId?: number | undefined
+    userId?: number | undefined,
+    name?: string
   ) => string
 
   constructor(
@@ -30,7 +31,7 @@ class UserHubs {
         this.userStore.setUserConnected(true);
         this.userStore.setUser({
           ...user,
-          photo: this.getFileUrl(user.photo, user.id),
+          photo: this.getFileUrl(user.photo, user.id, user.userName),
         });
       }
     });
