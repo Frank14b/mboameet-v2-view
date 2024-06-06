@@ -66,7 +66,7 @@ export function useFeed(): FeedHookDto {
 
   useEffect(() => {
     fetchFeeds({ type: defaultTab });
-  }, [fetchFeeds]);
+  }, [defaultTab, fetchFeeds]);
 
   const formattedFeeds = useMemo(() => {
     const data = feeds as ResultFeed[];

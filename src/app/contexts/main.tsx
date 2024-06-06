@@ -109,7 +109,7 @@ export function MainWrapper({ children }: { children: any }) {
     setTimeout(() => {
       push(`${loginPathUrl}`);
     }, 300);
-  }, [setUserConnected, push, clear, setLoading, isAccessingNonProtectedPage]);
+  }, [setUserConnected, push, clear, isAccessingNonProtectedPage]);
 
   const deleteAccount = useCallback(async () => {}, []);
 
@@ -146,7 +146,6 @@ export function MainWrapper({ children }: { children: any }) {
         });
         setUserConnected(true);
       } else {
-        console.log(result);
         if (result.statusCode == 401) {
           logout();
         } else if (result.statusCode == 4040) {
@@ -158,7 +157,6 @@ export function MainWrapper({ children }: { children: any }) {
     logout,
     setUser,
     getFileUrl,
-    notification.apiNotify,
     setUserConnected,
     setLoading,
   ]);

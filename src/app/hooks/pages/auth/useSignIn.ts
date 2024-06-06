@@ -129,7 +129,7 @@ function useSignIn(): SignInHookDto {
         }, 200);
       }
     },
-    [savedKeys, initUserStoreSession]
+    [savedKeys, push, initUserStoreSession]
   );
 
   const data: SignInHookDto = {

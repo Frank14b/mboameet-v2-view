@@ -56,7 +56,7 @@ export default function FeedCardComponent({
         feedHook={feedHook}
       />
     ));
-  }, [feeds, activeTab, isLoading, feedHook, feedFormHook]);
+  }, [feeds, isLoading, feedHook, feedFormHook]);
 
   const tabMenus = useMemo(() => {
     let result: TabCustomAnimationProps[] = [];
