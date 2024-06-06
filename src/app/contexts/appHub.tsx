@@ -96,7 +96,6 @@ export function AppHubWrapper({ children }: { children: any }) {
 
   useEffect(() => {
     // init the app websocket client hub
-    console.log(pathname);
     initHub();
   }, [initHub, pathname]);
 
