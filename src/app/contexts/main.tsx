@@ -11,13 +11,12 @@ import {
   useRef,
   useState,
 } from "react";
-// import { QueryClient, QueryClientProvider, useQueryClient } from "react-query";
 import { AppHubWrapper } from "./appHub";
 import useUserStore from "../store/userStore";
-import { deleteToken, isTokenExpired } from "../lib/server-utils";
+import { deleteToken } from "../lib/server-utils";
 import { usePathname } from "next/navigation";
 // import { sessionTimeOut } from "../lib/workers";
-import { ObjectKeyDto, ResultLoginDto } from "../types";
+import { ObjectKeyDto, ResultLoginDto, ThemeDto } from "../types";
 import {
   administrationPathUrl,
   authStartPath,
@@ -25,7 +24,6 @@ import {
   loginPathUrl,
   mainDivComponentId,
   marketplacePathUrl,
-  userEncryptionStorageKey,
 } from "../lib/constants/app";
 import { ToastContainer } from "react-toastify";
 import { MobileSideBarMenuComponent } from "@/app/components/commons/mobileSideBarMenu";
@@ -165,6 +163,7 @@ export function MainWrapper({ children }: { children: any }) {
     mainScroll,
     navigationChange,
     mainDivComponentRef,
+    isDark: theme === 'dark',
     setNavigationChange,
     setTheme,
     logout,
@@ -179,7 +178,6 @@ export function MainWrapper({ children }: { children: any }) {
 
   return (
     <MainContext.Provider value={MainData}>
-      {/* <QueryClientProvider client={queryClient}> */}
       {loading ? (
         <></>
       ) : (
@@ -288,7 +286,6 @@ export function MainWrapper({ children }: { children: any }) {
           </main>
         </>
       )}
-      {/* </QueryClientProvider> */}
     </MainContext.Provider>
   );
 }
@@ -304,8 +301,9 @@ export type MainContextDto = {
   mainScroll: any;
   navigationChange: NavigationChangeType;
   mainDivComponentRef: RefObject<HTMLDivElement>;
+  isDark: boolean;
   setNavigationChange: Dispatch<SetStateAction<NavigationChangeType>>;
-  setTheme: (userTheme: string) => void;
+  setTheme: (userTheme: ThemeDto) => void;
   logout: () => Promise<void>;
   getFileUrl: (link?: string, userId?: number, name?: string) => string;
   setMainScroll: Dispatch<SetStateAction<any>>;

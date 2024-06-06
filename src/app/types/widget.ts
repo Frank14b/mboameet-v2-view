@@ -14,10 +14,11 @@ export interface UserCardComponent {
 }
 
 export interface UserStoriesCardProps {
+  id: number;
   bgImage: string;
   image: string;
-  title: string;
-  description?: string;
+  activeStory: number;
+  onStoryClick?: (id: number) => void;
 }
 
 export interface AboutCardComponent {

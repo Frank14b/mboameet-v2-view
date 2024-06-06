@@ -1,5 +1,7 @@
 import {
   CakeIcon,
+  CameraIcon,
+  DocumentTextIcon,
   FaceFrownIcon,
   FaceSmileIcon,
   HeartIcon,
@@ -9,9 +11,11 @@ import {
   UserCircleIcon,
   UserGroupIcon,
   UsersIcon,
+  VideoCameraIcon,
 } from "@heroicons/react/24/solid";
 import { configs } from "../../../../app.config";
-import { MessageActionsDto, MessageReactionsDto } from "@/app/types";
+import { MessageActionsDto, MessageReactionsDto, ThemeDto } from "@/app/types";
+import theme from "@material-tailwind/react/theme";
 
 export const OTP_TIMER: number = parseInt(configs.RESEND_OTP_TIME ?? "30");
 
@@ -54,7 +58,7 @@ export const settingPathUrl: string = `/settings`;
 export const administrationPathUrl = {
   baseUrl: `/administration`,
   stores: `/administration/stores`,
-}
+};
 export const friendPathUrl: string = `/friends`;
 
 export const userEncryptionStorageKey: string = "userKey";
@@ -62,7 +66,7 @@ export const userEncryptionStorageKey: string = "userKey";
 export const chatBgImageClassName = {
   darkMode: "dark:bg-[url('/pxFuelTwo.jpg')]",
   lightMode: "bg-[url('/pxFuelLight.jpg')]",
-}
+};
 
 export const localStorageKey = {
   authToken: "authToken",
@@ -146,5 +150,26 @@ export const messageActionsList: MessageActionsDto[] = [
     icon: TrashIcon,
     color: "",
     sort: 3,
+  },
+];
+
+export const storiesTypes = [
+  {
+    title: "Stories Text",
+    subTitle: "Publish a text stories on your board",
+    icon: DocumentTextIcon,
+    type: "text",
+  },
+  {
+    title: "Photo Stories",
+    subTitle: "Publish a photo stories on your board",
+    icon: CameraIcon,
+    type: "photo",
+  },
+  {
+    title: "Video Stories",
+    subTitle: "Publish a video stories on your board",
+    icon: VideoCameraIcon,
+    type: "video",
   },
 ];

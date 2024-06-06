@@ -295,9 +295,8 @@ const imageFromInitial: {
 } = {};
 
 export const generateInitialsImage = (userName: string, bgColor: string) => {
-  const imgKey = userName + "_" + bgColor
-  if (imageFromInitial?.[imgKey])
-    return imageFromInitial[imgKey];
+  const imgKey = userName + "_" + bgColor;
+  if (imageFromInitial?.[imgKey]) return imageFromInitial[imgKey];
   //
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");

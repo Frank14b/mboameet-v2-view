@@ -75,3 +75,5 @@ export interface MessageActionsDto {
 };
 
 export type MessageActionType = "edit" | "delete";
+
+export type ThemeDto = "dark" | "light"

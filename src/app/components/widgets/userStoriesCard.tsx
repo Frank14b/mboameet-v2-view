@@ -1,58 +1,90 @@
 import { UserStoriesCardProps } from "@/app/types";
 import {
-    Card,
-    CardHeader,
-    CardBody,
-    Typography,
-    Avatar,
+  Card,
+  CardHeader,
+  CardBody,
+  Avatar,
+  IconButton,
 } from "@material-tailwind/react";
+import { useEffect, useState } from "react";
+import CustomNextImage from "./CustomNextImage";
+import { PlusCircleIcon } from "@heroicons/react/24/solid";
 
+export default function UserStoriesCard({
+  id,
+  bgImage,
+  image,
+  activeStory,
+  onStoryClick,
+}: UserStoriesCardProps) {
+  const [isActive, setIsActive] = useState<boolean>(false);
 
-export default function UserStoriesCard({ bgImage, image, title, description }: UserStoriesCardProps) {
+  useEffect(() => {
+    setIsActive(id === activeStory);
+  }, [activeStory, id, setIsActive]);
 
-    return <>
-        <Card
-            placeholder={""}
-            shadow={false}
-            className="relative grid h-[9rem] w-full max-w-[100rem] border-0 rounded-lg bg-transparent items-end justify-center overflow-hidden text-center"
+  return (
+    <>
+      <Card
+        placeholder={""}
+        shadow={false}
+        className={`${
+          isActive
+            ? "fixed top-0 bottom-0 left-0 right-0 z-[99999]"
+            : "relative grid h-[9rem] w-full max-w-[100rem] rounded-xl border-none bg-transparent items-end justify-center overflow-hidden text-center cursor-pointer"
+        }`}
+      >
+        <CardHeader
+          placeholder={""}
+          floated={false}
+          shadow={false}
+          color="transparent"
+          style={{ background: `url(${bgImage}) center/cover` }}
+          className={`absolute inset-0 m-0 h-full w-full rounded-none border-none bg-cover bg-center`}
         >
-            <CardHeader
-                placeholder={""}
-                floated={false}
-                shadow={false}
-                color="transparent"
-                style={{ background: `url(${bgImage}) center/cover` }}
-                className={`absolute inset-0 m-0 h-full w-full rounded-none bg-cover bg-center dark:border-0`}
-            >
-                <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-t from-black/80 via-black/50 backdrop-blur-sm" />
-            </CardHeader>
-            <CardBody placeholder={""} className="relative py-10 px-6 md:px-12">
-                {
-                    description && (
-                        <Typography
-                            placeholder={""}
-                            variant="h2"
-                            color="white"
-                            className="mb-6 font-medium leading-[1.5] text-lg"
-                        >
-                            {description}
-                        </Typography>
-                    )
-                }
+          <div
+            className={`to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-t rounded-none from-black/90 via-black/50 ${
+              isActive ? "backdrop-blur-lg" : "backdrop-blur-sm"
+            }`}
+          />
+        </CardHeader>
+        <CardBody
+          placeholder={""}
+          className="relative py-10 px-6 md:px-12 border-none"
+        >
+          <Avatar
+            style={{ minWidth: "50px", minHeight: "50px" }}
+            placeholder={""}
+            size="xl"
+            variant="circular"
+            alt="tania andrew"
+            className="border-2 border-white"
+            src={image}
+            onClick={() => onStoryClick?.(id)}
+          />
 
-                <Typography placeholder={""} variant="h5" className="mb-4 text-gray-300 dark:text-gray-400 text-md">
-                    {title}
-                </Typography>
-                <Avatar
-                    style={{ minWidth: "50px", minHeight: "50px" }}
-                    placeholder={""}
-                    size="xl"
-                    variant="circular"
-                    alt="tania andrew"
-                    className="border-2 border-white"
-                    src={image}
+          {isActive && (
+            <div className="relative">
+              <div className="h-[80vh] xs:h-[70vh] sm:h-[70vh] xs:mt-12 min-w-[350px] max-w-[30%] relative mx-auto">
+                <IconButton
+                  className="rounded-full absolute top-[-15px] left-[-10px] z-[9999] bg-transparent"
+                  placeholder={""}
+                  onClick={() => onStoryClick?.(0)}
+                >
+                  <PlusCircleIcon className="h-5 w-5 rotate-45" />
+                </IconButton>
+
+                <CustomNextImage
+                  alt=""
+                  src={"/full-shot-people-use-apps-make-friends.jpg"}
+                  fill={true}
+                  className="object-cover rounded-xl shadow-lg"
                 />
-            </CardBody>
-        </Card>
+              </div>
+            </div>
+          )}
+        </CardBody>
+      </Card>
     </>
+  );
 }
