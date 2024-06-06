@@ -22,8 +22,10 @@ const notifyWarning = (content: ToastContent) =>
 
 const apiNotify = <T>(data: ApiResponseDto<T | any>) => {
   if (data?.status) {
-    const message = data?.data?.message ?? data.message
+    const message = data?.data?.message ?? data.message;
     notifySuccess(message);
+  } else if (data.statusCode == 4040) {
+    notifyError("Please verify your internet connection");
   } else {
     notifyError(data.message);
   }

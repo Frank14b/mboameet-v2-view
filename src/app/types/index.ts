@@ -12,6 +12,7 @@ export type ApiResponseDto<T> = {
   status: boolean;
   message: string;
   data?: T;
+  statusCode?: number;
 };
 
 export type BooleanResultDto<T> = {

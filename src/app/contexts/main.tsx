@@ -38,6 +38,7 @@ import AsideBarMenuComponent from "@/app/components/commons/aside-bar-menu";
 import SideBarMenuComponent from "@/app/components/commons/side-bar-menu";
 import { generateInitialsImage } from "../lib/utils";
 import useCustomRouter from "../hooks/useCustomRouter";
+import { notification } from "../lib/notifications";
 
 const MainContext = createContext<any>({});
 
@@ -145,10 +146,22 @@ export function MainWrapper({ children }: { children: any }) {
         });
         setUserConnected(true);
       } else {
-        logout();
+        console.log(result);
+        if (result.statusCode == 401) {
+          logout();
+        } else if (result.statusCode == 4040) {
+          notification.apiNotify(result);
+        }
       }
     }, 1000);
-  }, [logout, setUser, getFileUrl, setUserConnected, setLoading]);
+  }, [
+    logout,
+    setUser,
+    getFileUrl,
+    notification.apiNotify,
+    setUserConnected,
+    setLoading,
+  ]);
 
   const MainData: MainContextDto = {
     userConnected,

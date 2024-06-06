@@ -86,7 +86,7 @@ export const apiCall = async ({
       cache[cacheKey] = response.data;
     }
 
-    return ApiSuccessMessage(response.data);
+    return ApiSuccessMessage(response.data, "", response.status);
   } catch (error: any) {
     if (axios.isCancel(error)) {
       console.log("Request cancelled");
@@ -95,8 +95,6 @@ export const apiCall = async ({
     if (error.response?.status == 401) {
       console.log("Unauthorized User");
     }
-
-    console.log("Request error", error);
 
     return ApiErrorMessage(error);
   } finally {
@@ -119,16 +117,19 @@ export const ApiErrorMessage = (error: any): ApiResponseDto<any> => {
     status: false,
     message: error?.response?.data?.title ?? error?.response?.data,
     data: error?.response?.data?.errors,
+    statusCode: error.code == "ENOTFOUND" ? 4040 : error?.response?.status,
   };
 };
 
 export const ApiSuccessMessage = (
   data: any,
-  message: string = "Success"
+  message: string = "Success",
+  statusCode: number = 200
 ): ApiResponseDto<any> => {
   return {
     status: true,
     message: message,
     data: data,
+    statusCode
   };
 };

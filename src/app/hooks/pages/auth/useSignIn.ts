@@ -16,6 +16,7 @@ import { useMainContext } from "@/app/contexts/main";
 import useLocalStorage from "../../useLocalStorage";
 import { userEncryptionStorageKey } from "@/app/lib/constants/app";
 import useAppEncryption from "../../useEncryption";
+import useCustomRouter from "../../useCustomRouter";
 
 function useSignIn(): SignInHookDto {
   //
@@ -28,6 +29,7 @@ function useSignIn(): SignInHookDto {
     decryptAndDecodeMessageAsync,
     savedKeys,
   } = useAppEncryption();
+  const { push } = useCustomRouter();
 
   const { handleSubmit } = useAppForm({
     schema: signInSchema,
@@ -123,7 +125,7 @@ function useSignIn(): SignInHookDto {
       if (result.status === true) {
         await initUserStoreSession(result?.data ?? null);
         setTimeout(() => {
-          window.location.reload();
+          push("/")
         }, 200);
       }
     },
