@@ -294,9 +294,10 @@ const imageFromInitial: {
   [key: string]: string;
 } = {};
 
-export const generateInitialsImage = (userName: string) => {
-  
-  if (imageFromInitial?.[userName]) return imageFromInitial[userName];
+export const generateInitialsImage = (userName: string, bgColor: string) => {
+  const imgKey = userName + "_" + bgColor
+  if (imageFromInitial?.[imgKey])
+    return imageFromInitial[imgKey];
   //
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
@@ -311,7 +312,7 @@ export const generateInitialsImage = (userName: string) => {
   canvas.height = 300;
 
   // Fill background
-  ctx.fillStyle = "#f0f0f0";
+  ctx.fillStyle = `${bgColor}`;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Set text styles
@@ -326,15 +327,15 @@ export const generateInitialsImage = (userName: string) => {
   // Get base64 data URL
   const dataURL = canvas.toDataURL("image/png");
 
-  imageFromInitial[userName] = dataURL;
+  imageFromInitial[imgKey] = dataURL;
   return dataURL;
 };
 
-export const  generateRandomHexColor = () => {
+export const generateRandomHexColor = () => {
   // Generate a random integer between 0 and 16777215 (inclusive)
   const randomNum = Math.floor(Math.random() * 16777215);
   // Convert the number to a hexadecimal string and pad it with zeros
-  const hexColor = "#" + randomNum.toString(16).padStart(6, '0');
+  const hexColor = "#" + randomNum.toString(16).padStart(6, "0");
 
   return hexColor;
-}
+};

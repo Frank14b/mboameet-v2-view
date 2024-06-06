@@ -58,7 +58,7 @@ export function MainWrapper({ children }: { children: any }) {
   const [navigationChange, setNavigationChange] =
     useState<NavigationChangeType>("stop");
   const [currentLink, setCurrentLink] = useState<string>("/");
-  const { get, clear } = useLocalStorage();
+  const { clear } = useLocalStorage();
   const [canRemoveAsideBar, setCanRemoveAsideBar] = useState<boolean>(false);
   const [canRemoveNavBar, setCanRemoveNavBar] = useState<boolean>(false);
   const mainDivComponentRef = useRef<HTMLDivElement>(null);
@@ -117,7 +117,10 @@ export function MainWrapper({ children }: { children: any }) {
     (link?: string, userId?: number, name?: string) => {
       //
       if (!link || link.length == 0) {
-        const imageFromInitial = generateInitialsImage(`${name}`);
+        const imageFromInitial = generateInitialsImage(
+          `${name}`,
+          theme == "dark" ? "#777" : "#f0f0f0"
+        );
         if (imageFromInitial.length > 1) return imageFromInitial;
 
         return defaultProfileImg;
@@ -126,7 +129,7 @@ export function MainWrapper({ children }: { children: any }) {
 
       return `${configs.PUBLIC_FILES_LINK}${userId}/${link}`;
     },
-    []
+    [theme]
   );
 
   const validateUserSession = useCallback(async () => {
@@ -153,13 +156,7 @@ export function MainWrapper({ children }: { children: any }) {
         }
       }
     }, 1000);
-  }, [
-    logout,
-    setUser,
-    getFileUrl,
-    setUserConnected,
-    setLoading,
-  ]);
+  }, [logout, setUser, getFileUrl, setUserConnected, setLoading]);
 
   const MainData: MainContextDto = {
     userConnected,
