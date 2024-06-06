@@ -24,7 +24,7 @@ export const sessionTimeOut = async ({ logout }: { logout: () => {} }) => {
     myWorker.port.postMessage(validity);
 
     myWorker.port.onmessage = function (e) {
-      if (e.data.status === true) {
+      if (e.data?.status === true) {
         isTokenExpired();
         logout()
       }

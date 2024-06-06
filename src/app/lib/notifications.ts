@@ -21,7 +21,7 @@ const notifyWarning = (content: ToastContent) =>
   toast.warning(content ?? "Wow so easy!", defaultOptions);
 
 const apiNotify = <T>(data: ApiResponseDto<T | any>) => {
-  if (data.status) {
+  if (data?.status) {
     const message = data?.data?.message ?? data.message
     notifySuccess(message);
   } else {

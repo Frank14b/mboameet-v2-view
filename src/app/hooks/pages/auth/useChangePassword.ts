@@ -47,7 +47,7 @@ function useChangePassword(): ChangePasswordHookDto {
     setIsLoading(false);
     notification.apiNotify<BooleanResultDto<string>>(result);
 
-    if(result.status) {
+    if(result?.status) {
       return router.push(loginPathUrl);
     }
   };

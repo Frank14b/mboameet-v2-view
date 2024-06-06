@@ -53,7 +53,7 @@ export function useFeed(): FeedHookDto {
         });
 
       setIsLoading(false);
-      if (result.status && result?.data?.data) {
+      if (result?.status && result?.data?.data) {
         setFeeds(result.data.data);
         return result.data.data;
       }

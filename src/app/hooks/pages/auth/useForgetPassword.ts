@@ -38,7 +38,7 @@ function useForgetPassword(): ForgetPasswordHookDto {
     setIsLoading(false);
     notification.apiNotify<ResultForgetPasswordDto>(result);
 
-    if (result.status && result.data) {
+    if (result?.status && result.data) {
       //
       setLocalStorage(localStorageKey.authToken, result.data.accessToken, true);
       return router.push(`${verifyTokenPathUrl}/${result.data.otpToken}`);

@@ -97,7 +97,7 @@ export function AppHubWrapper({ children }: { children: any }) {
   useEffect(() => {
     // init the app websocket client hub
     initHub();
-  }, [initHub]);
+  }, [initHub, pathname]);
 
   useEffect(() => {
     if (connection && !userHubs) {
@@ -112,7 +112,7 @@ export function AppHubWrapper({ children }: { children: any }) {
 
   const closeConnection = useCallback(() => {
     if (!connection) return;
-    return connection.stop();
+    return connection?.stop();
   }, [connection]);
 
   useEffect(() => {

@@ -90,7 +90,7 @@ const useUserProfile = () => {
 
   const validateUserSession = useCallback(async () => {
     const result = await validateToken();
-    if (result.status) {
+    if (result?.status) {
       setUser(result.data as ResultUpdateProfileData);
     }
   }, [setUser]);

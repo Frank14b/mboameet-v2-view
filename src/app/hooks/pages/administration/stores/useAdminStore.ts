@@ -119,7 +119,7 @@ const useAdminStore = () => {
 
       notification.apiNotify(result);
 
-      if (result.status === true) {
+      if (result?.status === true) {
         handleIsOpenStoreForm();
         reset();
         setStoreCroppedLogo(null);
