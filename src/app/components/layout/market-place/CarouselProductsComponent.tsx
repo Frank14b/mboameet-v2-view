@@ -32,12 +32,12 @@ export function CarouselProductsComponent() {
   const { products, isLoading } = useProducts({});
 
   const formattedProducts = useMemo(() => {
-    if (isLoading) return <></>;
+    if (isLoading) return <>Loading...</>;
     if (products.length === 0)
       return (
         <NoDataFound
           customClass="dark:shadow-none dark:bg-gray-800"
-          message="Stores not found"
+          message="Products not found"
         />
       );
 
