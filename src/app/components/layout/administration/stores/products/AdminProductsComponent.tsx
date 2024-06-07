@@ -96,7 +96,7 @@ export function AdminStoreProductsComponent({
                 className="bg-transparent shadow-none text-right"
               >
                 <TooltipCustomAnimation
-                  content={<p className="text-xs">Edit Store</p>}
+                  content={<p className="text-xs">Edit Product</p>}
                 >
                   <IconButton
                     size="sm"

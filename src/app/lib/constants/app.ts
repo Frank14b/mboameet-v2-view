@@ -174,3 +174,5 @@ export const storiesTypes = [
     type: "video",
   },
 ];
+
+export const priceUnitTypes = ["Unit", "kg", "Gram", "Liter", "Pack"];

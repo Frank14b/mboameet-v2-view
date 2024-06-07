@@ -85,20 +85,7 @@ export function MobileSideBarMenuComponent({
               >
                 <HomeIcon className="h-5 w-5" />
               </SpeedDialAction>
-              <SpeedDialAction
-                placeholder={""}
-                className="relative"
-                onClick={() => setActiveMenu("right")}
-              >
-                <CogIcon className="h-5 w-5" />
-              </SpeedDialAction>
-              <SpeedDialAction
-                placeholder={""}
-                className="relative"
-                onClick={() => setActiveMenu("left")}
-              >
-                <ListBulletIcon className="h-5 w-5" />
-              </SpeedDialAction>
+
               {isMarketPlace && (
                 <>
                   <SpeedDialAction
@@ -110,6 +97,23 @@ export function MobileSideBarMenuComponent({
                   </SpeedDialAction>
                 </>
               )}
+              
+              <SpeedDialAction
+                placeholder={""}
+                className="relative"
+                onClick={() => setActiveMenu("right")}
+              >
+                <CogIcon className="h-5 w-5" />
+              </SpeedDialAction>
+              
+              <SpeedDialAction
+                placeholder={""}
+                className="relative"
+                onClick={() => setActiveMenu("left")}
+              >
+                <ListBulletIcon className="h-5 w-5" />
+              </SpeedDialAction>
+              
             </SpeedDialContent>
           </SpeedDial>
         </div>

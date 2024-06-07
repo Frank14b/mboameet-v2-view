@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "MboaMeet App",
-  description: "Find your perfect matches",
+  description: "Let's match and connect",
 };
 
 export const viewport: Viewport = {

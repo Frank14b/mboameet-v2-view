@@ -169,7 +169,7 @@ export default function SelectFilterField({
                 </div>
               </MenuHandler>
               <MenuList
-                className="z-[999999999] min-w-[350px]"
+                className="z-[999999999] min-w-[350px] max-h-[300px]"
                 placeholder={""}
               >
                 <Input

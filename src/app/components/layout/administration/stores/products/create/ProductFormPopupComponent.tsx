@@ -12,13 +12,11 @@ import {
 } from "@material-tailwind/react";
 import {
   HomeIcon,
-  CameraIcon,
-  GlobeEuropeAfricaIcon,
+  CameraIcon
 } from "@heroicons/react/24/outline";
 
 import LoadingSpinner from "@/app/components/widgets/LoadingSpinner";
 import { CreateStoreFirstStepComponent } from "./stepper/FirstStepComponent";
-import { CreateStoreSecondStepComponent } from "./stepper/SecondStepComponent";
 import { CreateStoreThirdStepComponent } from "./stepper/ThirdStepComponent";
 import AnimateFadeOut from "@/app/components/widgets/motions/AnimateFadeOut";
 import { AdminStoreProductHookDto } from "@/app/hooks/pages/administration/stores/products/useStoreProducts";
@@ -72,18 +70,10 @@ export function CreateProductFormPopupComponent({
       if (
         !formErrors.name &&
         !formErrors.description &&
-        !formErrors.currencyId &&
-        !formErrors.storeTypeId
-      ) {
-        setActiveStep((cur) => cur + 1);
-      }
-    }
-
-    if (activeStep === 1) {
-      if (
-        !formErrors.phoneNumber &&
-        !formErrors.country &&
-        !formErrors.address
+        !formErrors.productCategoryId &&
+        !formErrors.price &&
+        !formErrors.priceUnit &&
+        !formErrors.priceUnitType
       ) {
         setActiveStep((cur) => cur + 1);
       }
@@ -96,7 +86,6 @@ export function CreateProductFormPopupComponent({
     }
   }, [
     isLastStep,
-    activeStep,
     isFirstStep,
     formErrors,
     croppedImage,
@@ -146,9 +135,6 @@ export function CreateProductFormPopupComponent({
                       <HomeIcon className="h-5 w-5" />
                     </Step>
                     <Step placeholder={""}>
-                      <GlobeEuropeAfricaIcon className="h-5 w-5" />
-                    </Step>
-                    <Step placeholder={""}>
                       <CameraIcon className="h-5 w-5" />
                     </Step>
                   </Stepper>
@@ -159,20 +145,6 @@ export function CreateProductFormPopupComponent({
                     >
                       <AnimateFadeOut speed={1}>
                         <CreateStoreFirstStepComponent
-                          adminProductHook={adminProductHook}
-                        />
-                      </AnimateFadeOut>
-                    </div>
-                  )}
-
-                  {activeStep == 1 && (
-                    <div
-                      className={`${
-                        activeStep == 1 ? "w-full mt-12" : "hidden"
-                      }`}
-                    >
-                      <AnimateFadeOut speed={1}>
-                        <CreateStoreSecondStepComponent
                           adminProductHook={adminProductHook}
                         />
                       </AnimateFadeOut>
@@ -204,7 +176,6 @@ export function CreateProductFormPopupComponent({
                       placeholder={""}
                       ref={nextFormBtnRef}
                       onClick={!isLastStep ? handleNext : () => {}}
-                      //   disabled={isLastStep}
                     >
                       {!isLastStep ? "Next" : "Save"}
                     </Button>

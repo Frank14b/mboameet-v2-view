@@ -18,12 +18,10 @@ import { FieldErrors, UseFormHandleSubmit } from "react-hook-form";
 import useAppForm from "../../../../useForm";
 import { useMainContext } from "@/app/contexts/main";
 import { notification } from "@/app/lib/notifications";
-import { CreateStoreSchema } from "@/app/validators/administration/stores";
 import { CreateStoreFormDto } from "@/app/types/administration/stores";
 import { proceedGetAdminStoreTypes } from "@/app/services/server-actions/stores/storeTypes";
 import { TypeOptionsProps } from "@/app/components/widgets/SelectFilterField";
 // import { proceedGetAdminCurrencies } from "@/app/services/server-actions/currencies";
-import { ResultCurrencyDto } from "@/app/types/currencies";
 import {
   // proceedGetAdminStores,
   proceedSubmitStore,
@@ -31,6 +29,8 @@ import {
 import { ResultStoreDto } from "@/app/types/stores";
 import { ResultProductCategoriesDto } from "@/app/types/stores/products/categories";
 import { proceedGetAdminStoreProducts } from "@/app/services/server-actions/stores/products";
+import { CreateProductSchema } from "@/app/validators/administration/products";
+import { CreateProductFormDto } from "@/app/types/administration/stores/products";
 
 const useAdminStoreProduct = (storeRef: string) => {
   //
@@ -51,20 +51,21 @@ const useAdminStoreProduct = (storeRef: string) => {
   const [categories, setCategories] = useState<
     ResultProductCategoriesDto[] | null
   >(null);
-  // const [currencies, setCurrencies] = useState<ResultCurrencyDto[] | null>(
-  //   null
-  // );
+
   const [stores, setStores] = useState<ResultStoreDto[] | null>(null);
 
   const { formState, handleSubmit, setValue, reset } = useAppForm({
-    schema: CreateStoreSchema,
+    schema: CreateProductSchema,
     defaultValues: {
       name: "",
       description: "",
-      address: null,
-      phoneNumber: null,
-      callingCode: "",
+      quantity: 10,
+      isUnlimited: true,
       photo: null,
+      productCategoryId: null,
+      price: 0,
+      priceUnit: null,
+      priceUnitType: "",
     },
   });
   const { errors } = formState;
@@ -92,7 +93,7 @@ const useAdminStoreProduct = (storeRef: string) => {
   );
 
   const submitFormData = useCallback(
-    async (data: CreateStoreFormDto) => {
+    async (data: CreateProductFormDto) => {
       //
       setIsLoading(true);
       setResponseData(null);
@@ -212,11 +213,11 @@ export type AdminStoreProductHookDto = {
   responseData: ApiResponseDto<ResultStoreDto> | null;
   selectedImage: string | null;
   connectedUser: ResultLoginDto | ObjectKeyDto | null;
-  formErrors: FieldErrors<CreateStoreFormDto>;
+  formErrors: FieldErrors<CreateProductFormDto>;
   croppedImage: ObjectKeyDto;
   categories: TypeOptionsProps[];
   stores: ResultStoreDto[];
-  submitFormData: (data: CreateStoreFormDto) => Promise<void>;
+  submitFormData: (data: CreateProductFormDto) => Promise<void>;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   handleSubmit: UseFormHandleSubmit<any>;
   handleIsOpenStoreForm: () => void;
