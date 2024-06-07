@@ -1,8 +1,8 @@
 "use client";
 
 import { Button, Typography } from "@material-tailwind/react";
-import FeedFormComponent from "./feedFormComponent";
-import FeedCardComponent from "./feedCardComponent";
+import FeedFormComponent from "./FeedFormComponent";
+import FeedCardComponent from "./FeedCardComponent";
 import useFeedForm from "@/app/hooks/pages/feeds/useFeedForm";
 import useFeed from "@/app/hooks/pages/feeds/useFeed";
 

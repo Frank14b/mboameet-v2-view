@@ -1,6 +1,6 @@
+import CustomNextImage from "@/app/components/widgets/CustomNextImage";
 import { useMainContext } from "@/app/contexts/main";
 import { FeedFilesData, ResultFeed } from "@/app/types";
-import Image from "next/image";
 
 export default function FeedImageViewComponent({
   fileType,
@@ -18,7 +18,7 @@ export default function FeedImageViewComponent({
           <div className="grid my-3 min-h-[140px] w-full place-items-center overflow-x-scroll lg:overflow-visible bg-white dark:bg-gray-900">
             <div className="grid grid-cols-1">
               <div>
-                <Image
+                <CustomNextImage
                   width={2000}
                   height={800}
                   className="object-cover object-center h-90 max-w-full md:h-90 max-h-[25rem]"
@@ -42,7 +42,7 @@ export default function FeedImageViewComponent({
             <div className="grid grid-cols-2">
               {feed?.feedFiles.map((image: FeedFilesData, index: number) => (
                 <div key={index}>
-                  <Image
+                  <CustomNextImage
                     width={1200}
                     height={600}
                     className="object-cover object-center h-90 max-w-full md:h-90 bg-white"

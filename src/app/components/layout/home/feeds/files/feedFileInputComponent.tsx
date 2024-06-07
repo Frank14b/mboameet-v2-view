@@ -1,4 +1,4 @@
-import CropImage from "@/app/components/widgets/cropImage";
+import CropImage from "@/app/components/widgets/CropImage";
 import { FeedFormHookDto } from "@/app/hooks/pages/feeds/useFeedForm";
 import { feedInputFile, feedInputVideoFile } from "@/app/lib/constants/app";
 import { createFileUploadString } from "@/app/lib/utils";

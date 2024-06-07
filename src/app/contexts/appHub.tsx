@@ -15,7 +15,7 @@ import useFeedStore from "../store/feedStore";
 import { usePathname } from "next/navigation";
 import FeedHubs from "../services/hubs/feeds";
 import { useMainContext } from "./main";
-import ConfirmationComponent from "../components/commons/alerts/confirmation";
+import ConfirmationComponent from "../components/commons/alerts/Confirmation";
 import { loginPathUrl } from "../lib/constants/app";
 import ChatHubs from "../services/hubs/chats";
 import useChatStore from "../store/chatStore";

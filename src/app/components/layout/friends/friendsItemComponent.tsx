@@ -2,7 +2,7 @@ import { FriendsHookDto } from "@/app/hooks/pages/friends/useFriends";
 import { ResultFriendsDto } from "@/app/types/friends";
 import { useCallback, useState } from "react";
 import { motion } from "framer-motion";
-import UserProfileCard from "../../widgets/userProfileCard";
+import UserProfileCard from "../../widgets/UserProfileCard";
 
 export function FriendsItemComponent({
   index,

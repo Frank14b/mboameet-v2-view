@@ -10,7 +10,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import { ChangeEvent, useCallback, useState } from "react";
-import CropImage from "./cropImage";
+import CropImage from "./CropImage";
 
 export default function FilesUploadDialog({
   children,

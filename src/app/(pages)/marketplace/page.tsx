@@ -1,7 +1,7 @@
 "use client";
 
-import { MarketPlaceComponent } from "@/app/components/layout/market-place/marketPlaceComponent";
-import CustomNextLink from "@/app/components/widgets/customNextLink";
+import { MarketPlaceComponent } from "@/app/components/layout/market-place/MarketPlaceComponent";
+import CustomNextLink from "@/app/components/widgets/CustomNextLink";
 import useCustomRouter from "@/app/hooks/useCustomRouter";
 import { administrationPathUrl } from "@/app/lib/constants/app";
 import { Cog6ToothIcon, HomeIcon } from "@heroicons/react/24/solid";

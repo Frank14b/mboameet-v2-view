@@ -2,7 +2,7 @@
 
 import { Avatar } from "@material-tailwind/react";
 import { ChangeEvent } from "react";
-import CropImage from "../../widgets/cropImage";
+import CropImage from "../../widgets/CropImage";
 import { ObjectKeyDto } from "@/app/types";
 
 export default function ProfileImageComponent({

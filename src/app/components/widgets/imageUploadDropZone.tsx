@@ -1,9 +1,9 @@
 "use client";
 
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent } from "react";
 import { ObjectKeyDto } from "@/app/types";
-import CropImage from "./cropImage";
-import Image from "next/image";
+import CropImage from "./CropImage";
+import CustomNextImage from "./CustomNextImage";
 
 export default function ImageUploadDropZone({
   croppedImage,
@@ -51,7 +51,7 @@ export default function ImageUploadDropZone({
           <div>
             {croppedImage?.base64 && (
               <>
-                <Image
+                <CustomNextImage
                   alt=""
                   src={croppedImage.base64}
                   height={200}

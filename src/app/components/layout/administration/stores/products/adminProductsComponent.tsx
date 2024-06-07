@@ -1,4 +1,4 @@
-import TooltipCustomAnimation from "@/app/components/widgets/tooltipCustomAnimation";
+import React, { useMemo, useState } from "react";
 import {
   EnvelopeIcon,
   GlobeEuropeAfricaIcon,
@@ -20,11 +20,11 @@ import {
   AccordionHeader,
   AccordionBody,
 } from "@material-tailwind/react";
-import React, { useMemo, useState } from "react";
 import CustomNextImage from "@/app/components/widgets/CustomNextImage";
-import StoreSkeleton from "@/app/components/widgets/skeletons/administration/storeSkeleton";
-import { NoDataFound } from "@/app/components/widgets/noDataFound";
-import { CreateProductFormPopupComponent } from "./create/productFormPopupComponent";
+import StoreSkeleton from "@/app/components/widgets/skeletons/administration/StoreSkeleton";
+import { NoDataFound } from "@/app/components/widgets/NoDataFound";
+import { CreateProductFormPopupComponent } from "./create/ProductFormPopupComponent";
+import TooltipCustomAnimation from "@/app/components/widgets/TooltipCustomAnimation";
 import { AdminStoreProductHookDto } from "@/app/hooks/pages/administration/stores/products/useStoreProducts";
 
 export function AdminStoreProductsComponent({

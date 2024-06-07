@@ -1,6 +1,6 @@
 "use client";
 
-import SignInComponent from "@/app/components/layout/authentication/registerComponent";
+import SignInComponent from "@/app/components/layout/authentication/RegisterComponent";
 import useSignUp from "@/app/hooks/pages/auth/useSignUp";
 
 export default function SignUpPage() {

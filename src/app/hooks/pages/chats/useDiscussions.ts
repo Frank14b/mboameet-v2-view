@@ -4,7 +4,6 @@ import {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 import { notification } from "@/app/lib/notifications";
@@ -28,7 +27,7 @@ import {
 import {
   MessageProps,
   UserProps,
-} from "@/app/components/layout/chats/messagesComponent";
+} from "@/app/components/layout/chats/MessageComponent";
 import useUserStore from "@/app/store/userStore";
 import {
   checkFileExtensionUsingLink,
@@ -40,7 +39,7 @@ import {
 import useChatStore from "@/app/store/chatStore";
 import { useAppHubContext } from "@/app/contexts/appHub";
 import { MessageActionType, ObjectKeyDto } from "@/app/types";
-import { MessageImagePreviewProps } from "@/app/components/layout/chats/messageImagePreviewComponent";
+import { MessageImagePreviewProps } from "@/app/components/layout/chats/MessageImagePreviewComponent";
 import useCustomRouter from "../../useCustomRouter";
 import useLocalStorage from "../../useLocalStorage";
 import useAppEncryption, { SecurityKeysTypes } from "../../useEncryption";

@@ -26,14 +26,14 @@ import {
   marketplacePathUrl,
 } from "../lib/constants/app";
 import { ToastContainer } from "react-toastify";
-import { MobileSideBarMenuComponent } from "@/app/components/commons/mobileSideBarMenu";
+import { MobileSideBarMenuComponent } from "@/app/components/commons/MobileSideBarMenu";
 import { configs } from "../../../app.config";
 import { validateToken } from "../services/server-actions";
-import NavigationLoadingComponent from "@/app/components/commons/navigationLoading";
+import NavigationLoadingComponent from "@/app/components/commons/NavigationLoading";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { nonProtectedPages } from "../middlewares/AuthMiddleware";
-import AsideBarMenuComponent from "@/app/components/commons/aside-bar-menu";
-import SideBarMenuComponent from "@/app/components/commons/side-bar-menu";
+import AsideBarMenuComponent from "@/app/components/commons/AsideBarMenu";
+import SideBarMenuComponent from "@/app/components/commons/SideBarMenu";
 import { generateInitialsImage } from "../lib/utils";
 import useCustomRouter from "../hooks/useCustomRouter";
 import { notification } from "../lib/notifications";

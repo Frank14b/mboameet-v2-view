@@ -1,6 +1,6 @@
 "use client";
 
-import InputField from "../../widgets/inputField";
+import InputField from "../../widgets/InputField";
 import { Button } from "@material-tailwind/react";
 import { ChangePasswordHookDto } from "@/app/hooks/pages/auth/useChangePassword";
 
@@ -10,7 +10,7 @@ export default function ChangePasswordFormComponent({
 }: {
   formHook: ChangePasswordHookDto;
 }) {
-  const { responseData } = formHook;
+  
   return (
     <>
       <div className="flex flex-col gap-4 p-6">

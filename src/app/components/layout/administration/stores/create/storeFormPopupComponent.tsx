@@ -16,12 +16,12 @@ import {
   GlobeEuropeAfricaIcon,
 } from "@heroicons/react/24/outline";
 
-import LoadingSpinner from "@/app/components/widgets/loadingSpinner";
+import LoadingSpinner from "@/app/components/widgets/LoadingSpinner";
 import { AdminStoreHookDto } from "@/app/hooks/pages/administration/stores/useAdminStore";
-import { CreateStoreFirstStepComponent } from "./stepper/firstStepComponent";
-import { CreateStoreSecondStepComponent } from "./stepper/secondStepComponent";
-import { CreateStoreThirdStepComponent } from "./stepper/thirdStepComponent";
-import AnimateFadeOut from "@/app/components/widgets/motions/animateFadeOut";
+import { CreateStoreFirstStepComponent } from "./stepper/FirstStepComponent";
+import { CreateStoreSecondStepComponent } from "./stepper/SecondStepComponent";
+import { CreateStoreThirdStepComponent } from "./stepper/ThirdStepComponent";
+import AnimateFadeOut from "@/app/components/widgets/motions/AnimateFadeOut";
 
 export function CreateStoreFormPopupComponent({
   adminStoreHook,

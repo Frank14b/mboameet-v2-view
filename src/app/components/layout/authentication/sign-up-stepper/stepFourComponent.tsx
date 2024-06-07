@@ -1,6 +1,6 @@
 import { SignUpHookDto } from "@/app/hooks/pages/auth/useSignUp";
+import useCustomRouter from "@/app/hooks/useCustomRouter";
 import { Button } from "@material-tailwind/react";
-import { useRouter } from "next/navigation";
 
 export default function SignUpStepFourComponent({
   stepProps,
@@ -9,7 +9,7 @@ export default function SignUpStepFourComponent({
 }) {
   //
   const { stepper, responseData } = stepProps;
-  const router = useRouter();
+  const { push } = useCustomRouter();
 
   return (
     <>
@@ -32,7 +32,7 @@ export default function SignUpStepFourComponent({
         </div>
         <div className="flex justify-between mt-5">
           <Button
-            onClick={() => router.push("/auth/signin")}
+            onClick={() => push("/auth/signin")}
             type="button"
             placeholder={""}
             color="pink"

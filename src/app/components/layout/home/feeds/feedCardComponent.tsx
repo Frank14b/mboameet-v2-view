@@ -1,17 +1,17 @@
 "use client";
 
+import { useCallback, useMemo, useState } from "react";
 import { FeedTypesDto, ResultFeed } from "@/app/types";
-import FeedItemComponent from "./feedItemComponent";
-import FeedSkeleton from "../../../widgets/skeletons/feedSkeleton";
 import { FeedHookDto } from "@/app/hooks/pages/feeds/useFeed";
 import { FeedFormHookDto } from "@/app/hooks/pages/feeds/useFeedForm";
 import {
   TabCustomAnimationProps,
   TabsCustomAnimation,
-} from "@/app/components/widgets/tabsCustomAnimation";
-import { useCallback, useMemo, useState } from "react";
-import AnimateHoverScale from "@/app/components/widgets/motions/animateHoverScale";
-import { NoDataFound } from "@/app/components/widgets/noDataFound";
+} from "@/app/components/widgets/TabsCustomAnimation";
+import FeedSkeleton from "../../../widgets/skeletons/FeedSkeleton";
+import AnimateHoverScale from "@/app/components/widgets/motions/AnimateHoverScale";
+import { NoDataFound } from "@/app/components/widgets/NoDataFound";
+import FeedItemComponent from "./FeedItemComponent";
 import { feedTypes } from "@/app/lib/constants/app";
 
 //

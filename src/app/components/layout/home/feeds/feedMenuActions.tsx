@@ -13,7 +13,7 @@ import {
   SpeedDialContent,
   SpeedDialHandler,
 } from "@material-tailwind/react";
-import SpeedDialButtonComponent from "../../../widgets/speedDialButton";
+import SpeedDialButtonComponent from "../../../widgets/SpeedDialButton";
 import { useMemo } from "react";
 
 export default function FeedItemActionMenuComponent({

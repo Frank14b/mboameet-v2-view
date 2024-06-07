@@ -1,6 +1,6 @@
 "use client";
 
-import { GalleriesComponent } from "@/app/components/layout/galleries/galleriesComponent";
+import { GalleriesComponent } from "@/app/components/layout/galleries/GalleriesComponent";
 import useGalleries from "@/app/hooks/pages/galleries/useGalleries";
 import { Typography } from "@material-tailwind/react";
 

@@ -1,12 +1,12 @@
 "use client";
 
-import LoadingSpinner from "../../widgets/loadingSpinner";
+import LoadingSpinner from "../../widgets/LoadingSpinner";
 import Link from "next/link";
-import ChangePasswordFormComponent from "./changePasswordFormComponent";
+import ChangePasswordFormComponent from "./ChangePasswordFormComponent";
 import useChangePassword from "@/app/hooks/pages/auth/useChangePassword";
 import { useEffect } from "react";
-import AnimateFadeOut from "../../widgets/motions/animateFadeOut";
-import Image from "next/image";
+import AnimateFadeOut from "../../widgets/motions/AnimateFadeOut";
+import CustomNextImage from "../../widgets/CustomNextImage";
 
 export default function ChangePasswordComponent({ token }: { token: string }) {
   //
@@ -25,7 +25,7 @@ export default function ChangePasswordComponent({ token }: { token: string }) {
           <div className="flex flex-col items-center justify-end">
             <div className="w-full">
               <div className="flex flex-col items-center">
-                <Image
+                <CustomNextImage
                   alt=""
                   width={2000}
                   height={2000}

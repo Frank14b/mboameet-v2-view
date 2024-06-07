@@ -1,6 +1,6 @@
 "use client";
 
-import ForgetPasswordComponent from "@/app/components/layout/authentication/forgetPasswordComponent";
+import ForgetPasswordComponent from "@/app/components/layout/authentication/ForgetPasswordComponent";
 
 export default function ForgetPasswordPage() {
     return (

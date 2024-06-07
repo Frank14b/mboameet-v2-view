@@ -1,11 +1,11 @@
 import { formatDate } from "@/app/lib/utils";
 import { ResultFeed } from "@/app/types";
 import { Avatar, Typography } from "@material-tailwind/react";
-import FeedItemActionMenuComponent from "./feedMenuActions";
+import FeedItemActionMenuComponent from "./FeedMenuActions";
 import { Dispatch, SetStateAction } from "react";
 import { referenceKeyword } from "@/app/lib/constants/app";
-import ProfileTooltipDetailsComponent from "../../profile/profileTooltipDetails";
-import PopoverCustom from "@/app/components/widgets/popoverCustom";
+import ProfileTooltipDetailsComponent from "../../profile/ProfileTooltipDetails";
+import PopoverCustom from "@/app/components/widgets/PopoverCustom";
 
 export default function FeedHeaderComponent({
   feedData,

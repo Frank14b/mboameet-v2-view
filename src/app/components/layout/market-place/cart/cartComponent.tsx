@@ -4,7 +4,7 @@ import {
   CardHeader,
   Typography,
 } from "@material-tailwind/react";
-import { MarketPlaceEmptyCartComponent } from "./emptyCartComponent";
+import { MarketPlaceEmptyCartComponent } from "./EmptyCartComponent";
 
 export function MarketPlaceCartComponent() {
   //

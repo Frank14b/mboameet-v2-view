@@ -53,6 +53,7 @@ export const verifyTokenPathUrl: string = `/auth/verify-token`;
 export const changePasswordPathUrl: string = `/auth/change-password`;
 export const profilePathUrl: string = `/profile`;
 export const marketplacePathUrl: string = `/marketplace`;
+export const walletPathUrl: string = `/wallets`;
 export const galleriesPathUrl: string = `/galleries`;
 export const settingPathUrl: string = `/settings`;
 export const administrationPathUrl = {

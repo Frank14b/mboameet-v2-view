@@ -1,5 +1,5 @@
-import Image from "next/image";
 import React from "react";
+import CustomNextImage from "./CustomNextImage";
 
 export function FeaturedImageGallery() {
   const data = [
@@ -33,7 +33,7 @@ export function FeaturedImageGallery() {
     <>
       <div className="grid grid-cols-1 gap-4">
         <div>
-          <Image
+          <CustomNextImage
             className="h-[380px] w-full max-w-full rounded-lg object-cover object-center md:h-[380px]"
             src={active}
             alt=""
@@ -47,7 +47,7 @@ export function FeaturedImageGallery() {
       <div className="grid grid-cols-5 gap-2 mt-3 rounded-lg">
         {data.map(({ imgelink }, index) => (
           <div key={index} className="bg-red-300">
-            <Image
+            <CustomNextImage
               width={1500}
               height={1500}
               onClick={() => setActive(imgelink)}

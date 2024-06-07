@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Drawer,
   Typography,
@@ -19,9 +19,9 @@ import {
 } from "@heroicons/react/24/solid";
 import { useMainContext } from "@/app/contexts/main";
 import useCustomRouter from "@/app/hooks/useCustomRouter";
-import { marketplacePathUrl } from "@/app/lib/constants/app";
-import SideBarMenuComponent from "@/app/components/commons/side-bar-menu";
-import AsideBarMenuComponent from "@/app/components/commons/aside-bar-menu";
+import { chatsPathUrl, marketplacePathUrl } from "@/app/lib/constants/app";
+import SideBarMenuComponent from "@/app/components/commons/SideBarMenu";
+import AsideBarMenuComponent from "@/app/components/commons/AsideBarMenu";
 
 export function MobileSideBarMenuComponent({
   enable,
@@ -31,9 +31,11 @@ export function MobileSideBarMenuComponent({
   isMarketPlace?: boolean;
 }) {
   //
+  const [floatingBtnClass, setFloatingBtnClass] = useState<string>("bottom-12 right-12");
   const [activeMenu, setActiveMenu] = React.useState<"left" | "right" | "">("");
   const { navigationChange } = useMainContext();
-  const { push } = useCustomRouter();
+  const { push, pathname } = useCustomRouter();
+
   const closeMenu = () => setActiveMenu("");
 
   const openLink = useCallback(
@@ -49,10 +51,18 @@ export function MobileSideBarMenuComponent({
     }
   }, [navigationChange]);
 
+  useEffect(() => {
+    if (pathname.startsWith(`${chatsPathUrl}/`)) {
+      setFloatingBtnClass("bottom-28 right-12") 
+    }else{
+      setFloatingBtnClass("bottom-12 right-12")
+    }
+  }, [pathname])
+
   return (
     <React.Fragment>
       <div
-        className={`z-20 fixed bottom-28 right-12 ${
+        className={`z-20 fixed ${floatingBtnClass} ${
           enable ? "" : "min-sm:hidden"
         }`}
       >

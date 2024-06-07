@@ -1,6 +1,6 @@
 "use client";
 
-import CustomNextLink from "@/app/components/widgets/customNextLink";
+import CustomNextLink from "@/app/components/widgets/CustomNextLink";
 import { HomeIcon } from "@heroicons/react/24/solid";
 import { Breadcrumbs } from "@material-tailwind/react";
 

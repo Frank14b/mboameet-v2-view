@@ -1,6 +1,6 @@
 "use client";
 
-import SettingsComponent from "@/app/components/layout/settings/settingsComponent";
+import SettingsComponent from "@/app/components/layout/settings/SettingsComponent";
 import useAccountSettings from "@/app/hooks/pages/profile/useAccountSettings";
 import { Typography } from "@material-tailwind/react";
 

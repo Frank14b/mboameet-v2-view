@@ -1,7 +1,7 @@
 "use client";
 
-import { AdminStoreProductsComponent } from "@/app/components/layout/administration/stores/products/adminProductsComponent";
-import CustomNextLink from "@/app/components/widgets/customNextLink";
+import { AdminStoreProductsComponent } from "@/app/components/layout/administration/stores/products/AdminProductsComponent";
+import CustomNextLink from "@/app/components/widgets/CustomNextLink";
 import useAdminStoreProduct from "@/app/hooks/pages/administration/stores/products/useStoreProducts";
 import { administrationPathUrl } from "@/app/lib/constants/app";
 import { HomeIcon } from "@heroicons/react/24/solid";

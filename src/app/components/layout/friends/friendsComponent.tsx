@@ -2,13 +2,13 @@ import { FriendsHookDto } from "@/app/hooks/pages/friends/useFriends";
 import {
   TabCustomAnimationProps,
   TabsCustomAnimation,
-} from "../../widgets/tabsCustomAnimation";
+} from "../../widgets/TabsCustomAnimation";
 import { useCallback, useMemo, useState } from "react";
 import { FriendsTypes, ResultFriendsDto } from "@/app/types/friends";
-import { UserProfileCardSkeleton } from "../../widgets/skeletons/userProfileCardSkeleton";
-import { UserProfilePopup } from "../../widgets/userProfilePopup";
-import { FriendsItemComponent } from "./friendsItemComponent";
-import { NoDataFound } from "../../widgets/noDataFound";
+import { UserProfileCardSkeleton } from "../../widgets/skeletons/UserProfileCardSkeleton";
+import { UserProfilePopup } from "../../widgets/UserProfilePopup";
+import { FriendsItemComponent } from "./FriendsItemComponent";
+import { NoDataFound } from "../../widgets/NoDataFound";
 import { Spinner } from "@material-tailwind/react";
 
 export function FriendsComponent({

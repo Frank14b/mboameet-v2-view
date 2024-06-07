@@ -12,7 +12,7 @@ import {
   Button,
   IconButton,
 } from "@material-tailwind/react";
-import { SayHiChatPopupComponent } from "../layout/friends/sayHiChatPopupComponent";
+import { SayHiChatPopupComponent } from "../layout/friends/SayHiChatPopupComponent";
 import CustomNextImage from "./CustomNextImage";
 
 export default function UserProfileCard({

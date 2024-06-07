@@ -1,6 +1,6 @@
 "use client";
 
-import { ChatsComponent } from "@/app/components/layout/chats/chatsComponent";
+import { ChatsComponent } from "@/app/components/layout/chats/ChatsComponent";
 import useChat from "@/app/hooks/pages/chats/useChat";
 import { Card, Typography } from "@material-tailwind/react";
 

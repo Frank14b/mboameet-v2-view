@@ -1,10 +1,10 @@
-import { GalleriesHookDto } from "@/app/hooks/pages/galleries/useGalleries";
-import AnimateHoverScale from "../../widgets/motions/animateHoverScale";
 import { useCallback, useMemo, useState } from "react";
+import { GalleriesHookDto } from "@/app/hooks/pages/galleries/useGalleries";
+import AnimateHoverScale from "../../widgets/motions/AnimateHoverScale";
 import {
   ImagePreviewPopup,
   ImagePreviewProps,
-} from "../../widgets/imagePreviewPopup";
+} from "../../widgets/ImagePreviewPopup";
 import CustomNextImage from "../../widgets/CustomNextImage";
 
 export function ChatMediaComponent({

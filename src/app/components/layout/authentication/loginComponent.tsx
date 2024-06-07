@@ -1,11 +1,11 @@
 "use client";
 
-import LoadingSpinner from "../../widgets/loadingSpinner";
+import LoadingSpinner from "../../widgets/LoadingSpinner";
 import { SignInHookDto } from "@/app/hooks/pages/auth/useSignIn";
-import LoginFormComponent from "./loginFormComponent";
-import AnimateFadeOut from "../../widgets/motions/animateFadeOut";
-import Image from "next/image";
-import Link from "next/link";
+import LoginFormComponent from "./LoginFormComponent";
+import AnimateFadeOut from "../../widgets/motions/AnimateFadeOut";
+import CustomNextLink from "../../widgets/CustomNextLink";
+import CustomNextImage from "../../widgets/CustomNextImage";
 
 export default function LoginComponent({
   signInHook,
@@ -35,20 +35,20 @@ export default function LoginComponent({
 
                 <p className="flex justify-center mb-3 font-sans text-sm antialiased font-light leading-normal text-inherit">
                   {`Don't have an account?`}
-                  <Link
+                  <CustomNextLink
                     href="/auth/signup"
                     className="block ml-1 font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900 dark:text-gray-500"
                   >
                     Sign up
-                  </Link>
+                  </CustomNextLink>
                 </p>
                 <p className="flex justify-center mb-6 font-sans text-sm antialiased font-light leading-normal text-inherit">
-                  <Link
+                  <CustomNextLink
                     href="/auth/forget-password"
                     className="block ml-1 font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900 dark:text-gray-500"
                   >
                     Reset Password Here!
-                  </Link>
+                  </CustomNextLink>
                 </p>
               </div>
             </div>
@@ -59,7 +59,7 @@ export default function LoginComponent({
           <div className="flex flex-col items-center justify-end">
             <div className="w-full">
               <div className="flex flex-col items-center">
-                <Image
+                <CustomNextImage
                   alt=""
                   width={2000}
                   height={2000}

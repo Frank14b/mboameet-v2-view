@@ -3,9 +3,9 @@
 import { ProfileHookDto } from "@/app/hooks/pages/profile/useUserProfile";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { Typography } from "@material-tailwind/react";
-import ProfileImageComponent from "./profileImageComponent";
-import ProfileDetailsComponent from "./profileDetailsComponent";
-import { UpdateProfileFormComponent } from "./updateProfileFormComponent";
+import ProfileImageComponent from "./ProfileImageComponent";
+import ProfileDetailsComponent from "./ProfileDetailsComponent";
+import { UpdateProfileFormComponent } from "./UpdateProfileFormComponent";
 
 export default function ProfileAccountComponent({
   userProfileHook,

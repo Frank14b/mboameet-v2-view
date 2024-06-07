@@ -1,11 +1,11 @@
 "use client";
 
-import LoadingSpinnerComponent from "../../widgets/loadingSpinner";
-import Link from "next/link";
-import SignUpFormComponent from "./registerFormComponent";
-import AnimateFadeOut from "../../widgets/motions/animateFadeOut";
-import Image from "next/image";
+import LoadingSpinnerComponent from "../../widgets/LoadingSpinner";
+import SignUpFormComponent from "./RegisterFormComponent";
+import AnimateFadeOut from "../../widgets/motions/AnimateFadeOut";
 import { SignUpHookDto } from "@/app/hooks/pages/auth/useSignUp";
+import CustomNextImage from "../../widgets/CustomNextImage";
+import CustomNextLink from "../../widgets/CustomNextLink";
 
 export default function SignInComponent({
   signUpHook,
@@ -22,7 +22,7 @@ export default function SignInComponent({
           <div className="flex flex-col items-center justify-end">
             <div className="w-full">
               <div className="flex flex-col items-center">
-                <Image
+                <CustomNextImage
                   alt=""
                   width={2000}
                   height={2000}
@@ -53,12 +53,12 @@ export default function SignInComponent({
 
                       <p className="flex justify-center mt-6 font-sans text-sm antialiased font-light leading-normal text-inherit">
                         Already have an account?
-                        <Link
+                        <CustomNextLink
                           href="/auth/signin"
                           className="block ml-1 font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900 dark:text-gray-500"
                         >
                           Sign In
-                        </Link>
+                        </CustomNextLink>
                       </p>
                     </form>
                   </LoadingSpinnerComponent>

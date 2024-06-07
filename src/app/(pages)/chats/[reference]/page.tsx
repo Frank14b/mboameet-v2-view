@@ -1,6 +1,6 @@
 "use client";
 
-import { ConversationsComponent } from "@/app/components/layout/chats/conversationsComponent";
+import { ConversationsComponent } from "@/app/components/layout/chats/ConversationsComponent";
 import useDiscussions from "@/app/hooks/pages/chats/useDiscussions";
 import { chatBgImageClassName } from "@/app/lib/constants/app";
 import { Card, Typography } from "@material-tailwind/react";

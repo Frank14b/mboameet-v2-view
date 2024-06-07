@@ -21,7 +21,7 @@ import { notification } from "@/app/lib/notifications";
 import { CreateStoreSchema } from "@/app/validators/administration/stores";
 import { CreateStoreFormDto } from "@/app/types/administration/stores";
 import { proceedGetAdminStoreTypes } from "@/app/services/server-actions/stores/storeTypes";
-import { TypeOptionsProps } from "@/app/components/widgets/selectFilterField";
+import { TypeOptionsProps } from "@/app/components/widgets/SelectFilterField";
 import { proceedGetAdminCurrencies } from "@/app/services/server-actions/currencies";
 import { ResultCurrencyDto } from "@/app/types/currencies";
 import {

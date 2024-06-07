@@ -1,7 +1,7 @@
 "use client";
 
 import { List } from "@material-tailwind/react";
-import SideBarMenuListComponent from "../widgets/sidebar/menuList";
+import SideBarMenuListComponent from "../widgets/sidebar/MenuList";
 import {
   BookmarkIcon,
   ChatBubbleBottomCenterIcon,
@@ -9,22 +9,22 @@ import {
   ShoppingBagIcon,
   UsersIcon,
   VideoCameraIcon,
+  WalletIcon,
 } from "@heroicons/react/24/solid";
-import { usePathname } from "next/navigation";
-import { ProfileMenuComponent } from "../widgets/profileMenu";
+import { ProfileMenuComponent } from "../widgets/ProfileMenu";
 import {
   chatsPathUrl,
   friendPathUrl,
   galleriesPathUrl,
   marketplacePathUrl,
   settingPathUrl,
+  walletPathUrl,
 } from "@/app/lib/constants/app";
-import useUserStore from "@/app/store/userStore";
+import useCustomRouter from "@/app/hooks/useCustomRouter";
 
 export default function SideBarMenuComponent({ children }: { children: any }) {
-  const pathname = usePathname();
 
-  const { userConnected } = useUserStore();
+  const { pathname } = useCustomRouter();
 
   return (
     <>
@@ -67,6 +67,13 @@ export default function SideBarMenuComponent({ children }: { children: any }) {
             icon={<ShoppingBagIcon />}
             active={pathname.startsWith(marketplacePathUrl) ? true : false}
             link={marketplacePathUrl}
+          />
+
+          <SideBarMenuListComponent
+            title="My Wallets"
+            icon={<WalletIcon />}
+            active={pathname.startsWith(walletPathUrl) ? true : false}
+            link={walletPathUrl}
           />
 
           <SideBarMenuListComponent

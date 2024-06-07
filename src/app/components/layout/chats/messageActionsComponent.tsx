@@ -5,9 +5,9 @@ import {
   SpeedDialContent,
 } from "@material-tailwind/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import SpeedDialButton from "../../widgets/speedDialButton";
+import SpeedDialButton from "../../widgets/SpeedDialButton";
 import { messageActionsList } from "@/app/lib/constants/app";
-import { MessageProps } from "./messagesComponent";
+import { MessageProps } from "./MessageComponent";
 import { MessageActionType } from "@/app/types";
 
 export default function MessageActionsComponent({

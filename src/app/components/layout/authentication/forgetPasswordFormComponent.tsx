@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@material-tailwind/react";
-import InputField from "../../widgets/inputField";
+import InputField from "../../widgets/InputField";
 import { ForgetPasswordHookDto } from "@/app/hooks/pages/auth/useForgetPassword";
 
 export default function ForgetPasswordFormComponent({

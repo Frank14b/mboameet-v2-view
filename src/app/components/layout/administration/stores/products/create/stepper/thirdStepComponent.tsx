@@ -1,6 +1,6 @@
 import React from "react";
 
-import ImageUploadDropZone from "@/app/components/widgets/imageUploadDropZone";
+import ImageUploadDropZone from "@/app/components/widgets/ImageUploadDropZone";
 import { AdminStoreProductHookDto } from "@/app/hooks/pages/administration/stores/products/useStoreProducts";
 
 export function CreateStoreThirdStepComponent({

@@ -7,9 +7,9 @@ import {
   Dialog,
   Typography,
 } from "@material-tailwind/react";
-import InputField from "../../widgets/inputField";
+import InputField from "../../widgets/InputField";
 import { ProfileHookDto } from "@/app/hooks/pages/profile/useUserProfile";
-import LoadingSpinner from "../../widgets/loadingSpinner";
+import LoadingSpinner from "../../widgets/LoadingSpinner";
 
 export function UpdateProfileFormComponent({
   userProfileHook,

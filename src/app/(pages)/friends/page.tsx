@@ -1,6 +1,6 @@
 "use client";
 
-import { FriendsComponent } from "@/app/components/layout/friends/friendsComponent";
+import { FriendsComponent } from "@/app/components/layout/friends/FriendsComponent";
 import useFriends from "@/app/hooks/pages/friends/useFriends";
 import { Typography } from "@material-tailwind/react";
 

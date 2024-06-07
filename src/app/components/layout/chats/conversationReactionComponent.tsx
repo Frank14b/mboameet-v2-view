@@ -5,7 +5,7 @@ import {
   SpeedDialContent,
 } from "@material-tailwind/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import SpeedDialButton from "../../widgets/speedDialButton";
+import SpeedDialButton from "../../widgets/SpeedDialButton";
 import { messageReactionsList } from "@/app/lib/constants/app";
 import { useEffect, useState } from "react";
 import { MessageReactionsDto } from "@/app/types";

@@ -6,11 +6,11 @@ import {
   HeartIcon,
 } from "@heroicons/react/24/solid";
 import { Timeline } from "@material-tailwind/react";
-import FeedCommentFormComponent from "./feedCommentFormComponent";
-import FeedCommentItemComponent from "./feedCommentItemComponent";
+import FeedCommentFormComponent from "./FeedCommentFormComponent";
+import FeedCommentItemComponent from "./FeedCommentItemComponent";
 import useFeedComment from "@/app/hooks/pages/feeds/comments/useFeedComment";
 import { useCallback } from "react";
-import AnimateHoverScale from "@/app/components/widgets/motions/animateHoverScale";
+import AnimateHoverScale from "@/app/components/widgets/motions/AnimateHoverScale";
 
 export default function FeedCommentComponent({
   feedData,

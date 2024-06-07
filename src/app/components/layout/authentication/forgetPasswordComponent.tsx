@@ -1,11 +1,11 @@
 "use client";
 
-import LoadingSpinner from "../../widgets/loadingSpinner";
+import LoadingSpinner from "../../widgets/LoadingSpinner";
 import Link from "next/link";
-import ForgetPasswordFormComponent from "./forgetPasswordFormComponent";
+import ForgetPasswordFormComponent from "./ForgetPasswordFormComponent";
 import useForgetPassword from "@/app/hooks/pages/auth/useForgetPassword";
-import Image from "next/image";
-import AnimateFadeOut from "../../widgets/motions/animateFadeOut";
+import AnimateFadeOut from "../../widgets/motions/AnimateFadeOut";
+import CustomNextImage from "../../widgets/CustomNextImage";
 
 export default function ForgetPasswordComponent() {
   //
@@ -57,7 +57,7 @@ export default function ForgetPasswordComponent() {
           <div className="flex flex-col items-center justify-end">
             <div className="w-full">
               <div className="flex flex-col items-center">
-                <Image
+                <CustomNextImage
                   alt=""
                   width={2000}
                   height={2000}

@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React from "react";
 
-import InputField from "@/app/components/widgets/inputField";
-import CountrySelectField from "@/app/components/widgets/countrySelectField";
+import InputField from "@/app/components/widgets/InputField";
+import CountrySelectField from "@/app/components/widgets/CountrySelectField";
 import { AdminStoreProductHookDto } from "@/app/hooks/pages/administration/stores/products/useStoreProducts";
 
 export function CreateStoreSecondStepComponent({

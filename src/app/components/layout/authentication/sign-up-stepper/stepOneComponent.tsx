@@ -1,5 +1,5 @@
-import InputField from "@/app/components/widgets/inputField";
-import AnimateFadeOut from "@/app/components/widgets/motions/animateFadeOut";
+import InputField from "@/app/components/widgets/InputField";
+import AnimateFadeOut from "@/app/components/widgets/motions/AnimateFadeOut";
 import { SignUpHookDto } from "@/app/hooks/pages/auth/useSignUp";
 
 export default function SignUpStepOneComponent({

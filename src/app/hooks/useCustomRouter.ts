@@ -33,7 +33,7 @@ const useCustomRouter = () => {
     [router, pathname, setNavigationChange]
   );
 
-  const customRouter = { push, replace };
+  const customRouter = { push, replace, pathname };
 
   return customRouter;
 };

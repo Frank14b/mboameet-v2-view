@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import {
   feedFormEditable,
   feedVideoPreviewId,
@@ -14,8 +15,6 @@ import {
   DialogHeader,
   Typography,
 } from "@material-tailwind/react";
-import React from "react";
-import EmojiPickerButton from "../../../widgets/emojiPickerButton";
 import {
   PhotoIcon,
   TrashIcon,
@@ -23,8 +22,9 @@ import {
 } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { FeedFormHookDto } from "@/app/hooks/pages/feeds/useFeedForm";
-import FeedFileInputComponent from "./files/feedFileInputComponent";
+import FeedFileInputComponent from "./files/FeedFileInputComponent";
 import { clickFileUploadWithRef } from "@/app/lib/utils";
+import EmojiPickerButton from "../../../widgets/EmojiPickerButton";
 
 export default function FeedFormComponent({
   children,

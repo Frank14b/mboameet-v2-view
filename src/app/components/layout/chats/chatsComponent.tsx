@@ -3,15 +3,15 @@
 import {
   TabCustomAnimationProps,
   TabsCustomAnimation,
-} from "../../widgets/tabsCustomAnimation";
+} from "../../widgets/TabsCustomAnimation";
 import { useCallback, useMemo } from "react";
-import { NoDataFound } from "../../widgets/noDataFound";
+import { NoDataFound } from "../../widgets/NoDataFound";
 import { ChatHookDto } from "@/app/hooks/pages/chats/useChat";
 import { DiscussionTypes, ResultMessageDto } from "@/app/types/chats";
 import ListWithAvatar, {
   ListWithAvatarProps,
-} from "../../widgets/listWithAvatar";
-import DiscussionSkeleton from "../../widgets/skeletons/discussionSkeleton";
+} from "../../widgets/ListWithAvatar";
+import DiscussionSkeleton from "../../widgets/skeletons/DiscussionSkeleton";
 import { chatsPathUrl } from "@/app/lib/constants/app";
 import useCustomRouter from "@/app/hooks/useCustomRouter";
 

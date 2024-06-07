@@ -51,7 +51,7 @@ export function StoriesPopupComponent() {
           Stories
         </DialogHeader>
         <DialogBody placeholder={""}>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 xs:grid-cols-2 justify-items-center gap-4">
             {storiesTypes.map((type, index) => (
               <Card
                 key={index}

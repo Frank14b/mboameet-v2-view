@@ -1,6 +1,6 @@
 "use client";
 
-import LoginComponent from "@/app/components/layout/authentication/loginComponent";
+import LoginComponent from "@/app/components/layout/authentication/LoginComponent";
 import useSignIn from "@/app/hooks/pages/auth/useSignIn";
 
 export default function SignInPage() {

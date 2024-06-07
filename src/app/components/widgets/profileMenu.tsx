@@ -1,4 +1,5 @@
 import { useMainContext } from "@/app/contexts/main";
+import useCustomRouter from "@/app/hooks/useCustomRouter";
 import { loginPathUrl, profilePathUrl } from "@/app/lib/constants/app";
 import useUserStore from "@/app/store/userStore";
 import {
@@ -8,14 +9,13 @@ import {
   MenuItem,
   Typography,
 } from "@material-tailwind/react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
+import CustomNextImage from "./CustomNextImage";
 
 export function ProfileMenuComponent() {
   //
   const mainContext = useMainContext();
   const { userConnected } = useUserStore();
-  const router = useRouter();
+  const { push } = useCustomRouter();
 
   return (
     <Menu>
@@ -23,7 +23,7 @@ export function ProfileMenuComponent() {
         <div className="flex gap-4 items-center justify-center capitalize cursor-pointer">
           {userConnected ? (
             <>
-              <Image
+              <CustomNextImage
                 alt={`${mainContext.connectedUser?.userName}`}
                 src={`${mainContext.connectedUser?.photo}`}
                 width={45}
@@ -39,7 +39,7 @@ export function ProfileMenuComponent() {
             </>
           ) : (
             <>
-              <Image
+              <CustomNextImage
                 alt="tania andrew"
                 src={`/03.png`}
                 width={45}
@@ -49,7 +49,7 @@ export function ProfileMenuComponent() {
               <Typography
                 placeholder={""}
                 className="text-md font-bold text-gray-900 dark:text-gray-100"
-                onClick={() => router.push(loginPathUrl)}
+                onClick={() => push(loginPathUrl)}
               >
                 my account{" "}
               </Typography>
@@ -63,7 +63,7 @@ export function ProfileMenuComponent() {
             <MenuItem
               placeholder={""}
               className="flex items-center gap-2"
-              onClick={() => router.push(profilePathUrl)}
+              onClick={() => push(profilePathUrl)}
             >
               <svg
                 width="16"

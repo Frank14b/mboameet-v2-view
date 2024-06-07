@@ -1,11 +1,11 @@
 "use client";
 
 import { useCallback, useMemo } from "react";
-import { NoDataFound } from "../../widgets/noDataFound";
+import { NoDataFound } from "../../widgets/NoDataFound";
 import { ConversationHookDto } from "@/app/hooks/pages/chats/useDiscussions";
 import { ResultMessageDto } from "@/app/types/chats";
-import { MessagesComponent } from "./messagesComponent";
-import ConversationSkeleton from "../../widgets/skeletons/conversationSkeleton";
+import { MessageComponent } from "./MessageComponent";
+import ConversationSkeleton from "../../widgets/skeletons/ConversationSkeleton";
 
 export function ConversationsComponent({
   conversationHook,
@@ -33,7 +33,7 @@ export function ConversationsComponent({
 
     return (
       <div className={`w-full`}>
-        <MessagesComponent
+        <MessageComponent
           users={users}
           messages={messages}
           onActionClick={onMessageActionClick}

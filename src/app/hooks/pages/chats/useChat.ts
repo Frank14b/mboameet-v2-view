@@ -14,7 +14,7 @@ import {
   discussionTypes,
   userEncryptionStorageKey,
 } from "@/app/lib/constants/app";
-import { ListWithAvatarProps } from "@/app/components/widgets/listWithAvatar";
+import { ListWithAvatarProps } from "@/app/components/widgets/ListWithAvatar";
 import useUserStore from "@/app/store/userStore";
 import useAppEncryption from "../../useEncryption";
 import useLocalStorage from "../../useLocalStorage";

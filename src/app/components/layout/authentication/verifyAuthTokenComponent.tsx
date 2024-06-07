@@ -1,15 +1,15 @@
 "use client";
 
-import { Button } from "@material-tailwind/react";
-import Link from "next/link";
-import InputField from "../../widgets/inputField";
-import useVerifyAuthToken from "@/app/hooks/pages/auth/useVerifyAuthToken";
 import { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
-import AnimateFadeOut from "../../widgets/motions/animateFadeOut";
-import LoadingSpinner from "../../widgets/loadingSpinner";
-import TimerCounter, { TimeDifference } from "../../commons/timerCounter";
+import { Button } from "@material-tailwind/react";
+import InputField from "../../widgets/InputField";
+import useVerifyAuthToken from "@/app/hooks/pages/auth/useVerifyAuthToken";
+import AnimateFadeOut from "../../widgets/motions/AnimateFadeOut";
+import LoadingSpinner from "../../widgets/LoadingSpinner";
+import TimerCounter, { TimeDifference } from "../../commons/TimerCounter";
 import { OTP_TIMER } from "@/app/lib/constants/app";
+import CustomNextLink from "../../widgets/CustomNextLink";
+import CustomNextImage from "../../widgets/CustomNextImage";
 //
 export default function VerifyAuthTokenComponent({
   token,
@@ -103,12 +103,12 @@ export default function VerifyAuthTokenComponent({
 
                 <p className="flex justify-center mb-3 font-sans text-sm antialiased font-light leading-normal text-inherit">
                   {`Recovered your password?`}
-                  <Link
+                  <CustomNextLink
                     href="/auth/signin"
                     className="block ml-1 font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900 dark:text-gray-500"
                   >
                     Back to sign in
-                  </Link>
+                  </CustomNextLink>
                 </p>
                 <TimerCounter
                   options={{
@@ -146,7 +146,7 @@ export default function VerifyAuthTokenComponent({
           <div className="flex flex-col items-center justify-end">
             <div className="w-full">
               <div className="flex flex-col items-center">
-                <Image
+                <CustomNextImage
                   alt=""
                   width={2000}
                   height={2000}

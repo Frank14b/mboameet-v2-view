@@ -1,8 +1,8 @@
 import React from "react";
-import InputField from "@/app/components/widgets/inputField";
-import MultiLineInputField from "@/app/components/widgets/multiLineInputField";
-import SelectFilterField from "@/app/components/widgets/selectFilterField";
+import InputField from "@/app/components/widgets/InputField";
+import MultiLineInputField from "@/app/components/widgets/MultiLineInputField";
 import { AdminStoreProductHookDto } from "@/app/hooks/pages/administration/stores/products/useStoreProducts";
+import SelectFilterField from "@/app/components/widgets/SelectFilterField";
 
 export function CreateStoreFirstStepComponent({
   adminProductHook,

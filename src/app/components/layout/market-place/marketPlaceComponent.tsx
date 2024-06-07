@@ -12,7 +12,7 @@ import {
   HeartIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/24/solid";
-import { CarouselProductsComponent } from "./carouselProductsComponent";
+import { CarouselProductsComponent } from "./CarouselProductsComponent";
 import CustomNextImage from "../../widgets/CustomNextImage";
 
 export function MarketPlaceComponent() {

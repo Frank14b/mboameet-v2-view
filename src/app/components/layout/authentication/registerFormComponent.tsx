@@ -1,10 +1,10 @@
 "use client";
 
 import { SignUpHookDto } from "@/app/hooks/pages/auth/useSignUp";
-import SignUpStepOneComponent from "./sign-up-stepper/stepOneComponent";
-import SignUpStepTwoComponent from "./sign-up-stepper/stepTwoComponent";
-import SignUpStepThreeComponent from "./sign-up-stepper/stepThreeComponent";
-import SignUpStepFourComponent from "./sign-up-stepper/stepFourComponent";
+import SignUpStepOneComponent from "./sign-up-stepper/StepOneComponent";
+import SignUpStepTwoComponent from "./sign-up-stepper/StepTwoComponent";
+import SignUpStepThreeComponent from "./sign-up-stepper/StepThreeComponent";
+import SignUpStepFourComponent from "./sign-up-stepper/StepFourComponent";
 
 export default function SignUpFormComponent({
   signUpFormProps,

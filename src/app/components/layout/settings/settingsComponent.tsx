@@ -1,8 +1,8 @@
 "use client";
 
 import { AccountSettingHookDto } from "@/app/hooks/pages/profile/useAccountSettings";
-import ThemeToggleComponent from "./themeToggleComponent";
-import ProfileSettingsComponent from "./profileSettingsComponent";
+import ThemeToggleComponent from "./ThemeToggleComponent";
+import ProfileSettingsComponent from "./ProfileSettingsComponent";
 
 export default function SettingsComponent({
   settingsHook,

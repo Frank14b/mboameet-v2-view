@@ -6,7 +6,7 @@ import {
   ListItemSuffix,
   Chip,
 } from "@material-tailwind/react";
-import AnimateHoverScale from "./motions/animateHoverScale";
+import AnimateHoverScale from "./motions/AnimateHoverScale";
 import CustomNextImage from "./CustomNextImage";
 import { formatDate } from "@/app/lib/utils";
 

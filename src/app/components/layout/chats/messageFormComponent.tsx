@@ -9,9 +9,9 @@ import { createFileUploadString } from "@/app/lib/utils";
 import { PlusIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { Badge, IconButton } from "@material-tailwind/react";
 import { ChangeEvent } from "react";
-import CropImage from "../../widgets/cropImage";
+import CropImage from "../../widgets/CropImage";
 import { ObjectKeyDto } from "@/app/types";
-import Image from "next/image";
+import CustomNextImage from "../../widgets/CustomNextImage";
 
 export function MessageFormComponent({
   userId,
@@ -38,7 +38,7 @@ export function MessageFormComponent({
       <div className="w-full overflow-y-hidden overflow-x-auto flex gap-2 px-5 mb-2">
         {linkedImages?.map((file: ObjectKeyDto, index: number) => (
           <div key={index} className="relative">
-            <Image
+            <CustomNextImage
               alt=""
               width={60}
               height={40}

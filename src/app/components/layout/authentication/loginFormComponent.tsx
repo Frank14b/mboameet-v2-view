@@ -1,11 +1,10 @@
 "use client";
 
-import InputField from "../../widgets/inputField";
-import Link from "next/link";
+import InputField from "../../widgets/InputField";
 import { Button } from "@material-tailwind/react";
 import { SignInHookDto } from "@/app/hooks/pages/auth/useSignIn";
-import CheckboxField from "../../widgets/checkboxField";
-import AnimateFadeOut from "../../widgets/motions/animateFadeOut";
+import CheckboxField from "../../widgets/CheckboxField";
+import AnimateFadeOut from "../../widgets/motions/AnimateFadeOut";
 
 export default function LoginFormComponent({
   signInHook,

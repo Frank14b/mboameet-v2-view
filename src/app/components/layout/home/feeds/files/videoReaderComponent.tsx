@@ -1,6 +1,6 @@
 import { useMainContext } from "@/app/contexts/main";
 import useLocalStorage from "@/app/hooks/useLocalStorage";
-import { feedVideoReaderId, mainDivComponentId } from "@/app/lib/constants/app";
+import { feedVideoReaderId } from "@/app/lib/constants/app";
 import { offsetElementPosition } from "@/app/lib/utils";
 import { ResultFeed } from "@/app/types";
 import {

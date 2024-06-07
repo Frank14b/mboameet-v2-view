@@ -15,11 +15,11 @@ import {
   TimelineItem,
   Typography,
 } from "@material-tailwind/react";
-import FeedCommentFormComponent from "./feedCommentFormComponent";
+import FeedCommentFormComponent from "./FeedCommentFormComponent";
 import { useMainContext } from "@/app/contexts/main";
 import useUserStore from "@/app/store/userStore";
 import { useEffect, useRef } from "react";
-import SpeedDialButton from "../../../../widgets/speedDialButton";
+import SpeedDialButton from "../../../../widgets/SpeedDialButton";
 import { FeedCommentHookDto } from "@/app/hooks/pages/feeds/comments/useFeedComment";
 import {
   defaultProfileImg,

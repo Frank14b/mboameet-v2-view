@@ -1,6 +1,6 @@
 "use client";
 
-import ChangePasswordComponent from "@/app/components/layout/authentication/changePasswordComponent";
+import ChangePasswordComponent from "@/app/components/layout/authentication/ChangePasswordComponent";
 
 export default function ChangePasswordPage({
   params,

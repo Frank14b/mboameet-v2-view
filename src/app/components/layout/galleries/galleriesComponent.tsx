@@ -12,9 +12,9 @@ import {
   ChatBubbleBottomCenterIcon,
   BookmarkIcon,
 } from "@heroicons/react/24/solid";
-import { ChatMediaComponent } from "./chatMediaComponent";
+import { ChatMediaComponent } from "./ChatMediaComponent";
 import { GalleriesHookDto } from "@/app/hooks/pages/galleries/useGalleries";
-import { FeedMediaComponent } from "./feedMediaComponent";
+import { FeedMediaComponent } from "./FeedMediaComponent";
 
 export function GalleriesComponent({
   galleryHook,

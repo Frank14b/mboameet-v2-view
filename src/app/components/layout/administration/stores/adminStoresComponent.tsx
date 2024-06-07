@@ -1,6 +1,4 @@
-import CustomNextLink from "@/app/components/widgets/customNextLink";
-import TooltipCustomAnimation from "@/app/components/widgets/tooltipCustomAnimation";
-import { AdminStoreHookDto } from "@/app/hooks/pages/administration/stores/useAdminStore";
+import React, { useMemo, useState } from "react";
 import {
   EnvelopeIcon,
   GlobeEuropeAfricaIcon,
@@ -24,12 +22,14 @@ import {
   AccordionHeader,
   AccordionBody,
 } from "@material-tailwind/react";
-import React, { useMemo, useState } from "react";
-import { CreateStoreFormPopupComponent } from "./create/storeFormPopupComponent";
+import { CreateStoreFormPopupComponent } from "./create/StoreFormPopupComponent";
 import CustomNextImage from "@/app/components/widgets/CustomNextImage";
-import StoreSkeleton from "@/app/components/widgets/skeletons/administration/storeSkeleton";
-import { NoDataFound } from "@/app/components/widgets/noDataFound";
+import StoreSkeleton from "@/app/components/widgets/skeletons/administration/StoreSkeleton";
+import { NoDataFound } from "@/app/components/widgets/NoDataFound";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
+import CustomNextLink from "@/app/components/widgets/CustomNextLink";
+import TooltipCustomAnimation from "@/app/components/widgets/TooltipCustomAnimation";
+import { AdminStoreHookDto } from "@/app/hooks/pages/administration/stores/useAdminStore";
 
 export function AdminStoresComponent({
   adminStoreHook,

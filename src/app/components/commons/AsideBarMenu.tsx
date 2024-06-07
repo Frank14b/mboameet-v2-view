@@ -1,12 +1,11 @@
 "use client";
 
-import { Button, Typography } from "@material-tailwind/react";
-import UserStoriesCard from "../widgets/userStoriesCard";
-import SideBarMenuListUserComponent from "../widgets/sidebar/menuListUser";
-import { PlusIcon } from "@heroicons/react/24/solid";
+import { Typography } from "@material-tailwind/react";
+import UserStoriesCard from "../widgets/UserStoriesCard";
+import SideBarMenuListUserComponent from "../widgets/sidebar/MenuListUser";
 import useFriends from "@/app/hooks/pages/friends/useFriends";
 import { useCallback, useMemo, useState } from "react";
-import CustomNextLink from "../widgets/customNextLink";
+import CustomNextLink from "../widgets/CustomNextLink";
 import { friendPathUrl } from "@/app/lib/constants/app";
 import { range } from "@/app/lib/utils";
 import { StoriesPopupComponent } from "./stories/StoriesPopupComponent";

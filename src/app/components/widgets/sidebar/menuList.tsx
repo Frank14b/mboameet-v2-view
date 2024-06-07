@@ -5,7 +5,7 @@ import {
   ListItemPrefix,
   ListItemSuffix,
 } from "@material-tailwind/react";
-import CustomNextLink from "../customNextLink";
+import CustomNextLink from "../CustomNextLink";
 
 export default function SideBarMenuListComponent({
   title,

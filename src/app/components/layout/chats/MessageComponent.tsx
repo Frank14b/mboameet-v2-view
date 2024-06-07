@@ -7,26 +7,24 @@ import {
   TimelineIcon,
   TimelineBody,
   Typography,
-  Avatar,
   Card,
 } from "@material-tailwind/react";
-import { MessageFormComponent } from "./messageFormComponent";
+import { MessageFormComponent } from "./MessageFormComponent";
 import {
   CheckBadgeIcon,
   PhoneIcon,
   VideoCameraIcon,
 } from "@heroicons/react/24/solid";
-import TooltipCustomAnimation from "../../widgets/tooltipCustomAnimation";
+import TooltipCustomAnimation from "../../widgets/TooltipCustomAnimation";
 import { messagesContentId } from "@/app/lib/constants/app";
 import { ConversationHookDto } from "@/app/hooks/pages/chats/useDiscussions";
-import ConversationReactionComponent from "./conversationReactionComponent";
-import MessageActionsComponent from "./messageActionsComponent";
-import Image from "next/image";
-import { MessageImagePreviewComponent } from "./messageImagePreviewComponent";
+import ConversationReactionComponent from "./ConversationReactionComponent";
+import MessageActionsComponent from "./MessageActionsComponent";
+import { MessageImagePreviewComponent } from "./MessageImagePreviewComponent";
 import { useState } from "react";
 import CustomNextImage from "../../widgets/CustomNextImage";
 
-export function MessagesComponent({
+export function MessageComponent({
   users,
   messages,
   onActionClick,
