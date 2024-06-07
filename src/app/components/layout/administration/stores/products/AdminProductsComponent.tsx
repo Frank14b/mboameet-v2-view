@@ -73,9 +73,9 @@ export function AdminStoreProductsComponent({
                 alt={item.name}
                 className="rounded-full object-cover"
               />
-              <div>
-                <h6 className="font-bold mb-1">{item.name}</h6>{" "}
-                <span className="font-normal text-gray-600">
+              <div className="">
+                <h6 className="font-bold mb-1 line-clamp-1">{item.name}</h6>{" "}
+                <span className="font-normal text-gray-600 line-clamp-1">
                   {item.productCategory.name}
                 </span>
               </div>
@@ -104,7 +104,7 @@ export function AdminStoreProductsComponent({
                   </IconButton>
                 </TooltipCustomAnimation>
               </CardHeader>
-              <CardBody placeholder={""} className="p-0 flex gap-5">
+              <CardBody placeholder={""} className="p-0 xs:grid lg:flex gap-5">
                 <ul className="flex flex-col gap-4 w-full">
                   <li className="flex items-center gap-4">
                     <span className="rounded-full border border-white/20 bg-white/20 p-1">
@@ -124,6 +124,7 @@ export function AdminStoreProductsComponent({
                     </span>
                     <Typography
                       placeholder={""}
+                      as={"div"}
                       className="font-normal text-sm flex gap-2"
                     >
                       Quantity: {!item.isUnlimited ? item.quantity : ""}

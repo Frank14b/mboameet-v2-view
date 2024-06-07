@@ -82,18 +82,15 @@ export function AdminStoresComponent({
                 className="rounded-full object-cover"
               />
               <div>
-                <h6 className="font-bold mb-1 flex xs:grid gap-3">
-                  {item.name}{" "}
+                <div className="font-bold mb-1 flex xs:grid gap-3">
+                  <div className="line-clamp-1">{item.name}{" "}</div>
                   <Chip
                     size="sm"
                     className="text-[9px] p-0 px-2"
                     color="pink"
                     value={item.storeType.name}
                   />
-                </h6>{" "}
-                <span className="font-normal text-gray-600">
-                  {item.description}
-                </span>
+                </div>{" "}
               </div>
             </div>
             <div>
@@ -111,7 +108,7 @@ export function AdminStoresComponent({
           </div>
         </AccordionHeader>
         <AccordionBody>
-          <div className="w-full">
+          {/* <div className="w-full"> */}
             <Card
               placeholder={""}
               className="w-full shadow-none max-w-[100%] p-8 dark:bg-gray-800 dark:text-gray-100"
@@ -132,7 +129,7 @@ export function AdminStoresComponent({
                   </IconButton>
                 </TooltipCustomAnimation>
               </CardHeader>
-              <CardBody placeholder={""} className="p-0 flex gap-5">
+              <CardBody placeholder={""} className="p-0 xs:grid lg:flex gap-5">
                 <ul className="flex flex-col gap-4 w-full">
                   <li className="flex items-center gap-4">
                     <span className="rounded-full border border-white/20 bg-white/20 p-1">
@@ -194,7 +191,7 @@ export function AdminStoresComponent({
                 </ul>
               </CardBody>
             </Card>
-          </div>
+          {/* </div> */}
         </AccordionBody>
       </Accordion>
     ));
