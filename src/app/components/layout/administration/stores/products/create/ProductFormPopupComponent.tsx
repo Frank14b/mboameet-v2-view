@@ -10,16 +10,14 @@ import {
   Step,
   CardHeader,
 } from "@material-tailwind/react";
-import {
-  HomeIcon,
-  CameraIcon
-} from "@heroicons/react/24/outline";
+import { HomeIcon, CameraIcon } from "@heroicons/react/24/outline";
 
 import LoadingSpinner from "@/app/components/widgets/LoadingSpinner";
 import { CreateStoreFirstStepComponent } from "./stepper/FirstStepComponent";
 import { CreateStoreThirdStepComponent } from "./stepper/ThirdStepComponent";
 import AnimateFadeOut from "@/app/components/widgets/motions/AnimateFadeOut";
 import { AdminStoreProductHookDto } from "@/app/hooks/pages/administration/stores/products/useStoreProducts";
+import useProductCategories from "@/app/hooks/pages/administration/stores/products/useProductCategories";
 
 export function CreateProductFormPopupComponent({
   adminProductHook,
@@ -28,6 +26,7 @@ export function CreateProductFormPopupComponent({
 }) {
   const {
     isLoading,
+    storeRef,
     isOpenStoreForm,
     responseData,
     formErrors,
@@ -37,6 +36,8 @@ export function CreateProductFormPopupComponent({
     submitFormData,
     handleUpdatePhotoField,
   } = adminProductHook;
+
+  const productCategoriesHook = useProductCategories({ storeRef });
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [isLastStep, setIsLastStep] = React.useState(false);
@@ -52,13 +53,7 @@ export function CreateProductFormPopupComponent({
         setActiveStep(0);
       }, 1000);
     }
-
-  }, [
-    nextFormBtnRef,
-    isFirstLoad,
-    isFirstStep,
-    isOpenStoreForm
-  ]);
+  }, [nextFormBtnRef, isFirstLoad, isFirstStep, isOpenStoreForm]);
 
   const handlePrev = () => {
     handleUpdatePhotoField(null);
@@ -146,6 +141,7 @@ export function CreateProductFormPopupComponent({
                       <AnimateFadeOut speed={1}>
                         <CreateStoreFirstStepComponent
                           adminProductHook={adminProductHook}
+                          productCategoriesHook={productCategoriesHook}
                         />
                       </AnimateFadeOut>
                     </div>

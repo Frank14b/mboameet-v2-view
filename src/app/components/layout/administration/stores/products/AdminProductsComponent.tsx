@@ -1,9 +1,7 @@
 import React, { useMemo, useState } from "react";
 import {
-  EnvelopeIcon,
-  GlobeEuropeAfricaIcon,
+  CurrencyEuroIcon,
   PencilIcon,
-  PhoneIcon,
   PlusIcon,
   ShoppingBagIcon,
 } from "@heroicons/react/24/solid";
@@ -12,6 +10,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Chip,
   IconButton,
   Typography,
 } from "@material-tailwind/react";
@@ -34,24 +33,22 @@ export function AdminStoreProductsComponent({
 }) {
   //
 
-  const { stores, isFetchingProduct, handleIsOpenStoreForm } = adminProductHook;
+  const { products, isFetchingProduct, handleIsOpenStoreForm } =
+    adminProductHook;
   const [openAccordion, setOpenAccordion] = useState<number>(0);
 
   const storeItems = useMemo(() => {
-    if (isFetchingProduct === true) return <StoreSkeleton isLoading={isFetchingProduct} count={3} />;
-    if (!stores || stores.length === 0)
+    if (isFetchingProduct === true)
+      return <StoreSkeleton isLoading={isFetchingProduct} count={3} />;
+    if (!products || products.length === 0)
       return (
         <NoDataFound
           customClass="dark:shadow-none dark:bg-gray-800"
-          message="Stores not found"
+          message="Products not found"
         />
       );
 
-    if (openAccordion == 0) {
-      setOpenAccordion(stores[0].id);
-    }
-
-    return stores.map((item, index: number) => (
+    return products.map((item, index: number) => (
       <Accordion
         placeholder={""}
         open={openAccordion === item.id}
@@ -72,14 +69,14 @@ export function AdminStoreProductsComponent({
               <CustomNextImage
                 width={50}
                 height={50}
-                src={item.logo}
+                src={item.image}
                 alt={item.name}
                 className="rounded-full object-cover"
               />
               <div>
                 <h6 className="font-bold mb-1">{item.name}</h6>{" "}
                 <span className="font-normal text-gray-600">
-                  {item.description}
+                  {item.productCategory.name}
                 </span>
               </div>
             </div>
@@ -111,35 +108,30 @@ export function AdminStoreProductsComponent({
                 <ul className="flex flex-col gap-4 w-full">
                   <li className="flex items-center gap-4">
                     <span className="rounded-full border border-white/20 bg-white/20 p-1">
-                      <EnvelopeIcon className="w-4 h-4" />
+                      <CurrencyEuroIcon className="w-4 h-4" />
                     </span>
                     <Typography
                       placeholder={""}
                       className="font-normal text-sm"
                     >
-                      {item.email}
+                      Price: {item.price} / {item.priceUnit} {item.priceUnitType}
                     </Typography>
                   </li>
+
                   <li className="flex items-center gap-4">
                     <span className="rounded-full border border-white/20 bg-white/20 p-1">
-                      <GlobeEuropeAfricaIcon className="w-4 h-4" />
+                      <CurrencyEuroIcon className="w-4 h-4" />
                     </span>
                     <Typography
                       placeholder={""}
-                      className="font-normal text-sm"
+                      className="font-normal text-sm flex gap-2"
                     >
-                      {item.country}, {item.city}, {item.address}
-                    </Typography>
-                  </li>
-                  <li className="flex items-center gap-4">
-                    <span className="rounded-full border border-white/20 bg-white/20 p-1">
-                      <PhoneIcon className="w-4 h-4" />
-                    </span>
-                    <Typography
-                      placeholder={""}
-                      className="font-normal text-sm"
-                    >
-                      {item.callingCode} {item.phoneNumber}
+                      Quantity: {!item.isUnlimited ? item.quantity : ""}
+                      <Chip
+                        className="text-xs mt-[-2px]"
+                        size="sm"
+                        value={item.isUnlimited ? "Unlimited" : "Limited"}
+                      />
                     </Typography>
                   </li>
                 </ul>
@@ -159,7 +151,7 @@ export function AdminStoreProductsComponent({
         </AccordionBody>
       </Accordion>
     ));
-  }, [stores, isFetchingProduct, openAccordion, setOpenAccordion]);
+  }, [products, isFetchingProduct, openAccordion, setOpenAccordion]);
 
   return (
     <div className="dark:text-gray-100">

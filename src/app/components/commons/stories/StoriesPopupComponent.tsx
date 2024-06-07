@@ -56,7 +56,7 @@ export function StoriesPopupComponent() {
               <Card
                 key={index}
                 placeholder={""}
-                className={`w-full hover:scale-105 hover:shadow-xl ${
+                className={`w-full hover:scale-105 transform transition duration-2 hover:shadow-xl ${
                   isDark ? "bg-gray-800" : "bg-gray-200"
                 }`}
               >

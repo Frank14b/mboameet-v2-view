@@ -1,19 +1,30 @@
-export type ResultStoreDto = {
+import { ResultStoreDto } from ".."
+
+export type ResultProductDto = {
     id: number,
     name: string,
-    email?: string,
     description: string,
     reference: string,
-    logo: string,
-    address: string,
-    country: string,
-    city: string,
-    zipCode?: string,
-    phoneNumber: string,
-    callingCode: string,
-    website?: string,
+    image: string,
+    price: number,
+    priceUnit: number,
+    priceUnitType: string,
+    quantity: number,
+    isUnlimited: boolean,
     createdAt: string,
     updatedAt: string,
-    status: boolean,
+    store: ResultProductStore
+    productCategory: ResultProductCategory
+}
+
+export type ResultProductStore = {
+    id: number,
+    name: string,
+    reference: string,
     userId: number,
+}
+
+export type ResultProductCategory = {
+    id: number,
+    name: string,
 }

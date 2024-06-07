@@ -140,17 +140,11 @@ export default function SelectFilterField({
           <div
             className={`rounded-md relative ring-0 ring-inset ring-gray-700 w-full`}
           >
-            <Menu
-              dismiss={{
-                itemPress: false,
-              }}
-              open={isOpen}
-              handler={setIsOpen}
-              allowHover
-            >
+            <Menu open={isOpen} allowHover>
               <MenuHandler>
                 <div className="gap-3">
                   <Button
+                    onClick={() => setIsOpen(!isOpen)}
                     variant="outlined"
                     className={`flex justify-between border-gray-500 text-sm font-normal normal-case ${
                       error ? "border-red-600 text-red-600" : ""
@@ -166,20 +160,27 @@ export default function SelectFilterField({
                       }`}
                     />
                   </Button>
+
+                  {isOpen && (
+                    <Input
+                      crossOrigin=""
+                      label={`Search ${data.title}`}
+                      type={"text"}
+                      name={`filter-${name}`}
+                      onChange={handleFilter}
+                      labelProps={{
+                        className: "hidden",
+                      }}
+                      className="bg-white border-0 ring-0"
+                    />
+                  )}
                 </div>
               </MenuHandler>
               <MenuList
                 className="z-[999999999] min-w-[350px] max-h-[300px]"
                 placeholder={""}
+                onClick={() => setIsOpen(!isOpen)}
               >
-                <Input
-                  crossOrigin=""
-                  placeholder={`Search ${data.title}`}
-                  type={"text"}
-                  name={`filter-${name}`}
-                  onChange={handleFilter}
-                  className="bg-white border-0 ring-0"
-                />
                 {isFiltering && (
                   <div className="justify-center grid py-3">
                     <Spinner className="w-5 h-5" />
@@ -192,7 +193,9 @@ export default function SelectFilterField({
                       <MenuItem
                         key={`${index}-${value}`}
                         placeholder={""}
-                        className={`flex items-center gap-2 ${watchField == value ? "bg-gray-200" : ""}`}
+                        className={`flex items-center gap-2 ${
+                          watchField == value ? "bg-gray-200" : ""
+                        }`}
                         onClick={() => handleOnChange(value)}
                       >
                         {image && (

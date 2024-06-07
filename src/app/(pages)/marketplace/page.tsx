@@ -13,7 +13,7 @@ export default function MarketPlacePage() {
 
   return (
     <div className="container dark:text-white">
-      <div className="w-full flex">
+      <div className="w-full flex xs:px-5">
         <Breadcrumbs placeholder={""} className="dark:bg-gray-800">
           <CustomNextLink href="/">
             <span className="opacity-60 dark:opacity-80 dark:text-gray-100">

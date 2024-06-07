@@ -4,19 +4,21 @@ import { ChangeEvent } from "react";
 import { ObjectKeyDto } from "@/app/types";
 import CropImage from "./CropImage";
 import CustomNextImage from "./CustomNextImage";
+import { Size } from "react-easy-crop";
 
 export default function ImageUploadDropZone({
   croppedImage,
   imageToUpload,
+  cropSize,
   selectFile,
   cropImage,
 }: {
   croppedImage?: ObjectKeyDto;
+  cropSize?: Size;
   imageToUpload: string | null;
   selectFile: (e: ChangeEvent<HTMLInputElement>) => void;
   cropImage: (image: string | Blob | ObjectKeyDto) => Promise<void>;
 }) {
-  
   return (
     <>
       <div className="flex items-center justify-center w-full">
@@ -72,6 +74,7 @@ export default function ImageUploadDropZone({
 
       {imageToUpload && (
         <CropImage
+          cropSize={cropSize}
           image={imageToUpload}
           croppedImage={cropImage}
           returnType={"object"}

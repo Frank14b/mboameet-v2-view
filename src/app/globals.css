@@ -140,3 +140,8 @@
 .customSelectFilter ul {
   margin-top: 47px;
 }
+
+.xs-product-rating span svg {
+  height: 0.8rem;
+  width: 0.8rem;
+}

@@ -1,10 +1,3 @@
-import { createFileUploadString, fileExtFromBase64 } from "@/app/lib/utils";
-import {
-  ApiResponseDto,
-  ObjectKeyDto,
-  ResultLoginDto,
-  // ResultStoreTypeDto,
-} from "@/app/types";
 import {
   ChangeEvent,
   Dispatch,
@@ -14,23 +7,20 @@ import {
   useMemo,
   useState,
 } from "react";
+import {
+  ApiResponseDto,
+  ObjectKeyDto,
+  ResultLoginDto,
+} from "@/app/types";
 import { FieldErrors, UseFormHandleSubmit } from "react-hook-form";
 import useAppForm from "../../../../useForm";
 import { useMainContext } from "@/app/contexts/main";
 import { notification } from "@/app/lib/notifications";
-import { CreateStoreFormDto } from "@/app/types/administration/stores";
-import { proceedGetAdminStoreTypes } from "@/app/services/server-actions/stores/storeTypes";
-import { TypeOptionsProps } from "@/app/components/widgets/SelectFilterField";
-// import { proceedGetAdminCurrencies } from "@/app/services/server-actions/currencies";
-import {
-  // proceedGetAdminStores,
-  proceedSubmitStore,
-} from "@/app/services/server-actions/stores";
-import { ResultStoreDto } from "@/app/types/stores";
-import { ResultProductCategoriesDto } from "@/app/types/stores/products/categories";
-import { proceedGetAdminStoreProducts } from "@/app/services/server-actions/stores/products";
+import { createFileUploadString, fileExtFromBase64 } from "@/app/lib/utils";
+import { proceedGetAdminStoreProducts, proceedSubmitProduct } from "@/app/services/server-actions/stores/products";
 import { CreateProductSchema } from "@/app/validators/administration/products";
 import { CreateProductFormDto } from "@/app/types/administration/stores/products";
+import { ResultProductDto } from "@/app/types/stores/products";
 
 const useAdminStoreProduct = (storeRef: string) => {
   //
@@ -43,16 +33,12 @@ const useAdminStoreProduct = (storeRef: string) => {
     [setIsOpenStoreForm]
   );
   const [responseData, setResponseData] =
-    useState<ApiResponseDto<ResultStoreDto> | null>(null);
+    useState<ApiResponseDto<ResultProductDto> | null>(null);
   const { connectedUser, getFileUrl } = useMainContext();
   const [storeCroppedLogo, setStoreCroppedLogo] = useState<ObjectKeyDto | null>(
     null
   );
-  const [categories, setCategories] = useState<
-    ResultProductCategoriesDto[] | null
-  >(null);
-
-  const [stores, setStores] = useState<ResultStoreDto[] | null>(null);
+  const [products, setProducts] = useState<ResultProductDto[] | null>(null);
 
   const { formState, handleSubmit, setValue, reset } = useAppForm({
     schema: CreateProductSchema,
@@ -102,21 +88,18 @@ const useAdminStoreProduct = (storeRef: string) => {
 
       const dataKeys = Object.entries(data);
       dataKeys.forEach(([key, value]) => {
-        if (key == "country") {
-          formData.append(key, value.name);
-          formData.append("callingCode", value.callingCode);
-        } else if (key == "photo") {
+        if (key == "photo") {
           formData.append(
-            "logo",
+            "image",
             storeCroppedLogo?.blob,
-            `store-logo.${fileExtFromBase64(storeCroppedLogo?.base64)}`
+            `store-product-image.${fileExtFromBase64(storeCroppedLogo?.base64)}`
           );
         } else {
           formData.append(key, value);
         }
       });
 
-      const result = await proceedSubmitStore(formData);
+      const result = await proceedSubmitProduct(formData, storeRef);
       setResponseData(result);
       setIsLoading(false);
 
@@ -129,6 +112,7 @@ const useAdminStoreProduct = (storeRef: string) => {
       }
     },
     [
+      storeRef,
       storeCroppedLogo,
       reset,
       setStoreCroppedLogo,
@@ -138,49 +122,32 @@ const useAdminStoreProduct = (storeRef: string) => {
     ]
   );
 
-  const handleGetProductCategories = useCallback(
-    async (keyword: string) => {
-      const result = await proceedGetAdminStoreTypes({
-        keyword: keyword,
-      });
-      setCategories(result?.data?.data ?? null);
-    },
-    [setCategories]
-  );
-
-  const formattedCategories = useMemo(() => {
-    if (!categories) return [];
-
-    return categories.map((category) => {
-      return {
-        label: category.name,
-        value: `${category.id}`,
-      };
+  const getProducts = useCallback(async () => {
+    const result = await proceedGetAdminStoreProducts({
+      keyword: "",
+      storeRef,
     });
-  }, [categories]);
-
-  const getStores = useCallback(async () => {
-    const result = await proceedGetAdminStoreProducts();
-    setStores(result?.data?.data ?? null);
+    setProducts(result?.data?.data ?? null);
     setIsFetchingProduct(false);
-  }, []);
+  }, [storeRef, setProducts, setIsFetchingProduct]);
 
   useEffect(() => {
-    getStores();
-  }, [getStores]);
+    getProducts();
+  }, [getProducts]);
 
-  const formattedStores = useMemo(() => {
-    if (!stores) return [];
-    return stores.map((store) => {
+  const formattedProducts = useMemo(() => {
+    if (!products) return [];
+    return products.map((product) => {
       return {
-        ...store,
-        logo: getFileUrl(store.logo, store.user.id, store.user.name),
-        reference: store.reference.toLowerCase(),
+        ...product,
+        image: getFileUrl(product.image, product.store.userId, ""),
+        reference: product.reference.toLowerCase(),
       };
     });
-  }, [stores, getFileUrl]);
+  }, [products, getFileUrl]);
 
   const data: AdminStoreProductHookDto = {
+    storeRef,
     isLoading,
     isFetchingProduct,
     responseData,
@@ -189,8 +156,7 @@ const useAdminStoreProduct = (storeRef: string) => {
     isOpenStoreForm,
     connectedUser,
     formErrors: errors,
-    categories: formattedCategories as TypeOptionsProps[],
-    stores: formattedStores as ResultStoreDto[],
+    products: formattedProducts as ResultProductDto[],
     handleUpdatePhotoField,
     handleCroppedImage,
     setIsLoading,
@@ -198,7 +164,6 @@ const useAdminStoreProduct = (storeRef: string) => {
     submitFormData,
     handleSubmit,
     handleIsOpenStoreForm,
-    handleGetProductCategories,
   };
 
   return { ...data };
@@ -207,16 +172,16 @@ const useAdminStoreProduct = (storeRef: string) => {
 export default useAdminStoreProduct;
 
 export type AdminStoreProductHookDto = {
+  storeRef: string;
   isLoading: boolean;
   isFetchingProduct: boolean;
   isOpenStoreForm: boolean;
-  responseData: ApiResponseDto<ResultStoreDto> | null;
+  responseData: ApiResponseDto<ResultProductDto> | null;
   selectedImage: string | null;
   connectedUser: ResultLoginDto | ObjectKeyDto | null;
   formErrors: FieldErrors<CreateProductFormDto>;
   croppedImage: ObjectKeyDto;
-  categories: TypeOptionsProps[];
-  stores: ResultStoreDto[];
+  products: ResultProductDto[];
   submitFormData: (data: CreateProductFormDto) => Promise<void>;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   handleSubmit: UseFormHandleSubmit<any>;
@@ -224,5 +189,4 @@ export type AdminStoreProductHookDto = {
   selectImageFile: (data: ChangeEvent<HTMLInputElement>) => Promise<void>;
   handleCroppedImage: (image: string | Blob | ObjectKeyDto) => Promise<void>;
   handleUpdatePhotoField: (value: string | null) => void;
-  handleGetProductCategories: (keyword: string) => Promise<void>;
 };

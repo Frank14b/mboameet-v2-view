@@ -10,6 +10,7 @@ import {
 import {
   ArrowRightIcon,
   HeartIcon,
+  ShoppingBagIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/24/solid";
 import { CarouselProductsComponent } from "./CarouselProductsComponent";
@@ -61,8 +62,9 @@ export function MarketPlaceComponent() {
               </Typography>
               <p className="px-5">
                 Easily preview furniture, decor, and more in your space,
-                ensuring everything fits perfectly and looks just right. It{"'"}s
-                the ultimate tool for hassle-free home customization and design!
+                ensuring everything fits perfectly and looks just right. It{"'"}
+                s the ultimate tool for hassle-free home customization and
+                design!
               </p>
             </div>
             <div className="mx-auto container grid place-items-center grid-cols-1 md:grid-cols-2">
@@ -149,6 +151,20 @@ export function MarketPlaceComponent() {
         <CardBody placeholder={""} className="p-4 pt-0 dark:text-gray-100">
           {/* // */}
           <CarouselProductsComponent />
+
+          <div className="flex justify-between px-5">
+            <Typography
+              placeholder={""}
+              variant="h5"
+              className="py-3 flex gap-2 text-pink-400"
+            >
+              <ShoppingBagIcon className="w-5 h-5 mt-[2px]" /> Features
+            </Typography>
+
+            <div className="mt-6 text-xs dark:text-gray-100 flex gap-1 hover:animate-pulse underline underline-offset-4 decoration-dotted cursor-pointer">
+              See More <ArrowRightIcon className="w-4 h-4" />{" "}
+            </div>
+          </div>
 
           <CarouselProductsComponent />
           {/* // */}

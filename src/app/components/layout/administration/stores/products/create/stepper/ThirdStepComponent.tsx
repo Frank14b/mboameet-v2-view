@@ -9,10 +9,14 @@ export function CreateStoreThirdStepComponent({
   adminProductHook: AdminStoreProductHookDto;
 }) {
   const { selectedImage, croppedImage, selectImageFile, handleCroppedImage } =
-  adminProductHook;
+    adminProductHook;
   return (
     <>
       <ImageUploadDropZone
+        cropSize={{
+          width: 700,
+          height: 700,
+        }}
         croppedImage={croppedImage}
         imageToUpload={selectedImage}
         selectFile={selectImageFile}

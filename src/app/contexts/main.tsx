@@ -15,7 +15,6 @@ import { AppHubWrapper } from "./appHub";
 import useUserStore from "../store/userStore";
 import { deleteToken } from "../lib/server-utils";
 import { usePathname } from "next/navigation";
-// import { sessionTimeOut } from "../lib/workers";
 import { ObjectKeyDto, ResultLoginDto, ThemeDto } from "../types";
 import {
   administrationPathUrl,

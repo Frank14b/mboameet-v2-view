@@ -6,23 +6,28 @@ import SelectFilterField from "@/app/components/widgets/SelectFilterField";
 import { range } from "@/app/lib/utils";
 import { priceUnitTypes } from "@/app/lib/constants/app";
 import SwitchToggle from "@/app/components/widgets/SwitchToggle";
+import { AdminProductCategoriesHookDto } from "@/app/hooks/pages/administration/stores/products/useProductCategories";
 
 export function CreateStoreFirstStepComponent({
   adminProductHook,
+  productCategoriesHook,
 }: {
   adminProductHook: AdminStoreProductHookDto;
+  productCategoriesHook: AdminProductCategoriesHookDto;
 }) {
+  const { categories, handleGetProductCategories } = productCategoriesHook;
+
   return (
-    <>
-      <div className="flex gap-3">
+    <div className="max-h-[55vh] overflow-y-auto p-3 rounded-lg">
+      <div className="lg:flex gap-3 sm:grid sm:grid-cols-1">
         <div className="w-full">
           <SelectFilterField
             data={{
               title: "Category",
               name: "productCategoryId",
               apiSearch: true,
-              // options: storeTypes,
-              // searchCallback: handleGetstoreTypes,
+              options: categories,
+              searchCallback: handleGetProductCategories,
             }}
           />
         </div>
@@ -46,7 +51,7 @@ export function CreateStoreFirstStepComponent({
       />
       <br />
 
-      <div className="flex gap-3">
+      <div className="lg:flex gap-3 sm:grid sm:grid-cols-1">
         <div className="w-full">
           <InputField
             data={{
@@ -56,7 +61,7 @@ export function CreateStoreFirstStepComponent({
             }}
           />
         </div>
-        <div className="w-full w-[20rem]">
+        <div className="w-full lg:w-[20rem]">
           <SelectFilterField
             data={{
               title: "Price Unit",
@@ -72,7 +77,7 @@ export function CreateStoreFirstStepComponent({
             }}
           />
         </div>
-        <div className="w-full w-[20rem]">
+        <div className="w-full lg:w-[20rem]">
           <SelectFilterField
             data={{
               title: "Unit Type",
@@ -91,9 +96,9 @@ export function CreateStoreFirstStepComponent({
       </div>
       <br />
 
-      <div className="flex gap-3">
+      <div className="lg:flex gap-3 sm:grid sm:grid-cols-1">
         <div className="w-full">
-        <InputField
+          <InputField
             data={{
               title: "Available Quantity",
               name: "quantity",
@@ -102,13 +107,15 @@ export function CreateStoreFirstStepComponent({
           />
         </div>
         <div className="w-full">
-          <SwitchToggle data={{
-            title: "Is Unlimited",
-            name: "isUnlimited",
-            subTitle: "The maximum quantity will be unlimited",
-          }} />
+          <SwitchToggle
+            data={{
+              title: "Is Unlimited",
+              name: "isUnlimited",
+              subTitle: "The maximum quantity will be unlimited",
+            }}
+          />
         </div>
       </div>
-    </>
+    </div>
   );
 }
