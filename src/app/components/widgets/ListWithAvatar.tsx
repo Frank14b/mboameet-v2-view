@@ -62,7 +62,7 @@ export default function ListWithAvatar({
                   >
                     {item.title}
                   </Typography>
-                  <div className="line-clamp-1 max-w-[35rem]">
+                  <div className="line-clamp-1 max-w-[35rem] xs:max-w-[10rem]">
                     <Typography
                       placeholder={""}
                       variant="small"
