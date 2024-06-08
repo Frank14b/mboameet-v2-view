@@ -86,7 +86,7 @@ export const apiCall = async ({
       cache[cacheKey] = response.data;
     }
 
-    return ApiSuccessMessage(response.data, "", response.status);
+    return ApiSuccessMessage(response.data, response.status, response.data?.message);
   } catch (error: any) {
     if (axios.isCancel(error)) {
       console.log("Request cancelled");
@@ -123,8 +123,8 @@ export const ApiErrorMessage = (error: any): ApiResponseDto<any> => {
 
 export const ApiSuccessMessage = (
   data: any,
-  message: string = "Success",
-  statusCode: number = 200
+  statusCode: number = 200,
+  message: string = "Success"
 ): ApiResponseDto<any> => {
   return {
     status: true,
