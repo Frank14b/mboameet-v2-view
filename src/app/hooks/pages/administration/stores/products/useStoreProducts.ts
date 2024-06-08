@@ -78,6 +78,15 @@ const useAdminStoreProduct = (storeRef: string) => {
     [setValue]
   );
 
+  const getProducts = useCallback(async () => {
+    const result = await proceedGetAdminStoreProducts({
+      keyword: "",
+      storeRef,
+    });
+    setProducts(result?.data?.data ?? null);
+    setIsFetchingProduct(false);
+  }, [storeRef, setProducts, setIsFetchingProduct]);
+
   const submitFormData = useCallback(
     async (data: CreateProductFormDto) => {
       //
@@ -111,6 +120,7 @@ const useAdminStoreProduct = (storeRef: string) => {
         handleIsOpenStoreForm();
         reset();
         setStoreCroppedLogo(null);
+        getProducts();
       }
     },
     [
@@ -121,17 +131,9 @@ const useAdminStoreProduct = (storeRef: string) => {
       handleIsOpenStoreForm,
       setResponseData,
       setIsLoading,
+      getProducts
     ]
   );
-
-  const getProducts = useCallback(async () => {
-    const result = await proceedGetAdminStoreProducts({
-      keyword: "",
-      storeRef,
-    });
-    setProducts(result?.data?.data ?? null);
-    setIsFetchingProduct(false);
-  }, [storeRef, setProducts, setIsFetchingProduct]);
 
   useEffect(() => {
     getProducts();
