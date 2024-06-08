@@ -74,6 +74,9 @@ export function CarouselProductsComponent() {
                         {product.name}
                       </Typography>
                     </div>
+                    <div className="line-clamp-1 text-[10px] dark:text-gray-600">
+                      {product.productCategory.name}
+                    </div>
 
                     <div className="flex gap-3 mt-2">
                       <Rating
