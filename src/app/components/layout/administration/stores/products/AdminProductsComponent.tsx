@@ -114,7 +114,8 @@ export function AdminStoreProductsComponent({
                       placeholder={""}
                       className="font-normal text-sm"
                     >
-                      Price: {item.price} / {item.priceUnit} {item.priceUnitType}
+                      Price: {item.price} / {item.priceUnit}{" "}
+                      {item.priceUnitType}
                     </Typography>
                   </li>
 
@@ -136,7 +137,7 @@ export function AdminStoreProductsComponent({
                     </Typography>
                   </li>
                 </ul>
-                <ul className="w-full">
+                {/* <ul className="w-full">
                   <li className="flex items-center gap-4">
                     <Typography
                       placeholder={""}
@@ -145,7 +146,12 @@ export function AdminStoreProductsComponent({
                       {item.description}
                     </Typography>
                   </li>
-                </ul>
+                </ul> */}
+                <div className="w-full">
+                  <div dangerouslySetInnerHTML={{ __html: JSON.parse(item.description) }}>
+                    {/* {item.description} */}
+                  </div>
+                </div>
               </CardBody>
             </Card>
           </div>

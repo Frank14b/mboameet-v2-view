@@ -94,6 +94,8 @@ const useAdminStoreProduct = (storeRef: string) => {
             storeCroppedLogo?.blob,
             `store-product-image.${fileExtFromBase64(storeCroppedLogo?.base64)}`
           );
+        } else if (key == "description") {
+          formData.append(key, JSON.stringify(value));
         } else {
           formData.append(key, value);
         }

@@ -47,6 +47,7 @@ export function CreateStoreFirstStepComponent({
           title: "Product Description",
           name: "description",
           multiple: true,
+          isEditor: true
         }}
       />
       <br />
