@@ -127,7 +127,7 @@ export default function FeedItemComponent({
 
         <div
           className={`rounded-xl px-3 pb-3 mb-3 text-sm text-black dark:text-gray-300 ${
-            clampText ? "lg:line-clamp-6 xs:line-clamp-3" : ""
+            clampText ? "lg:line-clamp-7 xs:line-clamp-5" : ""
           }`}
           dangerouslySetInnerHTML={{ __html: formatHashTags(feedData.message) }}
           onClick={() => setClampText(false)}
