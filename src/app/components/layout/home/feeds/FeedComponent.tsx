@@ -5,6 +5,7 @@ import FeedFormComponent from "./FeedFormComponent";
 import FeedCardComponent from "./FeedCardComponent";
 import useFeedForm from "@/app/hooks/pages/feeds/useFeedForm";
 import useFeed from "@/app/hooks/pages/feeds/useFeed";
+import { HomeModernIcon } from "@heroicons/react/24/solid";
 
 export default function FeedComponent() {
   // custom hooks
@@ -15,10 +16,10 @@ export default function FeedComponent() {
   return (
     <>
       <div className="feed-form-container">
-        <div className="w-full flex absolute dark:text-white right-0 px-5">
-          <div className="w-full px-5">
-            <Typography placeholder={""} className="font-bold px-1">
-              Feeds
+        <div className="w-full flex absolute dark:text-white right-0 px-4">
+          <div className="w-full px-0">
+            <Typography placeholder={""} className="font-bold justify-between flex px-1">
+              <span className="flex gap-2"><HomeModernIcon className="h-4 w-4 mt-[4px]" /> Feeds</span>
               <Button
                 onClick={() => {
                   handleOpenFeedForm(true);
