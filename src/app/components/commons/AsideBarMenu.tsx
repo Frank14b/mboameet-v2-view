@@ -58,7 +58,7 @@ export default function AsideBarMenuComponent({ children }: { children: any }) {
           <div className="p-1" key={index}>
             <UserStoriesCard
               id={id}
-              image="../full-shot-people-use-apps-make-friends.jpg"
+              image="/full-shot-people-use-apps-make-friends.jpg"
               bgImage="../beautiful-rendering-dating-app-concept.jpg"
               activeStory={activeStory}
               onStoryClick={onStoryClick}

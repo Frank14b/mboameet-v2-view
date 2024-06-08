@@ -3,7 +3,6 @@ import {
   Card,
   CardHeader,
   CardBody,
-  Avatar,
   IconButton,
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
@@ -52,13 +51,12 @@ export default function UserStoriesCard({
           placeholder={""}
           className="relative py-10 px-6 md:px-12 border-none"
         >
-          <Avatar
-            style={{ minWidth: "50px", minHeight: "50px" }}
-            placeholder={""}
-            size="xl"
-            variant="circular"
+          <CustomNextImage
+            style={{ minWidth: "60px", minHeight: "60px" }}
+            height={60}
+            width={60}
             alt="tania andrew"
-            className="border-2 border-white"
+            className="border-2 border-white rounded-full object-cover mt-5"
             src={image}
             onClick={() => onStoryClick?.(id)}
           />
@@ -76,7 +74,7 @@ export default function UserStoriesCard({
 
                 <CustomNextImage
                   alt=""
-                  src={"/full-shot-people-use-apps-make-friends.jpg"}
+                  src={image}
                   fill={true}
                   className="object-cover rounded-xl shadow-lg"
                 />

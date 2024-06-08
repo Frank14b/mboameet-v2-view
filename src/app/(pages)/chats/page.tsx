@@ -2,6 +2,7 @@
 
 import { ChatsComponent } from "@/app/components/layout/chats/ChatsComponent";
 import useChat from "@/app/hooks/pages/chats/useChat";
+import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/solid";
 import { Card, Typography } from "@material-tailwind/react";
 
 export default function ChatPage() {
@@ -10,10 +11,14 @@ export default function ChatPage() {
 
   return (
     <>
-      <Card placeholder={""} className={`w-full pt-3 h-screen dark:bg-gray-800`}>
-        <div className="w-full flex absolute dark:text-white right-0 px-5">
-          <div className="w-1/2 px-5">
-            <Typography placeholder={""} className="font-bold px-1">
+      <Card
+        placeholder={""}
+        className={`w-full pt-3 h-screen dark:bg-gray-800`}
+      >
+        <div className="w-full flex absolute dark:text-white right-0 px-4">
+          <div className="w-1/2 px-0">
+            <Typography placeholder={""} className="font-bold px-1 flex gap-2">
+              <ChatBubbleLeftEllipsisIcon className="h-4 w-4 mt-[5px]" />
               Discussions
             </Typography>
           </div>

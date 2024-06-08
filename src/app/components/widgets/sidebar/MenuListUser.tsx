@@ -6,6 +6,7 @@ import {
   ListItemPrefix,
   Typography,
 } from "@material-tailwind/react";
+import CustomNextImage from "../CustomNextImage";
 export default function SideBarMenuListUserComponent({
   users,
 }: {
@@ -16,11 +17,12 @@ export default function SideBarMenuListUserComponent({
       {users?.map((user: SideBarMenuListUser, index: number) => (
         <ListItem placeholder={""} className="px-1" key={index}>
           <ListItemPrefix placeholder={""}>
-            <Avatar
-              placeholder={""}
-              variant="circular"
-              alt="candice"
+            <CustomNextImage
+              alt=""
               src={user.image}
+              className="rounded-full"
+              height={45}
+              width={45}
             />
           </ListItemPrefix>
           <div className="line-clamp-1">
