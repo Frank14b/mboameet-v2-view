@@ -338,3 +338,11 @@ export const generateRandomHexColor = () => {
 
   return hexColor;
 };
+
+export const parseJsonString = (jsonString: string) => {
+  try {
+    return JSON.parse(jsonString);
+  } catch {
+    return jsonString;
+  }
+}

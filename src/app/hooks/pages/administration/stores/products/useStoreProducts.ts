@@ -16,7 +16,7 @@ import { FieldErrors, UseFormHandleSubmit } from "react-hook-form";
 import useAppForm from "../../../../useForm";
 import { useMainContext } from "@/app/contexts/main";
 import { notification } from "@/app/lib/notifications";
-import { createFileUploadString, fileExtFromBase64 } from "@/app/lib/utils";
+import { createFileUploadString, fileExtFromBase64, parseJsonString } from "@/app/lib/utils";
 import { proceedGetAdminStoreProducts, proceedSubmitProduct } from "@/app/services/server-actions/stores/products";
 import { CreateProductSchema } from "@/app/validators/administration/products";
 import { CreateProductFormDto } from "@/app/types/administration/stores/products";
@@ -144,7 +144,7 @@ const useAdminStoreProduct = (storeRef: string) => {
         ...product,
         image: getFileUrl(product.image, product.store.userId, ""),
         reference: product.reference.toLowerCase(),
-        description: JSON.parse(product.description)
+        description: parseJsonString(product.description)
       };
     });
   }, [products, getFileUrl]);
