@@ -137,19 +137,9 @@ export function AdminStoreProductsComponent({
                     </Typography>
                   </li>
                 </ul>
-                {/* <ul className="w-full">
-                  <li className="flex items-center gap-4">
-                    <Typography
-                      placeholder={""}
-                      className="font-normal text-sm"
-                    >
-                      {item.description}
-                    </Typography>
-                  </li>
-                </ul> */}
                 <div className="w-full">
-                  <div dangerouslySetInnerHTML={{ __html: JSON.parse(item.description) }}>
-                    {/* {item.description} */}
+                  <div dangerouslySetInnerHTML={{ __html: item.description }}>
+                    {/* // */}
                   </div>
                 </div>
               </CardBody>

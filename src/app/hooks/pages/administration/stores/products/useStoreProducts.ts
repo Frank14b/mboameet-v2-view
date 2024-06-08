@@ -144,6 +144,7 @@ const useAdminStoreProduct = (storeRef: string) => {
         ...product,
         image: getFileUrl(product.image, product.store.userId, ""),
         reference: product.reference.toLowerCase(),
+        description: JSON.parse(product.description)
       };
     });
   }, [products, getFileUrl]);
