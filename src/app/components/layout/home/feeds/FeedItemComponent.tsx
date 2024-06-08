@@ -32,6 +32,7 @@ export default function FeedItemComponent({
   const [isUserLiked, setIsUserLiked] = useState<boolean>(
     feed?.feedLikes && feed?.feedLikes?.length == 1 ? true : false
   );
+  const [clampText, setClampText] = useState<boolean>(true);
 
   const feedData = useMemo(() => {
     if (!updatedFeed) return feed;
@@ -125,8 +126,11 @@ export default function FeedItemComponent({
         )}
 
         <div
-          className="rounded-xl px-3 pb-3 mb-3 text-sm text-black dark:text-gray-300"
+          className={`rounded-xl px-3 pb-3 mb-3 text-sm text-black dark:text-gray-300 ${
+            clampText ? "lg:line-clamp-6 xs:line-clamp-3" : ""
+          }`}
           dangerouslySetInnerHTML={{ __html: formatHashTags(feedData.message) }}
+          onClick={() => setClampText(false)}
         ></div>
 
         <FeedCommentComponent
