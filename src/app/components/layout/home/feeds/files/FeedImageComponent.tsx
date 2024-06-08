@@ -29,6 +29,8 @@ export default function FeedImageViewComponent({
                   )}
                   alt="-"
                   priority={true}
+                  placeholder="blur"
+                  blurDataURL="/blurredPreview.png"
                 />
               </div>
             </div>
