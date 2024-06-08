@@ -15,7 +15,7 @@ export default function AnimateHoverScale({
       transition={{ duration: 0.2 + index / 10 }}
       whileHover={{ scale: 1.02 }}
       whileInView={{ opacity: 1 }}
-      viewport={{ once: false }}
+      viewport={{ once: true }}
     >
       {children}
     </motion.div>
