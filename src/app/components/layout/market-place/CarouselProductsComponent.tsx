@@ -1,35 +1,37 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Card, CardBody, Rating, Typography } from "@material-tailwind/react";
-import Carousel from "react-multi-carousel";
+import Carousel, { ResponsiveType } from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import CustomNextImage from "../../widgets/CustomNextImage";
 import useProducts from "@/app/hooks/pages/marketplace/useProducts";
 import { NoDataFound } from "../../widgets/NoDataFound";
 import { HomeIcon, ShoppingCartIcon } from "@heroicons/react/24/solid";
+import { ProductDetailsPopupComponent } from "./ProductDetailsPopupComponent";
+import { ResultProductDto } from "@/app/types/stores/products";
+import { productCarouselResponsive } from "@/app/lib/constants/app";
 
-export function CarouselProductsComponent() {
+export function CarouselProductsComponent({
+  responsive,
+}: {
+  responsive?: ResponsiveType;
+}) {
   //
-  const [responsive] = useState({
-    superLargeDesktop: {
-      // the naming can be any, depends on you.
-      breakpoint: { max: 4000, min: 3000 },
-      items: 7,
-    },
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 6,
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 4,
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 2,
-    },
-  });
-
   const { products, isLoading } = useProducts({});
+  const [isPopupDetailsOpen, setIsPopupDetailsOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] =
+    useState<ResultProductDto | null>(null);
+
+  const handleOpen = useCallback(() => {
+    setIsPopupDetailsOpen(!isPopupDetailsOpen);
+  }, [isPopupDetailsOpen, setIsPopupDetailsOpen]);
+
+  const handleSelectProduct = useCallback(
+    (product: ResultProductDto) => {
+      setSelectedProduct(product);
+      handleOpen();
+    },
+    [handleOpen, setSelectedProduct]
+  );
 
   const formattedProducts = useMemo(() => {
     if (isLoading) return <>Loading...</>;
@@ -43,7 +45,7 @@ export function CarouselProductsComponent() {
 
     return (
       <>
-        <Carousel responsive={responsive}>
+        <Carousel responsive={responsive ?? productCarouselResponsive}>
           {products.map((product, index) => (
             <div
               className="p-2 hover:scale-105 transform transition duration-2"
@@ -57,16 +59,24 @@ export function CarouselProductsComponent() {
                   placeholder={""}
                   className="min-h-[30vh] dark:text-gray-100 py-2 pb-4 p-0 hover:shadow-lg"
                 >
-                  <div className="h-[160px] relative">
+                  <div
+                    className="h-[160px] relative"
+                    onClick={() => handleSelectProduct(product)}
+                  >
                     <CustomNextImage
                       alt=""
                       className="object-cover rounded-lg"
                       fill={true}
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      quality={80}
                       src={product.image}
                     />
                   </div>
                   <div className="w-full p-2 px-4 dark:text-gray-400">
-                    <div className="line-clamp-1">
+                    <div
+                      className="line-clamp-1"
+                      onClick={() => handleSelectProduct(product)}
+                    >
                       <Typography
                         className="text-sm p-0 font-medium capitalize"
                         placeholder={""}
@@ -100,9 +110,25 @@ export function CarouselProductsComponent() {
             </div>
           ))}
         </Carousel>
+
+        {selectedProduct && (
+          <ProductDetailsPopupComponent
+            open={isPopupDetailsOpen}
+            handleOpen={handleOpen}
+            product={selectedProduct}
+          />
+        )}
       </>
     );
-  }, [products, isLoading, responsive]);
+  }, [
+    products,
+    isLoading,
+    responsive,
+    isPopupDetailsOpen,
+    selectedProduct,
+    handleOpen,
+    handleSelectProduct,
+  ]);
 
   return <>{formattedProducts}</>;
 }

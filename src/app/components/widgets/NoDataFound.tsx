@@ -35,6 +35,7 @@ export function NoDataFound({
           src={image ?? "/no-results-bg.2d2c6ee3.png"}
           alt="card-image"
           className="object-cover rounded-full"
+          priority={true}
         />
       </CardHeader>
       <CardBody placeholder={""}>

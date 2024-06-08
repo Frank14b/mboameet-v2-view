@@ -14,8 +14,7 @@ import {
   VideoCameraIcon,
 } from "@heroicons/react/24/solid";
 import { configs } from "../../../../app.config";
-import { MessageActionsDto, MessageReactionsDto, ThemeDto } from "@/app/types";
-import theme from "@material-tailwind/react/theme";
+import { MessageActionsDto, MessageReactionsDto } from "@/app/types";
 
 export const OTP_TIMER: number = parseInt(configs.RESEND_OTP_TIME ?? "30");
 
@@ -176,3 +175,43 @@ export const storiesTypes = [
 ];
 
 export const priceUnitTypes = ["Unit", "kg", "Gram", "Liter", "Pack"];
+
+export const productCarouselResponsive = {
+  superLargeDesktop: {
+    // the naming can be any, depends on you.
+    breakpoint: { max: 4000, min: 3000 },
+    items: 7,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 994 },
+    items: 6,
+  },
+  tablet: {
+    breakpoint: { max: 994, min: 464 },
+    items: 3,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 2,
+  },
+};
+
+export const productDetailsCarouselResponsive = {
+  superLargeDesktop: {
+    // the naming can be any, depends on you.
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 994 },
+    items: 4,
+  },
+  tablet: {
+    breakpoint: { max: 994, min: 464 },
+    items: 3,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 2,
+  },
+};
