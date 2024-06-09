@@ -28,7 +28,7 @@ export function ProductDetailsPopupComponent({
       <Dialog placeholder={""} size="lg" open={open} handler={handleOpen}>
         <DialogHeader placeholder={""}>
           <div className="w-full">
-            <div className="flex flex-col">
+            <div className="line-clamp-2">
               <Typography
                 placeholder={""}
                 variant="h5"
@@ -37,18 +37,18 @@ export function ProductDetailsPopupComponent({
               >
                 {product.name}
               </Typography>
-              <Typography
-                placeholder={""}
-                variant="small"
-                color="gray"
-                className="text-xs font-normal"
-              >
-                {product.productCategory.name}
-              </Typography>
             </div>
+            <Typography
+              placeholder={""}
+              variant="small"
+              color="gray"
+              className="text-xs font-normal"
+            >
+              {product.productCategory.name}
+            </Typography>
           </div>
         </DialogHeader>
-        <DialogBody placeholder={""} className="overflow-y-auto max-h-[75vh]">
+        <DialogBody placeholder={""} className="overflow-y-auto max-h-[70vh]">
           <div className="lg:flex">
             <div className="sm:flex xs:grid gap-1 w-full pb-5">
               <div className="lg:w-[90px] xs:flex gap-2 bg-gray-200 overflow-y-auto max-h-[300px] px-1 rounded-lg">

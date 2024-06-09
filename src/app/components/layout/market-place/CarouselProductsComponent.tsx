@@ -9,6 +9,7 @@ import { HomeIcon, ShoppingCartIcon } from "@heroicons/react/24/solid";
 import { ProductDetailsPopupComponent } from "./ProductDetailsPopupComponent";
 import { ResultProductDto } from "@/app/types/stores/products";
 import { productCarouselResponsive } from "@/app/lib/constants/app";
+import { CarouselProductSkeleton } from "../../widgets/skeletons/products/CarouselProductSkeleton";
 
 export function CarouselProductsComponent({
   responsive,
@@ -16,7 +17,7 @@ export function CarouselProductsComponent({
   responsive?: ResponsiveType;
 }) {
   //
-  const { products, isLoading } = useProducts({});
+  const { products, isFetchingProduct } = useProducts({});
   const [isPopupDetailsOpen, setIsPopupDetailsOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] =
     useState<ResultProductDto | null>(null);
@@ -34,7 +35,8 @@ export function CarouselProductsComponent({
   );
 
   const formattedProducts = useMemo(() => {
-    if (isLoading) return <>Loading...</>;
+    if (isFetchingProduct)
+      return <CarouselProductSkeleton isLoading={isFetchingProduct} count={6} />;
     if (products.length === 0)
       return (
         <NoDataFound
@@ -48,12 +50,12 @@ export function CarouselProductsComponent({
         <Carousel responsive={responsive ?? productCarouselResponsive}>
           {products.map((product, index) => (
             <div
-              className="p-2 hover:scale-105 transform transition duration-2"
+              className="p-2 hover:scale-105 transform transition duration-2 rounded-lg"
               key={index}
             >
               <Card
                 placeholder={""}
-                className="dark:bg-gray-900 p-0 cursor-pointer bg-gray-100 w-full shadow-none border-2 border-gray-100 dark:border-none"
+                className="dark:bg-gray-900 rounded-lg p-0 cursor-pointer bg-gray-100 w-full shadow-none border-2 border-gray-100 dark:border-none"
               >
                 <CardBody
                   placeholder={""}
@@ -122,7 +124,7 @@ export function CarouselProductsComponent({
     );
   }, [
     products,
-    isLoading,
+    isFetchingProduct,
     responsive,
     isPopupDetailsOpen,
     selectedProduct,

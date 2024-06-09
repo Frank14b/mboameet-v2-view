@@ -21,7 +21,7 @@ export function MarketPlaceComponent() {
 
   return (
     <div className="w-full">
-      <Card placeholder={""} className="dark:bg-gray-800 w-full rounded-lg">
+      <Card placeholder={""} className="dark:bg-gray-800 shadow-none dark:shadow-lg w-full rounded-lg">
         <CardHeader
           placeholder={""}
           className="mt-5 shadow-none px-5 bg-transparent"
@@ -48,7 +48,7 @@ export function MarketPlaceComponent() {
 
       <Card
         placeholder={""}
-        className="dark:bg-gray-800 w-full rounded-lg mt-5"
+        className="dark:bg-gray-800 w-full shadow-none dark:shadow-lg rounded-lg mt-5"
       >
         <CardBody placeholder={""} className="p-4 pt-0 dark:text-gray-100">
           <section className="py-16 px-8">
@@ -128,7 +128,7 @@ export function MarketPlaceComponent() {
 
       <Card
         placeholder={""}
-        className="dark:bg-gray-800 w-full rounded-lg mt-5"
+        className="dark:bg-gray-800 shadow-none dark:shadow-lg w-full rounded-lg mt-5"
       >
         <CardHeader
           placeholder={""}
