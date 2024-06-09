@@ -96,7 +96,7 @@ export function MainWrapper({ children }: { children: any }) {
   // const queryClient = new QueryClient();
 
   const logout = useCallback(async () => {
-    deleteToken();
+    await deleteToken();
     setUserConnected(false);
     useUserStore.persist.clearStorage();
     clear();
@@ -147,7 +147,7 @@ export function MainWrapper({ children }: { children: any }) {
         setUserConnected(true);
       } else {
         if (result.statusCode == 401) {
-          logout();
+          await logout();
         } else if (result.statusCode == 4040) {
           notification.apiNotify(result);
         }

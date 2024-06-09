@@ -42,12 +42,11 @@ export const checkCache = (key: string): boolean => {
   return myCache.has(key);
 };
 
-export const hashingData = (value: string): string => {
+const hashingData = (value: string): string => {
   try {
     return value;
 
     if (configs.APP_ENV_MODE == "dev") return value;
-
     // const password: string = configs.ENCRYPTION_PASSWORD ?? "";
     // // SHA-256 (recommended for password hashing)
     // const hash: string = crypto
@@ -160,11 +159,11 @@ export const getToken = async (): Promise<string> => {
   }
 };
 
-export const deleteToken = (): boolean => {
+export const deleteToken = async (): Promise<boolean> => {
   try {
-    cookies().delete(hashingData(tokenCookieskey[0]));
-    cookies().delete(hashingData(tokenCookieskey[1]));
-    cookies().delete(hashingData(tokenCookieskey[2]));
+    cookies().delete(tokenCookieskey[0]);
+    cookies().delete(tokenCookieskey[1]);
+    cookies().delete(tokenCookieskey[2]);
 
     return true;
   } catch (error) {
