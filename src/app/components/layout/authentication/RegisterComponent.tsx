@@ -35,7 +35,7 @@ export default function SignInComponent({
         </div>
 
         <div className="w-1/2 xs:w-full sm:w-full lg:w-1/2 bg-gray-200 dark:bg-gray-800">
-          <AnimateFadeOut>
+          {/* <AnimateFadeOut> */}
             <div className="flex flex-col items-center justify-center h-screen">
               <div className="relative flex flex-col text-gray-700 bg-white dark:bg-gray-900 dark:border-1 dark:shadow-xs shadow-md w-96 rounded-xl bg-clip-border">
                 <div className="relative grid mx-4 mb-0 -mt-6 overflow-hidden text-white shadow-lg h-28 place-items-center rounded-xl bg-pink-300 from-gray-900 to-gray-800 bg-clip-border shadow-gray-900/20">
@@ -65,7 +65,7 @@ export default function SignInComponent({
                 </div>
               </div>
             </div>
-          </AnimateFadeOut>
+          {/* </AnimateFadeOut> */}
         </div>
       </div>
     </>

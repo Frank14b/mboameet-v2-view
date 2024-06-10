@@ -24,17 +24,17 @@ export default function SignUpStepTwoComponent({
               {`What's your mobile number?`}
             </h3>
             <div className="grid gap-4 mb-4 grid-cols-1">
-              <AnimateFadeOut speed={0.8}>
+              {/* <AnimateFadeOut speed={0.8}> */}
                 <CountrySelectField
                   data={{
                     title: "Select Country",
                     name: "country",
                   }}
                 />
-              </AnimateFadeOut>
-              <AnimateFadeOut speed={0.8}>
+              {/* </AnimateFadeOut>
+              <AnimateFadeOut speed={0.8}> */}
                 <InputField data={{ title: "Phone Number", name: "phone" }} />
-              </AnimateFadeOut>
+              {/* </AnimateFadeOut> */}
             </div>
             <div className="flex justify-between mt-5 gap-5">
               <button

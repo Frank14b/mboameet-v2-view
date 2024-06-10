@@ -22,12 +22,12 @@ export default function SignUpStepOneComponent({
             Account Identity
           </h3>
           <div className="grid gap-4 mb-4 grid-cols-1">
-            <AnimateFadeOut speed={0.8}>
+            {/* <AnimateFadeOut speed={0.8}> */}
               <InputField
                 data={{ title: "How can we call you?", name: "userName" }}
               />
-            </AnimateFadeOut>
-            <AnimateFadeOut speed={1}>
+            {/* </AnimateFadeOut> */}
+            {/* <AnimateFadeOut speed={1}> */}
               <InputField
                 data={{
                   title: "What's your email address?",
@@ -35,7 +35,7 @@ export default function SignUpStepOneComponent({
                   type: "email",
                 }}
               />
-            </AnimateFadeOut>
+            {/* </AnimateFadeOut> */}
           </div>
           <button
             type="submit"

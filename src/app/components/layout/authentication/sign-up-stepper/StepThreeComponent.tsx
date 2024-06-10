@@ -22,12 +22,12 @@ export default function SignUpStepThreeComponent({
             Account Security
           </h3>
           <div className="grid gap-4 mb-4 grid-cols-1">
-            <AnimateFadeOut>
+            {/* <AnimateFadeOut> */}
               <InputField
                 data={{ title: "Password", type: "password" }}
               />
-            </AnimateFadeOut>
-            <AnimateFadeOut speed={1}>
+            {/* </AnimateFadeOut>
+            <AnimateFadeOut speed={1}> */}
               <InputField
                 data={{
                   title: "Confirm Password",
@@ -35,7 +35,7 @@ export default function SignUpStepThreeComponent({
                   name: "confirmPassword",
                 }}
               />
-            </AnimateFadeOut>
+            {/* </AnimateFadeOut> */}
           </div>
           <div className="flex justify-between mt-5 gap-5">
             {/* <button

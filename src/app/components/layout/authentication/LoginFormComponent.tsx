@@ -4,7 +4,7 @@ import InputField from "../../widgets/InputField";
 import { Button } from "@material-tailwind/react";
 import { SignInHookDto } from "@/app/hooks/pages/auth/useSignIn";
 import CheckboxField from "../../widgets/CheckboxField";
-import AnimateFadeOut from "../../widgets/motions/AnimateFadeOut";
+// import AnimateFadeOut from "../../widgets/motions/AnimateFadeOut";
 
 export default function LoginFormComponent({
   signInHook,
@@ -18,14 +18,14 @@ export default function LoginFormComponent({
     <>
       <div className="flex flex-col gap-4 p-6">
         <div className="relative w-full min-w-[200px]">
-          <AnimateFadeOut speed={0.8}>
+          {/* <AnimateFadeOut speed={0.8}> */}
             <InputField data={{ title: "Username", name: "userName" }} />
-          </AnimateFadeOut>
+          {/* </AnimateFadeOut> */}
         </div>
         <div className="relative w-full min-w-[200px]">
-          <AnimateFadeOut speed={1}>
+          {/* <AnimateFadeOut speed={1}> */}
             <InputField data={{ title: "Password", type: "password" }} />
-          </AnimateFadeOut>
+          {/* </AnimateFadeOut> */}
         </div>
         <div className="-ml-2.5">
           <div className="inline-flex items-center">

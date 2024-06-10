@@ -164,11 +164,11 @@ export function CreateStoreFormPopupComponent({
                     <div
                       className={`${isFirstStep ? "w-full mt-12" : "hidden"}`}
                     >
-                      <AnimateFadeOut speed={1}>
+                      {/* <AnimateFadeOut speed={1}> */}
                         <CreateStoreFirstStepComponent
                           adminStoreHook={adminStoreHook}
                         />
-                      </AnimateFadeOut>
+                      {/* </AnimateFadeOut> */}
                     </div>
                   )}
 
@@ -178,11 +178,11 @@ export function CreateStoreFormPopupComponent({
                         activeStep == 1 ? "w-full mt-12" : "hidden"
                       }`}
                     >
-                      <AnimateFadeOut speed={1}>
+                      {/* <AnimateFadeOut speed={1}> */}
                         <CreateStoreSecondStepComponent
                           adminStoreHook={adminStoreHook}
                         />
-                      </AnimateFadeOut>
+                      {/* </AnimateFadeOut> */}
                     </div>
                   )}
 
@@ -190,11 +190,11 @@ export function CreateStoreFormPopupComponent({
                     <div
                       className={`${isLastStep ? "w-full mt-12" : "hidden"}`}
                     >
-                      <AnimateFadeOut speed={1}>
+                      {/* <AnimateFadeOut speed={1}> */}
                         <CreateStoreThirdStepComponent
                           adminStoreHook={adminStoreHook}
                         />
-                      </AnimateFadeOut>
+                      {/* </AnimateFadeOut> */}
                     </div>
                   )}
 

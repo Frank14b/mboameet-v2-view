@@ -161,7 +161,13 @@ export function AdminStoreProductsComponent({
         </AccordionBody>
       </Accordion>
     ));
-  }, [products, isFetchingProduct, openAccordion, setOpenAccordion]);
+  }, [
+    products,
+    isFetchingProduct,
+    openAccordion,
+    uploadProductImage,
+    setOpenAccordion,
+  ]);
 
   return (
     <div className="dark:text-gray-100">
