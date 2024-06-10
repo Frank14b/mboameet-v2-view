@@ -67,13 +67,13 @@ export function MarketPlaceComponent() {
                 design!
               </p>
             </div>
-            <div className="mx-auto container grid place-items-center grid-cols-1 md:grid-cols-2">
+            <div className="mx-auto mt-5 container grid place-items-center grid-cols-1 md:grid-cols-2">
               <CustomNextImage
                 src="https://material-tailwind.com/image/product-4.png"
                 alt="pink blazer"
-                className="h-[36rem] w-full rounded-lg object-cover"
-                height={350}
-                width={350}
+                className="h-[26rem] w-full rounded-lg object-contain"
+                height={250}
+                width={250}
               />
               <div>
                 <Typography placeholder={""} className="mb-4" variant="h3">

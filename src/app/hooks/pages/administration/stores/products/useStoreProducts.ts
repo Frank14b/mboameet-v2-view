@@ -7,17 +7,21 @@ import {
   useMemo,
   useState,
 } from "react";
-import {
-  ApiResponseDto,
-  ObjectKeyDto,
-  ResultLoginDto,
-} from "@/app/types";
+import { ApiResponseDto, ObjectKeyDto, ResultLoginDto } from "@/app/types";
 import { FieldErrors, UseFormHandleSubmit } from "react-hook-form";
 import useAppForm from "../../../../useForm";
 import { useMainContext } from "@/app/contexts/main";
 import { notification } from "@/app/lib/notifications";
-import { createFileUploadString, fileExtFromBase64, parseJsonString } from "@/app/lib/utils";
-import { proceedGetAdminStoreProducts, proceedSubmitProduct } from "@/app/services/server-actions/stores/products";
+import {
+  createFileUploadString,
+  fileExtFromBase64,
+  parseJsonString,
+} from "@/app/lib/utils";
+import {
+  proceedGetAdminStoreProducts,
+  proceedSubmitProduct,
+  proceedSubmitProductImage,
+} from "@/app/services/server-actions/stores/products";
 import { CreateProductSchema } from "@/app/validators/administration/products";
 import { CreateProductFormDto } from "@/app/types/administration/stores/products";
 import { ResultProductDto } from "@/app/types/stores/products";
@@ -131,7 +135,7 @@ const useAdminStoreProduct = (storeRef: string) => {
       handleIsOpenStoreForm,
       setResponseData,
       setIsLoading,
-      getProducts
+      getProducts,
     ]
   );
 
@@ -146,10 +150,32 @@ const useAdminStoreProduct = (storeRef: string) => {
         ...product,
         image: getFileUrl(product.image, product.store.userId, ""),
         reference: product.reference.toLowerCase(),
-        description: parseJsonString(product.description)
+        description: parseJsonString(product.description),
       };
     });
   }, [products, getFileUrl]);
+
+  const uploadProductImage = useCallback(
+    async (image: ObjectKeyDto, productRef: string) => {
+      const formData = new FormData();
+
+      formData.append(
+        "image",
+        image.blob,
+        `store-product-image.${fileExtFromBase64(image.base64)}`
+      );
+      formData.append("fileType", "image");
+
+      const result = await proceedSubmitProductImage(
+        formData,
+        storeRef,
+        productRef
+      );
+
+      console.log("🚀 ~ result:", result)
+    },
+    [storeRef]
+  );
 
   const data: AdminStoreProductHookDto = {
     storeRef,
@@ -169,6 +195,7 @@ const useAdminStoreProduct = (storeRef: string) => {
     submitFormData,
     handleSubmit,
     handleIsOpenStoreForm,
+    uploadProductImage,
   };
 
   return { ...data };
@@ -193,5 +220,9 @@ export type AdminStoreProductHookDto = {
   handleIsOpenStoreForm: () => void;
   selectImageFile: (data: ChangeEvent<HTMLInputElement>) => Promise<void>;
   handleCroppedImage: (image: string | Blob | ObjectKeyDto) => Promise<void>;
+  uploadProductImage: (
+    image: ObjectKeyDto,
+    productRef: string
+  ) => Promise<void>;
   handleUpdatePhotoField: (value: string | null) => void;
 };

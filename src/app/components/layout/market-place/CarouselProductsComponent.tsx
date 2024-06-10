@@ -59,10 +59,10 @@ export function CarouselProductsComponent({
               >
                 <CardBody
                   placeholder={""}
-                  className="min-h-[30vh] dark:text-gray-100 py-2 pb-4 p-0 hover:shadow-lg"
+                  className="min-h-[30vh] dark:text-gray-100 py-2 pb-4 p-0"
                 >
                   <div
-                    className="h-[160px] relative"
+                    className="h-[140px] relative"
                     onClick={() => handleSelectProduct(product)}
                   >
                     <CustomNextImage
@@ -96,10 +96,10 @@ export function CarouselProductsComponent({
                         value={4}
                         className="xs-product-rating px-0"
                       />
-                      <div className="line-clamp-1 text-xs flex gap-1 dark:text-gray-600">
+                      {/* <div className="line-clamp-1 text-xs flex gap-1 dark:text-gray-600">
                         <HomeIcon className="h-3 w-3 mt-[1px]" />{" "}
                         {product.store.name}
-                      </div>
+                      </div> */}
                     </div>
 
                     <div className="w-full mt-4 flex justify-between text-xs">

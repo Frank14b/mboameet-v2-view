@@ -13,7 +13,7 @@ export default function MarketPlacePage() {
 
   return (
     <div className="container dark:text-white">
-      <div className="w-full flex xs:px-5">
+      <div className="w-full flex xs:px-5 justify-between">
         <Breadcrumbs placeholder={""} className="dark:bg-gray-800">
           <CustomNextLink href="/">
             <span className="opacity-60 dark:opacity-80 dark:text-gray-100">
@@ -29,7 +29,7 @@ export default function MarketPlacePage() {
           onClick={() => push(`${administrationPathUrl.stores}`)}
           placeholder={""}
           size="sm"
-          className="bg-pink-600 mx-3"
+          className="bg-pink-600 text-xs mx-3"
         >
           <Cog6ToothIcon className="w-5 h-5 sm:hidden" />{" "}
           <span className="xs:hidden">Manage My Store</span>

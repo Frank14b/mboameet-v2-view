@@ -25,6 +25,7 @@ import { NoDataFound } from "@/app/components/widgets/NoDataFound";
 import { CreateProductFormPopupComponent } from "./create/ProductFormPopupComponent";
 import TooltipCustomAnimation from "@/app/components/widgets/TooltipCustomAnimation";
 import { AdminStoreProductHookDto } from "@/app/hooks/pages/administration/stores/products/useStoreProducts";
+import ProductImageUploadComponent from "./create/ProductImageUploadComponent";
 
 export function AdminStoreProductsComponent({
   adminProductHook,
@@ -33,8 +34,12 @@ export function AdminStoreProductsComponent({
 }) {
   //
 
-  const { products, isFetchingProduct, handleIsOpenStoreForm } =
-    adminProductHook;
+  const {
+    products,
+    isFetchingProduct,
+    handleIsOpenStoreForm,
+    uploadProductImage,
+  } = adminProductHook;
   const [openAccordion, setOpenAccordion] = useState<number>(0);
 
   const storeItems = useMemo(() => {
@@ -104,43 +109,51 @@ export function AdminStoreProductsComponent({
                   </IconButton>
                 </TooltipCustomAnimation>
               </CardHeader>
-              <CardBody placeholder={""} className="p-0 xs:grid lg:flex gap-5">
-                <ul className="flex flex-col gap-4 w-full">
-                  <li className="flex items-center gap-4">
-                    <span className="rounded-full border border-white/20 bg-white/20 p-1">
-                      <CurrencyEuroIcon className="w-4 h-4" />
-                    </span>
-                    <Typography
-                      placeholder={""}
-                      className="font-normal text-sm"
-                    >
-                      Price: {item.price} / {item.priceUnit}{" "}
-                      {item.priceUnitType}
-                    </Typography>
-                  </li>
+              <CardBody placeholder={""} className="p-0">
+                <div className=" xs:grid lg:flex gap-5">
+                  <ul className="flex flex-col gap-4 w-full">
+                    <li className="flex items-center gap-4">
+                      <span className="rounded-full border border-white/20 bg-white/20 p-1">
+                        <CurrencyEuroIcon className="w-4 h-4" />
+                      </span>
+                      <Typography
+                        placeholder={""}
+                        className="font-normal text-sm"
+                      >
+                        Price: {item.price} / {item.priceUnit}{" "}
+                        {item.priceUnitType}
+                      </Typography>
+                    </li>
 
-                  <li className="flex items-center gap-4">
-                    <span className="rounded-full border border-white/20 bg-white/20 p-1">
-                      <CurrencyEuroIcon className="w-4 h-4" />
-                    </span>
-                    <Typography
-                      placeholder={""}
-                      as={"div"}
-                      className="font-normal text-sm flex gap-2"
-                    >
-                      Quantity: {!item.isUnlimited ? item.quantity : ""}
-                      <Chip
-                        className="text-xs mt-[-2px]"
-                        size="sm"
-                        value={item.isUnlimited ? "Unlimited" : "Limited"}
-                      />
-                    </Typography>
-                  </li>
-                </ul>
-                <div className="w-full">
-                  <div dangerouslySetInnerHTML={{ __html: item.description }}>
-                    {/* // */}
+                    <li className="flex items-center gap-4">
+                      <span className="rounded-full border border-white/20 bg-white/20 p-1">
+                        <CurrencyEuroIcon className="w-4 h-4" />
+                      </span>
+                      <Typography
+                        placeholder={""}
+                        as={"div"}
+                        className="font-normal text-sm flex gap-2"
+                      >
+                        Quantity: {!item.isUnlimited ? item.quantity : ""}
+                        <Chip
+                          className="text-xs mt-[-2px]"
+                          size="sm"
+                          value={item.isUnlimited ? "Unlimited" : "Limited"}
+                        />
+                      </Typography>
+                    </li>
+                  </ul>
+                  <div className="w-full">
+                    <div dangerouslySetInnerHTML={{ __html: item.description }}>
+                      {/* // */}
+                    </div>
                   </div>
+                </div>
+                <div className="w-full flex mt-5">
+                  <ProductImageUploadComponent
+                    productRef={item.reference}
+                    selectedImageFile={uploadProductImage}
+                  />
                 </div>
               </CardBody>
             </Card>

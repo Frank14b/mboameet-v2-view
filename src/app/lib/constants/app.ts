@@ -179,16 +179,24 @@ export const priceUnitTypes = ["Unit", "kg", "Gram", "Liter", "Pack"];
 export const productCarouselResponsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
-    breakpoint: { max: 4000, min: 3000 },
+    breakpoint: { max: 4000, min: 1400 },
     items: 7,
   },
+  large: {
+    breakpoint: { max: 1400, min: 1024 },
+    items: 5,
+  },
+  medium: {
+    breakpoint: { max: 1024, min: 960 },
+    items: 4,
+  },
   desktop: {
-    breakpoint: { max: 3000, min: 994 },
-    items: 6,
+    breakpoint: { max: 960, min: 721 },
+    items: 3,
   },
   tablet: {
-    breakpoint: { max: 994, min: 464 },
-    items: 3,
+    breakpoint: { max: 721, min: 464 },
+    items: 2,
   },
   mobile: {
     breakpoint: { max: 464, min: 0 },
@@ -199,16 +207,24 @@ export const productCarouselResponsive = {
 export const productDetailsCarouselResponsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
-    breakpoint: { max: 4000, min: 3000 },
+    breakpoint: { max: 4000, min: 1400 },
+    items: 7,
+  },
+  large: {
+    breakpoint: { max: 1400, min: 1024 },
     items: 5,
   },
-  desktop: {
-    breakpoint: { max: 3000, min: 994 },
+  medium: {
+    breakpoint: { max: 1024, min: 960 },
     items: 4,
   },
-  tablet: {
-    breakpoint: { max: 994, min: 464 },
+  desktop: {
+    breakpoint: { max: 960, min: 721 },
     items: 3,
+  },
+  tablet: {
+    breakpoint: { max: 721, min: 464 },
+    items: 2,
   },
   mobile: {
     breakpoint: { max: 464, min: 0 },

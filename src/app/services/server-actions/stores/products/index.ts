@@ -54,3 +54,18 @@ export const proceedGetStoreProducts = async (data: {
 
   return result;
 };
+
+export const proceedSubmitProductImage = async (
+  formData: FormData,
+  storeRef: string,
+  productRef: string
+) => {
+  //
+  const result: ApiResponseDto<ResultProductDto> = await apiCall({
+    method: "POST",
+    url: `${basePath}/${storeRef}/products/${productRef}/files`,
+    data: formData,
+  });
+
+  return result;
+};
