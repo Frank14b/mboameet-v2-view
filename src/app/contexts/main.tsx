@@ -186,7 +186,7 @@ export function MainWrapper({ children }: { children: any }) {
               {userConnected === true && !pathname.startsWith(authStartPath) ? (
                 <>
                   <div className="mh-600 bg-gray-200 dark:bg-gray-800">
-                    <div className="flex large:container">
+                    <div className="flex max-w-[1400px] m-auto">
                       <MobileSideBarMenuComponent
                         enable={canRemoveNavBar}
                         isMarketPlace={canRemoveNavBar}
@@ -210,7 +210,7 @@ export function MainWrapper({ children }: { children: any }) {
                         } w-1/2 csm:w-full xs:w-full lg:w-1/2 bg-gray-100 dark:bg-gray-900`}
                       >
                         <div
-                          className="flex flex-col h-screen pt-6 pb-6 relative overflow-y-auto"
+                          className="flex flex-col h-screen pt-6 pb-6 relative overflow-y-auto large:px-5"
                           id={mainDivComponentId}
                           ref={mainDivComponentRef}
                         >
@@ -239,7 +239,7 @@ export function MainWrapper({ children }: { children: any }) {
                       {!pathname.startsWith(authStartPath) ? (
                         <>
                           <div className="mh-600 bg-gray-200 dark:bg-gray-800">
-                            <div className="flex large:container">
+                            <div className="flex max-w-[1400px] m-auto">
                               <MobileSideBarMenuComponent
                                 enable={canRemoveNavBar}
                                 isMarketPlace={canRemoveNavBar}
@@ -263,7 +263,7 @@ export function MainWrapper({ children }: { children: any }) {
                         </>
                       ) : (
                         <>
-                          <div className="flex xs:grid large:container">
+                          <div className="flex xs:grid max-w-[1400px] m-auto">
                             {" "}
                             {children}
                             <MobileSideBarMenuComponent

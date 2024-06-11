@@ -151,6 +151,13 @@ const useAdminStoreProduct = (storeRef: string) => {
         image: getFileUrl(product.image, product.store.userId, ""),
         reference: product.reference.toLowerCase(),
         description: parseJsonString(product.description),
+        files: product.files.map((file) => {
+          return {
+           ...file,
+            url: getFileUrl(file.url, product.store.userId, ""),
+            previewUrl: getFileUrl(file.previewUrl, product.store.userId, ""),
+          };
+        }),
       };
     });
   }, [products, getFileUrl]);
@@ -172,9 +179,9 @@ const useAdminStoreProduct = (storeRef: string) => {
         productRef
       );
 
-      console.log("🚀 ~ result:", result)
+      getProducts()
     },
-    [storeRef]
+    [storeRef, getProducts]
   );
 
   const data: AdminStoreProductHookDto = {

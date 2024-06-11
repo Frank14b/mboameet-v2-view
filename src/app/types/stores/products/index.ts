@@ -1,5 +1,3 @@
-import { ResultStoreDto } from ".."
-
 export type ResultProductDto = {
     id: number,
     name: string,
@@ -13,8 +11,9 @@ export type ResultProductDto = {
     isUnlimited: boolean,
     createdAt: string,
     updatedAt: string,
-    store: ResultProductStore
-    productCategory: ResultProductCategory
+    store: ResultProductStore,
+    productCategory: ResultProductCategory,
+    files: ResultProductFilesDto[],
 }
 
 export type ResultProductStore = {
@@ -22,9 +21,21 @@ export type ResultProductStore = {
     name: string,
     reference: string,
     userId: number,
+    currency: {
+        name: string,
+        code: string,
+        symbol: string,
+    }
 }
 
 export type ResultProductCategory = {
     id: number,
     name: string,
+}
+
+export type ResultProductFilesDto = {
+    id: number,
+    url: string,
+    previewUrl: string,
+    type: string,
 }

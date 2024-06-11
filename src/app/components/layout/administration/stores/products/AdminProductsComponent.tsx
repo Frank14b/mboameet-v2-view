@@ -120,8 +120,8 @@ export function AdminStoreProductsComponent({
                         placeholder={""}
                         className="font-normal text-sm"
                       >
-                        Price: {item.price} / {item.priceUnit}{" "}
-                        {item.priceUnitType}
+                        Price: {item.price} {item.store.currency.code} /{" "}
+                        {item.priceUnit} {item.priceUnitType}
                       </Typography>
                     </li>
 
@@ -149,10 +149,26 @@ export function AdminStoreProductsComponent({
                     </div>
                   </div>
                 </div>
-                <div className="w-full flex mt-5">
+                <div className="w-full flex mt-5 gap-2">
+                  {item.files.map((file, index) => (
+                    <div className="" key={index}>
+                      <CustomNextImage
+                        width={140}
+                        height={140}
+                        src={file.url}
+                        blurDataURL={file.previewUrl}
+                        alt={item.name}
+                        className="rounded-lg object-cover"
+                      />
+                    </div>
+                  ))}
                   <ProductImageUploadComponent
                     productRef={item.reference}
                     selectedImageFile={uploadProductImage}
+                    cropSize={{
+                      width: 800,
+                      height: 800,
+                    }}
                   />
                 </div>
               </CardBody>

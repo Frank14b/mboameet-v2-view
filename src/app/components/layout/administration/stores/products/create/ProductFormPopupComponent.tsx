@@ -15,7 +15,6 @@ import { HomeIcon, CameraIcon } from "@heroicons/react/24/outline";
 import LoadingSpinner from "@/app/components/widgets/LoadingSpinner";
 import { CreateStoreFirstStepComponent } from "./stepper/FirstStepComponent";
 import { CreateStoreThirdStepComponent } from "./stepper/ThirdStepComponent";
-import AnimateFadeOut from "@/app/components/widgets/motions/AnimateFadeOut";
 import { AdminStoreProductHookDto } from "@/app/hooks/pages/administration/stores/products/useStoreProducts";
 import useProductCategories from "@/app/hooks/pages/administration/stores/products/useProductCategories";
 
