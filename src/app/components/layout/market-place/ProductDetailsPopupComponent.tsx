@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Dialog,
@@ -8,10 +8,14 @@ import {
   Typography,
   Rating,
 } from "@material-tailwind/react";
-import { ResultProductDto } from "@/app/types/stores/products";
+import {
+  ResultProductDto,
+  ResultProductFilesDto,
+} from "@/app/types/stores/products";
 import CustomNextImage from "../../widgets/CustomNextImage";
-import { range } from "@/app/lib/utils";
 import { HomeIcon } from "@heroicons/react/24/solid";
+import type { DialogHeaderStylesType } from "@material-tailwind/react";
+import { useMainContext } from "@/app/contexts/main";
 
 export function ProductDetailsPopupComponent({
   open,
@@ -23,9 +27,27 @@ export function ProductDetailsPopupComponent({
   handleOpen: () => void;
 }) {
   //
+
+  const [selectedImage, setSelectedImage] = useState<ResultProductFilesDto>(
+    product.files[0]
+  );
+  const { isDark } = useMainContext();
+
+  useEffect(() => {
+    if (open) {
+      setSelectedImage(product.files[0]);
+    }
+  }, [open]);
+
   return (
     <>
-      <Dialog placeholder={""} size="lg" open={open} handler={handleOpen}>
+      <Dialog
+        placeholder={""}
+        open={open}
+        handler={handleOpen}
+        size="lg"
+        className={`${isDark ? "bg-gray-900" : "bg-gray-100"}`}
+      >
         <DialogHeader placeholder={""}>
           <div className="w-full">
             <div className="line-clamp-2">
@@ -33,7 +55,7 @@ export function ProductDetailsPopupComponent({
                 placeholder={""}
                 variant="h5"
                 color="blue-gray"
-                className="font-medium"
+                className={`font-medium ${isDark ? "text-gray-100" : ""}`}
               >
                 {product.name}
               </Typography>
@@ -42,34 +64,43 @@ export function ProductDetailsPopupComponent({
               placeholder={""}
               variant="small"
               color="gray"
-              className="text-xs font-normal"
+              className={`text-xs font-normal ${isDark ? "text-gray-400" : ""}`}
             >
               {product.productCategory.name}
             </Typography>
           </div>
         </DialogHeader>
-        <DialogBody placeholder={""} className="overflow-y-auto max-h-[70vh]">
+        <DialogBody
+          placeholder={""}
+          className="overflow-y-auto max-h-[70vh] max-w-[900px]"
+        >
           <div className="lg:flex">
             <div className="sm:flex xs:grid gap-1 w-full pb-5">
-              <div className="lg:w-[90px] xs:flex gap-2 bg-gray-200 overflow-y-auto max-h-[300px] px-1 rounded-lg">
-                {range(1, 5).map((value) => (
+              <div
+                className={`lg:w-[90px] xs:flex gap-2 overflow-y-auto max-h-[300px] px-1 rounded-lg ${
+                  isDark ? "bg-gray-900" : "bg-gray-200"
+                }`}
+              >
+                {product.files.map((file, index) => (
                   <CustomNextImage
-                    key={value}
+                    key={index}
                     alt={product.name}
-                    src={product.image}
+                    src={file.url}
                     height={80}
                     width={80}
                     className="rounded-lg mb-2 cursor-pointer"
+                    onClick={() => setSelectedImage(file)}
                   />
                 ))}
               </div>
               <div className="w-full sm:w-[350px] xs:w-full">
                 <CustomNextImage
                   alt={product.name}
-                  src={product.image}
+                  src={selectedImage.url}
                   height={300}
                   width={1000}
-                  className="rounded-lg"
+                  className="rounded-lg shadow-lg"
+                  blurDataURL={selectedImage.previewUrl}
                 />
               </div>
             </div>
@@ -87,75 +118,60 @@ export function ProductDetailsPopupComponent({
               <Typography
                 placeholder={""}
                 color="blue-gray"
-                className="font-bold"
+                className={`font-bold ${isDark ? "text-gray-200" : ""}`}
                 as={"div"}
               >
-                Price: {product.price} - {product.priceUnit}{" "}
-                {product.priceUnitType}
+                Price: {product.price} {product.store.currency.code} -{" "}
+                {product.priceUnit} {product.priceUnitType}
               </Typography>
-              <hr />
               <Rating
                 placeholder={""}
                 value={4}
                 className="xs-product-rating px-0"
               />
+              <Button
+                placeholder={""}
+                size="sm"
+                color="pink"
+                className="my-5 flex items-center shadow-none"
+              >
+                Deal Now
+              </Button>
               <Typography
                 placeholder={""}
                 color="gray"
-                className="font-medium mt-3"
+                className={`font-medium mt-3 ${isDark ? "text-gray-100" : ""}`}
               >
                 Description
               </Typography>
               <div
-                className="text-sm"
+                className={`${isDark ? "text-gray-300" : ""} text-sm`}
                 dangerouslySetInnerHTML={{ __html: product.description }}
               >
                 {/* // */}
               </div>
             </div>
           </div>
-          {/* <div className="w-full bg-gray-200 rounded-lg mt-2 pt-2">
-            <Typography
-              placeholder={""}
-              color="pink"
-              className="font-bold text-sm px-3"
-            >
-              Similar Products
-            </Typography>
-            <CarouselProductsComponent
-              responsive={productDetailsCarouselResponsive}
-            />
-          </div> */}
         </DialogBody>
         <DialogFooter placeholder={""} className="justify-between">
-          <div className="flex items-center gap-16">
-            <div>
-              <Typography
-                placeholder={""}
-                variant="small"
-                color="gray"
-                className="font-normal"
-              >
-                Views
-              </Typography>
-              <Typography
-                placeholder={""}
-                color="blue-gray"
-                className="font-medium"
-              >
-                44,082,044
-              </Typography>
-            </div>
+          <div></div>
+          <div className="flex gap-3">
+            <Button
+              placeholder={""}
+              size="sm"
+              variant="outlined"
+              color="blue-gray"
+            >
+              Share
+            </Button>
+            <Button
+              placeholder={""}
+              size="sm"
+              color="pink"
+            >
+              Deal Now
+            </Button>
           </div>
-          <Button
-            placeholder={""}
-            size="sm"
-            variant="outlined"
-            color="blue-gray"
-            className="mr-5 flex items-center"
-          >
-            Share
-          </Button>
         </DialogFooter>
       </Dialog>
     </>

@@ -33,10 +33,25 @@ const useProducts = ({ storeRef }: { storeRef?: string }) => {
   const formattedProducts = useMemo(() => {
     if (!products) return [];
     return products.map((product) => {
+      //
+      product.image = getFileUrl(product.image, product.store.userId, "");
+
+      product.files.push({
+        id: 0,
+        url: product.image,
+        previewUrl: product.image,
+        type: "",
+      });
       return {
         ...product,
-        image: getFileUrl(product.image, product.store.userId, ""),
         reference: product.reference.toLowerCase(),
+        files: product.files.map((file) => {
+          return {
+            ...file,
+            url: getFileUrl(file.url, product.store.userId, ""),
+            previewUrl: getFileUrl(file.previewUrl, product.store.userId, ""),
+          };
+        }),
       };
     });
   }, [products, getFileUrl]);

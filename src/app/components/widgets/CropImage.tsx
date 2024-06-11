@@ -54,11 +54,11 @@ export default function CropImage({ image, croppedImage, returnType, cropSize }:
                     image={image}
                     crop={crop}
                     zoom={zoom}
-                    aspect={1 / 1}
+                    aspect={4 / 3}
                     onCropChange={setCrop}
                     onCropComplete={onCropComplete}
                     onZoomChange={setZoom}
-                    cropSize={cropSize ?? {width: 400, height: 400}}
+                    cropSize={cropSize ?? {width: 500, height: 500}}
                 />
                 {/*  */}
             </DialogBody>
