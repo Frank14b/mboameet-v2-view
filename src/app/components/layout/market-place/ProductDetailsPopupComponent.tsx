@@ -163,11 +163,7 @@ export function ProductDetailsPopupComponent({
             >
               Share
             </Button>
-            <Button
-              placeholder={""}
-              size="sm"
-              color="pink"
-            >
+            <Button placeholder={""} size="sm" color="pink">
               Deal Now
             </Button>
           </div>
