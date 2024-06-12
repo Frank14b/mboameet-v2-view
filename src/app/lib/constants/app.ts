@@ -27,7 +27,7 @@ export const invalidEmailErrorMessage: string =
 export const requiredEmailErrorMessage: string = "Email address is required";
 export const defaultProfileImg: string =
   "https://docs.material-tailwind.com/img/team-3.jpg";
-export const defaultImage: string = "/NoPicture_s.png";
+export const defaultImage: string = "/images/NoPicture_s.png";
 
 export const mainDivComponentId: string = `main-app-div`;
 export const referenceKeyword: string = `feed-card-item-`;
@@ -64,8 +64,8 @@ export const friendPathUrl: string = `/friends`;
 export const userEncryptionStorageKey: string = "userKey";
 
 export const chatBgImageClassName = {
-  darkMode: "dark:bg-[url('/pxFuelTwo.jpg')]",
-  lightMode: "bg-[url('/pxFuelLight.jpg')]",
+  darkMode: "dark:bg-[url('/images/pxFuelTwo.jpg')]",
+  lightMode: "bg-[url('/images/pxFuelLight.jpg')]",
 };
 
 export const localStorageKey = {

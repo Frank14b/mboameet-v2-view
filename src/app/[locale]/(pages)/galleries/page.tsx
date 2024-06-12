@@ -11,7 +11,7 @@ export default function GalleryPage() {
 
   return (
     <>
-      <div className="w-full flex absolute dark:text-white right-0 px-4">
+      <div className="flex dark:text-white pl-4">
         <div className="w-1/2 px-0">
           <Typography placeholder={""} className="font-bold px-1 flex gap-2">
             <CameraIcon className="h-4 w-4 mt-[5px]" />

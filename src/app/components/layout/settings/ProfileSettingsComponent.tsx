@@ -20,6 +20,7 @@ import { useCountries } from "use-react-countries";
 import { useMemo } from "react";
 import useCustomRouter from "@/app/hooks/useCustomRouter";
 import { useMainContext } from "@/app/contexts/main";
+import { useChangeLocale, useCurrentLocale } from "@/app/locales/client";
 
 export default function ProfileSettingsComponent({
   settingsHook,
@@ -31,6 +32,9 @@ export default function ProfileSettingsComponent({
   const { settings, updateAccountSettings } = settingsHook;
   const { countries } = useCountries();
   const { logout, deleteAccount } = useMainContext();
+
+  const changeLocale = useChangeLocale();
+  const locale = useCurrentLocale();
 
   const formattedCountries = useMemo(() => {
     return countries.map((country) => {
@@ -139,14 +143,23 @@ export default function ProfileSettingsComponent({
                         </ListItemPrefix>
                         <div>
                           <span className="dark:text-gray-100">
-                            Default Language
+                            Current Language
                           </span>
                         </div>
                         <ListItemSuffix
                           placeholder={""}
-                          className="uppercase font-bold"
+                          className="uppercase font-bold flex gap-5 mt-1"
                         >
-                          {settings.preferredLanguage}
+                          {locale}
+
+                          <span
+                            className="text-xs capitalize font-normal underline"
+                            onClick={() =>
+                              changeLocale(locale == "fr" ? "en" : "fr")
+                            }
+                          >
+                            Change | {locale == "fr" ? "En" : "Fr"}
+                          </span>
                         </ListItemSuffix>
                       </ListItem>
                       {/* // */}
@@ -181,9 +194,7 @@ export default function ProfileSettingsComponent({
                         <ListItemPrefix placeholder={""}>
                           <TrashIcon className="h-5 w-5 text-red-700" />
                         </ListItemPrefix>
-                        <span className="text-red-700">
-                          Delete my account
-                        </span>
+                        <span className="text-red-700">Delete my account</span>
                       </ListItem>
                       <ListItem placeholder={""} onClick={() => logout()}>
                         <ListItemPrefix placeholder={""}>

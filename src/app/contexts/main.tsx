@@ -162,7 +162,7 @@ export function MainWrapper({ children }: { children: any }) {
     mainScroll,
     navigationChange,
     mainDivComponentRef,
-    isDark: theme === 'dark',
+    isDark: theme === "dark",
     setNavigationChange,
     setTheme,
     logout,
@@ -263,13 +263,15 @@ export function MainWrapper({ children }: { children: any }) {
                         </>
                       ) : (
                         <>
-                          <div className="flex xs:grid max-w-[1600px] m-auto">
-                            {" "}
-                            {children}
-                            <MobileSideBarMenuComponent
-                              enable={true}
-                              isMarketPlace={canRemoveNavBar}
-                            ></MobileSideBarMenuComponent>{" "}
+                          <div className=" bg-gray-200 dark:bg-gray-800 w-full">
+                            <div className="flex xs:grid max-w-[1600px] m-auto">
+                              {" "}
+                              {children}
+                              <MobileSideBarMenuComponent
+                                enable={true}
+                                isMarketPlace={canRemoveNavBar}
+                              ></MobileSideBarMenuComponent>{" "}
+                            </div>
                           </div>
                         </>
                       )}

@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SessionAccessMiddleware } from "./app/middlewares/AuthMiddleware";
+import { createI18nMiddleware } from 'next-international/middleware'
 
 const PUBLIC_FILE = /\.(.*)$/;
+
+
+const I18nMiddleware = createI18nMiddleware({
+  locales: ['en', 'fr'],
+  defaultLocale: 'fr',
+  urlMappingStrategy: 'rewrite'
+})
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
@@ -40,12 +48,9 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.next({
-    request: {
-      // Apply new request headers
-      headers: requestHeaders,
-    },
-  });
+  return I18nMiddleware(request);
+
+  // return NextResponse.next(I18nMiddleware(request));
 }
 
 // See "Matching Paths" below to learn more

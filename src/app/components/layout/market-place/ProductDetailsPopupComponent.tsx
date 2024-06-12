@@ -14,7 +14,6 @@ import {
 } from "@/app/types/stores/products";
 import CustomNextImage from "../../widgets/CustomNextImage";
 import { HomeIcon } from "@heroicons/react/24/solid";
-import type { DialogHeaderStylesType } from "@material-tailwind/react";
 import { useMainContext } from "@/app/contexts/main";
 
 export function ProductDetailsPopupComponent({
@@ -37,7 +36,7 @@ export function ProductDetailsPopupComponent({
     if (open) {
       setSelectedImage(product.files[0]);
     }
-  }, [open]);
+  }, [open, product, setSelectedImage]);
 
   return (
     <>

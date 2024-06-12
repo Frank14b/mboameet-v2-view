@@ -20,6 +20,7 @@ import {
   HeartIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/solid";
+import CustomNextImage from "./CustomNextImage";
 
 export function UserProfilePopup({
   show,
@@ -34,37 +35,22 @@ export function UserProfilePopup({
   const [open, setOpen] = useState<boolean>(show);
   const handleOpen = () => onClose();
   const [userData, setUserData] = useState<ResultFriendsDto>(user);
-
-  useEffect(() => {
-    setOpen(show);
-    setUserData(user);
-  }, [show, user, setOpen]);
+  const [selectedImage, setSelectedImage] = React.useState("");
 
   const data = [
     {
       imageLink: userData?.photo ?? "",
-    },
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1432462770865-65b70566d673?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-    },
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80",
-    },
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2762&q=80",
-    },
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1682407186023-12c70a4a35e0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2832&q=80",
-    },
+    }
   ];
 
-  const [active, setActive] = React.useState(userData?.photo ?? "");
+  useEffect(() => {
+    setOpen(show);
+    setUserData(user);
+    setSelectedImage(user?.photo ?? "");
+  }, [show, user, setOpen, setSelectedImage]);
 
   if (!open) return <></>;
+
   return (
     <>
       <Dialog
@@ -143,7 +129,8 @@ export function UserProfilePopup({
                           color="gray"
                           className="font-normal"
                         >
-                          Member since: {new Date(user.createdAt).toDateString()}
+                          Member since:{" "}
+                          {new Date(user.createdAt).toDateString()}
                         </Typography>
                       </div>
                     </TimelineHeader>
@@ -152,9 +139,9 @@ export function UserProfilePopup({
               </div>
             </div>
             <div className="w-full shadow-lg shadow-blue-gray-900/5 grid justify-items-center place-items-end">
-              <Image
+              <CustomNextImage
                 className="h-[380px] w-full max-w-full rounded-lg shadow-lg border object-cover object-center md:h-[380px]"
-                src={active}
+                src={selectedImage}
                 alt={`${userData.fullName}`}
                 width={2000}
                 height={800}
@@ -177,17 +164,16 @@ export function UserProfilePopup({
                   <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
                 </svg>
               </IconButton>
-
             </div>
           </div>
 
           <div className="grid grid-cols-5 gap-2 mt-3 rounded-lg">
             {data.map(({ imageLink }, index) => (
               <div key={index}>
-                <Image
+                <CustomNextImage
                   width={1500}
                   height={1500}
-                  onClick={() => setActive(imageLink)}
+                  onClick={() => setSelectedImage(imageLink)}
                   src={imageLink}
                   className="max-w-full h-20 cursor-pointer rounded-lg shadow-lg border object-cover object-center"
                   alt="gallery-image"

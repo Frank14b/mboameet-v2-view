@@ -43,7 +43,7 @@ export function FriendsItemComponent({
         transition={{ duration: 0.2 + 1 }}
         whileHover={{ scale: 1.02 }}
         whileInView={{ opacity: 1 }}
-        viewport={{ once: false }}
+        viewport={{ once: true }}
         key={index}
       >
         <UserProfileCard
