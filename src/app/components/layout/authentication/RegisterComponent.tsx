@@ -2,10 +2,10 @@
 
 import LoadingSpinnerComponent from "../../widgets/LoadingSpinner";
 import SignUpFormComponent from "./RegisterFormComponent";
-import AnimateFadeOut from "../../widgets/motions/AnimateFadeOut";
 import { SignUpHookDto } from "@/app/hooks/pages/auth/useSignUp";
 import CustomNextImage from "../../widgets/CustomNextImage";
 import CustomNextLink from "../../widgets/CustomNextLink";
+import { useScopedI18n } from "@/app/locales/client";
 
 export default function SignInComponent({
   signUpHook,
@@ -14,6 +14,8 @@ export default function SignInComponent({
 }) {
   //
   const { handleSubmit, submitFormData, isLoading } = signUpHook;
+
+  const scopedT = useScopedI18n("authentication.signUp");
 
   return (
     <>
@@ -40,24 +42,24 @@ export default function SignInComponent({
               <div className="relative flex flex-col text-gray-700 bg-white dark:bg-gray-900 dark:border-1 dark:shadow-xs shadow-md w-96 rounded-xl bg-clip-border">
                 <div className="relative grid mx-4 mb-0 -mt-6 overflow-hidden text-white shadow-lg h-28 place-items-center rounded-xl bg-pink-300 from-gray-900 to-gray-800 bg-clip-border shadow-gray-900/20">
                   <h3 className="block font-sans text-3xl antialiased font-semibold leading-snug tracking-normal text-white">
-                    Sign Up
+                    {scopedT("title")}
                   </h3>
                 </div>
-                {/* <p className="text-sm text-gray-600 mt-4 px-5 text-center">
-                  Fill the required fields bellow or use the social button below
-                </p> */}
+                <p className="text-sm text-gray-600 mt-4 px-5 text-center">
+                  {scopedT("subtitle")}
+                </p>
                 <div className="p-5">
                   <LoadingSpinnerComponent isLoading={isLoading}>
                     <form method="post" onSubmit={handleSubmit(submitFormData)}>
                       <SignUpFormComponent signUpFormProps={signUpHook} />
 
                       <p className="flex justify-center mt-6 font-sans text-sm antialiased font-light leading-normal text-inherit">
-                        Already have an account?
+                        {scopedT("already_have_account")}
                         <CustomNextLink
                           href="/auth/signin"
                           className="block ml-1 font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900 dark:text-gray-500"
                         >
-                          Sign In
+                          {scopedT("go_to_signin")}
                         </CustomNextLink>
                       </p>
                     </form>

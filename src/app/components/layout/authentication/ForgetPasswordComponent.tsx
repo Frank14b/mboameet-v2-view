@@ -6,11 +6,14 @@ import ForgetPasswordFormComponent from "./ForgetPasswordFormComponent";
 import useForgetPassword from "@/app/hooks/pages/auth/useForgetPassword";
 import AnimateFadeOut from "../../widgets/motions/AnimateFadeOut";
 import CustomNextImage from "../../widgets/CustomNextImage";
+import { useScopedI18n } from "@/app/locales/client";
 
 export default function ForgetPasswordComponent() {
   //
   const formHook = useForgetPassword();
   const { handleSubmit, isLoading, submitFormData } = formHook;
+
+  const scopedT = useScopedI18n("authentication.forgetPassword");
 
   return (
     <>
@@ -21,7 +24,7 @@ export default function ForgetPasswordComponent() {
               <div className="relative flex flex-col text-gray-700 bg-white dark:bg-gray-900 shadow-md w-96 rounded-xl bg-clip-border">
                 <div className="relative grid mx-4 mb-4 -mt-6 overflow-hidden text-white shadow-lg h-28 place-items-center rounded-xl bg-pink-300 from-gray-900 to-gray-800 bg-clip-border shadow-gray-900/20">
                   <h3 className="block font-sans text-2xl antialiased font-semibold leading-snug tracking-normal text-white">
-                    Forget Password
+                    {scopedT("title")}
                   </h3>
                 </div>
                 <LoadingSpinner isLoading={isLoading}>
@@ -36,16 +39,16 @@ export default function ForgetPasswordComponent() {
                     href="/auth/signin"
                     className="block ml-1 font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900 dark:text-gray-500"
                   >
-                    Sign in
+                    {scopedT("sign_in")}
                   </Link>
                 </p>
                 <p className="flex justify-center mb-6 font-sans text-sm antialiased font-light leading-normal text-inherit">
-                {`Don't have account?`}
+                  {`Don't have account?`}
                   <Link
                     href="/auth/signup"
                     className="block ml-1 font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900 dark:text-gray-500"
                   >
-                    Sign up
+                    {scopedT("sign_up")}
                   </Link>
                 </p>
               </div>

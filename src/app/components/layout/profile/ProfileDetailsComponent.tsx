@@ -1,5 +1,6 @@
 "use client";
 
+import { useScopedI18n } from "@/app/locales/client";
 import { ObjectKeyDto, ResultLoginDto } from "@/app/types";
 import { EnvelopeIcon, FlagIcon, UserIcon } from "@heroicons/react/24/solid";
 
@@ -8,11 +9,12 @@ export default function ProfileDetailsComponent({
 }: {
   connectedUser: ResultLoginDto | ObjectKeyDto | null;
 }) {
+  const scopedT = useScopedI18n("profile");
+
   return (
     <>
       <div className="w-full mt-6">
         <ul className="flex flex-col w-full">
-
           <li className="relative flex flex-col gap-2">
             <span className="absolute left-0 grid !w-[78px] justify-center bg-transparent transition-opacity duration-200">
               <span className="h-full w-0.5 bg-blue-gray-100"></span>
@@ -23,7 +25,7 @@ export default function ProfileDetailsComponent({
               </span>
               <div className="flex flex-col gap-1">
                 <h6 className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900 dark:text-gray-200">
-                  Your User Name
+                  {scopedT("user_name")}
                 </h6>
                 <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 dark:text-gray-400">
                   {connectedUser?.userName}
@@ -42,7 +44,7 @@ export default function ProfileDetailsComponent({
               </span>
               <div className="flex flex-col gap-1">
                 <h6 className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900 dark:text-gray-200">
-                  Your Full Name
+                  {scopedT("full_name")}
                 </h6>
                 <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 dark:text-gray-400">
                   {connectedUser?.firstName ?? "-"}{" "}
@@ -62,7 +64,7 @@ export default function ProfileDetailsComponent({
               </span>
               <div className="flex flex-col gap-1">
                 <h6 className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900 dark:text-gray-200">
-                  Your Email Address
+                  {scopedT("email")}
                 </h6>
                 <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 dark:text-gray-400">
                   {connectedUser?.email}
@@ -81,7 +83,7 @@ export default function ProfileDetailsComponent({
               </span>
               <div className="flex flex-col gap-1">
                 <h6 className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900 dark:text-gray-200">
-                  Your Country
+                  {scopedT("country")}
                 </h6>
                 <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 dark:text-gray-400">
                   {connectedUser?.country}
@@ -89,7 +91,6 @@ export default function ProfileDetailsComponent({
               </div>
             </div>
           </li>
-
         </ul>
       </div>
     </>

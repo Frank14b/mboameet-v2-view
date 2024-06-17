@@ -10,6 +10,7 @@ import {
 import InputField from "../../widgets/InputField";
 import { ProfileHookDto } from "@/app/hooks/pages/profile/useUserProfile";
 import LoadingSpinner from "../../widgets/LoadingSpinner";
+import { useScopedI18n } from "@/app/locales/client";
 
 export function UpdateProfileFormComponent({
   userProfileHook,
@@ -24,6 +25,8 @@ export function UpdateProfileFormComponent({
     handleOpenEditProfile,
     submitFormData,
   } = userProfileHook;
+
+  const scopedT = useScopedI18n("profile.edit_form");
 
   return (
     <>
@@ -42,7 +45,7 @@ export function UpdateProfileFormComponent({
             <form method="post" onSubmit={handleSubmit(submitFormData)}>
               <CardBody placeholder={""} className="flex flex-col gap-4">
                 <Typography placeholder={""} variant="h4" color="blue-gray">
-                  Edit Profile
+                  {scopedT("title")}
                 </Typography>
                 <Typography
                   placeholder={""}
@@ -50,32 +53,39 @@ export function UpdateProfileFormComponent({
                   variant="paragraph"
                   color="gray"
                 >
-                  Enter your email and password to Sign In.
+                  {scopedT("subtitle")}
                 </Typography>
 
                 {/* <InputField data={{ title: "Username", name: "userName" }} /> */}
 
                 <InputField
                   data={{
-                    title: "First Name",
+                    title: scopedT("firstName"),
                     name: "firstName",
                   }}
                 />
 
                 <InputField
                   data={{
-                    title: "Last Name",
+                    title: scopedT("lastName"),
                     name: "lastName",
                   }}
                 />
 
                 <InputField
                   data={{
-                    title: "Email",
+                    title: scopedT("email"),
+                    name: "email",
                   }}
                 />
 
-                <InputField data={{ title: "Password", type: "password" }} />
+                <InputField
+                  data={{
+                    title: scopedT("password"),
+                    name: "password",
+                    type: "password",
+                  }}
+                />
               </CardBody>
               <CardFooter placeholder={""} className="pt-0">
                 <Button
@@ -85,7 +95,7 @@ export function UpdateProfileFormComponent({
                   fullWidth
                   className="dark-pink-600"
                 >
-                  Save
+                  {scopedT("save_btn")}
                 </Button>
 
                 <p className="mt-3">

@@ -11,6 +11,7 @@ import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/solid";
 import useDiscussions from "@/app/hooks/pages/chats/useDiscussions";
 import { ResultChatReferenceDto } from "@/app/types/chats";
 import useCustomRouter from "@/app/hooks/useCustomRouter";
+import { useScopedI18n } from "@/app/locales/client";
 
 export function SayHiChatPopupComponent({
   id,
@@ -52,6 +53,8 @@ export function SayHiChatPopupComponent({
     setIsLoading(false);
   }, [id, chatReference, push, setIsLoading, handleSendHiMessage]);
 
+  const scopedT = useScopedI18n("friends.say_hi");
+
   return (
     <>
       <span onClick={handleOpen}>{children}</span>
@@ -63,16 +66,16 @@ export function SayHiChatPopupComponent({
         >
           <ChatBubbleLeftEllipsisIcon className="h-14 w-14 text-red-400" />
           <Typography placeholder={""} color="red" variant="h4">
-            Say Hi!
+            {scopedT("title")}
           </Typography>
           <Typography placeholder={""} className="text-center font-normal">
             {!chatReference ? (
               <>
-                Start a new conversation with <b className="capitalize">{name}</b>
+                {scopedT("new_conversation")} <b className="capitalize">{name}</b>
               </>
             ) : (
               <>
-                Continue your conversation with <b className="capitalize">{name}</b>
+                {scopedT("continue_conversation")} <b className="capitalize">{name}</b>
               </>
             )}
           </Typography>
@@ -91,7 +94,7 @@ export function SayHiChatPopupComponent({
                 color="blue-gray"
                 onClick={handleOpen}
               >
-                close
+                {scopedT("close")}
               </Button>
               {chatReference ? (
                 <>
@@ -104,7 +107,7 @@ export function SayHiChatPopupComponent({
                       push(`/chats/${chatReference}`);
                     }}
                   >
-                    Ok, Continue
+                    {scopedT("continue_btn")}
                   </Button>
                 </>
               ) : (
@@ -115,7 +118,7 @@ export function SayHiChatPopupComponent({
                     variant="gradient"
                     onClick={sendMessage}
                   >
-                    Ok, Say Hi!
+                    {scopedT("send_btn")}
                   </Button>
                 </>
               )}

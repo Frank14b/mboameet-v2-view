@@ -14,7 +14,7 @@ export function ConversationsComponent({
 }) {
   //
   const skeletons: number = 5;
-  const { isLoading, messages, users, setIsLoading } = conversationHook;
+  const { isLoading, messages, users } = conversationHook;
   //
 
   const onMessageActionClick = useCallback(
@@ -28,7 +28,11 @@ export function ConversationsComponent({
     //
     if (messages.length == 0)
       return (
-        <NoDataFound customClass="shadow-none dark:bg-gray-800" message="" showMessage={false} />
+        <NoDataFound
+          customClass="shadow-none dark:bg-gray-800"
+          message=""
+          showMessage={false}
+        />
       );
 
     return (

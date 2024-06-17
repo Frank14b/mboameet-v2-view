@@ -37,7 +37,7 @@ export default function ListWithAvatar({
             <ListItem
               placeholder={""}
               onClick={() => onActionClick?.(item)}
-              className={`dark:bg-gray-900 ${
+              className={`dark:bg-gray-800 ${
                 activeItem == item.id ? "bg-gray-300" : ""
               }`}
               key={index}
@@ -58,7 +58,7 @@ export default function ListWithAvatar({
                     placeholder={""}
                     variant="h6"
                     color="blue-gray"
-                    className="dark:text-gray-400 capitalize"
+                    className="dark:text-gray-200 capitalize"
                   >
                     {item.title}
                   </Typography>
@@ -77,7 +77,7 @@ export default function ListWithAvatar({
 
               <ListItemSuffix placeholder={""}>
                 <div className="flex gap-3">
-                  <div className="text-xs">
+                  <div className="text-xs dark:text-gray-500">
                     {item.date && formatDate(item.date, "ago")}
                   </div>
                   {item.chip && activeItem != item.id ? (

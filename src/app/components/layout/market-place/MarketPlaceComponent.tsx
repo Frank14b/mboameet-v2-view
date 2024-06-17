@@ -15,13 +15,19 @@ import {
 } from "@heroicons/react/24/solid";
 import { CarouselProductsComponent } from "./CarouselProductsComponent";
 import CustomNextImage from "../../widgets/CustomNextImage";
+import { useScopedI18n } from "@/app/locales/client";
 
 export function MarketPlaceComponent() {
   //
 
+  const scopedT = useScopedI18n("marketPlace");
+
   return (
     <div className="w-full">
-      <Card placeholder={""} className="dark:bg-gray-800 shadow-none dark:shadow-lg w-full rounded-lg">
+      <Card
+        placeholder={""}
+        className="dark:bg-gray-800 shadow-none dark:shadow-lg w-full rounded-lg"
+      >
         <CardHeader
           placeholder={""}
           className="mt-5 shadow-none px-5 bg-transparent"
@@ -32,11 +38,12 @@ export function MarketPlaceComponent() {
               variant="h5"
               className="py-3 flex gap-2 text-pink-400"
             >
-              <ShoppingCartIcon className="w-5 h-5 mt-[2px]" /> Latest
+              <ShoppingCartIcon className="w-5 h-5 mt-[2px]" />{" "}
+              {scopedT("latest")}
             </Typography>
 
             <div className="mt-6 text-xs flex gap-1 hover:animate-pulse underline underline-offset-4 decoration-dotted cursor-pointer dark:text-gray-100">
-              See More <ArrowRightIcon className="w-4 h-4" />{" "}
+              {scopedT("see_more")} <ArrowRightIcon className="w-4 h-4" />{" "}
             </div>
           </div>
         </CardHeader>
@@ -140,11 +147,12 @@ export function MarketPlaceComponent() {
               variant="h5"
               className="py-3 flex gap-2 text-pink-400"
             >
-              <ShoppingCartIcon className="w-5 h-5 mt-[2px]" /> Recommended
+              <ShoppingCartIcon className="w-5 h-5 mt-[2px]" />{" "}
+              {scopedT("recommended")}
             </Typography>
 
             <div className="mt-6 text-xs dark:text-gray-100 flex gap-1 hover:animate-pulse underline underline-offset-4 decoration-dotted cursor-pointer">
-              See More <ArrowRightIcon className="w-4 h-4" />{" "}
+              {scopedT("see_more")} <ArrowRightIcon className="w-4 h-4" />{" "}
             </div>
           </div>
         </CardHeader>
@@ -158,11 +166,12 @@ export function MarketPlaceComponent() {
               variant="h5"
               className="py-3 flex gap-2 text-pink-400"
             >
-              <ShoppingBagIcon className="w-5 h-5 mt-[2px]" /> Features
+              <ShoppingBagIcon className="w-5 h-5 mt-[2px]" />{" "}
+              {scopedT("features")}
             </Typography>
 
             <div className="mt-6 text-xs dark:text-gray-100 flex gap-1 hover:animate-pulse underline underline-offset-4 decoration-dotted cursor-pointer">
-              See More <ArrowRightIcon className="w-4 h-4" />{" "}
+              {scopedT("see_more")} <ArrowRightIcon className="w-4 h-4" />{" "}
             </div>
           </div>
 

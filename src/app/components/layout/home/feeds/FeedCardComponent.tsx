@@ -13,6 +13,7 @@ import AnimateHoverScale from "@/app/components/widgets/motions/AnimateHoverScal
 import { NoDataFound } from "@/app/components/widgets/NoDataFound";
 import FeedItemComponent from "./FeedItemComponent";
 import { feedTypes } from "@/app/lib/constants/app";
+import { useScopedI18n } from "@/app/locales/client";
 
 //
 export default function FeedCardComponent({
@@ -29,6 +30,8 @@ export default function FeedCardComponent({
     feedTypes.recent.key as FeedTypesDto
   );
 
+  const scopedT = useScopedI18n('home.feeds');
+ 
   const onTabChange = (tab: string) => {
     setIsLoading(true);
     fetchFeeds({
@@ -43,7 +46,7 @@ export default function FeedCardComponent({
       return (
         <NoDataFound
           customClass="dark:shadow-none dark:bg-gray-800"
-          message="Feed not found"
+          message={scopedT('not_found')}
         />
       );
     //
@@ -56,14 +59,14 @@ export default function FeedCardComponent({
         feedHook={feedHook}
       />
     ));
-  }, [feeds, isLoading, feedHook, feedFormHook]);
+  }, [feeds, isLoading, feedHook, feedFormHook, scopedT]);
 
   const tabMenus = useMemo(() => {
     let result: TabCustomAnimationProps[] = [];
 
     feedTypesList.map((tab) => {
       result.push({
-        label: tab.name.toUpperCase(),
+        label: scopedT(`${tab.name}`),
         value: tab.key,
         icon: tab.icon,
         htmlContent: formattedFeeds,
@@ -71,7 +74,7 @@ export default function FeedCardComponent({
     });
 
     return result;
-  }, [feedTypesList, formattedFeeds]);
+  }, [feedTypesList, formattedFeeds, scopedT]);
 
   return (
     <div className="mt-4">

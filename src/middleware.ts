@@ -4,7 +4,6 @@ import { createI18nMiddleware } from 'next-international/middleware'
 
 const PUBLIC_FILE = /\.(.*)$/;
 
-
 const I18nMiddleware = createI18nMiddleware({
   locales: ['en', 'fr'],
   defaultLocale: 'fr',

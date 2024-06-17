@@ -11,6 +11,7 @@ import FeedCommentItemComponent from "./FeedCommentItemComponent";
 import useFeedComment from "@/app/hooks/pages/feeds/comments/useFeedComment";
 import { useCallback } from "react";
 import AnimateHoverScale from "@/app/components/widgets/motions/AnimateHoverScale";
+import { useScopedI18n } from "@/app/locales/client";
 
 export default function FeedCommentComponent({
   feedData,
@@ -27,6 +28,8 @@ export default function FeedCommentComponent({
     setEditCommentId,
     setOpenComment,
   } = commentHook;
+
+  const scopedT = useScopedI18n('home.feeds');
 
   const toggleComments = useCallback(() => {
     if (openComment == 0) {
@@ -50,7 +53,7 @@ export default function FeedCommentComponent({
           } text-xs cursor-pointer`}
         >
           <HeartIcon className="h-4 w-4" />
-          &nbsp;Like {feedData.likes}
+          &nbsp;{scopedT("item_like")} {feedData.likes}
         </span>
 
         <span
@@ -58,7 +61,7 @@ export default function FeedCommentComponent({
           className="flex text-gray-600 dark:text-gray-300 text-xs cursor-pointer"
         >
           <ChatBubbleBottomCenterTextIcon className="h-4 w-4" />
-          &nbsp;Comment {feedData.comments}
+          &nbsp;{scopedT("item_comment")} {feedData.comments}
         </span>
       </div>
       {/* ---- */}

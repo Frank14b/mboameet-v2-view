@@ -1,10 +1,13 @@
 import { useMainContext } from "@/app/contexts/main";
+import { useScopedI18n } from "@/app/locales/client";
 import { LightBulbIcon } from "@heroicons/react/24/solid";
 import { ChangeEvent } from "react";
 
 export default function ThemeToggleComponent() {
   //
   const mainContext = useMainContext();
+  const scopedT = useScopedI18n("settings");
+
   return (
     <>
       <div className="w-full mt-12">
@@ -19,10 +22,10 @@ export default function ThemeToggleComponent() {
               </span>
               <div className="flex flex-col gap-1">
                 <h6 className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900 dark:text-gray-200">
-                  Customize your app theme
+                  {scopedT("theme.title")}
                 </h6>
                 <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 dark:text-gray-400">
-                  Current theme : {mainContext.theme}
+                  {scopedT("theme.subTitle")} : {mainContext.theme}
                 </p>
                 <div className="w-full">
                   <div className="inline-flex items-center">
@@ -54,7 +57,7 @@ export default function ThemeToggleComponent() {
                       htmlFor="ripple-on"
                       className="mt-px mb-0 ml-3 font-light text-gray-700 dark:text-gray-400 cursor-pointer select-none"
                     >
-                      Dark Mode On
+                      {scopedT("theme.dark_mode_on")}
                     </label>
                   </div>
                 </div>

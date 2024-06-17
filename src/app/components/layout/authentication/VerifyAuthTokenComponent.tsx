@@ -10,6 +10,7 @@ import TimerCounter, { TimeDifference } from "../../commons/TimerCounter";
 import { OTP_TIMER } from "@/app/lib/constants/app";
 import CustomNextLink from "../../widgets/CustomNextLink";
 import CustomNextImage from "../../widgets/CustomNextImage";
+import { useScopedI18n } from "@/app/locales/client";
 //
 export default function VerifyAuthTokenComponent({
   token,
@@ -48,6 +49,8 @@ export default function VerifyAuthTokenComponent({
     [setTimer, toggleResendTimer]
   );
 
+  const scopedT = useScopedI18n("authentication.twoStepToken");
+
   return (
     <>
       {/* // */}
@@ -59,11 +62,11 @@ export default function VerifyAuthTokenComponent({
                 <div className="relative grid mx-4 mb-4 -mt-6 overflow-hidden text-white shadow-lg h-28 place-items-center rounded-xl bg-pink-300 from-gray-900 to-gray-800 bg-clip-border shadow-gray-900/20">
                   <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                     <h3 className="block font-sans text-md antialiased font-semibold leading-snug tracking-normal text-white">
-                      2 Step Verification
+                      {scopedT("title")}
                     </h3>
                     <div className="mt-2">
                       <p className="text-sm text-white">
-                        Proceed with the otp code verification.
+                        {scopedT("subtitle")}
                       </p>
                     </div>
                   </div>
@@ -75,7 +78,7 @@ export default function VerifyAuthTokenComponent({
                         <div className="border-0 border-gray-900/10 pb-4">
                           <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-3">
                             <InputField
-                              data={{ title: "OTP code", name: "otp" }}
+                              data={{ title: scopedT("form.otp_code"), name: "otp" }}
                             />
                           </div>
                         </div>
@@ -88,7 +91,7 @@ export default function VerifyAuthTokenComponent({
                           color="pink"
                           className="w-full bg-pink-300"
                         >
-                          Proceed
+                          {scopedT("proceed_btn")}
                         </Button>
                       </div>
 
@@ -107,7 +110,7 @@ export default function VerifyAuthTokenComponent({
                     href="/auth/signin"
                     className="block ml-1 font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900 dark:text-gray-500"
                   >
-                    Back to sign in
+                    {scopedT("back_to_signin")}
                   </CustomNextLink>
                 </p>
                 <TimerCounter
@@ -119,7 +122,7 @@ export default function VerifyAuthTokenComponent({
                   }}
                 >
                   <p className="flex justify-center mb-6 font-sans text-sm antialiased font-light leading-normal text-inherit">
-                    {`Didn't received otp?`}&nbsp;
+                    {scopedT("did_not_received_otp")}&nbsp;
                     {timer ? (
                       <>
                         <span className="font-sans">{timer.ss} s</span>
@@ -131,7 +134,7 @@ export default function VerifyAuthTokenComponent({
                           href="#"
                           className="font-sans"
                         >
-                          Resend
+                          {scopedT("resend")}
                         </a>
                       </>
                     )}

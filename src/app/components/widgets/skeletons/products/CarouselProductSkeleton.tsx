@@ -21,20 +21,20 @@ export function CarouselProductSkeleton({
           >
             <Card
               placeholder={""}
-              className="dark:bg-gray-900 p-0 cursor-pointer bg-gray-100 w-full shadow-none border-2 border-gray-100 dark:border-none"
+              className="dark:bg-gray-900 p-0 cursor-pointer rounded-lg bg-gray-100 w-full shadow-none border-2 border-gray-100 dark:border-none"
             >
               <CardBody
                 placeholder={""}
                 className="min-h-[30vh] dark:text-gray-100 py-2 pb-4 p-0 hover:shadow-xs"
               >
-                <div className="h-[160px] relative">
+                <div className="h-[130px] relative bg-gray-600 rounded-lg">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={2}
                     stroke="currentColor"
-                    className="w-full h-[130px] text-gray-400"
+                    className="w-full h-[130px] text-gray-700"
                   >
                     <path
                       strokeLinecap="round"
@@ -44,9 +44,9 @@ export function CarouselProductSkeleton({
                   </svg>
                 </div>
                 <div className="w-full p-2 px-4 dark:text-gray-400">
-                  <div className="">
+                  <div className="mb-5">
                     <Typography
-                      className="text-sm w-[90%] p-0 h-2 rounded-full bg-gray-300 dark:bg-gray-900"
+                      className="text-sm w-[90%] p-0 h-2 rounded-full bg-gray-300 dark:bg-gray-800"
                       placeholder={""}
                     >
                       <></>
@@ -54,7 +54,7 @@ export function CarouselProductSkeleton({
                   </div>
                   <div className="line-clamp-1 text-[10px] dark:text-gray-600 mt-1">
                     <Typography
-                      className="text-sm w-20 p-0 h-2 rounded-full bg-gray-300 dark:bg-gray-900"
+                      className="text-sm w-20 p-0 h-2 rounded-full bg-gray-300 dark:bg-gray-800"
                       placeholder={""}
                     >
                       <></>
@@ -64,7 +64,7 @@ export function CarouselProductSkeleton({
                   <div className="flex gap-3 mt-2">
                     <div className="line-clamp-1 text-xs flex gap-1 dark:text-gray-600">
                       <Typography
-                        className="text-sm w-20 p-0 h-2 rounded-full bg-gray-300 dark:bg-gray-900"
+                        className="text-sm w-20 p-0 h-2 rounded-full bg-gray-300 dark:bg-gray-800"
                         placeholder={""}
                       >
                         <></>
@@ -74,13 +74,13 @@ export function CarouselProductSkeleton({
 
                   <div className="w-full mt-4 flex justify-between text-xs">
                     <Typography
-                      className="text-sm w-20 p-0 h-2 rounded-full bg-gray-300 dark:bg-gray-900"
+                      className="text-sm w-20 p-0 h-2 rounded-full bg-gray-300 dark:bg-gray-800"
                       placeholder={""}
                     >
                       <></>
                     </Typography>
                     <Typography
-                      className="text-sm w-5 p-0 h-2 rounded-full bg-gray-300 dark:bg-gray-900"
+                      className="text-sm w-5 p-0 h-2 rounded-full bg-gray-300 dark:bg-gray-800"
                       placeholder={""}
                     >
                       <></>

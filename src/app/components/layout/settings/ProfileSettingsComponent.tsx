@@ -20,7 +20,11 @@ import { useCountries } from "use-react-countries";
 import { useMemo } from "react";
 import useCustomRouter from "@/app/hooks/useCustomRouter";
 import { useMainContext } from "@/app/contexts/main";
-import { useChangeLocale, useCurrentLocale } from "@/app/locales/client";
+import {
+  useChangeLocale,
+  useCurrentLocale,
+  useScopedI18n,
+} from "@/app/locales/client";
 
 export default function ProfileSettingsComponent({
   settingsHook,
@@ -32,6 +36,8 @@ export default function ProfileSettingsComponent({
   const { settings, updateAccountSettings } = settingsHook;
   const { countries } = useCountries();
   const { logout, deleteAccount } = useMainContext();
+
+  const scopedT = useScopedI18n("settings");
 
   const changeLocale = useChangeLocale();
   const locale = useCurrentLocale();
@@ -58,7 +64,7 @@ export default function ProfileSettingsComponent({
             <div className="relative items-center gap-4 py-3 px-5 bg-white dark:bg-black/35 dark:border-0 border shadow-lg rounded-xl border-blue-gray-50 shadow-blue-gray-900/5">
               <div className="w-full">
                 <h6 className="font-sans mb-3 text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900 dark:text-gray-200">
-                  Profile Settings
+                  {scopedT("profile.title")}
                 </h6>
                 <div className="w-full">
                   <Card
@@ -77,7 +83,7 @@ export default function ProfileSettingsComponent({
                           <PencilIcon className="h-5 w-5" />
                         </ListItemPrefix>
                         <span className="dark:text-gray-100">
-                          Edit My Profile
+                          {scopedT("profile.edit_profile")}
                         </span>
                       </ListItem>
                       <ListItem placeholder={""}>
@@ -86,11 +92,10 @@ export default function ProfileSettingsComponent({
                         </ListItemPrefix>
                         <div>
                           <span className="dark:text-gray-100">
-                            Account Visibility
+                            {scopedT("profile.account_visibility")}
                           </span>
                           <p className="text-xs dark:text-gray-500">
-                            Turn this off to hide your profile to all unmatched
-                            users
+                            {scopedT("profile.account_visibility_desc")}
                           </p>
                         </div>
                         <ListItemSuffix placeholder={""}>
@@ -114,11 +119,10 @@ export default function ProfileSettingsComponent({
                         </ListItemPrefix>
                         <div>
                           <span className="dark:text-gray-100">
-                            Auto Approve Match Requests
+                            {scopedT("profile.auto_approve_match")}
                           </span>
                           <p className="text-xs dark:text-gray-500">
-                            All match requests will be auto approve if this is
-                            turn to active
+                            {scopedT("profile.auto_approve_match_desc")}
                           </p>
                         </div>
                         <ListItemSuffix placeholder={""}>
@@ -143,7 +147,7 @@ export default function ProfileSettingsComponent({
                         </ListItemPrefix>
                         <div>
                           <span className="dark:text-gray-100">
-                            Current Language
+                            {scopedT("profile.current_language")}
                           </span>
                         </div>
                         <ListItemSuffix
@@ -158,7 +162,8 @@ export default function ProfileSettingsComponent({
                               changeLocale(locale == "fr" ? "en" : "fr")
                             }
                           >
-                            Change | {locale == "fr" ? "En" : "Fr"}
+                            {scopedT("profile.change_lang_text")} |{" "}
+                            {locale == "fr" ? "En" : "Fr"}
                           </span>
                         </ListItemSuffix>
                       </ListItem>
@@ -194,13 +199,13 @@ export default function ProfileSettingsComponent({
                         <ListItemPrefix placeholder={""}>
                           <TrashIcon className="h-5 w-5 text-red-700" />
                         </ListItemPrefix>
-                        <span className="text-red-700">Delete my account</span>
+                        <span className="text-red-700">{scopedT("profile.delete_account")}</span>
                       </ListItem>
                       <ListItem placeholder={""} onClick={() => logout()}>
                         <ListItemPrefix placeholder={""}>
                           <PowerIcon className="h-5 w-5 text-red-700" />
                         </ListItemPrefix>
-                        <span className="text-red-700">Sign Out</span>
+                        <span className="text-red-700">{scopedT("profile.sign_out")}</span>
                       </ListItem>
                     </List>
                   </Card>

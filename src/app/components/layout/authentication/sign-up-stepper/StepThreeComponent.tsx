@@ -1,6 +1,6 @@
 import InputField from "@/app/components/widgets/InputField";
-import AnimateFadeOut from "@/app/components/widgets/motions/AnimateFadeOut";
 import { SignUpHookDto } from "@/app/hooks/pages/auth/useSignUp";
+import { useScopedI18n } from "@/app/locales/client";
 
 export default function SignUpStepThreeComponent({
   stepProps,
@@ -9,6 +9,7 @@ export default function SignUpStepThreeComponent({
 }) {
   //
   const { stepper } = stepProps;
+  const scopedT = useScopedI18n("authentication.signUp");
 
   return (
     <>
@@ -19,37 +20,29 @@ export default function SignUpStepThreeComponent({
           }`}
         >
           <h3 className="mb-4 text-md font-medium font-700 leading-none text-pink-600 dark:text-pink-600">
-            Account Security
+            {scopedT("form.step_three.title")}
           </h3>
           <div className="grid gap-4 mb-4 grid-cols-1">
-            {/* <AnimateFadeOut> */}
-              <InputField
-                data={{ title: "Password", type: "password" }}
-              />
-            {/* </AnimateFadeOut>
-            <AnimateFadeOut speed={1}> */}
-              <InputField
-                data={{
-                  title: "Confirm Password",
-                  type: "password",
-                  name: "confirmPassword",
-                }}
-              />
-            {/* </AnimateFadeOut> */}
+            <InputField
+              data={{
+                title: scopedT("form.step_three.password"),
+                type: "password",
+              }}
+            />
+            <InputField
+              data={{
+                title: scopedT("form.step_three.confirm_password"),
+                type: "password",
+                name: "confirmPassword",
+              }}
+            />
           </div>
           <div className="flex justify-between mt-5 gap-5">
-            {/* <button
-              onClick={switchbackStepper}
-              type="button"
-              className="rounded-md border bg-white-600 w-1/2 px-3 py-2 text-sm font-semibold text-pink-300 hover:text-white shadow-sm hover:bg-pink-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Back
-            </button> */}
             <button
               type="submit"
               className="rounded-md bg-pink-300 w-full px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              Proceed
+              {scopedT("form.step_three.confirm_btn")}
             </button>
           </div>
         </div>

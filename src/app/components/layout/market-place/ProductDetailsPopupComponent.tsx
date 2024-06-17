@@ -15,6 +15,7 @@ import {
 import CustomNextImage from "../../widgets/CustomNextImage";
 import { HomeIcon } from "@heroicons/react/24/solid";
 import { useMainContext } from "@/app/contexts/main";
+import { useScopedI18n } from "@/app/locales/client";
 
 export function ProductDetailsPopupComponent({
   open,
@@ -26,6 +27,7 @@ export function ProductDetailsPopupComponent({
   handleOpen: () => void;
 }) {
   //
+  const scopedT = useScopedI18n("marketPlace.products.details.popup");
 
   const [selectedImage, setSelectedImage] = useState<ResultProductFilesDto>(
     product.files[0]
@@ -112,7 +114,9 @@ export function ProductDetailsPopupComponent({
                 as={"div"}
               >
                 <HomeIcon className="w-3 h-3 mt-[1px]" />{" "}
-                <span>Seller: {product.store.name}</span>
+                <span>
+                  {scopedT("seller")}: {product.store.name}
+                </span>
               </Typography>
               <Typography
                 placeholder={""}
@@ -120,8 +124,9 @@ export function ProductDetailsPopupComponent({
                 className={`font-bold ${isDark ? "text-gray-200" : ""}`}
                 as={"div"}
               >
-                Price: {product.price} {product.store.currency.code} -{" "}
-                {product.priceUnit} {product.priceUnitType}
+                {scopedT("price")}: {product.price}{" "}
+                {product.store.currency.code} - {product.priceUnit}{" "}
+                {product.priceUnitType}
               </Typography>
               <Rating
                 placeholder={""}
@@ -134,14 +139,14 @@ export function ProductDetailsPopupComponent({
                 color="pink"
                 className="my-5 flex items-center shadow-none"
               >
-                Deal Now
+                {scopedT("deal_now")}
               </Button>
               <Typography
                 placeholder={""}
                 color="gray"
                 className={`font-medium mt-3 ${isDark ? "text-gray-100" : ""}`}
               >
-                Description
+                {scopedT("description")}
               </Typography>
               <div
                 className={`${isDark ? "text-gray-300" : ""} text-sm`}
@@ -161,10 +166,10 @@ export function ProductDetailsPopupComponent({
               variant="outlined"
               color="blue-gray"
             >
-              Share
+              {scopedT("share")}
             </Button>
             <Button placeholder={""} size="sm" color="pink">
-              Deal Now
+              {scopedT("deal_now")}
             </Button>
           </div>
         </DialogFooter>

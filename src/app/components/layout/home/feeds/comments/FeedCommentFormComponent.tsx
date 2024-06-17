@@ -26,8 +26,6 @@ export default function FeedCommentFormComponent({
     updateItem ? `100%` : `60px`
   );
 
-  console.log("🚀 ~ formDivWidth:", formDivWidth)
-
   const handleKeyPress = useCallback(
     (e: KeyboardEvent) => {
       const content = getContentEditable(formRef);

@@ -1,7 +1,7 @@
 import CountrySelectField from "@/app/components/widgets/CountrySelectField";
 import InputField from "@/app/components/widgets/InputField";
-import AnimateFadeOut from "@/app/components/widgets/motions/AnimateFadeOut";
 import { SignUpHookDto } from "@/app/hooks/pages/auth/useSignUp";
+import { useScopedI18n } from "@/app/locales/client";
 
 export default function SignUpStepTwoComponent({
   stepProps,
@@ -10,6 +10,7 @@ export default function SignUpStepTwoComponent({
 }) {
   //
   const { stepper } = stepProps;
+  const scopedT = useScopedI18n("authentication.signUp");
 
   return (
     <>
@@ -21,27 +22,28 @@ export default function SignUpStepTwoComponent({
             }`}
           >
             <h3 className="mb-4 text-md font-medium font-700 leading-none text-pink-600 dark:text-pink-600">
-              {`What's your mobile number?`}
+              {scopedT("form.step_two.title")}
             </h3>
             <div className="grid gap-4 mb-4 grid-cols-1">
-              {/* <AnimateFadeOut speed={0.8}> */}
-                <CountrySelectField
-                  data={{
-                    title: "Select Country",
-                    name: "country",
-                  }}
-                />
-              {/* </AnimateFadeOut>
-              <AnimateFadeOut speed={0.8}> */}
-                <InputField data={{ title: "Phone Number", name: "phone" }} />
-              {/* </AnimateFadeOut> */}
+              <CountrySelectField
+                data={{
+                  title: scopedT("form.step_two.country_select"),
+                  name: "country",
+                }}
+              />
+              <InputField
+                data={{
+                  title: scopedT("form.step_two.phone_number"),
+                  name: "phone",
+                }}
+              />
             </div>
             <div className="flex justify-between mt-5 gap-5">
               <button
                 type="submit"
                 className="rounded-md bg-pink-300 w-full px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Next step: Security
+                {scopedT("form.step_two.confirm_btn")}
               </button>
             </div>
           </div>

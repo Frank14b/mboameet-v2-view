@@ -100,12 +100,12 @@ export const friendTypes = {
 
 export const feedTypes = {
   recent: {
-    name: "recent",
+    name: "tab_recent" as "tab_recent",
     key: "recent",
     icon: Square3Stack3DIcon,
   },
   popular: {
-    name: "popular",
+    name: "tab_popular" as "tab_popular",
     key: "popular",
     icon: UserCircleIcon,
   },

@@ -4,6 +4,7 @@ import { Avatar } from "@material-tailwind/react";
 import { ChangeEvent } from "react";
 import CropImage from "../../widgets/CropImage";
 import { ObjectKeyDto } from "@/app/types";
+import { useScopedI18n } from "@/app/locales/client";
 
 export default function ProfileImageComponent({
   username,
@@ -18,6 +19,9 @@ export default function ProfileImageComponent({
   changeProfilePicture: (e: ChangeEvent<HTMLInputElement>) => void;
   uploadProfileImage: (image: string | Blob | ObjectKeyDto) => Promise<void>;
 }) {
+
+  const scopedT = useScopedI18n("profile");
+
   return (
     <>
       <div className="flex items-center justify-center w-full">
@@ -42,9 +46,7 @@ export default function ProfileImageComponent({
               />
             </svg>
             <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-              <span className="font-semibold">Click to upload</span> or drag and
-              drop
-            </p>
+              <span className="font-semibold">{scopedT("click_to_upload")}</span> {scopedT("or_drag_and_drop")}</p>
             <p className="text-xs text-gray-500 dark:text-gray-400">
               SVG, PNG, JPG or GIF (MAX. 800x400px)
             </p>

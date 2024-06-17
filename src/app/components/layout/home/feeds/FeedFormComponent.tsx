@@ -25,6 +25,7 @@ import { FeedFormHookDto } from "@/app/hooks/pages/feeds/useFeedForm";
 import FeedFileInputComponent from "./files/FeedFileInputComponent";
 import { clickFileUploadWithRef } from "@/app/lib/utils";
 import EmojiPickerButton from "../../../widgets/EmojiPickerButton";
+import { useScopedI18n } from "@/app/locales/client";
 
 export default function FeedFormComponent({
   children,
@@ -51,6 +52,8 @@ export default function FeedFormComponent({
     handleSubmitUpdatedFeed,
   } = feedFormHook;
 
+  const scopedT = useScopedI18n('home.feeds');
+
   return (
     <>
       <Dialog
@@ -70,7 +73,7 @@ export default function FeedFormComponent({
             >
               {" "}
               <Typography placeholder={""} className="mb-1" variant="h4">
-                @New_Feed{" "}
+                {scopedT("popup.add_form.title")}{" "}
               </Typography>
             </DialogHeader>
             <svg
@@ -94,7 +97,7 @@ export default function FeedFormComponent({
               color="gray"
               variant="lead"
             >
-              Write the message and then click button.
+              {scopedT("popup.add_form.subtitle")}
             </Typography>
             <div className="grid gap-6 max-h-96 overflow-y-auto overflow-x-hidden w-full mx-w-full">
               <div className="w-full emoji-container">
@@ -183,7 +186,7 @@ export default function FeedFormComponent({
                   color="gray"
                   onClick={() => handleSubmitFeed()}
                 >
-                  Post Now
+                  {scopedT("popup.add_form.add_feed_btn")}
                 </Button>
               </>
             )}
@@ -196,7 +199,7 @@ export default function FeedFormComponent({
                   color="gray"
                   onClick={() => handleSubmitUpdatedFeed()}
                 >
-                  Update Now
+                  {scopedT("popup.edit_form.edit_feed_btn")}
                 </Button>
               </>
             )}

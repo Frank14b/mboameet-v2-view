@@ -1,5 +1,6 @@
 import { SignUpHookDto } from "@/app/hooks/pages/auth/useSignUp";
 import useCustomRouter from "@/app/hooks/useCustomRouter";
+import { useScopedI18n } from "@/app/locales/client";
 import { Button } from "@material-tailwind/react";
 
 export default function SignUpStepFourComponent({
@@ -10,6 +11,7 @@ export default function SignUpStepFourComponent({
   //
   const { stepper, responseData } = stepProps;
   const { push } = useCustomRouter();
+  const scopedT = useScopedI18n("authentication.signUp");
 
   return (
     <>
@@ -19,15 +21,16 @@ export default function SignUpStepFourComponent({
         }`}
       >
         <h3 className="mb-4 text-md font-medium font-bold leading-none text-green-600 dark:text-green-800">
-          Congratulations
+          {scopedT("form.step_four.title")}
         </h3>
         <div className="grid gap-4 mb-4 sm:grid-cols-1 bg-gray-100 p-3 rounded-md border">
           <div>
             <h3>
-              Your account <b>{responseData?.data?.email}</b> has been created
-              successfully
+              {scopedT("form.step_four.subtitle", {
+                name: responseData?.data?.email,
+              })}
             </h3>
-            <p>Check your email address to activate your account</p>
+            <p>{scopedT("form.step_four.subtitle2")}</p>
           </div>
         </div>
         <div className="flex justify-between mt-5">
@@ -38,7 +41,7 @@ export default function SignUpStepFourComponent({
             color="pink"
             className="w-full bg-pink-300"
           >
-            Go to sign-in
+            {scopedT("form.step_four.go_to_sign_in")}
           </Button>
         </div>
       </div>

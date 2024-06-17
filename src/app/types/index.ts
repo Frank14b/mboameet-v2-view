@@ -48,7 +48,16 @@ export interface DiscussionTypesDto {
 
 export interface FriendTypesDto extends DiscussionTypesDto {}
 
-export interface FeedTypesListDto extends DiscussionTypesDto {}
+export interface FeedTypesListDto {
+  name: "tab_recent" | "tab_popular";
+  key: string;
+  icon: ForwardRefExoticComponent<
+    Omit<SVGProps<SVGSVGElement>, "ref"> & {
+      title?: string | undefined;
+      titleId?: string | undefined;
+    } & RefAttributes<SVGSVGElement>
+  >;
+}
 
 export interface MessageReactionsDto {
   key: string;

@@ -5,7 +5,7 @@ import "react-multi-carousel/lib/styles.css";
 import CustomNextImage from "../../widgets/CustomNextImage";
 import useProducts from "@/app/hooks/pages/marketplace/useProducts";
 import { NoDataFound } from "../../widgets/NoDataFound";
-import { HomeIcon, ShoppingCartIcon } from "@heroicons/react/24/solid";
+import { ShoppingCartIcon } from "@heroicons/react/24/solid";
 import { ProductDetailsPopupComponent } from "./ProductDetailsPopupComponent";
 import { ResultProductDto } from "@/app/types/stores/products";
 import { productCarouselResponsive } from "@/app/lib/constants/app";
@@ -36,7 +36,7 @@ export function CarouselProductsComponent({
 
   const formattedProducts = useMemo(() => {
     if (isFetchingProduct)
-      return <CarouselProductSkeleton isLoading={isFetchingProduct} count={6} />;
+      return <CarouselProductSkeleton isLoading={true} count={7} />;
     if (products.length === 0)
       return (
         <NoDataFound

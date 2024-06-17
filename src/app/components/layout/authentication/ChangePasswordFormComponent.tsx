@@ -3,6 +3,7 @@
 import InputField from "../../widgets/InputField";
 import { Button } from "@material-tailwind/react";
 import { ChangePasswordHookDto } from "@/app/hooks/pages/auth/useChangePassword";
+import { useScopedI18n } from "@/app/locales/client";
 
 //
 export default function ChangePasswordFormComponent({
@@ -10,7 +11,8 @@ export default function ChangePasswordFormComponent({
 }: {
   formHook: ChangePasswordHookDto;
 }) {
-  
+  const scopedT = useScopedI18n("authentication.changePassword");
+
   return (
     <>
       <div className="flex flex-col gap-4 p-6">
@@ -19,7 +21,7 @@ export default function ChangePasswordFormComponent({
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-3">
               <InputField
                 data={{
-                  title: "Enter new password",
+                  title: scopedT("form.password"),
                   name: "password",
                   type: "password",
                 }}
@@ -27,7 +29,7 @@ export default function ChangePasswordFormComponent({
 
               <InputField
                 data={{
-                  title: "Confirm new password",
+                  title: scopedT("form.confirm_password"),
                   name: "confirmPassword",
                   type: "password",
                 }}
@@ -43,7 +45,7 @@ export default function ChangePasswordFormComponent({
             color="pink"
             className="w-full bg-pink-300"
           >
-            Proceed
+            {scopedT("form.confirm_btn")}
           </Button>
         </div>
       </div>
