@@ -15,13 +15,13 @@ export function MarketPlaceEmptyCartComponent() {
       <Typography placeholder={""} variant="h4" className="py-3 gap-2">
         {scopedT("title")}
       </Typography>
-
+      
       <Image
         alt=""
         className="object-cover my-20"
         width={250}
         height={250}
-        src={"/empty-cart2.webp"}
+        src={"/images/empty-cart2.webp"}
       />
       {/* // */}
       <div className="">

@@ -13,7 +13,6 @@ const I18nMiddleware = createI18nMiddleware({
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
   // const res = NextResponse.next()
-
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-url", request.url);
 

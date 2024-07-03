@@ -78,7 +78,7 @@ export function MarketPlaceComponent() {
               <CustomNextImage
                 src="https://material-tailwind.com/image/product-4.png"
                 alt="pink blazer"
-                className="h-[26rem] w-full rounded-lg object-contain"
+                className="h-[26rem] w-[90%] rounded-lg object-contain"
                 height={250}
                 width={250}
               />

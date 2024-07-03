@@ -27,7 +27,7 @@ export const invalidEmailErrorMessage: string =
 export const requiredEmailErrorMessage: string = "Email address is required";
 export const defaultProfileImg: string =
   "https://docs.material-tailwind.com/img/team-3.jpg";
-export const defaultImage: string = "/images/NoPicture_s.png";
+export const defaultImage: string = "/images/thumbnail.svg";
 
 export const mainDivComponentId: string = `main-app-div`;
 export const referenceKeyword: string = `feed-card-item-`;

@@ -28,7 +28,7 @@ export default function SignInComponent({
                   alt=""
                   width={2000}
                   height={2000}
-                  src="/images/communication-social-media-icons-smartphone-device.jpg"
+                  src="/images/full-shot-people-use-apps-make-friends.jpg"
                   className="h-screen object-cover w-full relative"
                 />
               </div>
@@ -36,7 +36,7 @@ export default function SignInComponent({
           </div>
         </div>
 
-        <div className="w-1/2 xs:w-full sm:w-full lg:w-1/2 bg-gray-200 dark:bg-gray-800">
+        <div className="w-1/2 xs:w-1/2 sm:w-1/2 lg:w-1/2 bg-gray-200 dark:bg-gray-800">
           {/* <AnimateFadeOut> */}
             <div className="flex flex-col items-center justify-center h-screen">
               <div className="relative flex flex-col text-gray-700 bg-white dark:bg-gray-900 dark:border-1 dark:shadow-xs shadow-md w-96 rounded-xl bg-clip-border">
