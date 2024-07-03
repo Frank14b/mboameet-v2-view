@@ -62,7 +62,7 @@ export default function LoginComponent({
                   alt=""
                   width={2000}
                   height={2000}
-                  src="/full-shot-people-use-apps-make-friends.jpg"
+                  src="/images/full-shot-people-use-apps-make-friends.jpg"
                   className="h-screen object-cover w-full relative"
                 />
               </div>

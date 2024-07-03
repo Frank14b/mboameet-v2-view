@@ -28,7 +28,7 @@ export default function SignInComponent({
                   alt=""
                   width={2000}
                   height={2000}
-                  src="/communication-social-media-icons-smartphone-device.jpg"
+                  src="/images/communication-social-media-icons-smartphone-device.jpg"
                   className="h-screen object-cover w-full relative"
                 />
               </div>
