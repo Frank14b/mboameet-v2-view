@@ -8,7 +8,6 @@ import { useCallback, useMemo, useState } from "react";
 import CustomNextLink from "../widgets/CustomNextLink";
 import { friendPathUrl } from "@/app/lib/constants/app";
 import { range } from "@/app/lib/utils";
-import { StoriesPopupComponent } from "./stories/StoriesPopupComponent";
 
 export default function AsideBarMenuComponent({ children }: { children: any }) {
   //
@@ -77,10 +76,6 @@ export default function AsideBarMenuComponent({ children }: { children: any }) {
     <>
       {children}
       <div className="w-full pb-6 dark:text-gray-200">
-        <div className="relative">
-          <StoriesPopupComponent />
-        </div>
-
         <div className="grid grid-cols-2">{userStories}</div>
       </div>
 

@@ -26,7 +26,7 @@ export default function Home() {
               className="font-bold justify-between flex px-1"
             >
               <span className="flex gap-2">
-                <HomeModernIcon className="h-4 w-4 mt-[4px]" /> Feeds
+                <HomeModernIcon className="h-4 w-4 mt-[4px]" /> {scopedT("feeds.title")}
               </span>
               <Button
                 onClick={() => {

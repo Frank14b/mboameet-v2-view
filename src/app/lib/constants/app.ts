@@ -87,12 +87,12 @@ export const discussionTypes = {
 
 export const friendTypes = {
   recommended: {
-    name: "recommended",
+    name: "tab_recommend" as "tab_recommend",
     key: "recommended",
     icon: Square3Stack3DIcon,
   },
   matches: {
-    name: "matches",
+    name: "tab_matches" as "tab_matches",
     key: "matches",
     icon: UserCircleIcon,
   },

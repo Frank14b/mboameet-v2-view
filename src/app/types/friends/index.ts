@@ -1,10 +1,8 @@
-import { Maybe } from "yup";
-
 export type ResultFriendsDto = {
   id: number;
   userName: string;
-  firstName?: Maybe<string | undefined>;
-  lastName?: Maybe<string | undefined>;
+  firstName?: string | undefined;
+  lastName?: string | undefined;
   email: string;
   photo?: string;
   fullName?: string;

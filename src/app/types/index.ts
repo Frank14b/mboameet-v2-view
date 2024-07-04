@@ -46,7 +46,16 @@ export interface DiscussionTypesDto {
   >;
 }
 
-export interface FriendTypesDto extends DiscussionTypesDto {}
+export interface FriendTypesDto {
+  name: "tab_recommend" | "tab_matches";
+  key: string;
+  icon: ForwardRefExoticComponent<
+    Omit<SVGProps<SVGSVGElement>, "ref"> & {
+      title?: string | undefined;
+      titleId?: string | undefined;
+    } & RefAttributes<SVGSVGElement>
+  >;
+}
 
 export interface FeedTypesListDto {
   name: "tab_recent" | "tab_popular";
@@ -86,3 +95,11 @@ export interface MessageActionsDto {
 export type MessageActionType = "edit" | "delete";
 
 export type ThemeDto = "dark" | "light"
+
+export type ResultNavBarStatsDto = {
+  feeds: number;
+  discussions: number;
+  friends: number;
+  cart: number;
+  wallets: number;
+}

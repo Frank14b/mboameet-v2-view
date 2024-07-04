@@ -21,10 +21,12 @@ import {
   walletPathUrl,
 } from "@/app/lib/constants/app";
 import useCustomRouter from "@/app/hooks/useCustomRouter";
+import useNavbarStats from "@/app/hooks/useNavbarStats";
 
 export default function SideBarMenuComponent({ children }: { children: any }) {
-
   const { pathname } = useCustomRouter();
+
+  const { stats } = useNavbarStats();
 
   return (
     <>
@@ -42,7 +44,13 @@ export default function SideBarMenuComponent({ children }: { children: any }) {
             title="News Feed"
             icon={<BookmarkIcon />}
             active={pathname == "/" ? true : false}
-            badge="+99"
+            badge={`${
+              stats && stats.feeds > 0
+                ? stats.feeds >= 99
+                  ? "+99"
+                  : stats.feeds
+                : ""
+            }`}
             link={"/"}
           />
 
@@ -50,7 +58,13 @@ export default function SideBarMenuComponent({ children }: { children: any }) {
             title="Discussions"
             icon={<ChatBubbleBottomCenterIcon />}
             active={pathname.startsWith(chatsPathUrl) ? true : false}
-            badge={"1"}
+            badge={`${
+              stats && stats.discussions > 0
+                ? stats.discussions >= 99
+                  ? "+99"
+                  : stats.discussions
+                : ""
+            }`}
             link={chatsPathUrl}
           />
 
@@ -58,7 +72,13 @@ export default function SideBarMenuComponent({ children }: { children: any }) {
             title="Friends"
             icon={<UsersIcon />}
             active={pathname.startsWith(friendPathUrl) ? true : false}
-            badge="+30"
+            badge={`${
+              stats && stats.friends > 0
+                ? stats.friends >= 99
+                  ? "+99"
+                  : stats.friends
+                : ""
+            }`}
             link={friendPathUrl}
           />
 
@@ -66,6 +86,13 @@ export default function SideBarMenuComponent({ children }: { children: any }) {
             title="MarketPlace"
             icon={<ShoppingBagIcon />}
             active={pathname.startsWith(marketplacePathUrl) ? true : false}
+            badge={`${
+              stats && stats.cart > 0
+                ? stats.cart >= 99
+                  ? "+99"
+                  : stats.cart
+                : ""
+            }`}
             link={marketplacePathUrl}
           />
 
@@ -73,6 +100,13 @@ export default function SideBarMenuComponent({ children }: { children: any }) {
             title="My Wallets"
             icon={<WalletIcon />}
             active={pathname.startsWith(walletPathUrl) ? true : false}
+            badge={`${
+              stats && stats.wallets > 0
+                ? stats.wallets >= 99
+                  ? "+99"
+                  : stats.wallets
+                : ""
+            }`}
             link={walletPathUrl}
           />
 

@@ -2,6 +2,7 @@
 
 import {
   ApiResponseDto,
+  ResultNavBarStatsDto,
   ResultUpdateProfileData,
   UpdateProfileFormData,
 } from "@/app/types/index";
@@ -11,6 +12,7 @@ const basePath = "/users";
 const urls = {
   updateProfile: `${basePath}`,
   updateProfileImage: `${basePath}/picture`,
+  accountStats:  `${basePath}/count-stats`
 };
 
 export const proceedUpdateProfile = async (
@@ -36,3 +38,12 @@ export const updateProfileImage = async (data: FormData) => {
 
   return result;
 };
+
+export const getAccountStats = async () => {
+  const result: ApiResponseDto<ResultNavBarStatsDto> = await apiCall({
+    method: "GET",
+    url: `${urls.accountStats}`,
+  });
+
+  return result;
+}

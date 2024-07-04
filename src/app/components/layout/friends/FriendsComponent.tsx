@@ -10,12 +10,15 @@ import { UserProfilePopup } from "../../widgets/UserProfilePopup";
 import { FriendsItemComponent } from "./FriendsItemComponent";
 import { NoDataFound } from "../../widgets/NoDataFound";
 import { Spinner } from "@material-tailwind/react";
+import { useScopedI18n } from "@/app/locales/client";
 
 export function FriendsComponent({
   friendsHook,
 }: {
   friendsHook: FriendsHookDto;
 }) {
+
+  const scopedT = useScopedI18n('friends');
   //
   const skeletons: number = 9;
   const {
@@ -91,7 +94,7 @@ export function FriendsComponent({
 
     friendTypesList.map((tab) => {
       result.push({
-        label: tab.name.toUpperCase(),
+        label: scopedT(`${tab.name}`),
         value: tab.key,
         icon: tab.icon,
         htmlContent: friendsList,
@@ -99,7 +102,7 @@ export function FriendsComponent({
     });
 
     return result;
-  }, [friendsList, friendTypesList]);
+  }, [friendsList, friendTypesList, scopedT]);
 
   return (
     <div className="w-full">
