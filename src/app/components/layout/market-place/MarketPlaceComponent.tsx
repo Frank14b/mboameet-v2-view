@@ -58,7 +58,7 @@ export function MarketPlaceComponent() {
         className="dark:bg-gray-800 w-full shadow-none dark:shadow-lg rounded-lg mt-5"
       >
         <CardBody placeholder={""} className="p-4 pt-0 dark:text-gray-100">
-          <section className="py-16 px-8">
+          <section className="py-16 px-0">
             <div className="w-full text-center">
               <Typography
                 placeholder={""}

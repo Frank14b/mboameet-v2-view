@@ -9,6 +9,7 @@ import {
 import { useMainContext } from "@/app/contexts/main";
 import { proceedGetStoreProducts } from "@/app/services/server-actions/stores/products";
 import { ResultProductDto } from "@/app/types/stores/products";
+import { parseJsonString } from "@/app/lib/utils";
 
 const useProducts = ({ storeRef }: { storeRef?: string }) => {
   //
@@ -45,6 +46,7 @@ const useProducts = ({ storeRef }: { storeRef?: string }) => {
       return {
         ...product,
         reference: product.reference.toLowerCase(),
+        description: parseJsonString(product.description),
         files: product.files.map((file) => {
           return {
             ...file,

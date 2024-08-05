@@ -53,16 +53,24 @@ const useAdminStore = () => {
     null
   );
   const [stores, setStores] = useState<ResultStoreDto[] | null>(null);
+  const [isEditable, setIsEditable] = useState<boolean>(false);
 
   const { formState, handleSubmit, setValue, reset } = useAppForm({
     schema: CreateStoreSchema,
     defaultValues: {
+      id: 0,
       name: "",
       description: "",
-      address: null,
-      phoneNumber: null,
+      address: "",
+      phoneNumber: "",
       callingCode: "",
       photo: null,
+      currencyId: 0,
+      storeTypeId: 0,
+      website: "",
+      city: "",
+      country: {},
+      email: "",
     },
   });
   const { errors } = formState;
@@ -89,8 +97,14 @@ const useAdminStore = () => {
     [setValue]
   );
 
+  const getStores = useCallback(async () => {
+    const result = await proceedGetAdminStores();
+    setStores(result?.data?.data ?? null);
+    setIsFetchingStore(false);
+  }, []);
+
   const submitFormData = useCallback(
-    async (data: CreateStoreFormDto) => {
+    async (data: CreateStoreFormDto & { id?: number }) => {
       //
       setIsLoading(true);
       setResponseData(null);
@@ -99,21 +113,25 @@ const useAdminStore = () => {
 
       const dataKeys = Object.entries(data);
       dataKeys.forEach(([key, value]) => {
-        if (key == "country") {
+        if (key == "id") {
+          // do nothing
+        } else if (key == "country") {
           formData.append(key, value.name);
           formData.append("callingCode", value.callingCode);
         } else if (key == "photo") {
-          formData.append(
-            "logo",
-            storeCroppedLogo?.blob,
-            `store-logo.${fileExtFromBase64(storeCroppedLogo?.base64)}`
-          );
+          if (storeCroppedLogo?.base64) {
+            formData.append(
+              "logo",
+              storeCroppedLogo?.blob,
+              `store-logo.${fileExtFromBase64(storeCroppedLogo?.base64)}`
+            );
+          }
         } else {
           formData.append(key, value);
         }
       });
 
-      const result = await proceedSubmitStore(formData);
+      const result = await proceedSubmitStore(formData, data?.id);
       setResponseData(result);
       setIsLoading(false);
 
@@ -123,6 +141,7 @@ const useAdminStore = () => {
         handleIsOpenStoreForm();
         reset();
         setStoreCroppedLogo(null);
+        getStores();
       }
     },
     [
@@ -132,11 +151,12 @@ const useAdminStore = () => {
       handleIsOpenStoreForm,
       setResponseData,
       setIsLoading,
+      getStores
     ]
   );
 
   const handleGetstoreTypes = useCallback(
-    async (keyword: string) => {
+    async (keyword?: string) => {
       const result = await proceedGetAdminStoreTypes({
         keyword: keyword,
       });
@@ -174,15 +194,10 @@ const useAdminStore = () => {
     });
   }, [currencies]);
 
-  const getStores = useCallback(async () => {
-    const result = await proceedGetAdminStores();
-    setStores(result?.data?.data ?? null);
-    setIsFetchingStore(false);
-  }, []);
-
   useEffect(() => {
+    handleGetstoreTypes("");
     getStores();
-  }, [getStores]);
+  }, [getStores, handleGetstoreTypes]);
 
   const formattedStores = useMemo(() => {
     if (!stores) return [];
@@ -194,6 +209,31 @@ const useAdminStore = () => {
       };
     });
   }, [stores, getFileUrl]);
+
+  const handleEditStore = useCallback(
+    (item: ResultStoreDto) => {
+      setValue("id", item.id);
+      setValue("address", item.address);
+      setValue("callingCode", item.callingCode);
+      setValue("description", item.description);
+      setValue("name", item.name);
+      setValue("phoneNumber", item.phoneNumber);
+      setValue("storeTypeId", item.storeType.id);
+      setValue("currencyId", item.currency.id);
+      setValue("city", item.city);
+      setValue("country", {
+        name: item.country,
+        callingCode: item.callingCode,
+      });
+      setValue("callingCode", item.callingCode);
+      setValue("email", item.email ?? "");
+      setValue("website", item.website ?? "");
+      //
+      setIsEditable(true);
+      handleIsOpenStoreForm();
+    },
+    [setValue, handleIsOpenStoreForm]
+  );
 
   const data: AdminStoreHookDto = {
     isLoading,
@@ -207,6 +247,7 @@ const useAdminStore = () => {
     storeTypes: formattedTypes as TypeOptionsProps[],
     currencies: formattedCurrencies as TypeOptionsProps[],
     stores: formattedStores as ResultStoreDto[],
+    isEditable,
     getCurrencies,
     handleUpdatePhotoField,
     handleCroppedImage,
@@ -214,8 +255,13 @@ const useAdminStore = () => {
     selectImageFile,
     submitFormData,
     handleSubmit,
-    handleIsOpenStoreForm,
+    handleIsOpenStoreForm: () => {
+      reset();
+      setIsEditable(false);
+      handleIsOpenStoreForm();
+    },
     handleGetstoreTypes,
+    handleEditStore,
   };
 
   return { ...data };
@@ -235,6 +281,7 @@ export type AdminStoreHookDto = {
   storeTypes: TypeOptionsProps[];
   currencies: TypeOptionsProps[];
   stores: ResultStoreDto[];
+  isEditable: boolean;
   getCurrencies: () => Promise<ResultCurrencyDto[] | null>;
   submitFormData: (data: CreateStoreFormDto) => Promise<void>;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
@@ -244,4 +291,5 @@ export type AdminStoreHookDto = {
   handleCroppedImage: (image: string | Blob | ObjectKeyDto) => Promise<void>;
   handleUpdatePhotoField: (value: string | null) => void;
   handleGetstoreTypes: (keyword: string) => Promise<void>;
+  handleEditStore: (item: ResultStoreDto) => void;
 };

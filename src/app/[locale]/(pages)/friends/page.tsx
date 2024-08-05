@@ -9,8 +9,9 @@ import { Typography } from "@material-tailwind/react";
 export default function FriendsPage() {
   //
   const friendsHook = useFriends();
+  const { activeTab, handleScrollEvent } = friendsHook;
 
-  const scopedT = useScopedI18n('friends');
+  const scopedT = useScopedI18n("friends");
 
   return (
     <>
@@ -23,7 +24,11 @@ export default function FriendsPage() {
         </div>
       </div>
       {/*  */}
-      <div className="mt-5">
+      <div
+        className="mt-5 h-[100vh] overflow-y-auto rounded-lg"
+        id={`friendsScroll-${activeTab}`}
+        onScroll={(e) => handleScrollEvent(e.currentTarget)}
+      >
         <FriendsComponent friendsHook={friendsHook} />
       </div>
       {/*  */}

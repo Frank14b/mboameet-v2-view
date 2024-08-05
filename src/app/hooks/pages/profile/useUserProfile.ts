@@ -36,7 +36,7 @@ const useUserProfile = () => {
     useState<ApiResponseDto<ResultUpdateProfileData> | null>(null);
   const { user, setUser } = useUserStore();
   const { userHubs } = useAppHubContext();
-  const { connectedUser } = useMainContext();
+  const { connectedUser, getFileUrl } = useMainContext();
 
   const { handleSubmit, setValue } = useAppForm({
     schema: UpdateProfileSchema,
@@ -82,16 +82,27 @@ const useUserProfile = () => {
 
       if (result.status === true && result?.data) {
         setImageToUpload(null);
-        setUser(result.data);
+        setUser({
+          ...result.data,
+          photo: getFileUrl(
+            result.data?.photo,
+            result.data?.id,
+            result.data?.userName
+          ),
+        });
       }
     },
-    [setImageToUpload, setUser]
+    [setImageToUpload, setUser, getFileUrl]
   );
 
   const validateUserSession = useCallback(async () => {
     const result = await validateToken();
     if (result?.status) {
-      setUser(result.data as ResultUpdateProfileData);
+      const data = result.data as ResultUpdateProfileData;
+      setUser({
+        ...data,
+        photo: getFileUrl(data?.photo, data?.id, data?.userName),
+      });
     }
   }, [setUser]);
 

@@ -14,8 +14,8 @@ export function CreateStoreThirdStepComponent({
     <>
       <ImageUploadDropZone
         cropSize={{
-          width: 700,
-          height: 700,
+          width: 500,
+          height: 500,
         }}
         croppedImage={croppedImage}
         imageToUpload={selectedImage}

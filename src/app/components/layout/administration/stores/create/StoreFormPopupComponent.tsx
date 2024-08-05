@@ -21,7 +21,6 @@ import { AdminStoreHookDto } from "@/app/hooks/pages/administration/stores/useAd
 import { CreateStoreFirstStepComponent } from "./stepper/FirstStepComponent";
 import { CreateStoreSecondStepComponent } from "./stepper/SecondStepComponent";
 import { CreateStoreThirdStepComponent } from "./stepper/ThirdStepComponent";
-import AnimateFadeOut from "@/app/components/widgets/motions/AnimateFadeOut";
 
 export function CreateStoreFormPopupComponent({
   adminStoreHook,
@@ -35,6 +34,7 @@ export function CreateStoreFormPopupComponent({
     formErrors,
     croppedImage,
     currencies,
+    isEditable,
     handleSubmit,
     handleIsOpenStoreForm,
     submitFormData,
@@ -46,28 +46,19 @@ export function CreateStoreFormPopupComponent({
   const [isLastStep, setIsLastStep] = React.useState(false);
   const [isFirstStep, setIsFirstStep] = React.useState(false);
   const nextFormBtnRef = useRef<HTMLButtonElement>(null);
-  const [isFirstLoad, setIsFirstLoad] = React.useState<boolean>(true);
 
   useEffect(() => {
-    if (isOpenStoreForm && isFirstStep && isFirstLoad) {
-      setIsFirstLoad(false);
-      setTimeout(() => {
-        nextFormBtnRef.current && nextFormBtnRef.current.click();
-        setActiveStep(0);
-      }, 1000);
+    setActiveStep(0);
+    if (isOpenStoreForm && !isEditable) {
+      nextFormBtnRef.current && nextFormBtnRef.current.click();
     }
+  }, [isOpenStoreForm, nextFormBtnRef, isEditable, setActiveStep]);
 
+  useEffect(() => {
     if (currencies.length <= 0 && isOpenStoreForm) {
       getCurrencies();
     }
-  }, [
-    nextFormBtnRef,
-    isFirstLoad,
-    isFirstStep,
-    isOpenStoreForm,
-    currencies,
-    getCurrencies,
-  ]);
+  }, [isOpenStoreForm, currencies, getCurrencies]);
 
   const handlePrev = () => {
     handleUpdatePhotoField(null);
@@ -82,7 +73,9 @@ export function CreateStoreFormPopupComponent({
         !formErrors.currencyId &&
         !formErrors.storeTypeId
       ) {
-        setActiveStep((cur) => cur + 1);
+        setTimeout(() => {
+          setActiveStep((cur) => cur + 1);
+        }, 200);
       }
     }
 
@@ -92,7 +85,9 @@ export function CreateStoreFormPopupComponent({
         !formErrors.country &&
         !formErrors.address
       ) {
-        setActiveStep((cur) => cur + 1);
+        setTimeout(() => {
+          setActiveStep((cur) => cur + 1);
+        }, 200);
       }
     }
 
@@ -164,11 +159,9 @@ export function CreateStoreFormPopupComponent({
                     <div
                       className={`${isFirstStep ? "w-full mt-12" : "hidden"}`}
                     >
-                      {/* <AnimateFadeOut speed={1}> */}
-                        <CreateStoreFirstStepComponent
-                          adminStoreHook={adminStoreHook}
-                        />
-                      {/* </AnimateFadeOut> */}
+                      <CreateStoreFirstStepComponent
+                        adminStoreHook={adminStoreHook}
+                      />
                     </div>
                   )}
 
@@ -178,11 +171,9 @@ export function CreateStoreFormPopupComponent({
                         activeStep == 1 ? "w-full mt-12" : "hidden"
                       }`}
                     >
-                      {/* <AnimateFadeOut speed={1}> */}
-                        <CreateStoreSecondStepComponent
-                          adminStoreHook={adminStoreHook}
-                        />
-                      {/* </AnimateFadeOut> */}
+                      <CreateStoreSecondStepComponent
+                        adminStoreHook={adminStoreHook}
+                      />
                     </div>
                   )}
 
@@ -190,11 +181,9 @@ export function CreateStoreFormPopupComponent({
                     <div
                       className={`${isLastStep ? "w-full mt-12" : "hidden"}`}
                     >
-                      {/* <AnimateFadeOut speed={1}> */}
-                        <CreateStoreThirdStepComponent
-                          adminStoreHook={adminStoreHook}
-                        />
-                      {/* </AnimateFadeOut> */}
+                      <CreateStoreThirdStepComponent
+                        adminStoreHook={adminStoreHook}
+                      />
                     </div>
                   )}
 
@@ -207,11 +196,16 @@ export function CreateStoreFormPopupComponent({
                       Prev
                     </Button>
                     <Button
-                      type={`${isLastStep ? "submit" : "submit"}`}
+                      type={`${
+                        isLastStep
+                          ? "submit"
+                          : !isEditable
+                          ? "submit"
+                          : "button"
+                      }`}
                       placeholder={""}
                       ref={nextFormBtnRef}
                       onClick={!isLastStep ? handleNext : () => {}}
-                      //   disabled={isLastStep}
                     >
                       {!isLastStep ? "Next" : "Save"}
                     </Button>

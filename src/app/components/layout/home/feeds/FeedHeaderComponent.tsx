@@ -1,11 +1,12 @@
 import { formatDate } from "@/app/lib/utils";
 import { ResultFeed } from "@/app/types";
-import { Avatar, Typography } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import FeedItemActionMenuComponent from "./FeedMenuActions";
 import { Dispatch, SetStateAction } from "react";
 import { referenceKeyword } from "@/app/lib/constants/app";
 import ProfileTooltipDetailsComponent from "../../profile/ProfileTooltipDetails";
 import PopoverCustom from "@/app/components/widgets/PopoverCustom";
+import CustomNextImage from "@/app/components/widgets/CustomNextImage";
 
 export default function FeedHeaderComponent({
   feedData,
@@ -62,13 +63,15 @@ export default function FeedHeaderComponent({
             }
             placement="right-end"
           >
-            <Avatar
-              placeholder={""}
-              variant="circular"
-              alt="candice"
-              src={userPhoto}
-              className="cursor-pointer"
-            />
+            <div>
+              <CustomNextImage
+                alt={`${feedData.user.userName}`}
+                src={userPhoto}
+                className="cursor-pointer rounded-full"
+                height={50}
+                width={50}
+              />
+            </div>
           </PopoverCustom>
 
           <div>

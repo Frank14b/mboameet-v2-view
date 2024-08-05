@@ -40,6 +40,7 @@ export function FriendsComponent({
     setIsLoading(true);
     fetchFriends({
       type: tab as FriendsTypes,
+      page: 1
     });
   };
 
@@ -82,7 +83,7 @@ export function FriendsComponent({
 
         <>
           <div className="w-full grid justify-center items-center h-10 pt-2">
-            {showLoadingMore && <Spinner className="h-12 w-12" />}
+            {showLoadingMore && <Spinner className="size-6" />}
           </div>
         </>
       </>

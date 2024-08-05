@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Button,
   Card,
@@ -17,6 +17,7 @@ import { CreateStoreFirstStepComponent } from "./stepper/FirstStepComponent";
 import { CreateStoreThirdStepComponent } from "./stepper/ThirdStepComponent";
 import { AdminStoreProductHookDto } from "@/app/hooks/pages/administration/stores/products/useStoreProducts";
 import useProductCategories from "@/app/hooks/pages/administration/stores/products/useProductCategories";
+import { useMainContext } from "@/app/contexts/main";
 
 export function CreateProductFormPopupComponent({
   adminProductHook,
@@ -30,11 +31,14 @@ export function CreateProductFormPopupComponent({
     responseData,
     formErrors,
     croppedImage,
+    isEditableForm,
     handleSubmit,
     handleIsOpenStoreForm,
     submitFormData,
     handleUpdatePhotoField,
   } = adminProductHook;
+
+  const { isDark } = useMainContext();
 
   const productCategoriesHook = useProductCategories({ storeRef });
 
@@ -42,17 +46,30 @@ export function CreateProductFormPopupComponent({
   const [isLastStep, setIsLastStep] = React.useState(false);
   const [isFirstStep, setIsFirstStep] = React.useState(false);
   const nextFormBtnRef = useRef<HTMLButtonElement>(null);
-  const [isFirstLoad, setIsFirstLoad] = React.useState<boolean>(true);
+  const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
+
+  const init = useCallback(() => {
+    if (isOpenStoreForm && isFirstStep) {
+      setActiveStep(0);
+      if (!isEditableForm) {
+        setTimeout(() => {
+          isFirstLoad &&
+            nextFormBtnRef.current &&
+            nextFormBtnRef.current.click();
+        }, 300);
+      }
+    }
+  }, [
+    nextFormBtnRef,
+    isEditableForm,
+    isFirstStep,
+    isOpenStoreForm,
+    isFirstLoad,
+  ]);
 
   useEffect(() => {
-    if (isOpenStoreForm && isFirstStep && isFirstLoad) {
-      setIsFirstLoad(false);
-      setTimeout(() => {
-        nextFormBtnRef.current && nextFormBtnRef.current.click();
-        setActiveStep(0);
-      }, 1000);
-    }
-  }, [nextFormBtnRef, isFirstLoad, isFirstStep, isOpenStoreForm]);
+    init();
+  }, [init]);
 
   const handlePrev = () => {
     handleUpdatePhotoField(null);
@@ -69,7 +86,10 @@ export function CreateProductFormPopupComponent({
         !formErrors.priceUnit &&
         !formErrors.priceUnitType
       ) {
-        setActiveStep((cur) => cur + 1);
+        setTimeout(() => {
+          !isFirstLoad && setActiveStep((cur) => cur + 1);
+          setIsFirstLoad(false);
+        }, 200);
       }
     }
 
@@ -83,7 +103,9 @@ export function CreateProductFormPopupComponent({
     isFirstStep,
     formErrors,
     croppedImage,
+    isFirstLoad,
     handleUpdatePhotoField,
+    setIsFirstLoad,
   ]);
 
   useEffect(() => {
@@ -99,9 +121,9 @@ export function CreateProductFormPopupComponent({
         size="lg"
         open={isOpenStoreForm}
         handler={handleIsOpenStoreForm}
-        className="bg-transparent shadow-none"
+        className={`shadow-none ${isDark ? "" : ""}`}
       >
-        <Card placeholder={""} className="mx-auto w-full dark:bg-dark-600">
+        <Card placeholder={""} className={`mx-auto w-full ${isDark ? "" : ""}`}>
           <CardHeader placeholder={""} className="shadow-none mt-5">
             <Typography placeholder={""} variant="h4" color="blue-gray">
               Product
@@ -137,12 +159,10 @@ export function CreateProductFormPopupComponent({
                     <div
                       className={`${isFirstStep ? "w-full mt-12" : "hidden"}`}
                     >
-                      {/* <AnimateFadeOut speed={1}> */}
                       <CreateStoreFirstStepComponent
                         adminProductHook={adminProductHook}
                         productCategoriesHook={productCategoriesHook}
                       />
-                      {/* </AnimateFadeOut> */}
                     </div>
                   )}
 
@@ -150,11 +170,9 @@ export function CreateProductFormPopupComponent({
                     <div
                       className={`${isLastStep ? "w-full mt-12" : "hidden"}`}
                     >
-                      {/* <AnimateFadeOut speed={1}> */}
                       <CreateStoreThirdStepComponent
                         adminProductHook={adminProductHook}
                       />
-                      {/* </AnimateFadeOut> */}
                     </div>
                   )}
 
@@ -167,7 +185,13 @@ export function CreateProductFormPopupComponent({
                       Prev
                     </Button>
                     <Button
-                      type={`${isLastStep ? "submit" : "submit"}`}
+                      type={`${
+                        isLastStep
+                          ? "submit"
+                          : isEditableForm
+                          ? "button"
+                          : "submit"
+                      }`}
                       placeholder={""}
                       ref={nextFormBtnRef}
                       onClick={!isLastStep ? handleNext : () => {}}

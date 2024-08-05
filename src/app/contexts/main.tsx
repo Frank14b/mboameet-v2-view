@@ -75,14 +75,15 @@ export function MainWrapper({ children }: { children: any }) {
   }, [pathname, setCurrentLink]);
 
   useEffect(() => {
-    if (currentLink == pathname) return;
-
+    // if (currentLink == pathname) return;
     if (
       pathname.startsWith(`${marketplacePathUrl}`) ||
       pathname.startsWith(administrationPathUrl.baseUrl)
     ) {
-      setCanRemoveAsideBar(true);
-      setCanRemoveNavBar(true);
+      // setCanRemoveAsideBar(true);
+      // setCanRemoveNavBar(true);
+      setCanRemoveAsideBar(false);
+      setCanRemoveNavBar(false);
     } else {
       setCanRemoveAsideBar(false);
       setCanRemoveNavBar(false);

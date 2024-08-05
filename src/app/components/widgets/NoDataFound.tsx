@@ -32,7 +32,7 @@ export function NoDataFound({
         <CustomNextImage
           height={200}
           width={200}
-          src={image ?? "/no-results-bg.2d2c6ee3.png"}
+          src={image ?? "/images/no-results-bg.2d2c6ee3.png"}
           alt="card-image"
           className="object-cover rounded-full"
           priority={true}

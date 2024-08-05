@@ -12,7 +12,7 @@ export default function MarketPlacePage() {
   const { push } = useCustomRouter();
 
   return (
-    <div className="container dark:text-white">
+    <div className="w-full dark:text-white px-5">
       <div className="w-full flex justify-between">
         <Breadcrumbs placeholder={""} className="dark:bg-gray-800">
           <CustomNextLink href="/">

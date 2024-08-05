@@ -16,7 +16,7 @@ export default function CustomNextImage({
       {...props}
       src={imgSrc ? props.src : defaultImage}
       alt={props.alt ? props.alt : ""}
-      className={`${className} ${imgSrc ? "" : "object-cover bg-gray-300"}`}
+      className={`${className} ${imgSrc ? "" : "bg-gray-300 opacity-30 dark:opacity-100 dark:bg-gray-700"}`}
       onError={() => setImgSrc(false)}
     />
   );

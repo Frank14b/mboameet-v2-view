@@ -48,7 +48,7 @@ export function useFeedComment(feedId: number): FeedCommentHookDto {
     let result = null;
 
     if (response.status) {
-      result = response.data?.data ?? null;
+      result = response.data?.data ?? [];
     }
 
     setComments(result);

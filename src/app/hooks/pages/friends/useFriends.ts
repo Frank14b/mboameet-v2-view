@@ -25,13 +25,17 @@ const useFriends = () => {
   const [activeTab, setActiveTab] = useState<FriendsTypes>(
     friendTypesList[0].key as FriendsTypes
   );
-  const { mainDivComponentRef, getFileUrl } = useMainContext();
+  const { getFileUrl } = useMainContext();
   const [isAutoFetchFromScrolling, setIsAutoFetchFromScrolling] =
     useState<boolean>(false);
   const [showLoadingMore, setShowLoadingMore] = useState<boolean>(false);
   const [pagination, setPagination] = useState<ResultPaginate<
     ResultFriendsDto[]
   > | null>(null);
+  const [currentMainDiv, setCurrentMainDiv] = useState<HTMLDivElement | null>(null);
+
+  const [startIndex, setStartIndex] = useState(0);
+  const [itemsPerPage] = useState(30);
 
   const fetchFriends = useCallback(
     async ({ type, page = 1 }: { type: FriendsTypes; page?: number }) => {
@@ -58,12 +62,22 @@ const useFriends = () => {
           setFriends((prevData) => {
             return [...prevData, ...(result.data?.data as ResultFriendsDto[])];
           });
+          setStartIndex((c) => {
+            return c + 27;
+          });
         }
         return result.data.data;
       }
       setFriends([]);
     },
-    [setIsLoading, setFriends, setPagination, setActiveTab, setShowLoadingMore]
+    [
+      setIsLoading,
+      setFriends,
+      setPagination,
+      setActiveTab,
+      setShowLoadingMore,
+      setStartIndex,
+    ]
   );
 
   useEffect(() => {
@@ -90,27 +104,52 @@ const useFriends = () => {
     return result;
   }, []);
 
-  useEffect(() => {
-    const mainDiv = mainDivComponentRef.current;
-    if (!mainDiv) return;
-    //
-    mainDiv.addEventListener("scroll", () => {
-      const scrollTop = mainDiv.scrollTop;
-      const scrollHeight = mainDiv.scrollHeight;
-      const clientHeight = mainDiv.clientHeight;
+  const handleScrollEvent = useCallback((mainDiv: HTMLDivElement) => {
 
+    setCurrentMainDiv(mainDiv);
+
+    const scrollTop = mainDiv.scrollTop;
+    const scrollHeight = mainDiv.scrollHeight;
+    const clientHeight = mainDiv.clientHeight;
+
+    if (scrollTop <= 10) {
+      if (startIndex - itemsPerPage > 0) {
+        setStartIndex(startIndex - 20);
+      } else {
+        setStartIndex(0);
+      }
+    } else {
       if (scrollTop + clientHeight >= scrollHeight) {
         setShowLoadingMore(true);
         setIsAutoFetchFromScrolling(true);
+      } else {
+        if (pagination && pagination.currentPage > pagination.lastPage) {
+          if (startIndex + 27 > (pagination?.total ?? 0)) return;
+
+          setShowLoadingMore(true);
+          setIsAutoFetchFromScrolling(true);
+
+          setStartIndex((c) => {
+            return c + 27;
+          });
+        }
       }
-    });
-  }, [mainDivComponentRef, setShowLoadingMore, setIsAutoFetchFromScrolling]);
+    }
+  }, [
+    startIndex,
+    itemsPerPage,
+    pagination,
+    setShowLoadingMore,
+    setIsAutoFetchFromScrolling,
+    setStartIndex,
+    setCurrentMainDiv
+  ]);
 
   useEffect(() => {
     if (isAutoFetchFromScrolling && pagination) {
       if (pagination?.currentPage < pagination?.lastPage) {
         fetchFriends({ type: activeTab, page: pagination.currentPage + 1 });
-      }else{
+      } else {
         setShowLoadingMore(false);
       }
       setIsAutoFetchFromScrolling(false);
@@ -124,16 +163,29 @@ const useFriends = () => {
     setIsAutoFetchFromScrolling,
   ]);
 
+  const displayedData = useMemo(() => {
+    if (formattedFriends.length <= itemsPerPage) return formattedFriends;
+
+    if (currentMainDiv && startIndex > 0) {
+      setTimeout(() => {
+        currentMainDiv.scrollTop = (currentMainDiv.scrollHeight - currentMainDiv.clientHeight) * 0.5; // increase the scroll position to remove side effect
+      }, 200);
+    }
+
+    return formattedFriends.slice(startIndex, startIndex + itemsPerPage);
+  }, [formattedFriends, startIndex, itemsPerPage]);
+
   const data: FriendsHookDto = {
     isLoading,
     showLoadingMore,
-    friends: formattedFriends,
+    friends: displayedData,
     friendTypesList,
     defaultTab,
     activeTab,
     setIsLoading,
     fetchFriends,
     followFriend,
+    handleScrollEvent
   };
 
   return { ...data };
@@ -151,12 +203,15 @@ export type FriendsHookDto = {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   fetchFriends: ({
     type,
+    page,
   }: {
     type: FriendsTypes;
+    page?: number;
   }) => Promise<ResultFriendsDto[] | undefined>;
   followFriend: ({
     id,
   }: {
     id: number;
   }) => Promise<ApiResponseDto<ResultFriendsDto[]>>;
+  handleScrollEvent: (e: HTMLDivElement) => void;
 };

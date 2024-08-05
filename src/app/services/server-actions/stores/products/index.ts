@@ -1,4 +1,6 @@
-import { ApiResponseDto, ResultPaginate } from "@/app/types";
+"use server";
+
+import { ApiResponseDto, BooleanResultDto, RequestMethod, ResultPaginate } from "@/app/types";
 import { apiCall } from "../../../api";
 import { ResultProductDto } from "@/app/types/stores/products";
 
@@ -11,12 +13,21 @@ const urls = {
 
 export const proceedSubmitProduct = async (
   formData: FormData,
-  storeRef: string
+  storeRef: string,
+  id?: number
 ) => {
   //
+  let url = `${urls.createProduct}/${storeRef}/products`;
+  let method = "POST";
+
+  if (id) {
+    url += `/${id}`;
+    method = "PUT";
+  }
+
   const result: ApiResponseDto<ResultProductDto> = await apiCall({
-    method: "POST",
-    url: `${urls.createProduct}/${storeRef}/products`,
+    method: method as RequestMethod,
+    url,
     data: formData,
   });
 
@@ -65,6 +76,16 @@ export const proceedSubmitProductImage = async (
     method: "POST",
     url: `${basePath}/${storeRef}/products/${productRef}/files`,
     data: formData,
+  });
+
+  return result;
+};
+
+export const proceedDeleteProduct = async (id: number, storeRef: string) => {
+  //
+  const result: ApiResponseDto<BooleanResultDto<null>> = await apiCall({
+    method: "DELETE",
+    url: `${basePath}/${storeRef}/products/${id}`,
   });
 
   return result;

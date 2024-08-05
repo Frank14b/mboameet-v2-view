@@ -73,9 +73,17 @@ export default function SelectFilterField({
     checkError();
 
     if (watchField && dataOptions.length > 0) {
-      const item = dataOptions.find((options) => options.value === watchField);
+      const item = dataOptions.find((options) => `${options.value}` === `${watchField}`);
       if (item) {
         setSelectedValue(item.label);
+      } else {
+        const secondCheckItem = dataOptions.find(
+          (options) =>
+            JSON.stringify(options.customValue) === JSON.stringify(watchField)
+        );
+        if (secondCheckItem) {
+          setSelectedValue(secondCheckItem.label);
+        }
       }
     }
   }, [watchField, dataOptions, checkError]);

@@ -219,7 +219,7 @@ export default {
         remember_me: "Remember me",
         confirm_btn: "Proceed",
       },
-    }
+    },
   },
 
   marketPlace: {
@@ -238,14 +238,57 @@ export default {
           description: "Description",
           price: "Price",
           seller: "Seller",
-        }
-      }
+        },
+      },
     },
 
     emptyCart: {
       title: "Your Shopping Cart is Empty",
       subtitle: "Add some products to your cart",
       back_to_marketplace: "Back to marketplace",
-    }
-  }
+    },
+  },
+
+  administration: {
+    stores: {
+      breadcrumbs: {
+        administration: "Administration",
+        stores: "Stores",
+        add_btn_text: "New Store",
+      },
+      title: "Stores Management",
+      subtitle: "Create a New Store",
+      subtitle2: "Start your journey with a full online business",
+      add_btn_text: "New Store",
+
+      tooltips: {
+        store_products: "Store Products",
+        edit_store: "Edit Store"
+      },
+      manage_product: "Manage",
+
+      not_found: "Stores Not Found",
+
+      products: {
+        breadcrumbs: {
+          administration: "Administration",
+          stores: "Stores",
+          products: "Products",
+          add_btn_text: "New Product",
+        },
+
+        title: "Store Products",
+        subtitle: "Create New Product",
+        subtitle2: "Start your journey with a full online business",
+        add_btn_text: "New Product",
+
+        tooltips: {
+          edit_text: "Edit Product",
+          delete_text: "Delete Product",
+        },
+
+        not_found: "Products Not Found",
+      },
+    },
+  },
 } as const;

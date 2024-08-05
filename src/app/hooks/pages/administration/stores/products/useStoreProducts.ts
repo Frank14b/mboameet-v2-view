@@ -18,6 +18,7 @@ import {
   parseJsonString,
 } from "@/app/lib/utils";
 import {
+  proceedDeleteProduct,
   proceedGetAdminStoreProducts,
   proceedSubmitProduct,
   proceedSubmitProductImage,
@@ -43,18 +44,20 @@ const useAdminStoreProduct = (storeRef: string) => {
     null
   );
   const [products, setProducts] = useState<ResultProductDto[] | null>(null);
+  const [isEditableForm, setIsEditableForm] = useState<boolean>(false);
 
   const { formState, handleSubmit, setValue, reset } = useAppForm({
     schema: CreateProductSchema,
     defaultValues: {
+      id: 0,
       name: "",
       description: "",
       quantity: 10,
       isUnlimited: true,
       photo: null,
-      productCategoryId: null,
+      productCategoryId: 0,
       price: 0,
-      priceUnit: null,
+      priceUnit: 0,
       priceUnitType: "",
     },
   });
@@ -92,7 +95,7 @@ const useAdminStoreProduct = (storeRef: string) => {
   }, [storeRef, setProducts, setIsFetchingProduct]);
 
   const submitFormData = useCallback(
-    async (data: CreateProductFormDto) => {
+    async (data: CreateProductFormDto & { id?: number }) => {
       //
       setIsLoading(true);
       setResponseData(null);
@@ -101,12 +104,18 @@ const useAdminStoreProduct = (storeRef: string) => {
 
       const dataKeys = Object.entries(data);
       dataKeys.forEach(([key, value]) => {
-        if (key == "photo") {
-          formData.append(
-            "image",
-            storeCroppedLogo?.blob,
-            `store-product-image.${fileExtFromBase64(storeCroppedLogo?.base64)}`
-          );
+        if (key == "id") {
+          // do nothing
+        } else if (key == "photo") {
+          if (!data.id || data.id == 0) {
+            formData.append(
+              "image",
+              storeCroppedLogo?.blob,
+              `store-product-image.${fileExtFromBase64(
+                storeCroppedLogo?.base64
+              )}`
+            );
+          }
         } else if (key == "description") {
           formData.append(key, JSON.stringify(value));
         } else {
@@ -114,7 +123,7 @@ const useAdminStoreProduct = (storeRef: string) => {
         }
       });
 
-      const result = await proceedSubmitProduct(formData, storeRef);
+      const result = await proceedSubmitProduct(formData, storeRef, data.id);
       setResponseData(result);
       setIsLoading(false);
 
@@ -153,7 +162,7 @@ const useAdminStoreProduct = (storeRef: string) => {
         description: parseJsonString(product.description),
         files: product.files.map((file) => {
           return {
-           ...file,
+            ...file,
             url: getFileUrl(file.url, product.store.userId, ""),
             previewUrl: getFileUrl(file.previewUrl, product.store.userId, ""),
           };
@@ -173,16 +182,40 @@ const useAdminStoreProduct = (storeRef: string) => {
       );
       formData.append("fileType", "image");
 
-      const result = await proceedSubmitProductImage(
-        formData,
-        storeRef,
-        productRef
-      );
+      await proceedSubmitProductImage(formData, storeRef, productRef);
 
-      getProducts()
+      getProducts();
     },
     [storeRef, getProducts]
   );
+
+  const handleEditStoreProduct = useCallback(
+    (item: ResultProductDto) => {
+      setValue("id", item.id);
+      setValue("description", item.description);
+      setValue("isUnlimited", item.isUnlimited);
+      setValue("name", item.name);
+      setValue("quantity", item.quantity);
+      setValue("price", item.price);
+      setValue("priceUnit", item.priceUnit);
+      setValue("priceUnitType", item.priceUnitType);
+      setValue("productCategoryId", item.productCategory.id);
+      //
+      setIsEditableForm(true);
+      handleIsOpenStoreForm();
+    },
+    [handleIsOpenStoreForm]
+  );
+
+  const handleDeleteProduct = useCallback(async (item: ResultProductDto) => {
+    const result = await proceedDeleteProduct(item.id, storeRef);
+
+    notification.apiNotify(result);
+
+    if(result.status) {
+      getProducts();
+    }
+  }, [getProducts]);
 
   const data: AdminStoreProductHookDto = {
     storeRef,
@@ -195,14 +228,21 @@ const useAdminStoreProduct = (storeRef: string) => {
     connectedUser,
     formErrors: errors,
     products: formattedProducts as ResultProductDto[],
+    isEditableForm,
     handleUpdatePhotoField,
     handleCroppedImage,
     setIsLoading,
     selectImageFile,
     submitFormData,
     handleSubmit,
-    handleIsOpenStoreForm,
+    handleIsOpenStoreForm: () => {
+      reset();
+      setIsEditableForm(false);
+      handleIsOpenStoreForm();
+    },
     uploadProductImage,
+    handleEditStoreProduct,
+    handleDeleteProduct,
   };
 
   return { ...data };
@@ -221,6 +261,7 @@ export type AdminStoreProductHookDto = {
   formErrors: FieldErrors<CreateProductFormDto>;
   croppedImage: ObjectKeyDto;
   products: ResultProductDto[];
+  isEditableForm: boolean;
   submitFormData: (data: CreateProductFormDto) => Promise<void>;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   handleSubmit: UseFormHandleSubmit<any>;
@@ -232,4 +273,6 @@ export type AdminStoreProductHookDto = {
     productRef: string
   ) => Promise<void>;
   handleUpdatePhotoField: (value: string | null) => void;
+  handleEditStoreProduct: (item: ResultProductDto) => void;
+  handleDeleteProduct: (item: ResultProductDto) => void;
 };

@@ -10,12 +10,6 @@ const nextConfig = {
         pathname: "/**",
       },
       {
-        protocol: "http",
-        hostname: "localhost",
-        port: "5000",
-        pathname: "/**",
-      },
-      {
         protocol: "https",
         hostname: "docs.material-tailwind.com",
         port: "",
@@ -50,6 +44,18 @@ const nextConfig = {
         hostname: "mboameet.azurewebsites.net",
         pathname: "/**",
         port: ""
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "5000",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "mboameet-v2-api",
+        pathname: "/**",
+        port: "5000"
       }
     ],
   },

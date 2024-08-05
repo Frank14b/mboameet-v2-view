@@ -83,7 +83,7 @@ export default function SideBarMenuComponent({ children }: { children: any }) {
           />
 
           <SideBarMenuListComponent
-            title="MarketPlace"
+            title="Marketplace"
             icon={<ShoppingBagIcon />}
             active={pathname.startsWith(marketplacePathUrl) ? true : false}
             badge={`${

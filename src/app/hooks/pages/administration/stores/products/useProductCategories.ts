@@ -2,6 +2,7 @@ import {
   Dispatch,
   SetStateAction,
   useCallback,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -23,7 +24,7 @@ const useProductCategories = ({ storeRef }: { storeRef?: string }) => {
         storeRef: storeRef,
         manage: true,
       });
-      
+
       setCategories(result?.data?.data ?? null);
     },
     [storeRef, setCategories]
@@ -39,6 +40,10 @@ const useProductCategories = ({ storeRef }: { storeRef?: string }) => {
       };
     });
   }, [categories]);
+
+  useEffect(() => {
+    handleGetProductCategories();
+  }, [handleGetProductCategories]);
 
   const data: AdminProductCategoriesHookDto = {
     isLoading,

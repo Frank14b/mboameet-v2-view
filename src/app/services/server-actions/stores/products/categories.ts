@@ -28,8 +28,8 @@ export const proceedGetStoreProductCategories = async (data: {
       method: "GET",
       url: `${urls.getCategories}${storePath}/products/categories?manage=${
         data?.manage ?? false
-      }${filter}`,
+      }${filter ?? ''}`,
     });
-
+    
   return result;
 };

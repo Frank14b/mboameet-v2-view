@@ -4,6 +4,7 @@ import {
   PencilIcon,
   PlusIcon,
   ShoppingBagIcon,
+  TrashIcon,
 } from "@heroicons/react/24/solid";
 import {
   Button,
@@ -26,6 +27,8 @@ import { CreateProductFormPopupComponent } from "./create/ProductFormPopupCompon
 import TooltipCustomAnimation from "@/app/components/widgets/TooltipCustomAnimation";
 import { AdminStoreProductHookDto } from "@/app/hooks/pages/administration/stores/products/useStoreProducts";
 import ProductImageUploadComponent from "./create/ProductImageUploadComponent";
+import { useMainContext } from "@/app/contexts/main";
+import { useScopedI18n } from "@/app/locales/client";
 
 export function AdminStoreProductsComponent({
   adminProductHook,
@@ -33,14 +36,19 @@ export function AdminStoreProductsComponent({
   adminProductHook: AdminStoreProductHookDto;
 }) {
   //
-
   const {
     products,
     isFetchingProduct,
     handleIsOpenStoreForm,
     uploadProductImage,
+    handleEditStoreProduct,
+    handleDeleteProduct,
   } = adminProductHook;
+  //
+  const { isDark } = useMainContext();
   const [openAccordion, setOpenAccordion] = useState<number>(0);
+
+  const scopedT = useScopedI18n("administration.stores.products");
 
   const storeItems = useMemo(() => {
     if (isFetchingProduct === true)
@@ -49,7 +57,7 @@ export function AdminStoreProductsComponent({
       return (
         <NoDataFound
           customClass="dark:shadow-none dark:bg-gray-800"
-          message="Products not found"
+          message={scopedT("not_found")}
         />
       );
 
@@ -67,7 +75,13 @@ export function AdminStoreProductsComponent({
         <AccordionHeader
           placeholder={""}
           className="border-0"
-          onClick={() => setOpenAccordion(item.id)}
+          onClick={() => {
+            if (openAccordion == 0) {
+              setOpenAccordion(item.id);
+            } else {
+              setOpenAccordion(0);
+            }
+          }}
         >
           <div className="flex w-full justify-between">
             <div className="flex gap-2 h-10 text-sm items-center dark:text-gray-100">
@@ -95,57 +109,83 @@ export function AdminStoreProductsComponent({
             >
               <CardHeader
                 placeholder={""}
-                className="bg-transparent shadow-none text-right"
+                className="bg-transparent gap-3 shadow-none text-right"
               >
                 <TooltipCustomAnimation
-                  content={<p className="text-xs">Edit Product</p>}
+                  content={
+                    <p className="text-xs">{scopedT("tooltips.edit_text")}</p>
+                  }
+                >
+                  <IconButton
+                    size="sm"
+                    placeholder={""}
+                    className="rounded-full mx-5 dark:bg-gray-700"
+                    onClick={() => handleEditStoreProduct(item)}
+                  >
+                    <PencilIcon className="h-3 w-3" />
+                  </IconButton>
+                </TooltipCustomAnimation>
+
+                <TooltipCustomAnimation
+                  content={
+                    <p className="text-xs">{scopedT("tooltips.delete_text")}</p>
+                  }
                 >
                   <IconButton
                     size="sm"
                     placeholder={""}
                     className="rounded-full dark:bg-gray-700"
+                    onClick={() => handleDeleteProduct(item)}
                   >
-                    <PencilIcon className="h-3 w-3" />
+                    <TrashIcon className="h-3 w-3" />
                   </IconButton>
                 </TooltipCustomAnimation>
               </CardHeader>
               <CardBody placeholder={""} className="p-0">
-                <div className=" xs:grid lg:flex gap-5">
-                  <ul className="flex flex-col gap-4 w-full">
-                    <li className="flex items-center gap-4">
-                      <span className="rounded-full border border-white/20 bg-white/20 p-1">
-                        <CurrencyEuroIcon className="w-4 h-4" />
-                      </span>
-                      <Typography
-                        placeholder={""}
-                        className="font-normal text-sm"
-                      >
-                        Price: {item.price} {item.store.currency.code} /{" "}
-                        {item.priceUnit} {item.priceUnitType}
-                      </Typography>
-                    </li>
+                <div className="xs:grid lg:flex gap-5">
+                  <div>
+                    <ul className="flex flex-col gap-4 w-full">
+                      <li className="flex items-center gap-4">
+                        <span className="rounded-full bg-white/20 p-1">
+                          <CurrencyEuroIcon className="w-4 h-4" />
+                        </span>
+                        <Typography
+                          placeholder={""}
+                          className="font-normal text-sm"
+                        >
+                          Price: {item.price} {item.store.currency.code} /{" "}
+                          {item.priceUnit} {item.priceUnitType}
+                        </Typography>
+                      </li>
 
-                    <li className="flex items-center gap-4">
-                      <span className="rounded-full border border-white/20 bg-white/20 p-1">
-                        <CurrencyEuroIcon className="w-4 h-4" />
-                      </span>
-                      <Typography
-                        placeholder={""}
-                        as={"div"}
-                        className="font-normal text-sm flex gap-2"
+                      <li className="flex items-center gap-4">
+                        <span className="rounded-full bg-white/20 p-1">
+                          <CurrencyEuroIcon className="w-4 h-4" />
+                        </span>
+                        <Typography
+                          placeholder={""}
+                          as={"div"}
+                          className="font-normal text-sm flex gap-2"
+                        >
+                          Quantity: {!item.isUnlimited ? item.quantity : ""}
+                          <Chip
+                            className="text-xs mt-[-2px]"
+                            size="sm"
+                            value={item.isUnlimited ? "Unlimited" : "Limited"}
+                          />
+                        </Typography>
+                      </li>
+                    </ul>
+                    <div
+                      className={`w-full rounded-lg mt-5 p-5 ${
+                        isDark ? "bg-gray-900" : "bg-gray-100"
+                      }`}
+                    >
+                      <div
+                        dangerouslySetInnerHTML={{ __html: item.description }}
                       >
-                        Quantity: {!item.isUnlimited ? item.quantity : ""}
-                        <Chip
-                          className="text-xs mt-[-2px]"
-                          size="sm"
-                          value={item.isUnlimited ? "Unlimited" : "Limited"}
-                        />
-                      </Typography>
-                    </li>
-                  </ul>
-                  <div className="w-full">
-                    <div dangerouslySetInnerHTML={{ __html: item.description }}>
-                      {/* // */}
+                        {/* // */}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -166,8 +206,8 @@ export function AdminStoreProductsComponent({
                     productRef={item.reference}
                     selectedImageFile={uploadProductImage}
                     cropSize={{
-                      width: 800,
-                      height: 800,
+                      width: 500,
+                      height: 500,
                     }}
                   />
                 </div>
@@ -187,7 +227,6 @@ export function AdminStoreProductsComponent({
 
   return (
     <div className="dark:text-gray-100">
-      {/* // */}
       <div className="">
         <Card
           placeholder={""}
@@ -203,7 +242,7 @@ export function AdminStoreProductsComponent({
                 variant="h6"
                 className="py-3 gap-2 flex text-pink-400"
               >
-                <ShoppingBagIcon className="w-5 h-5" /> Store Products
+                <ShoppingBagIcon className="w-5 h-5" /> {scopedT("title")}
               </Typography>
 
               <Typography
@@ -211,10 +250,10 @@ export function AdminStoreProductsComponent({
                 variant="h6"
                 className="uppercase text-sm"
               >
-                Create a new product
+                {scopedT("subtitle")}
               </Typography>
               <Typography placeholder={""} className="text-xs">
-                Start your journey with a full online business
+                {scopedT("subtitle2")}
               </Typography>
             </div>
             <div>
@@ -224,14 +263,13 @@ export function AdminStoreProductsComponent({
                 className="text-xs flex gap-2"
                 size="sm"
               >
-                <PlusIcon className="h-4 w-3" /> new product
+                <PlusIcon className="h-4 w-3" /> {scopedT("add_btn_text")}
               </Button>
             </div>
           </CardHeader>
           <CardBody placeholder={""}>{storeItems}</CardBody>
         </Card>
       </div>
-      {/* // */}
 
       <CreateProductFormPopupComponent adminProductHook={adminProductHook} />
     </div>

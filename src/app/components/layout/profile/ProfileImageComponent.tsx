@@ -5,6 +5,7 @@ import { ChangeEvent } from "react";
 import CropImage from "../../widgets/CropImage";
 import { ObjectKeyDto } from "@/app/types";
 import { useScopedI18n } from "@/app/locales/client";
+import CustomNextImage from "../../widgets/CustomNextImage";
 
 export default function ProfileImageComponent({
   username,
@@ -51,14 +52,13 @@ export default function ProfileImageComponent({
               SVG, PNG, JPG or GIF (MAX. 800x400px)
             </p>
 
-            <Avatar
-              placeholder={""}
-              variant="circular"
+            <CustomNextImage
               alt={username}
-              size="xxl"
-              className="cursor-pointer mt-5 border-2 border-pink-100"
+              className="cursor-pointer mt-5 border-2 border-pink-100 rounded-full"
               src={photo}
-            ></Avatar>
+              width={100}
+              height={100}
+            />
           </div>
           <input
             onChange={(e: ChangeEvent<HTMLInputElement>) =>

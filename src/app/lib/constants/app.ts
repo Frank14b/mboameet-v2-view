@@ -27,7 +27,7 @@ export const invalidEmailErrorMessage: string =
 export const requiredEmailErrorMessage: string = "Email address is required";
 export const defaultProfileImg: string =
   "https://docs.material-tailwind.com/img/team-3.jpg";
-export const defaultImage: string = "/images/thumbnail.svg";
+export const defaultImage: string = "/images/thumbnail_image.webp";
 
 export const mainDivComponentId: string = `main-app-div`;
 export const referenceKeyword: string = `feed-card-item-`;
@@ -180,19 +180,19 @@ export const productCarouselResponsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
     breakpoint: { max: 4000, min: 1400 },
-    items: 7,
+    items: 4,
   },
   large: {
     breakpoint: { max: 1400, min: 1024 },
-    items: 5,
+    items: 3,
   },
   medium: {
     breakpoint: { max: 1024, min: 960 },
-    items: 4,
+    items: 3,
   },
   desktop: {
     breakpoint: { max: 960, min: 721 },
-    items: 3,
+    items: 2,
   },
   tablet: {
     breakpoint: { max: 721, min: 464 },

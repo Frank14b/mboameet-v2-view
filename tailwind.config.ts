@@ -8,6 +8,10 @@ const config: Config | any = withMT({
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    // fontFamily: {
+    //   display: ['Roboto'],
+    //   body: ['Roboto', 'sans-serif']
+    // },
     screens: {
       'xs': { max: '640px' },
       'csm': { max: '992px' },

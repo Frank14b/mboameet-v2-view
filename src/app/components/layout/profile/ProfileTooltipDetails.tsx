@@ -8,6 +8,7 @@ import {
   ListItem,
   ListItemPrefix,
 } from "@material-tailwind/react";
+import CustomNextImage from "../../widgets/CustomNextImage";
 
 export default function ProfileTooltipDetailsComponent({
   user,
@@ -17,7 +18,13 @@ export default function ProfileTooltipDetailsComponent({
   return (
     <>
       <div className="mb-4 flex items-center gap-4 border-b border-blue-gray-50 pb-4 dark:text-white dark:border-0">
-        <Avatar placeholder={""} src={user?.photo} alt="tania andrew" />
+        <CustomNextImage
+          alt={user?.userName}
+          src={user?.photo}
+          className="cursor-pointer rounded-full"
+          height={40}
+          width={40}
+        />
         <div>
           <Typography
             placeholder={""}

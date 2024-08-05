@@ -73,9 +73,14 @@ export default function FeedCommentFormComponent({
       {/* ---- */}
       <motion.div
         initial={{ width: formDivWidth, scale: 1, float: "right" }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.6 }}
         whileHover={{ width: "100%" }}
-        onHoverStart={() => setFormDivWidth(`100%`)}
+        whileFocus={{ width: "100%" }}
+        whileTap={{width: '100%'}}
+        whileInView={{width: '100%'}}
+        onHoverStart={() => {
+          setFormDivWidth(`100%`);
+        }}
       >
         <div className="relative">
           <div
@@ -85,7 +90,6 @@ export default function FeedCommentFormComponent({
             role="textbox"
             contentEditable={true}
             suppressContentEditableWarning={true}
-            // onClick={() => handleGetCursorPosition()}
           >
             {" "}
             <>{}</>{" "}

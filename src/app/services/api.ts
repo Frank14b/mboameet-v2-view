@@ -114,6 +114,7 @@ export const apiCall = async ({
 // };
 
 export const ApiErrorMessage = (error: any): ApiResponseDto<any> => {
+  console.log(error.response.data);
   return {
     status: false,
     message: error?.response?.data?.title ?? error?.response?.data,
