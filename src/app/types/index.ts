@@ -5,6 +5,7 @@ export * from "./widget";
 export * from "./user";
 export * from "./feeds";
 export * from './stores/storeTypes';
+export * from './stories';
 
 export type RequestMethod = "POST" | "GET" | "DELETE" | "PUT" | "PATCH";
 

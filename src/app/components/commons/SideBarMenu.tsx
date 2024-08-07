@@ -1,12 +1,13 @@
 "use client";
 
-import { List } from "@material-tailwind/react";
+import { Chip, List } from "@material-tailwind/react";
 import SideBarMenuListComponent from "../widgets/sidebar/MenuList";
 import {
   BookmarkIcon,
   ChatBubbleBottomCenterIcon,
   Cog6ToothIcon,
   ShoppingBagIcon,
+  ShoppingCartIcon,
   UsersIcon,
   VideoCameraIcon,
   WalletIcon,
@@ -83,7 +84,22 @@ export default function SideBarMenuComponent({ children }: { children: any }) {
           />
 
           <SideBarMenuListComponent
-            title="Marketplace"
+            title={
+              <div className="flex justify-between w-full">
+                <span>Marketplace</span>
+
+                <Chip
+                  value={
+                    <div className="flex gap-2">
+                      <ShoppingCartIcon className="size-4" /> <span>2</span>
+                    </div>
+                  }
+                  variant="ghost"
+                  size="sm"
+                  className={`rounded-full px-2 py-1 text-xs bg-gray-400`}
+                />
+              </div>
+            }
             icon={<ShoppingBagIcon />}
             active={pathname.startsWith(marketplacePathUrl) ? true : false}
             badge={`${

@@ -1,6 +1,11 @@
 "use server";
 
-import { ApiResponseDto, BooleanResultDto, RequestMethod, ResultPaginate } from "@/app/types";
+import {
+  ApiResponseDto,
+  BooleanResultDto,
+  RequestMethod,
+  ResultPaginate,
+} from "@/app/types";
 import { apiCall } from "../../../api";
 import { ResultProductDto } from "@/app/types/stores/products";
 
@@ -86,6 +91,27 @@ export const proceedDeleteProduct = async (id: number, storeRef: string) => {
   const result: ApiResponseDto<BooleanResultDto<null>> = await apiCall({
     method: "DELETE",
     url: `${basePath}/${storeRef}/products/${id}`,
+  });
+
+  return result;
+};
+
+export const proceedRateProductAsync = async ({
+  storeRef,
+  productRef,
+  rating,
+}: {
+  storeRef: string;
+  productRef: string;
+  rating: number;
+}) => {
+  //
+  const result: ApiResponseDto<ResultProductDto> = await apiCall({
+    method: "PUT",
+    url: `${urls.getProducts}${storeRef}/products/${productRef}/rating`,
+    data: {
+      rating
+    }
   });
 
   return result;

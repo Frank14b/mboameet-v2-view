@@ -1,22 +1,31 @@
 "use client";
 
-import { Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import UserStoriesCard from "../widgets/UserStoriesCard";
 import SideBarMenuListUserComponent from "../widgets/sidebar/MenuListUser";
 import useFriends from "@/app/hooks/pages/friends/useFriends";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import CustomNextLink from "../widgets/CustomNextLink";
 import { friendPathUrl } from "@/app/lib/constants/app";
-import { range } from "@/app/lib/utils";
+import { StoriesPopupComponent } from "./stories/StoriesPopupComponent";
+import useStories from "@/app/hooks/useStories";
 
 export default function AsideBarMenuComponent({ children }: { children: any }) {
   //
   const { friends, isLoading } = useFriends();
+  const { stories, handleGetStories } = useStories();
   const [activeStory, setActiveStory] = useState<number>(0);
 
-  const onStoryClick = useCallback((id: number) => {
-    setActiveStory(id)
-  }, [setActiveStory])
+  const onStoryClick = useCallback(
+    (id: number) => {
+      setActiveStory(id);
+    },
+    [setActiveStory]
+  );
+
+  useEffect(() => {
+    handleGetStories({ limit: 4 });
+  }, [handleGetStories]);
 
   const friendSuggestions = useMemo(() => {
     if (isLoading)
@@ -25,7 +34,7 @@ export default function AsideBarMenuComponent({ children }: { children: any }) {
 
     return (
       <>
-        <div className="max-h-[300px] overflow-y-auto overflow-x-hidden">
+        <div className="max-h-[260px] overflow-y-auto overflow-x-hidden">
           <SideBarMenuListUserComponent
             users={friends.map((friend, index: number) => {
               let name = `${friend.firstName} ${friend.lastName}`;
@@ -53,30 +62,43 @@ export default function AsideBarMenuComponent({ children }: { children: any }) {
 
     return (
       <>
-        {range(1, 4).map((id, index) => (
-          <div className="p-1" key={index}>
-            <UserStoriesCard
-              id={id}
-              image="/images/full-shot-people-use-apps-make-friends.jpg"
-              bgImage="../images/beautiful-rendering-dating-app-concept.jpg"
-              activeStory={activeStory}
-              onStoryClick={onStoryClick}
-            />
-          </div>
-        ))}
+        <StoriesPopupComponent />
 
-        <p className="text-xs underline px-1 pt-5">
-          <CustomNextLink href={friendPathUrl}> See All </CustomNextLink>
-        </p>
+        <div className="grid grid-cols-2">
+          {stories.map((item, index) => (
+            <div className="p-1" key={index}>
+              <UserStoriesCard
+                id={item.id}
+                image="/images/full-shot-people-use-apps-make-friends.jpg"
+                bgImage="../images/beautiful-rendering-dating-app-concept.jpg"
+                item={item}
+                nextItem={stories?.[index + 1]}
+                activeStory={activeStory}
+                onStoryClick={onStoryClick}
+              />
+            </div>
+          ))}
+        </div>
+
+        <div className="w-full text-center mt-2">
+          <Button
+            onClick={() => {}}
+            placeholder={""}
+            size="sm"
+            className="bg-gray-800 mx-auto w-[200px]"
+          >
+            View All Stories
+          </Button>
+        </div>
       </>
     );
-  }, [activeStory, isLoading, onStoryClick]);
+  }, [activeStory, stories, isLoading, onStoryClick]);
 
   return (
     <>
       {children}
       <div className="w-full pb-6 dark:text-gray-200">
-        <div className="grid grid-cols-2">{userStories}</div>
+        <div className="px-0">{userStories}</div>
       </div>
 
       <div className="w-full pb-6 dark:text-gray-200">

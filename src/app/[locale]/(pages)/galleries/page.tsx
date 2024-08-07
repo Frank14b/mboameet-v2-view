@@ -20,7 +20,7 @@ export default function GalleryPage() {
         </div>
       </div>
       {/*  */}
-      <div className="mt-12">
+      <div className="mt-12 px-5">
         <GalleriesComponent galleryHook={galleryHook} />
       </div>
       {/*  */}

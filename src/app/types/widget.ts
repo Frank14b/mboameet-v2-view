@@ -13,14 +13,6 @@ export interface UserCardComponent {
   description?: string;
 }
 
-export interface UserStoriesCardProps {
-  id: number;
-  bgImage: string;
-  image: string;
-  activeStory: number;
-  onStoryClick?: (id: number) => void;
-}
-
 export interface AboutCardComponent {
   title: string;
   icon: any;
@@ -28,7 +20,7 @@ export interface AboutCardComponent {
 }
 
 export interface SideBarMenuList {
-  title: string;
+  title: React.ReactNode;
   icon: any;
   active?: boolean;
   badge?: string;

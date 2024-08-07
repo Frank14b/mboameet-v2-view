@@ -14,6 +14,7 @@ export type ResultProductDto = {
     store: ResultProductStore,
     productCategory: ResultProductCategory,
     files: ResultProductFilesDto[],
+    rating: number
 }
 
 export type ResultProductStore = {
@@ -38,4 +39,10 @@ export type ResultProductFilesDto = {
     url: string,
     previewUrl: string,
     type: string,
+}
+
+export type ResultProductRatingDto = {
+    id: number,
+    userId: number,
+    rating: number
 }

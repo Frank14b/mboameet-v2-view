@@ -17,7 +17,14 @@ export function CarouselProductsComponent({
   responsive?: ResponsiveType;
 }) {
   //
-  const { products, isFetchingProduct } = useProducts({});
+  const {
+    products,
+    isFetchingProduct,
+    proceedRate,
+    proceedShare,
+    proceedDealNow,
+  } = useProducts({});
+
   const [isPopupDetailsOpen, setIsPopupDetailsOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] =
     useState<ResultProductDto | null>(null);
@@ -95,16 +102,16 @@ export function CarouselProductsComponent({
                         placeholder={""}
                         value={4}
                         className="xs-product-rating px-0"
+                        readonly={true}
                       />
-                      {/* <div className="line-clamp-1 text-xs flex gap-1 dark:text-gray-600">
-                        <HomeIcon className="h-3 w-3 mt-[1px]" />{" "}
-                        {product.store.name}
-                      </div> */}
                     </div>
 
                     <div className="w-full mt-4 flex justify-between text-xs">
                       <span className="">{product.price}</span>
-                      <ShoppingCartIcon className="h-4 w-4 text-pink-300" />
+                      <ShoppingCartIcon
+                        onClick={() => proceedDealNow?.(product.id)}
+                        className="h-4 w-4 text-pink-300"
+                      />
                     </div>
                   </div>
                 </CardBody>
@@ -118,6 +125,9 @@ export function CarouselProductsComponent({
             open={isPopupDetailsOpen}
             handleOpen={handleOpen}
             product={selectedProduct}
+            handleRating={proceedRate}
+            handleShare={proceedShare}
+            handleDealNow={proceedDealNow}
           />
         )}
       </>
@@ -130,6 +140,9 @@ export function CarouselProductsComponent({
     selectedProduct,
     handleOpen,
     handleSelectProduct,
+    proceedRate,
+    proceedShare,
+    proceedDealNow,
   ]);
 
   return <>{formattedProducts}</>;

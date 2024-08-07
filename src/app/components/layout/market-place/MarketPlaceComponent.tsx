@@ -30,7 +30,7 @@ export function MarketPlaceComponent() {
       >
         <CardHeader
           placeholder={""}
-          className="mt-5 shadow-none px-5 bg-transparent"
+          className="mt-5 shadow-none px-2 bg-transparent"
         >
           <div className="flex justify-between">
             <Typography
@@ -139,7 +139,7 @@ export function MarketPlaceComponent() {
       >
         <CardHeader
           placeholder={""}
-          className="mt-5 shadow-none px-5 bg-transparent"
+          className="mt-5 shadow-none px-2 bg-transparent"
         >
           <div className="flex justify-between">
             <Typography
@@ -160,7 +160,7 @@ export function MarketPlaceComponent() {
           {/* // */}
           <CarouselProductsComponent />
 
-          <div className="flex justify-between px-5">
+          <div className="flex justify-between px-2">
             <Typography
               placeholder={""}
               variant="h5"

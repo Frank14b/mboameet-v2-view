@@ -8,24 +8,34 @@ import {
   Typography,
   Rating,
 } from "@material-tailwind/react";
+
 import {
   ResultProductDto,
   ResultProductFilesDto,
 } from "@/app/types/stores/products";
+
 import CustomNextImage from "../../widgets/CustomNextImage";
 import { HomeIcon } from "@heroicons/react/24/solid";
 import { useMainContext } from "@/app/contexts/main";
 import { useScopedI18n } from "@/app/locales/client";
 
+export type ProductDetailsPopupComponentProps = {
+  open: boolean;
+  product: ResultProductDto;
+  handleOpen: () => void;
+  handleRating?: (productRef: string, rating: number) => void;
+  handleDealNow?: (productId: number) => void;
+  handleShare?: (product: ResultProductDto) => void;
+};
+
 export function ProductDetailsPopupComponent({
   open,
   product,
   handleOpen,
-}: {
-  open: boolean;
-  product: ResultProductDto;
-  handleOpen: () => void;
-}) {
+  handleRating,
+  handleDealNow,
+  handleShare,
+}: ProductDetailsPopupComponentProps) {
   //
   const scopedT = useScopedI18n("marketPlace.products.details.popup");
 
@@ -46,7 +56,7 @@ export function ProductDetailsPopupComponent({
         placeholder={""}
         open={open}
         handler={handleOpen}
-        size="lg"
+        size="xl"
         className={`${isDark ? "bg-gray-900" : "bg-gray-100"}`}
       >
         <DialogHeader placeholder={""}>
@@ -71,89 +81,85 @@ export function ProductDetailsPopupComponent({
             </Typography>
           </div>
         </DialogHeader>
-        <DialogBody
-          placeholder={""}
-          className="overflow-y-auto max-h-[70vh] max-w-[900px]"
-        >
-          <div className="lg:flex">
-            <div className="sm:flex xs:grid gap-1 w-full pb-5">
-              <div
-                className={`lg:w-[90px] xs:flex gap-2 overflow-y-auto max-h-[300px] px-1 rounded-lg ${
-                  isDark ? "bg-gray-900" : "bg-gray-200"
-                }`}
-              >
-                {product.files.map((file, index) => (
-                  <CustomNextImage
-                    key={index}
-                    alt={product.name}
-                    src={file.url}
-                    height={80}
-                    width={80}
-                    className="rounded-lg mb-2 cursor-pointer"
-                    onClick={() => setSelectedImage(file)}
-                  />
-                ))}
-              </div>
-              <div className="w-full sm:w-[350px] xs:w-full">
-                <CustomNextImage
-                  alt={product.name}
-                  src={selectedImage.url}
-                  height={300}
-                  width={1000}
-                  className="rounded-lg shadow-lg"
-                  blurDataURL={selectedImage.previewUrl}
-                />
-              </div>
-            </div>
-
-            <div className="w-full pl-3">
-              <Typography
-                placeholder={""}
-                color="pink"
-                className="font-medium text-xs flex gap-1"
-                as={"div"}
-              >
-                <HomeIcon className="w-3 h-3 mt-[1px]" />{" "}
-                <span>
-                  {scopedT("seller")}: {product.store.name}
-                </span>
-              </Typography>
-              <Typography
-                placeholder={""}
-                color="blue-gray"
-                className={`font-bold ${isDark ? "text-gray-200" : ""}`}
-                as={"div"}
-              >
-                {scopedT("price")}: {product.price}{" "}
-                {product.store.currency.code} - {product.priceUnit}{" "}
-                {product.priceUnitType}
-              </Typography>
-              <Rating
-                placeholder={""}
-                value={4}
-                className="xs-product-rating px-0"
+        <DialogBody placeholder={""} className="overflow-y-auto h-[75vh]">
+          <div className="">
+            <div className={`${isDark ? "bg-black" : "bg-gray-400"} w-full rounded-md mb-4`}>
+              <CustomNextImage
+                alt={product.name}
+                src={selectedImage.url}
+                height={300}
+                width={1000}
+                className="h-auto w-full max-w-full rounded-lg object-contain object-center md:h-[50vh]"
+                blurDataURL={selectedImage.previewUrl}
               />
-              <Button
-                placeholder={""}
-                size="sm"
-                color="pink"
-                className="my-5 flex items-center shadow-none"
-              >
-                {scopedT("deal_now")}
-              </Button>
-              <Typography
-                placeholder={""}
-                color="gray"
-                className={`font-medium mt-3 ${isDark ? "text-gray-100" : ""}`}
-              >
-                {scopedT("description")}
-              </Typography>
-              <div
-                className={`${isDark ? "text-gray-300" : ""} text-sm`}
-                dangerouslySetInnerHTML={{ __html: product.description }}
-              >
-                {/* // */}
-              </div>
+            </div>
+            <div
+              className={`w-full flex items-end gap-4 overflow-x-auto rounded-lg ${
+                isDark ? "bg-gray-900" : "bg-gray-200"
+              }`}
+            >
+              {product.files.map((file, index) => (
+                <CustomNextImage
+                  key={index}
+                  alt={product.name}
+                  src={file.url}
+                  height={80}
+                  width={80}
+                  className="rounded-lg mb-2 cursor-pointer"
+                  onClick={() => setSelectedImage(file)}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="w-full mt-4">
+            <Typography
+              placeholder={""}
+              color="pink"
+              className="font-medium text-xs flex gap-1"
+              as={"div"}
+            >
+              <HomeIcon className="w-3 h-3 mt-[1px]" />{" "}
+              <span>
+                {scopedT("seller")}: {product.store.name}
+              </span>
+            </Typography>
+            <Typography
+              placeholder={""}
+              color="blue-gray"
+              className={`font-bold ${isDark ? "text-gray-200" : ""}`}
+              as={"div"}
+            >
+              {scopedT("price")}: {product.price} {product.store.currency.code}{" "}
+              - {product.priceUnit} {product.priceUnitType}
+            </Typography>
+            <Rating
+              placeholder={""}
+              value={4}
+              className="xs-product-rating px-0"
+              onChange={(value) => handleRating?.(product.reference, value)}
+            />
+            <Button
+              placeholder={""}
+              size="sm"
+              color="pink"
+              className="my-5 flex items-center shadow-none"
+              onClick={() => handleDealNow?.(product.id)}
+            >
+              {scopedT("deal_now")}
+            </Button>
+            <Typography
+              placeholder={""}
+              color="gray"
+              className={`font-medium mt-3 ${isDark ? "text-gray-100" : ""}`}
+            >
+              {scopedT("description")}
+            </Typography>
+            <div
+              className={`${isDark ? "text-gray-300" : ""} text-sm`}
+              dangerouslySetInnerHTML={{ __html: product.description }}
+            >
+              {/* // */}
             </div>
           </div>
         </DialogBody>
@@ -165,10 +171,16 @@ export function ProductDetailsPopupComponent({
               size="sm"
               variant="outlined"
               color="blue-gray"
+              onClick={() => handleShare?.(product)}
             >
               {scopedT("share")}
             </Button>
-            <Button placeholder={""} size="sm" color="pink">
+            <Button
+              onClick={() => handleDealNow?.(product.id)}
+              placeholder={""}
+              size="sm"
+              color="pink"
+            >
               {scopedT("deal_now")}
             </Button>
           </div>

@@ -13,7 +13,7 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import { ResultFriendsDto } from "@/app/types/friends";
-import Image from "next/image";
+
 import {
   CalendarIcon,
   EyeIcon,

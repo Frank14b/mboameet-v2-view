@@ -14,7 +14,11 @@ import {
   VideoCameraIcon,
 } from "@heroicons/react/24/solid";
 import { configs } from "../../../../app.config";
-import { MessageActionsDto, MessageReactionsDto } from "@/app/types";
+import {
+  MessageActionsDto,
+  MessageReactionsDto,
+  StoriesTypes,
+} from "@/app/types";
 
 export const OTP_TIMER: number = parseInt(configs.RESEND_OTP_TIME ?? "30");
 
@@ -158,19 +162,19 @@ export const storiesTypes = [
     title: "Stories Text",
     subTitle: "Publish a text stories on your board",
     icon: DocumentTextIcon,
-    type: "text",
+    type: StoriesTypes.TEXT,
   },
   {
     title: "Photo Stories",
     subTitle: "Publish a photo stories on your board",
     icon: CameraIcon,
-    type: "photo",
+    type: StoriesTypes.IMAGE,
   },
   {
     title: "Video Stories",
     subTitle: "Publish a video stories on your board",
     icon: VideoCameraIcon,
-    type: "video",
+    type: StoriesTypes.VIDEO,
   },
 ];
 

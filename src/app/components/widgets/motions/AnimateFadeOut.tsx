@@ -1,14 +1,16 @@
 import { motion } from "framer-motion";
 
-export default function AnimateFadeOut({
-  children,
-  speed,
-  once
-}: {
+export type AnimateFadeOutProps = {
   children: any;
   speed?: number;
   once?: boolean;
-}) {
+};
+
+export default function AnimateFadeOut({
+  children,
+  speed,
+  once,
+}: AnimateFadeOutProps) {
   return (
     <>
       <motion.div

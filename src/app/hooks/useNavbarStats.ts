@@ -2,7 +2,7 @@ import { notification } from "@/app/lib/notifications";
 import {
   ResultNavBarStatsDto,
 } from "@/app/types";
-import { useRouter } from "next/navigation";
+
 import {
   Dispatch,
   SetStateAction,
@@ -10,14 +10,16 @@ import {
   useEffect,
   useState,
 } from "react";
+
 import { getAccountStats } from "../services/server-actions";
 import useUserStore from "../store/userStore";
+import useCustomRouter from "./useCustomRouter";
 
 const useNavbarStats = () => {
   //
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [stats, setStats] = useState<ResultNavBarStatsDto | null>(null);
-  const router = useRouter();
+  const { push } = useCustomRouter();
   const { userConnected } = useUserStore();
 
   const proceedGetStats = useCallback(async () => {
@@ -26,12 +28,13 @@ const useNavbarStats = () => {
     if (!result.status) {
       return notification.apiNotify(result);
     }
-    if (!result.data) return router.push("/");
+
+    if (!result.data) return push("/");
 
     setIsLoading(false);
 
     setStats(result.data);
-  }, [router, setIsLoading, setStats]);
+  }, [push, setIsLoading, setStats]);
 
   useEffect(() => {
     if(!userConnected) return;

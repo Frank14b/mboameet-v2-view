@@ -1,10 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  feedFormEditable,
-  feedVideoPreviewId,
-} from "@/app/lib/constants/app";
+import { feedFormEditable, feedVideoPreviewId } from "@/app/lib/constants/app";
 import { ObjectKeyDto } from "@/app/types";
 import {
   Button,
@@ -52,7 +49,7 @@ export default function FeedFormComponent({
     handleSubmitUpdatedFeed,
   } = feedFormHook;
 
-  const scopedT = useScopedI18n('home.feeds');
+  const scopedT = useScopedI18n("home.feeds");
 
   return (
     <>
@@ -130,7 +127,6 @@ export default function FeedFormComponent({
                       height={70}
                       className="rounded shadow object-center"
                       src={image?.base64}
-                      // style={{ width: "110px", height: "70px" }}
                     />
                     <div className="absolute bg-gray-900 top-0 left-0 w-full bottom-0 rounded-lg bg-opacity-40"></div>
                     <span

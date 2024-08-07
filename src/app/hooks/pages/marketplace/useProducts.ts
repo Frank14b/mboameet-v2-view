@@ -6,6 +6,7 @@ import {
   useMemo,
   useState,
 } from "react";
+
 import { useMainContext } from "@/app/contexts/main";
 import { proceedGetStoreProducts } from "@/app/services/server-actions/stores/products";
 import { ResultProductDto } from "@/app/types/stores/products";
@@ -17,6 +18,10 @@ const useProducts = ({ storeRef }: { storeRef?: string }) => {
   const [isFetchingProduct, setIsFetchingProduct] = useState<boolean>(true);
   const { getFileUrl } = useMainContext();
   const [products, setProducts] = useState<ResultProductDto[] | null>(null);
+
+  const proceedRate = useCallback((productRef: string, rating: number) => {
+    //
+  }, []);
 
   const getProducts = useCallback(async () => {
     const result = await proceedGetStoreProducts({
@@ -30,6 +35,14 @@ const useProducts = ({ storeRef }: { storeRef?: string }) => {
   useEffect(() => {
     getProducts();
   }, [getProducts]);
+
+  const proceedShare = useCallback((product: ResultProductDto) => {
+    //
+  }, []);
+
+  const proceedDealNow = useCallback((productId: number) => {
+    //
+  }, []);
 
   const formattedProducts = useMemo(() => {
     if (!products) return [];
@@ -63,6 +76,9 @@ const useProducts = ({ storeRef }: { storeRef?: string }) => {
     isFetchingProduct,
     products: formattedProducts as ResultProductDto[],
     setIsLoading,
+    proceedRate,
+    proceedShare,
+    proceedDealNow,
   };
 
   return { ...data };
@@ -75,4 +91,7 @@ export type StoreProductHookDto = {
   isFetchingProduct: boolean;
   products: ResultProductDto[];
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  proceedRate: (productRef: string, rating: number) => void;
+  proceedShare: (product: ResultProductDto) => void;
+  proceedDealNow: (productId: number) => void;
 };

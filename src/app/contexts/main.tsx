@@ -80,8 +80,6 @@ export function MainWrapper({ children }: { children: any }) {
       pathname.startsWith(`${marketplacePathUrl}`) ||
       pathname.startsWith(administrationPathUrl.baseUrl)
     ) {
-      // setCanRemoveAsideBar(true);
-      // setCanRemoveNavBar(true);
       setCanRemoveAsideBar(false);
       setCanRemoveNavBar(false);
     } else {
@@ -184,7 +182,7 @@ export function MainWrapper({ children }: { children: any }) {
         <>
           <main className={`${theme}`}>
             <AppHubWrapper>
-              {userConnected === true && !pathname.startsWith(authStartPath) ? (
+              {userConnected === true || !pathname.startsWith(authStartPath) ? (
                 <>
                   <div className="mh-600 bg-gray-200 dark:bg-gray-800">
                     <div className="flex max-w-[1600px] m-auto">
@@ -239,7 +237,7 @@ export function MainWrapper({ children }: { children: any }) {
                     <>
                       {!pathname.startsWith(authStartPath) ? (
                         <>
-                          <div className="mh-600 bg-gray-200 dark:bg-gray-800">
+                          {/* <div className="mh-600 bg-gray-200 dark:bg-gray-800">
                             <div className="flex max-w-[1600px] m-auto">
                               <MobileSideBarMenuComponent
                                 enable={canRemoveNavBar}
@@ -260,7 +258,7 @@ export function MainWrapper({ children }: { children: any }) {
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          </div> */}
                         </>
                       ) : (
                         <>
